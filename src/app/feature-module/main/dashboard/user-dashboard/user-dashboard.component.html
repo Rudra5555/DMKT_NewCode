@@ -1,0 +1,300 @@
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Education Portal</title>
+</head>
+
+<body>
+  <header>
+    <div>
+      <form [formGroup]="getAllFilesForm" class="file-search" id="totalGrp">
+        <div class="search-bar">
+          <input
+            (click)="getAllDtaForHide()"
+            style="margin-left: -52%; position: absolute; margin-top: 76%"
+            type="text"
+            class="searchBar"
+            placeholder="Enter your search key..."
+            data-bs-toggle="modal"
+            data-bs-target="#viewMainHeadOptions"
+          />
+
+          <button
+            style="margin-top: 76%; position: absolute; margin-left: -5%"  id="dashboardModalSearch"
+            class="button button-primary"
+          >
+            Search
+          </button>
+        </div>
+      </form>
+      <img src="assets/img/banner-edit.jpg" class="backgroundImage" />
+    </div>
+  </header>
+
+ <!-- </body> -->
+ 
+    <div class="card-container" #autoScroll  [hidden]="cardHide">
+    <div class="row justify-content-center align-items-center">
+      <div class="col-sm-3 col-6" *ngFor="let item of plantsList; let i = index">
+        <div class="card">
+          <div class="ds-top">
+            <div *ngIf="item.departmentName == 'OPERATION'">
+              <img src="assets/img/areaImage1.JPG" width="500" height="500" />
+            </div>
+            <div *ngIf="item.departmentName == 'MECHANICAL'">
+              <img src="assets/img/DSC_5538.JPG" width="500" height="500" />
+            </div>
+            <div *ngIf="item.departmentName == 'ELECTRICAL'">
+              <img src="assets/img/DSC_0070.JPG" width="500" height="500" />
+            </div>
+            <div *ngIf="item.departmentName == 'C&I'">
+              <img src="assets/img/DSC_5538.JPG" width="500" height="500" />
+            </div>
+            <div *ngIf="item.departmentName == 'CIVIL'">
+              <img src="assets/img/DSC_0070.JPG" width="500" height="500" />
+            </div>
+            <div *ngIf="item.departmentName == 'CHP'">
+              <img src="assets/img/DSC_5538.JPG" width="500" height="500" />
+            </div>
+            <div *ngIf="item.departmentName == 'AHP'">
+              <img src="assets/img/DSC_5538.JPG" width="500" height="500" />
+            </div>
+          </div>
+          <div class="avatar-holder">
+
+            <div *ngIf="item.departmentName == 'OPERATION'">
+              <img
+                src="assets/img/Power-O&M.jpg"
+               class="avtarImage"
+              />
+            </div>
+
+            <div *ngIf="item.departmentName == 'ASH-DYKE'">
+              <img
+                src="assets/img/Ash-Dyke.jpg"
+                class="avtarImage"
+              />
+            </div>
+            
+            
+            <div *ngIf="item.departmentName == 'OPERATION'">
+              <img
+                src="assets/img/Power-O&M.jpg"
+                class="avtarImage"
+              />
+            </div>
+            <div *ngIf="item.departmentName == 'ELECTRICAL'">
+              <img
+                src="assets/img/Power-Sale.jpg"
+                class="avtarImage"
+              />
+            </div>
+
+            <div *ngIf="item.departmentName == 'MECHANICAL'">
+              <img
+                src="assets/img/Ash-Dyke.jpg"
+                class="avtarImage"
+              />
+            </div>
+            <div *ngIf="item.departmentName == 'C&I'">
+              <img
+                src="assets/img/Plant-Infra.jpg"
+                class="avtarImage"
+              />
+            </div>
+            <div *ngIf="item.departmentName == 'CIVIL'">
+              <img
+                src="assets/img/Coal-Commercial.jpg"
+                class="avtarImage"
+              />
+            </div>
+            <div *ngIf="item.departmentName == 'CHP'">
+              <img
+                src="assets/img/Plant-Infra.jpg"
+                class="avtarImage"
+              />
+            </div>
+            <div *ngIf="item.departmentName == 'AHP'">
+              <img
+                src="assets/img/Power-Sale.jpg"
+                class="avtarImage"
+              />
+            </div>
+
+            <div *ngIf="item.departmentName == 'ELECTRICAL'">
+              <img
+                src="assets/img/Ash-Dyke.jpg"
+                class="avtarImage"
+              />
+            </div>
+          </div>
+          <div class="name">
+            <h5 style="font-weight: 600; margin-top: -20%; font-size: 14px">
+              {{ item.departmentName }}
+            </h5>
+            <h3 class="card-title">{{ item.fileCount }}</h3>
+          <div *ngFor="let it of item.listOfSubAreaDtos">
+            <ol  >
+              
+              <li>
+                <h5 class="subAreasName" (click)="getDetailsByPlantsDataName(item.departmentName,it.subAreaName)" >&#11166; {{ it.subAreaName }}</h5> 
+              </li>
+            </ol>
+            </div>
+          </div>
+           
+          </div>
+        </div>
+      </div>
+    </div>
+</body>
+<!-- <app-footer></app-footer> -->
+
+
+
+
+
+<!-- Main Head Modal -->
+
+<div class="modal firstModal custom-modal fade" id="viewMainHeadOptions" role="dialog">
+  <div class="modal-dialog modal-dialog-right modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header"
+        style="background-color: #0cae2f; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);  border-top-left-radius: 10px; 
+  border-top-right-radius: 10px;  width: 109%;">
+        <div>
+          <h2 style="margin-left: 191px; font-size: 30px; margin-top: -13px;">Choose Main Head</h2>
+        </div>
+        <button
+          type="button"
+          id="closeModalBtn"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body"
+        style="height: 428px; width: 109%; background-color: #ededed; background-image: url('./assets/img/Power-BG2.jpg'); background-size: 100%; background-position: center;border-bottom-left-radius: 10px; 
+         border-bottom-right-radius: 10px; background-repeat: no-repeat;">
+        <div class="row">
+          <div class="col-sm-3" *ngFor="let item of headList">
+            <div class="item-container" [attr.data-name]="item.name">
+              <section class="card2" (click)="getDetailsByCateName(item.name, item.catType)">
+                <a data-bs-toggle="modal" data-bs-target="#viewPlantsOptions">
+                  <div *ngIf="item.name == 'POWER O&M'">
+                    <img src="assets/img/Power-O&M.jpg" />
+                  </div>
+                </a>
+                <!-- <a [routerLink]="routes.filemanager" target="_blank"> -->
+                  <div (click)="navigateToRoute(item.name, item.catType)" class="clickable-div" *ngIf="item.name == 'POWER SALE'" >
+                    <img  src="assets/img/Power-Sale.jpg" />
+                  </div>
+                <!-- </a> -->
+                  <div (click)="navigateToRoute(item.name, item.catType)" class="clickable-div" *ngIf="item.name == 'ASH-DYKE'">
+                    <img src="assets/img/Ash-Dyke.jpg" />
+                  </div>
+                  <div (click)="navigateToRoute(item.name, item.catType)" class="clickable-div" *ngIf="item.name == 'PLANT INFRA(OUTSIDE)'">
+                    <img src="assets/img/Plant-Infra.jpg" />
+                  </div>
+                  <div (click)="navigateToRoute(item.name, item.catType)" class="clickable-div" *ngIf="item.name == 'POWER-LEGAL'">
+                    <img src="assets/img/Power-Legal.jpg" />
+                  </div>
+                
+                  <div (click)="navigateToRoute(item.name, item.catType)" class="clickable-div" *ngIf="item.name == 'COAL COMMERCIAL'">
+                    <img src="assets/img/Coal-Commercial.jpg" />
+                  </div>
+               
+                  <div *ngIf="item.name == 'OPERATION'">
+                    <img src="assets/img/Power-O&M.jpg" />
+                  </div>
+                  <div *ngIf="item.name == 'MECHANICAL'">
+                    <img src="assets/img/Power-Sale.jpg" />
+                  </div>
+                  <div *ngIf="item.name == 'ELECTRICAL'">
+                    <img src="assets/img/Ash-Dyke.jpg" />
+                  </div>
+                  <div *ngIf="item.name == 'C&I'">
+                    <img src="assets/img/Plant-Infra.jpg" />
+                  </div>
+                  <div *ngIf="item.name == 'CIVIL'">
+                    <img src="assets/img/Coal-Commercial.jpg" />
+                  </div>
+                  <div *ngIf="item.name == 'CHP'">
+                    <img src="assets/img/Plant-Infra.jpg" />
+                  </div>
+                  <div *ngIf="item.name == 'AHP'">
+                    <img src="assets/img/Power-Sale.jpg" />
+                  </div>
+                  <div *ngIf="item.name == 'ELECTRICAL'">
+                    <img src="assets/img/Ash-Dyke.jpg" />
+                  </div>
+                 
+                  
+           
+              </section>
+              <div class="mainHeadNames" *ngIf="item.name == 'POWER O&M'">Power O&M</div>
+              <div class="mainHeadNames" *ngIf="item.name == 'POWER SALE'">Power Sale</div>
+              <div class="mainHeadNames" *ngIf="item.name == 'ASH-DYKE'">Ash-Dyke</div>
+              <div class="mainHeadNames" *ngIf="item.name == 'PLANT INFRA(OUTSIDE)'">Plant Infra</div>
+              <div class="mainHeadNames" *ngIf="item.name == 'COAL COMMERCIAL'">Coal Commercial</div>
+              <div class="mainHeadNames" *ngIf="item.name == 'POWER-LEGAL'">Power Legal</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Main Head Modal Section End -->
+
+
+
+
+
+<!-- plantModal -->
+
+<div class="modal firstModal custom-modal fade" id="viewPlantsOptions" role="dialog">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+      <div class="row">
+        <div class="col-md-6" style="position: relative; height: 360px; background-color: #ffffff; background-image: url('./assets/img/Pop-up-Steel-plant.png'); background-size: 104%; background-position: left center; background-repeat: no-repeat;">
+          <!-- Background image section -->
+          <button type="button" class="circular-button" id="backButton"  data-bs-toggle="modal"
+          
+          data-bs-target="#viewMainHeadOptions" style="position: absolute; top: 10px; left: 10px; width: 30px; height: 30px; border-radius: 50%; background-color:#4b954f; border: 1px solid #000000; display: flex; align-items: center; justify-content: center;">
+            &#x2190; <!-- Unicode for left arrow -->
+          </button>
+        </div>
+        <div class="col-md-6" style="position: relative; display: flex; align-items: center; justify-content: center; background-color: white;">
+          <!-- Written content section -->
+          <button type="button" id="closePlantModalBtn" #closebutton class="btn-close circular-button" data-bs-dismiss="modal" aria-label="Close" style="position: absolute; top: 10px; right: 10px; width: 20px; height: 20px; border-radius: 50%; background-color: #fd0404; border: 1px solid #000000; display: flex; align-items: center; justify-content: center;">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <div class="plantContent" style="text-align: center;">
+            <h2 style="color: black;">Choose Plant</h2>
+            <p>Please choose any one plant from <br />the below options</p>
+            <div class="row">
+              <div class="" *ngFor="let item of plantsList">
+                <div *ngIf="item.name == 'CPP-2'">
+                  <button class="btn-custom btn-green"  (click)="getDetailsByPlantsName(item.name, item.catType)" (click)="onClick()" >CPP-2</button>
+                </div>
+                <div *ngIf="item.name == 'CPP-3'">
+                  <button class="btn-custom btn-green"  (click)="getDetailsByPlantsName(item.name, item.catType)" (click)="onClick()">CPP-3</button>
+                </div>
+               
+                </div>
+                </div>
+          
+            <!-- <button class="btn-custom btn-white" style="background-color: white; color: black; border: 1px solid #000000; padding: 10px 20px; text-align: center; text-decoration: none; display: inline-block; font-size: 16px; margin: 4px 2px; cursor: pointer; border-radius: 5px;">CPP-3</button>
+          -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+

@@ -1,0 +1,252 @@
+
+
+<!-- /Page Content-->
+<div class="col-md-12 d-flex" id="recentUploadDocumentPage">
+  <div class="card card-table flex-fill" >
+    <div class="container">
+      <div class="card-header centered-div" >
+          <h3 class="card-title mb-0 ">Recent Updated Documents</h3>
+          
+      </div>
+
+
+      <div class="daterange-picker d-flex centered-div">
+      <div class="form-sort">
+        <i class="las la-calendar"></i>
+        <input type="text" class="form-control date-range bookingrange" #drp="bsDaterangepicker" bsDaterangepicker
+          [(ngModel)]="bsRangeValue" />
+      </div>
+      </div>
+    </div> 
+      <div class="card-body">
+          <div class="table-responsive">
+              <table class="table table-nowrap custom-table mb-0">
+                  <thead>
+                    <tr>
+                      <th>Document Name</th>
+                      <th>Document Extension</th>
+                      <th>Department Name</th>
+                      <th>Sub-Area</th>
+                      <th>Storage Location</th>
+                      <th>Document Type</th>
+                      <th class="text-end">Action</th>
+                      
+                  </tr>
+                  </thead>
+                  <tbody>
+                      
+                      <tr>
+                          <td><a [routerLink]="'/sales/invoice-view'">1</a></td>
+                          <td>
+                              <h2><a>PDF</a></h2>
+                          </td>
+                          <td>A</td>
+                          <td>10</td>
+                          <!-- <td>
+                              <span class="badge bg-inverse-warning">asd</span>
+                          </td> -->
+                          <td>10</td>
+                          <td>Blueprint</td>
+                          <td class="text-end">
+                              <div class="dropdown dropdown-action">
+                                <a class="action-icon dropdown-toggle" data-bs-toggle="dropdown"
+                                  aria-expanded="false"><i class="material-icons">more_vert</i></a>
+                                  <div class="dropdown-menu dropdown-menu-right">
+                                      <a class="dropdown-item" data-bs-toggle="modal"
+                                      data-bs-target="#edit_holiday"><i   class="fa-lg ion-code-download"
+                                      data-bs-toggle="tooltip"
+                                      title="ion-code-download"></i> Download</a>
+                                      <a class="dropdown-item" data-bs-toggle="modal"
+                                        data-bs-target="#delete_holiday"><i class="fa-lg ion-chatbubble"
+                                        data-bs-toggle="tooltip"
+                                        title="ion-chatbubble"></i>
+                                        <!-- <i
+                                              class="ion-code-download"
+                                              data-bs-toggle="tooltip"
+                                              title="ion-code-download"
+                                          ></i> -->
+                                        Comment</a>
+                                      
+                                    </div>
+                                  </div>
+                                </td>
+                      </tr>
+                      <tr>
+                          <td><a [routerLink]="'/sales/invoice-view'">2</a></td>
+                          <td>
+                              <h2><a>HTML</a></h2>
+                          </td>
+                          <td>B</td>
+                          <td>5</td>
+                          <!-- <td>
+                              <span class="badge bg-inverse-success">Paid</span>
+                          </td> -->
+                          <td>5</td>
+                          <td>Paid File</td>
+                          <td class="text-end">
+                              <div class="dropdown dropdown-action">
+                                <a class="action-icon dropdown-toggle" data-bs-toggle="dropdown"
+                                  aria-expanded="false"><i class="material-icons">more_vert</i></a>
+                                  <div class="dropdown-menu dropdown-menu-right">
+                                      <a class="dropdown-item" data-bs-toggle="modal"
+                                      data-bs-target="#edit_holiday"><i   class="fa-lg ion-code-download"
+                                      data-bs-toggle="tooltip"
+                                      title="ion-code-download"></i> Download</a>
+                                      <a class="dropdown-item" data-bs-toggle="modal"
+                                        data-bs-target="#delete_holiday"><i class="fa-lg ion-chatbubble"
+                                        data-bs-toggle="tooltip"
+                                        title="ion-chatbubble"></i>
+                                        <!-- <i
+                                              class="ion-code-download"
+                                              data-bs-toggle="tooltip"
+                                              title="ion-code-download"
+                                          ></i> -->
+                                        Comment</a>
+                                    </div>
+                                  </div>
+                                </td>
+                      </tr>
+                      <tr>
+                          <td><a [routerLink]="'/sales/invoice-view'">3</a></td>
+                          <td>
+                              <h2><a>DOC</a></h2>
+                          </td>
+                          <td>E</td>
+                          <td>30</td>
+                          <!-- <td>
+                              <span class="badge bg-inverse-success">Paid</span>
+                          </td> -->
+                          <td>5</td>
+                          <td>Work File</td>
+                          <td class="text-end">
+                              <div class="dropdown dropdown-action">
+                                <a class="action-icon dropdown-toggle" data-bs-toggle="dropdown"
+                                  aria-expanded="false"><i class="material-icons">more_vert</i></a>
+                                  <div class="dropdown-menu dropdown-menu-right">
+                                      <a class="dropdown-item" data-bs-toggle="modal"
+                                      data-bs-target="#edit_holiday"><i   class="fa-lg ion-code-download"
+                                      data-bs-toggle="tooltip"
+                                      title="ion-code-download"></i> Download</a>
+                                      <a class="dropdown-item" data-bs-toggle="modal"
+                                        data-bs-target="#delete_holiday"><i class="fa-lg ion-chatbubble"
+                                        data-bs-toggle="tooltip"
+                                        title="ion-chatbubble"></i>
+                                        <!-- <i
+                                              class="ion-code-download"
+                                              data-bs-toggle="tooltip"
+                                              title="ion-code-download"
+                                          ></i> -->
+                                        Comment</a>
+                                    </div>
+                                  </div>
+                                </td>
+                      </tr>
+                      <tr>
+                          <td><a [routerLink]="'/sales/invoice-view'">4</a></td>
+                          <td>
+                              <h2><a>PDF</a></h2>
+                          </td>
+                          <td>D</td>
+                          <td>40</td>
+                          <!-- <td>
+                              <span class="badge bg-inverse-success">Paid</span>
+                          </td> -->
+                          <td>6</td>
+                          <td>User Doc</td>
+                          <td class="text-end">
+                              <div class="dropdown dropdown-action">
+                                <a class="action-icon dropdown-toggle" data-bs-toggle="dropdown"
+                                  aria-expanded="false"><i class="material-icons">more_vert</i></a>
+                                  <div class="dropdown-menu dropdown-menu-right">
+                                      <a class="dropdown-item" data-bs-toggle="modal"
+                                      data-bs-target="#edit_holiday"><i   class="fa-lg ion-code-download"
+                                      data-bs-toggle="tooltip"
+                                      title="ion-code-download"></i> Download</a>
+                                      <a class="dropdown-item" data-bs-toggle="modal"
+                                        data-bs-target="#delete_holiday"><i class="fa-lg ion-chatbubble"
+                                        data-bs-toggle="tooltip"
+                                        title="ion-chatbubble"></i>
+                                        <!-- <i
+                                              class="ion-code-download"
+                                              data-bs-toggle="tooltip"
+                                              title="ion-code-download"
+                                          ></i> -->
+                                        Comment</a>
+                                    </div>
+                                  </div>
+                                </td>
+                      </tr>
+                      <tr>
+                          <td><a [routerLink]="'/sales/invoice-view'">5</a></td>
+                          <td>
+                              <h2><a>WORD</a></h2>
+                          </td>
+                          <td>C</td>
+                          <td>46</td>
+                          <!-- <td>
+                              <span class="badge bg-inverse-danger">Unpaid</span>
+                          </td> -->
+                          <td>44</td>
+                          <td>Word Doc</td>
+                          <td class="text-end">
+                              <div class="dropdown dropdown-action">
+                                <a class="action-icon dropdown-toggle" data-bs-toggle="dropdown"
+                                  aria-expanded="false"><i class="material-icons">more_vert</i></a>
+                                  <div class="dropdown-menu dropdown-menu-right">
+                                    <a class="dropdown-item" data-bs-toggle="modal"
+                                      data-bs-target="#edit_holiday"><i   class="fa-lg ion-code-download"
+                                      data-bs-toggle="tooltip"
+                                      title="ion-code-download"></i> Download</a>
+                                      <a class="dropdown-item" data-bs-toggle="modal"
+                                        data-bs-target="#delete_holiday"><i class="fa-lg ion-chatbubble"
+                                        data-bs-toggle="tooltip"
+                                        title="ion-chatbubble"></i>
+                                        <!-- <i
+                                              class="ion-code-download"
+                                              data-bs-toggle="tooltip"
+                                              title="ion-code-download"
+                                          ></i> -->
+                                        Comment</a>
+                                    </div>
+                                  </div>
+                                </td>
+                              
+                      </tr>
+                      
+                  </tbody>
+              </table>
+          </div>
+      </div>
+      <!-- <div class="card-footer">
+          <a [routerLink]="'/sales/invoice-page'">View all Documents</a>
+      </div> -->
+  </div>
+</div>
+
+
+<!-- <footer>
+	<div class="content">
+	  <div class="top">
+		<div class="logo-details">
+		  <img src="assets/img/Library-logo1.png" id="footerLogo" width="270" height="400"  >
+		</div>
+		<span class="copyright_text" >Copyright © 2024 <a href="#"></a></span>
+		<span class="policy_terms">
+		  <a href="#">Privacy policy</a>
+		  <a href="#">Terms & condition</a>
+		</span>
+		<div class="media-icons">
+		  <a href="#"><i class="fab fa-facebook-f"></i></a>
+		  <a href="#"><i class="fab fa-twitter"></i></a>
+		  <a href="#"><i class="fab fa-instagram"></i></a>
+		  <a href="#"><i class="fab fa-linkedin-in"></i></a>
+		</div>
+	  </div>
+	</div>
+  </footer> -->
+
+
+
+
+
+<!-- /Page Content -->

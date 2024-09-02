@@ -1,0 +1,65 @@
+.sidebar{
+   
+    background: linear-gradient(to right, #f2f9fb 0%, #bde5c2 100%) !important;
+
+}
+.submenu .d-block{
+    background-color: white;
+}
+.sidebar .sidebar-menu ul li a, .two-col-bar .sidebar-menu ul li a {
+    position: relative;
+    font-size: 15px;
+    color: #000000;
+    height: auto;
+    transition: all 0.2s ease;
+    padding: 8px 15px;
+    display: flex;
+    align-items: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    justify-content: flex-start;
+    -webkit-justify-content: flex-start;
+    -ms-flex-pack: flex-start;
+}
+.sidebar #sidebar-menu.sidebar-menu ul ul li a {
+    color: #000000;
+}
+.submenu[_ngcontent-ng-c2404396667] .d-block[_ngcontent-ng-c2404396667] {
+    background-color: #a7ed81;
+}
+.la-user:before {
+    content: "\f007";
+    color: rgb(22, 32, 138);
+   
+}
+.la-cube:before {
+    content: "\f1b2";
+    color: rgb(22, 32, 138);
+}
+.la-book:before {
+    content: "\f02d";
+    color: rgb(22, 32, 138);
+}
+
+.la-file-upload:before {
+    content: "\f574";
+    color: rgb(22, 32, 138);
+}
+.la-book-open:before {
+    content: "\f518";
+    color: rgb(22, 32, 138);
+}
+.la-users:before {
+    content: "\f0c0";
+    color: rgb(22, 32, 138);
+}
+.la.la-file-text:before {
+    content: "\f15c";
+    color: rgb(22, 32, 138);
+}
+.sidebar .sidebar-menu ul li a span, .two-col-bar .sidebar-menu ul li a span {
+    color: rgb(22, 32, 138);
+}
+.submenu[_ngcontent-ng-c2404396667][_ngcontent-ng-c2404396667] .d-block[_ngcontent-ng-c2404396667][_ngcontent-ng-c2404396667] {
+    background-color: #d1dec9;
+}

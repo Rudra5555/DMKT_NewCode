@@ -1,0 +1,133 @@
+
+<div class="content container-fluid">
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="row">
+            <div class="col-sm-12">
+                <h3 class="page-title">Requested Document List</h3>
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item"><a [routerLink]="routes.adminDashboard">Dashboard</a></li>
+                    <li class="breadcrumb-item active">Requested Document List</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+  
+    <div class="col-md-12 d-flex">
+        <div class="card card-table flex-fill">
+          <div class="container">
+            <div class="card-header centered-div">
+                <h3 class="card-title mb-0 ">Requested Document List</h3>
+                
+            </div>
+      
+            <!-- <div class="wrapper">
+                <div class="container" id="container">
+                  <div class="box">Recent Updated Documents</div> 
+                  <div class="box">Item two</div>
+                  <div class="box">
+                    <label for="start">Search date:</label>
+                    <input type="date" id="start" name="trip-start" value="2018-07-22" min="2018-01-01" max="2018-12-31" />
+                  </div>
+                </div>
+            </div> -->
+              <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-nowrap custom-table mb-0">
+                        <thead>
+                            <tr>
+                                <th>Document Name</th>
+                                <th>Document Extension</th>
+                                <th>Department Name</th>
+                                <th>Sub-Area</th>
+                                <th>Storage Location</th>
+                                <th>Document Type</th>
+                                <th class="text-end">Action</th>
+                                
+                            </tr>
+                        </thead>
+                        <tbody>
+                            
+                            <tr>
+                                <td><a [routerLink]="'/apps/file-manager'">SOP.pdf</a></td>
+                                <td>
+                                <h2><a>Abir Dey</a></h2>
+                                </td>
+                                <td>abcd</td>
+                                <td>Electrical</td>
+                                <td>7/06/24,20:05:00</td>
+                                <td>NA</td>
+                                <td >
+                                    <button class="btn"><i class="fa fa-download"></i> Download</button>
+                                      </td>
+                            </tr>
+                            <tr>
+                                <td><a [routerLink]="'/apps/file-manager'">Oops.pdf</a></td>
+                                <td>
+                                <h2><a>Arpan Modal</a></h2>
+                                </td>
+                                <td>abtfdjd</td>
+                                <td>Bca</td>
+                                <td>14/06/24,18:05:00</td>
+                                <td>Na</td>
+                                <td >
+                                    <button class="btn"><i class="fa fa-download"></i> Download</button>
+                                      </td>
+                            </tr>
+                            <tr>
+                                <td><a [routerLink]="'/apps/file-manager'">Laravel.pdf</a></td>
+                                <td>
+                                <h2><a>Biplob Mondol</a></h2>
+                                </td>
+                                <td>ayjtfjdd</td>
+                                <td>ECE</td>
+                                <td>8/06/24,12:05:00</td>
+                                <td>Na</td>
+                                <td >
+                                    <button class="btn"><i class="fa fa-download"></i> Download</button>
+                                      </td>
+                            </tr>
+                            <tr>
+                                <td><a [routerLink]="'/apps/file-manager'">c++.pdf</a></td>
+                                <td>
+                                <h2><a>Abir Dey</a></h2>
+                                </td>
+                                <td>abcktdthd</td>
+                                <td>Electrical</td>
+                                <td>6/06/24,10:50:00</td>
+                                <td>Na</td>
+                                <td >
+                                    <button class="btn"><i class="fa fa-download"></i> Download</button>
+                                      </td>
+                            </tr>
+                            <tr>
+                                <td><a [routerLink]="'/apps/file-manager'">java.pdf</a></td>
+                                <td>
+                                <h2><a>Arpan Dutta</a></h2>
+                                </td>
+                                <td>ajdcdbcd</td>
+                                <td>CSE</td>
+                                <td>25/06/24,22:05:00</td>
+                                <td>NA</td>
+                                <td >
+                                    <button class="btn"><i class="fa fa-download"></i> Download</button>
+                                      </td>
+                                    
+                            </tr>
+                            
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="card-footer">
+                <a [routerLink]="'/apps/file-manager'">View all Documents</a>
+            </div>
+        </div>
+      </div>
+     
+
+      
+
+
+

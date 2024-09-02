@@ -1,0 +1,188 @@
+<!-- <div class="content container-fluid">
+  <div class="page-header">
+    <div class="row">
+      <div class="col-sm-12">
+        <h3 class="page-title">Welcome {{ uname }}!</h3>
+        <ul class="breadcrumb">
+          <li class="breadcrumb-item active" id="dashboard">Dashboard</li>
+        </ul>
+      </div>
+    </div>
+    <form [formGroup]="getAllFilesForm" class="file-search">
+      <div class="input-group">
+        <div class="col-md-12  d-flex">
+          <div class="col-xl-12">
+            <div class="input-block mb-3 form-focus select-focus">
+              <mat-select class="select custom-mat-select floating-mat-select" (ngModelChange)="onSubmit($event)"
+                formControlName="dropDownData" placeholder="--Select Category--" id="myDropdown" required>
+
+                <mat-option>--Select Category--</mat-option>
+                <mat-option value="Department">Departments</mat-option>
+                <mat-option value="Area">Areas</mat-option>
+                <mat-option value="Instrument">Instruments</mat-option>
+              </mat-select>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div class="dropdown">
+       <div class="file-body">
+      <div class="file-scroll">
+        <div class="file-content-inner">
+          <div class="row row-sm justify-content-left">
+
+            <div class="col-12 col-sm-4 col-md-3 col-lg-4 col-xl-3" *ngFor="let item of myData; let i = index">
+
+              <a class="card" [routerLink]="routes.filemanager">
+                <div class="containers">
+                  <div  *ngIf="item.dType=='Area'" class ="icon-circle">
+                    <img style="border-radius: 100px; height:100%;width:100%;" [attr.src]="'assets/img/Area1.jpg'" />
+           
+                  </div>
+                  <div  *ngIf="item.dType=='Department'" class="icon-circle" >
+                    <img style="border-radius: 100px; height:100%;width:100%;" [attr.src]="'assets/img/dep.jpg'" />
+             
+                  </div>
+                  <div *ngIf="item.dType=='Instrument'"class="icon-circle">
+                    <img style="border-radius: 100px; height:100%;width:100%;" [attr.src]="'assets/img/in.jpg'" />
+              
+                  </div>
+
+                  <div class="title mb-3">
+                    <h2>{{ item.dType }}</h2>
+                  </div>
+                  <div class="subtitle">
+                    Total Documents: {{ item.totalFiles }}
+                    Document Type: Manual <br>
+                    Total File Size: 954kb
+
+                  </div>
+                  <div class="btnRound btnService">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 19 18" height="18" width="19">
+                      <path stroke-linejoin="round" stroke-linecap="round" stroke-width="1.5" stroke="#23C55E"
+                        d="M3.51141 2.78405L14.9344 6.95805C15.4154 7.13405 15.4014 7.81905 14.9134 7.97605L9.68541 9.64905L8.01241 14.8771C7.85641 15.3651 7.17041 15.3791 6.99441 14.8981L2.82141 3.47405C2.66441 3.04405 3.08141 2.62705 3.51141 2.78405Z">
+                      </path>
+                    </svg>
+                  </div>
+                </div>
+              </a>
+
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+  </div>
+</div> -->
+
+
+<!-- <!DOCTYPE html>
+<html lang="en"> -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Education Portal</title>
+   
+</head>
+<body>
+    <header >
+      <!-- <img src="assets/img/libraryBackground.jpg" class="backgroundImage" width="500" height="500"> -->
+       <div class="logoView">
+        <!-- <img src="../../../../../assets/img/library-DM-&-KT-1111.png" class="img-fluid"/> -->
+       </div>
+       <form [formGroup]="getAllFilesForm" class="file-search" id="totalGrp">
+        <div class="search-bar">
+          <mat-select class="select custom-mat-select" (ngModelChange)="onSubmit($event)"
+          formControlName="dropDownData" placeholder="Departments" id="myDropdown" [(value)]="selected" required>
+          <!-- <mat-option class="selectText">--Select Category--</mat-option> -->
+          <mat-option value="Main Head" >Main Head</mat-option>
+          <mat-option value="Plant" >Plant</mat-option>
+          <mat-option value="Department">Department</mat-option>
+          <mat-option value="Sub-Area">Sub-Area</mat-option>
+        </mat-select>
+            
+            <input type="text" class="searchBar" placeholder="Enter your search key..."  data-bs-toggle="modal"
+            data-bs-target="#viewSelectedOptions">
+            <button class="button button-primary">Search</button>
+        </div>
+        </form>
+    </header>
+    <main class="cards-container">
+      <section  id="school-education" *ngFor="let item of myData; let i = index">
+        <!-- <a  [routerLink]="routes.filemanager"> -->
+          <a  (click)="openLink()">
+          <div class="card">
+            <div class="bg-image hover-overlay" mdbRipple rippleColor="light">
+              <img src={{item.src}} class="img-fluid"/>
+              
+            </div>
+            <div class="card-body">
+              <h5 class="card-title">{{ item.dType }}</h5>
+              <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+              <a href="#!" class="btn btn-primary">View Files</a>
+            </div>
+          </div>
+          </a>
+      </section>
+    
+  </main>
+</body>
+
+
+
+
+
+<div id="viewSelectedOptions" class="modal custom-modal fade" role="dialog">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+      <div class="modal-content">
+          <div class="modal-header" style="height: 20vh;">
+            <h2>Select Your Options</h2>
+            <button
+              type="button"
+              id="closeModalBtn"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body flex">
+            <div class="row">
+
+              <div >
+                <div class="container">
+               
+                  <div class="row justify-content-evenly " >
+                  
+                    <div class="card2" *ngFor="let item of myData;">
+                      <!-- <a (click)="navigateToFileManager()"   > -->
+                     <a [routerLink]="routes.filemanager" target="_blank">
+                      <!-- <a  (click)="openLink()"> -->
+                        <div class="row">
+                      <div>
+                      <img  src={{item.src}} alt="Profile Image" >
+                    </div>
+                   
+                    <div class="fileName" >
+                      <h2> {{ item.dType }}</h2>
+                    </div>
+                  </div>
+                  </a>
+              </div>
+             
+          </div>
+      </div>
+  </div>
+</div>
+</div>
+

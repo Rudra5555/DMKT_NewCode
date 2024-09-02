@@ -1,0 +1,37 @@
+.search-set .search-input input[type=search] {
+    height: 42px;
+    border: 1px solid rgba(145, 158, 171, 0.3);
+    background: #FFF;
+    width: 227px;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+.space-select .mat-mdc-select-trigger {
+    padding-left: 35px;
+    border: 1px solid rgba(145, 158, 171, 0.32);
+    border-radius: 5px;
+    color: #878a99;
+    line-height: 38px;
+    border-radius: 8px;
+    height: 43px;
+    background-color: #fff;
+    min-width: 200px;
+}
+.table_header .dataTables_length label {
+    display: flex;
+    align-items: center;
+   
+    height: 52px;
+}
+.daterange-picker .form-sort input {
+    padding-left: 25px;
+    height: 43px;
+}
+.filter-section > ul {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: end;
+    margin-right: 25px;
+}

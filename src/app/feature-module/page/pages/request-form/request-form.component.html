@@ -1,0 +1,75 @@
+<!-- Page Content -->
+<div class="content container-fluid">
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="row">
+            <div class="col-sm-16">
+                <h3 class="page-title">Request Form</h3>
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item"><a [routerLink]="routes.adminDashboard">Dashboard</a></li>
+                    <li class="breadcrumb-item active" style="color: black;">Request Form</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+   
+    <!-- /Page Header -->
+
+<form class="file-search">
+     <input type="text" class="form-control rounded-pill" placeholder="Search">   
+</form>
+  <div class="row" >
+    <div class="col-lg-6">
+        <form [formGroup]="uploadFileForm" (ngSubmit)="onSubmit()">
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="input-block mb-3">
+                  <label class="col-form-label" for="">Upload Files <span class="text-danger">*</span></label>
+      <div class="card">
+          <div class="card-header">
+            <h5 class="card-title">Multiple File Upload</h5>
+          </div>
+          <div class="card-body">
+            <div class="custom-file-container" data-upload-id="mySecondImage">
+              <label>Upload (Allow Multiple) <a href="javascript:void(0)"
+              class="custom-file-container__image-clear" title="Clear Image"></a></label>
+              <ngx-dropzone (change)="onMultipleSelect($event)" class="service-upload" formControlName="uploadFile">
+                <ngx-dropzone-label class="drop-browse align-center">
+                  <span><img src="assets/img/icons/drop-icon.svg" alt="upload" /></span>
+                  <div class="d-flex">
+                    Drop your files here or<span class="text-primary ms-1">browse</span>
+                  </div>
+                  <span class="text-muted">Maximum size: 50MB</span>
+                </ngx-dropzone-label>
+                @for (f of multipleFiles; track f) {
+                  <ngx-dropzone-image-preview ngProjectAs="ngx-dropzone-preview"
+                    [file]="f" [removable]="true" (removed)="onRemoveMultiple(f)">
+                  </ngx-dropzone-image-preview>
+                }
+              </ngx-dropzone>
+           
+          </div> 
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      </div>
+      </form>
+        </div>
+        <div class="col-lg-6">
+            <div class="col-sm-6">
+                <div class="input-block mb-3">
+        <label class="col-form-label" for="">Remarks <span class="text-danger">*</span></label>
+       <p class="ex1"> <textarea name="paragraph_text" cols="73" rows="20"></textarea ></p>
+    </div>
+    </div>
+        </div>
+
+</div>  
+<div class="submit-section">
+    <button style="background-color: rgb(0, 224, 89);" class="btn btn-primary submit-btn" type="submit">Submit</button>
+  </div>
+
+</div>

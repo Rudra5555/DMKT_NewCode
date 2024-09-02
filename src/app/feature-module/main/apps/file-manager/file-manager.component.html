@@ -1,0 +1,560 @@
+<div class="content container-fluid" id="fileManagerFooter">
+  <!-- Page Header -->
+  <div class="page-header">
+    <div class="row align-items-center">
+      <div class="col-md-4">
+        <!-- <h3 class="page-title"> Document </h3> -->
+        <h5 class="page-title">{{ departmentName }} / {{ subAreaName }}</h5>
+
+        <ul class="breadcrumb">
+          <li class="breadcrumb-item">
+            <a [routerLink]="routes.employee">Dashboard</a>
+          </li>
+          <li class="breadcrumb-item active" style="color: black">
+            {{ subAreaNameOnHeader }} Document
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <hr />
+
+    <div class="filter-section">
+      <ul>
+        <li>
+          <div class="filter-section">
+            <div class="col-xl-12">
+              <div class="daterange-picker d-flex centered-div">
+                <div class="form-sort">
+                  <i class="las la-calendar"></i>
+                  <input
+                    type="text"
+                    class="form-control date-range bookingrange"
+                    #drp="bsDaterangepicker"
+                    bsDaterangepicker
+                    placeholder="Select Date..."
+                    [(ngModel)]="bsRangeValue"
+                    (ngModelChange)="onDateRangeSelected()"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          
+        </li>
+        
+
+        <li>
+          <div class="search-set">
+            <div class="search-input">
+              <!-- <a href="javascript:void(0);" class="btn btn-searchset"
+                ><i class="las la-search"></i
+              ></a> -->
+              <div class="dataTables_filter">
+                <label>
+                  <input
+                    style="height: 43px;    margin-top: 19%;"
+                    id="value"
+                    [(ngModel)]="searchDataValue"
+                    [ngModelOptions]="{ standalone: true }"
+                    [ngModelOptions]="{ standalone: true }"
+                    (ngModelChange)="searchData(searchDataValue)"
+                    type="search"
+                    class="form-control"
+                    placeholder="Search..."
+                  />
+                </label>
+              </div>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class="row" style="margin-top: 20px; overflow-y: auto">
+      <div class="col-md-12">
+        <div class="table_header" >
+          <div class="row">
+            <div class="col-sm-8 col-md-5">
+              <div class="dataTables_length">
+                <label class="col-form-label" for="">
+                  Show
+                  <select
+                    [(ngModel)]="pageSize"
+                    (ngModelChange)="changePageSize()"
+                    class="form-control form-control-sm" id="changePageDataNumber"
+                  >
+                    <option value="10">10</option>
+                    <option value="25">25</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                  </select>
+                  Entries
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="table-responsive"
+          style="text-align: center; justify-content: center"
+        >
+          <table
+            matSort
+            (matSortChange)="sortData($event)"
+            class="table table-striped custom-table datatable doc-table"
+          >
+            <thead>
+              <tr>
+                <th style="color: rgb(22, 32, 138)" mat-sort-header="name">
+                  Document Name
+                </th>
+                <th style="color: rgb(22, 32, 138)" mat-sort-header="type">
+                  Document Type
+                </th>
+                <th style="color: rgb(22, 32, 138)" mat-sort-header="ver">
+                  Versions
+                </th>
+                <th style="color: rgb(22, 32, 138)" mat-sort-header="size">
+                  Document Size
+                </th>
+                <th style="color: rgb(22, 32, 138)">Download</th>
+                <th style="color: rgb(22, 32, 138)">View</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr *ngFor="let item of fileList">
+                
+                <td>
+                  <h2 class="table-avatar d-flex">
+                    {{ item.listOfDocumentVersoinDtos[0].newUniqueFileName }}
+                  </h2>
+                </td>
+                <td>{{ item.documentType }}</td>
+
+                <td>
+                  <mat-select
+                    class="custom-mat-select select"
+                    id="versionSelect"
+                    placeholder="Select Version"
+                    (selectionChange)="onVersionChange(item, $event.value)"
+                    [value]="item.selectedVersion"
+                  >
+                    <mat-option
+                      *ngFor="let version of item.listOfDocumentVersoinDtos"
+                      [value]="version"
+                    >
+                      {{ version.versionName }} -
+                      {{ version.versionReleaseDate }}
+                    </mat-option>
+                  </mat-select>
+                </td>
+                <td>{{ item.listOfDocumentVersoinDtos[0].fileSize }} KB</td>
+                <td class="text-center">
+                  <a
+                    class="dropdown-item"
+                    [href]="item.listOfDocumentVersoinDtos[0].fileUrl"
+                    target="_blank"
+                  >
+                    <i
+                      class="fa-solid fa-download"
+                      style="color: rgb(0, 117, 234)"
+                    ></i>
+                  </a>
+                </td>
+                <td class="text-center">
+                  <a
+                    class="dropdown-item"
+                    [href]="item.listOfDocumentVersoinDtos[0].fileUrl"
+                    target="_blank"
+                    data-bs-toggle="modal"
+                    data-bs-target="#view_files"
+                  >
+                    <i class="fas fa-eye" style="color: rgb(0, 117, 234)"></i>
+                  </a>
+                </td>
+              </tr>
+              <tr *ngIf="fileList.length == 0">
+                <td colspan="6" style="text-align: center; color: red">
+                  No Records Found!
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="table_footer">
+          <div class="col-sm-12 col-md-5">
+            <div class="dataTables_info">
+              Showing {{ serialNumberArray[0] }} to
+              {{ serialNumberArray[serialNumberArray.length - 2] }} of
+              {{ totalData }} entries
+            </div>
+          </div>
+  
+          <div class="col-sm-12 col-md-7">
+            <div class="pagination_section">
+              <ul class="pagination">
+                <li class="page-item" [ngClass]="{
+                    disabled: currentPage === 1
+                  }">
+                  <a (click)="getMoreData('previous')" class="page-link" href="javascript:void(0);" tabindex="-1"><i
+                      class="fa fa-angle-double-left"></i></a>
+                </li>
+  
+                @for (item of pageNumberArray; track item; let i = $index) {
+                <li class="page-item" [class.active]="item === currentPage" [ngClass]="
+                      (pageNumberArray[currentPage - 2] > item &&
+                        item !== 1 &&
+                        pageNumberArray.length > 6) ||
+                      (pageNumberArray[currentPage] < item &&
+                        item !== 1 &&
+                        pageNumberArray.length > 6 &&
+                        pageNumberArray.length !== item)
+                        ? 'hide-page-no'
+                        : 'show-page-no'
+                    ">
+                  <a (click)="moveToPage(item)" class="page-link" href="javascript:void(0);">
+                    {{ item }}
+                  </a>
+                </li>
+                @if (
+                i === 0 && pageNumberArray.length > 6 && currentPage > 2
+                ) {
+                <li class="page-item" [hidden]="currentPage === 1" (click)="moveToPage(currentPage - 2)"
+                  (keydown.enter)="moveToPage(currentPage - 2)" tabindex="0">
+                  <a class="page-link" href="javascript:void(0);"> ... </a>
+                </li>
+                }
+                @if (
+                i === pageNumberArray.length - 2 &&
+                pageNumberArray.length > 6
+                ) {
+                <li [hidden]="
+                      currentPage >=
+                        pageNumberArray[pageNumberArray.length - 2] ||
+                      totalData < serialNumberArray[serialNumberArray.length - 1]
+                    " class="page-item" (click)="moveToPage(currentPage + 2)"
+                  (keydown.enter)="moveToPage(currentPage + 2)" tabindex="0">
+                  <a class="page-link" href="javascript:void(0);"> ... </a>
+                </li>
+                }
+                }
+  
+                <li class="page-item" [ngClass]="{
+                    disabled:
+                      currentPage ===
+                        pageNumberArray[pageNumberArray.length - 1] ||
+                        fileList.length === 0
+                  }">
+                  <a (click)="getMoreData('next')" class="page-link" href="javascript:void(0);"><i
+                      class=" fa fa-angle-double-right"></i>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Export -->
+  <div class="modal custom-modal fade modal-padding" id="export" role="dialog">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header header-border justify-content-between p-0">
+          <h5 class="modal-title">Export</h5>
+          <button
+            type="button"
+            class="btn-close position-static"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <div class="modal-body p-0">
+          <form>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="input-block mb-3">
+                  <h5 class="mb-3">Export</h5>
+                  <div class="status-radio-btns d-flex">
+                    <div class="people-status-radio">
+                      <input
+                        type="radio"
+                        class="status-radio"
+                        id="pdf"
+                        name="export-type"
+                        checked
+                      />
+                      <label for="pdf">Person</label>
+                    </div>
+                    <div class="people-status-radio">
+                      <input
+                        type="radio"
+                        class="status-radio"
+                        id="excel"
+                        name="export-type"
+                      />
+                      <label for="excel">Organization</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-12">
+                <h4 class="mb-3">Filters</h4>
+                <div class="input-block mb-3">
+                  <label class="col-form-label"
+                    >Fields <span class="text-danger">*</span></label
+                  >
+
+                  <mat-select
+                    class="custom-mat-select select"
+                    placeholder="All Fields"
+                  >
+                    <mat-option value="all">All Fields</mat-option>
+                    <mat-option value="all">doc</mat-option>
+                    <mat-option value="all">Company</mat-option>
+                  </mat-select>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="input-block mb-3">
+                  <label class="col-form-label"
+                    >From Date <span class="text-danger">*</span></label
+                  >
+                  <div class="cal-icon">
+                    <input
+                      class="form-control floating datetimepicker"
+                      type="text"
+                      bsDatepicker
+                    />
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="input-block mb-3">
+                  <label class="col-form-label"
+                    >To Date <span class="text-danger">*</span></label
+                  >
+                  <div class="cal-icon">
+                    <input
+                      class="form-control floating datetimepicker"
+                      type="text"
+                      bsDatepicker
+                    />
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-12 text-end form-wizard-button">
+                <button
+                  class="button btn-lights reset-btn"
+                  type="reset"
+                  data-bs-dismiss="modal"
+                >
+                  Reset
+                </button>
+                <button class="btn btn-primary" type="submit">
+                  Export Now
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- /Export -->
+
+  <div id="view_file_version" class="modal custom-modal fade" role="dialog">
+    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Document Information</h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="row">
+              <!-- <div class="col-md-6">
+              <div class="cardVer">
+                <div class="card-file-thumb" id="docIcon">
+                  <i class="fa-regular fa-file-pdf fa-2xl"></i>
+                </div>
+
+                <div class="container" id="docInfo">
+                  <h4>Boiler Manual</h4>
+                  <h6>286kb</h6>
+                  <h4>Manual</h4>
+                </div>
+              </div>
+            </div> -->
+
+              <div class="cardModal">
+                <div class="icon-circle">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 28 29"
+                    height="29"
+                    width="28"
+                  >
+                    <path
+                      stroke-linejoin="round"
+                      stroke-linecap="round"
+                      stroke-width="1.5"
+                      stroke="#23C55E"
+                      d="M23.7222 9.04435V6.71102C23.7222 5.42235 22.6775 4.37769 21.3888 4.37769L6.61106 4.37769C5.32239 4.37769 4.27773 5.42235 4.27773 6.71102V9.04435C4.27773 10.333 5.32239 11.3777 6.61106 11.3777H21.3888C22.6775 11.3777 23.7222 10.333 23.7222 9.04435Z"
+                    ></path>
+                    <path
+                      stroke-linejoin="round"
+                      stroke-linecap="round"
+                      stroke-width="1.5"
+                      stroke="#23C55E"
+                      d="M23.7222 21.4888V19.1555C23.7222 17.8668 22.6775 16.8221 21.3888 16.8221H15.9444C14.6557 16.8221 13.6111 17.8668 13.6111 19.1555V21.4888C13.6111 22.7775 14.6557 23.8221 15.9444 23.8221H21.3888C22.6775 23.8221 23.7222 22.7775 23.7222 21.4888Z"
+                    ></path>
+                  </svg>
+                </div>
+                <div class="title mb-3"><h2>Manual</h2></div>
+                <div class="subtitle">
+                  Total Documents: Manual Document Type: pdf <br />
+                  Total File Size: 954kb
+                </div>
+                <div class="btnRound btnService">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 19 18"
+                    height="18"
+                    width="19"
+                  >
+                    <path
+                      stroke-linejoin="round"
+                      stroke-linecap="round"
+                      stroke-width="1.5"
+                      stroke="#23C55E"
+                      d="M3.51141 2.78405L14.9344 6.95805C15.4154 7.13405 15.4014 7.81905 14.9134 7.97605L9.68541 9.64905L8.01241 14.8771C7.85641 15.3651 7.17041 15.3791 6.99441 14.8981L2.82141 3.47405C2.66441 3.04405 3.08141 2.62705 3.51141 2.78405Z"
+                    ></path>
+                  </svg>
+                </div>
+              </div>
+
+              <div class="col-md-6" id="versionDrop">
+                <div class="input-block mb-3">
+                  <label class="col-form-label"
+                    >Version <span class="text-danger">*</span></label
+                  >
+                </div>
+              </div>
+            </div>
+
+            <div class="col-lg-12 text-end form-wizard-button">
+              <button
+                class="btn btn-warning"
+                id="viewBtn"
+                type="submit"
+                data-bs-toggle="modal"
+                data-bs-target="#view_files"
+              >
+                View
+              </button>
+              <button class="btn btn-warning" type="submit">Download</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Middle modal END-->
+
+  <!-- File Upload Modal -->
+  <div
+    id="view_files"
+    #view_files
+    class="modal custom-modal fade"
+    role="dialog"
+  >
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">File-Name</h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="row">
+              <!-- <iframe src="http://localhost:8080/document/show-pdf/Scope of Work_Digital Library0a1ee6ec-b60f-41da-ac55-31003c08c239"
+                    width="800" height="600"> </iframe> -->
+              <!-- <iframe src="D:\Client project\pdf documents for demo/scope"
+                    width="800" height="600"> </iframe> -->
+              <!-- <iframe src="http://103.168.18.28:8080/document/show-file/POWER O&M.C&I.TURBINE.CPP-2.318.C72-EN.pdf"
+                    width="800" target="_blank" height="600"> </iframe> -->
+
+              <!-- <iframe
+              src="http://103.168.18.28:8080/document/show-file/POWER O&M.C&I.TURBINE.CPP-2.32.Copy of Estimated_Time.xlsx"
+              width="800" 
+              height="600"
+              frameborder="0"
+            >
+              ...This is an embedded file...
+            </iframe> -->
+
+              <!-- <ngx-doc-viewer [url]="doc" [viewer]="viewer" style="width:100%;height:80vh;"></ngx-doc-viewer> -->
+
+               <ngx-doc-viewer
+                [url]="doc"
+                [viewer]="viewer"
+                style="width: 100%; height: 80vh"
+              ></ngx-doc-viewer>
+
+<!-- <iframe src="https://sharecad.org/cadframe/load?url=http://www.cadsofttools.com/dwgviewer/floorplan.dwg" scrolling="yes"></iframe>
+               -->
+
+
+               <!-- <iframe src="http://localhost:4200/assets/files/anteen.dwg" scrolling="yes"></iframe> -->
+              
+               <!-- <iframe src="https://sharecad.org/cadframe/load?url=http://www.cadsofttools.com/dwgviewer/floorplan.dwg" scrolling="yes" width="100%" height="600"></iframe> -->
+
+
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--  /File Upload Modal -->
+</div>

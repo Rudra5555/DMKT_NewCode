@@ -1,0 +1,198 @@
+<!-- Page Content -->
+<div
+  class="content"
+  [ngClass]="layoutWidth === '2' ? 'container' : 'container-fluid'"
+>
+  <!-- Page Header -->
+  <div class="page-header">
+    <div class="row">
+      <div class="col-sm-6">
+        <h3 class="page-title">Welcome {{ userName }}</h3>
+        <ul class="breadcrumb">
+          <li class="breadcrumb-item active" style="color: black;">Dashboard</li>
+        </ul>
+      </div>
+      
+      <div class="col-sm-6 text-right">
+        <li class="daterange-picker d-flex justify-content-end" style="margin-right: 180px;">
+          <label class="mr-2 mt-2">Select Dates:</label> 
+          <div class="form-sort">
+            <i class="las la-calendar"></i>
+            <input type="text" class="form-control date-range bookingrange" #drp="bsDaterangepicker"
+              bsDaterangepicker [(ngModel)]="bsRangeValue" (ngModelChange)="onDateRangeSelected()" />
+          </div>
+        </li>
+      </div>
+    </div>
+
+  </div>
+  <!-- /Page Header -->
+
+  <div class="row"> 
+    <div class="col-md-6 col-sm-6 col-lg-6 col-xl-3">
+      <div class="card dash-widget">
+        <div class="card-body">
+          <span class="dash-widget-icon"
+            ><i class="fa-solid fa-user"></i></span>
+            <div class="dash-widget-info" id="arrows">
+              <h3 class="count">{{ fileCount }}  <span class="arrow up"><i class="fas fa-arrow-up" style="height: 83px;font-size:24px;"></i><i id="downArrow" class="" style="height: 83px;font-size:24px;"></i>(+{{incCount}})</span></h3>
+              <span class="countName">Total Documents</span>
+            </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6 col-sm-6 col-lg-6 col-xl-3">
+      <div class="card dash-widget">
+        <div class="card-body">
+          <span class="dash-widget-icon"
+            ><i class="fa-solid fa-user"></i></span>
+            <div class="dash-widget-info">
+              <h3 class="count">{{totalActiveUser}}<span class="arrow up"><i class="fas fa-arrow-up" style="height: 83px;font-size:24px;"></i><i id="downArrow" class="" style="height: 83px;font-size:24px;"></i></span></h3>
+              <span class="countName">Total Active Users</span>
+            </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6 col-sm-6 col-lg-6 col-xl-3">
+      <div class="card dash-widget">
+        <div class="card-body">
+          <span class="dash-widget-icon"><i class="fa-solid fa-user"></i></span>
+          <div class="dash-widget-info">
+            <h3 class="count">{{totalActiveHod}}<span class="arrow up"><i class="fas fa-arrow-up" style="height: 83px;font-size:24px;"></i><i id="downArrow"  *ngIf="isIncrease === false" class="" style="height: 83px;font-size:24px;"></i></span></h3>
+            <span class="countName">Total Active HODs</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6 col-sm-6 col-lg-6 col-xl-3">
+      <div class="card dash-widget">
+        <div class="card-body">
+          <span class="dash-widget-icon"><i class="fa-solid fa-user"></i></span>
+          <div class="dash-widget-info">
+            <h3 class="count">{{totalDepartment}}<span class="arrow up"><i class="fas fa-arrow-up" style="height: 83px;font-size:24px;"></i><i id="downArrow" class="" style="height: 83px;font-size:24px;"></i></span></h3>
+            <span class="countName">Total Department</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <div class="row">
+        <div class="col-md-6 text-center">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Application Usage</div>
+            </div>
+            <div class="card-body abc">
+              <div class="chartjs-wrapper-demo custom-chart1">
+                <canvas 
+                  baseChart
+                
+                  [type]="'pie'"
+                  [data]="pieChartData"
+                  [options]="{ responsive: true }"
+                >
+                </canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+
+
+
+
+        <div class="col-md-6 text-center">
+          <div class="card">
+            <div class="card-body">
+
+              <h3 class="card-title">Document Uploaded</h3>
+
+              <div class="card-body acc">
+                <div class="chartjs-wrapper-demo ">
+                  <canvas baseChart id="chartBar1" class="chart h-300" [data]="barChartData2">
+                  </canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+ 
+
+  <div class="col-md-12 d-flex">
+    <div class="card card-table flex-fill">
+      <div class="card-header">
+        
+
+        <div class="daterange-picker d-flex centered-div">
+          <h3 class="card-title mb-0">Recent Updated Documents</h3>
+          <div class="form-sort">
+            <i class="las la-calendar"></i>
+            <input type="text" class="form-control date-range bookingrange" #drp="bsDaterangepicker"
+              bsDaterangepicker [(ngModel)]="bsRangeValue" (ngModelChange)="onDateRangeSelected()" />
+          </div>
+          </div>
+      </div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-nowrap custom-table mb-0">
+            <thead >
+              <tr >
+                <th>Document Name</th>
+                <th>Document Extension</th>
+                <th>Department Name</th>
+                <th>Sub-Area</th>
+                <th>Storage Location</th>
+                <th>Document Type</th>
+                <th class="text-end">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+
+              <tr *ngFor="let item of fileList">
+                <td><a [routerLink]="">{{item.fileName}}</a></td>
+                <td>
+                  <h2>{{item.extension}}</h2>
+                </td>
+                <td>
+                  {{item.department? item.department : 'N/A'}}
+                </td>
+                <td>{{item.subArea? item.subArea : 'N/A'}}</td>
+                <td>Hard Copy</td>
+                <td>{{item.documentType}}</td>
+                <td class="text-center">
+                    <a
+                      class="dropdown-item"
+                      [href]="item.fileUrl"
+                      target="_blank"
+                    >
+                      <i
+                        class="fa-solid fa-download"
+                        style="color: rgb(0, 117, 234)"
+                      ></i>
+                    </a>
+                  </td>
+                </tr>
+
+                <tr *ngIf="noRecordFlag">
+                  <td colspan="6" style="text-align: center; color: red">
+                    No Records Found!
+                  </td>
+                </tr>
+
+            </tbody>
+          </table>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- /Page Content -->
