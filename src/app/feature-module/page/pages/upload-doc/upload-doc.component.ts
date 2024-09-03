@@ -68,7 +68,7 @@ export class UploadDocComponent implements OnInit {
 
   onFileDropped($event: any) {
     this.prepareFilesList($event);
-   
+
   }
 
   fileBrowseHandler(files: any) {
@@ -78,7 +78,6 @@ export class UploadDocComponent implements OnInit {
 
   deleteFile(index: number) {
     if (this.files[index].progress < 100) {
-      // //console.log("Upload in progress.");
       return;
     }
     this.files.splice(index, 1);
@@ -98,46 +97,36 @@ export class UploadDocComponent implements OnInit {
         }
       }, 50);
     }, 50);
-    // //console.log("deleted file", this.files);
-    
+
   }
 
   prepareFilesList(files: Array<any>) {
-    // //console.log("preparation file list:: ",files);
-    if(files != null){
+    if (files != null) {
       this.uploadDocumentFlag = false;
     }
     for (const item of files) {
       item.progress = 0;
       this.files.push(item);
-   // this.selectedFiles.push(item);
-      // //console.log("call files.push ", this.selectedFiles);
-      // //console.log("each file size ",item.size);
-      // //console.log("files push item:",this.files);
-      
-
       this.calculateTotalFileSize(this.files);
     }
     this.fileDropEl.nativeElement.value = "";
     this.uploadFilesSimulator(0);
     this.updateSubmitButtonState();
-    
+
   }
 
 
   calculateTotalFileSize(files: Array<any>) {
     const fiftyMB = 2 * 1024 * 1024;
     let totalSize = 0;
-    
+
     for (const file of files) {
       totalSize += file.size;
     }
-  
+
     if (totalSize <= fiftyMB) {
-      // //console.log("Total file size pass" ,totalSize);
       this.uploadDocumentSizeFlag = false;
     } else {
-      // //console.log("Total file size fail");
       this.uploadDocumentSizeFlag = true;
     }
     this.updateSubmitButtonState();
@@ -159,60 +148,50 @@ export class UploadDocComponent implements OnInit {
     const [catName, abbreviation] = event.value.split('~');
     this.selectedCatName = catName;
     this.selectedCatNameAbbr = abbreviation;
-    if(this.selectedCatName != null){
+    if (this.selectedCatName != null) {
       this.mainHeadFlag = false
     }
-    if(this.selectedCatName != 'POWER O&M'){
+    if (this.selectedCatName != 'POWER O&M') {
       this.plantList = [];
       this.departmentList = [];
-      this.subAreaList =[];
+      this.subAreaList = [];
     }
-    // this.onMainHeadChange(this.selectedCatName);
-    this.onMainHeadChange( this.selectedCatName, this.selectedCatNameAbbr);
+    this.onMainHeadChange(this.selectedCatName, this.selectedCatNameAbbr);
     this.updateSubmitButtonState();
   }
 
   selectedPlant(event: any) {
     this.plantOption = event.value;
 
-    if(this.plantOption != null){
+    if (this.plantOption != null) {
       this.plantFlag = false;
     }
-    if(this.selectedCatName != "POWER O&M"){
+    if (this.selectedCatName != "POWER O&M") {
       this.plantFlag = false;
-      // //console.log("false plant flag",this.plantFlag);
-      
+
     }
     this.getAllPlantList(this.plantOption, "plants");
     this.updateSubmitButtonState();
   }
 
   selectedDepartment(event: any) {
-    // this.selectedDeptCatName = event.value;
-
     const [catName, abbreviation] = event.value.split('~');
     this.selectedDeptCatName = catName;
     this.selectedDeptCatNameAbbr = abbreviation;
-    // //console.log(this.selectedDeptCatName, this.selectedDeptCatNameAbbr);
 
-    if(this.selectedDeptCatName != null){
+    if (this.selectedDeptCatName != null) {
       this.departmentFlag = false;
     }
-    
+
     this.getSubAreaList(this.selectedDeptCatName, "department");
     this.updateSubmitButtonState();
   }
 
   selectedSubArea(event: any) {
-    // this.selectedSubAreaCatName = event.value;
-
     const [catName, abbreviation] = event.value.split('~');
     this.selectedSubAreaCatName = catName;
     this.selectedSubAreaCatNameAbbr = abbreviation;
-    // //console.log(this.selectedSubAreaCatName, this.selectedSubAreaCatNameAbbr);
-    // //console.log("subArea data:",this.selectedSubAreaCatName);
-    
-    if(this.selectedSubAreaCatName != null){
+    if (this.selectedSubAreaCatName != null) {
       this.subAreaFlag = false;
     }
     this.updateSubmitButtonState();
@@ -220,7 +199,7 @@ export class UploadDocComponent implements OnInit {
 
   selectedDocumentType(event: any) {
     this.documentTypeOption = event.value;
-    if(this.documentTypeOption != null){
+    if (this.documentTypeOption != null) {
       this.documentTypeFlag = false;
     }
     this.updateSubmitButtonState();
@@ -228,23 +207,21 @@ export class UploadDocComponent implements OnInit {
 
   storageLocationType(event: any) {
     this.storageLocationOption = event.value;
-    // //console.log(this.storageLocationOption);
-    
-    if(this.storageLocationOption != null){
+    if (this.storageLocationOption != null) {
       this.storageLocationFlag = false;
     }
     this.updateSubmitButtonState();
   }
 
 
- 
+
   updateSubmitButtonState() {
     this.disableSubmitBtn = this.uploadDocumentSizeFlag || this.uploadDocumentFlag || this.mainHeadFlag || this.plantFlag || this.departmentFlag || this.subAreaFlag || this.documentTypeFlag || this.storageLocationFlag;
   }
 
 
 
- 
+
 
   onSubmit(): void {
 
@@ -258,23 +235,17 @@ export class UploadDocComponent implements OnInit {
     ishodRestricted = ishodRestricted === "" ? false : true;
 
 
-  
+
     const formData = new FormData();
     for (const file of this.files) {
-   
-      
-      // //console.log("this selectedFiles",file);
-      
       formData.append("file", file);
     }
 
     if (!this.selectedCatName) {
-      // //console.log("true main head");
-      
+
       this.mainHeadFlag = true;
     } else {
       this.mainHeadFlag = false;
-      // //console.log("false main head");
     }
 
     if (!this.plantOption) {
@@ -301,24 +272,23 @@ export class UploadDocComponent implements OnInit {
       this.documentTypeFlag = false;
     }
 
-    if(!this.storageLocationOption){
+    if (!this.storageLocationOption) {
       this.storageLocationFlag = true;
-    }else {
+    } else {
       this.storageLocationFlag = false;
     }
 
-   
-    if (this.files.length === 0 ) {
+
+    if (this.files.length === 0) {
       this.uploadDocumentFlag = true;
     } else {
       this.uploadDocumentFlag = false;
-      // //console.log("testing -> false");
-      
+
     }
 
     this.updateSubmitButtonState();
 
-    if (this.selectedCatName && this.plantOption && this.selectedDeptCatName && this.selectedSubAreaCatName && this.documentTypeOption && this.storageLocationOption && this.files.length > 0 ) {
+    if (this.selectedCatName && this.plantOption && this.selectedDeptCatName && this.selectedSubAreaCatName && this.documentTypeOption && this.storageLocationOption && this.files.length > 0) {
       const modalData = {
         "mainHead": this.selectedCatName,
         "mainHeadAbbr": this.selectedCatNameAbbr,
@@ -332,12 +302,12 @@ export class UploadDocComponent implements OnInit {
         "isStatutory": isStatutoryDocument,
         "isRestrictedDocument": isRestrictedDocument,
         "hodRestricted": ishodRestricted
-        
+
       };
-      // //console.log(modalData);
+
       formData.append("requestbody", JSON.stringify(modalData));
-    
-      
+
+
       this.uploadService.upload(formData).subscribe({
         next: (event: any) => {
           if (event instanceof HttpResponse) {
@@ -349,7 +319,6 @@ export class UploadDocComponent implements OnInit {
         }
       });
     } else {
-      // //console.log("Please fill all the required fields.");
       const modalData = {
         "mainHead": this.selectedCatName,
         "mainHeadAbbr": this.selectedCatNameAbbr,
@@ -363,17 +332,16 @@ export class UploadDocComponent implements OnInit {
         "isStatutory": isStatutoryDocument,
         "isRestrictedDocument": isRestrictedDocument,
         "hodRestricted": ishodRestricted
-        
+
       };
-      // //console.log(modalData);
       formData.append("requestbody", JSON.stringify(modalData));
 
-      
+
       this.uploadService.upload(formData).subscribe({
         next: (event: any) => {
           if (event instanceof HttpResponse) {
 
-            
+
             this.successfulSubmitAlert();
           }
         },
@@ -392,8 +360,7 @@ export class UploadDocComponent implements OnInit {
       next: (event: any) => {
         if (event instanceof HttpResponse) {
           this.mainHeadList = event.body?.categoryList || [];
-          // //console.log("main head:",this.mainHeadList);
-          
+
         }
       },
       error: (err: any) => {
@@ -402,16 +369,15 @@ export class UploadDocComponent implements OnInit {
     });
   }
 
-  onMainHeadChange(selectedValue: string, selectedAbbr: string ) {
-    this.getPlantList(selectedValue, "main-head",selectedAbbr);
+  onMainHeadChange(selectedValue: string, selectedAbbr: string) {
+    this.getPlantList(selectedValue, "main-head", selectedAbbr);
   }
 
-  getPlantList(selectedValue: string, mainHead: string,selectedAbbr:string) {
+  getPlantList(selectedValue: string, mainHead: string, selectedAbbr: string) {
     this.uploadDocument.allDataList(selectedValue, mainHead).subscribe({
       next: (event: any) => {
         if (event instanceof HttpResponse) {
           this.plantList = event.body?.categoryList || [];
-          // //console.log("plant list:",this.plantList);
         }
       },
       error: (err: any) => {
@@ -456,7 +422,7 @@ export class UploadDocComponent implements OnInit {
     }).then(() => {
 
       window.location.reload();
-      
+
     });
   }
 

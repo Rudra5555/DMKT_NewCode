@@ -5,10 +5,10 @@ import { routes } from 'src/app/core/core.index';
 import { DataService } from 'src/app/core/services/data/data.service';
 import { apiResultFormat, getcontactlist } from 'src/app/core/services/interface/models';
 import { pageSelection } from 'src/app/feature-module/employee/employees/departments/departments.component';
-// import { datasModel } from '../../deals/deals-details/deals-details.component';
+
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { MatChipEditedEvent, MatChipInputEvent } from '@angular/material/chips';
-// import { datasModel } from 'src/app/feature-module/crm/analytics/analytics.component';
+
 import { FormGroup, FormBuilder, Validators, ReactiveFormsModule } from "@angular/forms";
 import { clientsDatas, companiesList } from 'src/app/core/core.index';
 import { FileManagementService } from 'src/app/services/file-management.service';
@@ -16,7 +16,7 @@ import { HttpResponse } from '@angular/common/http';
 import { BehaviorSubject, flatMap, Observable, ReplaySubject, Subject } from 'rxjs';
 import { LoginComponentService } from 'src/app/services/login-component.service';
 import { encode } from 'base64-arraybuffer';
-// import { FormsModule } from '@angular/forms';
+
 import { NgxDocViewerModule, ViewerType } from 'ngx-doc-viewer';
 import Swal from 'sweetalert2';
 import { ThisReceiver } from '@angular/compiler';
@@ -39,7 +39,6 @@ export class RequestedDocComponent implements OnInit {
   bsValue = new Date();
   bsRangeValue: Date[] = [];
   maxDate = new Date();
-  // pagination variables
   public lastIndex = 0;
   public pageSize = 10;
   public totalData = 0;
@@ -57,14 +56,12 @@ export class RequestedDocComponent implements OnInit {
   public selectedFiles: any;
   public uploadFileForm!: FormGroup;
   public editClientForm!: FormGroup;
-  //  public multipleFiles: File[] = [];
   public reasonFlag: boolean = false;
   public requestFileFlag: boolean = false;
   public uploadDocumentFlag: boolean = false;
   public uploadDocumentSizeFlag: boolean = false;
   public getRole: any;
   public roleFlag: boolean = false;
-  //  userId: number | undefined;
   userName: string | undefined;
   base64String: any;
   public approvedDocumentName: any;
@@ -74,9 +71,6 @@ export class RequestedDocComponent implements OnInit {
   public requestedFileName: any
   res: any;
   public disableSubmitBtn: boolean = false;
-
-  //  public uploadDocumentFlag: boolean = false;
-  //  public uploadDocumentSizeFlag: boolean = false;
   public documentTypeFlag: boolean = false;
   public fileNames: string[] = [];
   files: any[] = [];
@@ -102,9 +96,7 @@ export class RequestedDocComponent implements OnInit {
   loggedSuperUserId: any;
   generatedBy: any;
   selectedFileUrl: any;
-  //  public requestProof : any
   subject = new BehaviorSubject('')
-  // noRecordFlag:boolean=false;
 
 
 
@@ -113,17 +105,7 @@ export class RequestedDocComponent implements OnInit {
 
   //** / pagination variables
   constructor(private data: DataService, private datePipe: DatePipe, _uploadService: FileManagementService, private formBuilder: FormBuilder, private loginService: LoginComponentService) {
-    // this.maxDate.setDate(this.maxDate.getDate() + 7);
-    // this.bsRangeValue = [this.bsValue, this.maxDate];
 
-    // this.subject.subscribe((base64Data: string) => {
-    //  // //console.log("Base64 Stringhgh:", base64Data);
-
-    // });
-    // this.uploadFileForm = this.formBuilder.group({
-    //   remarks: ["", [Validators.required]],
-
-    // });
     this.bsRangeValue = [this.bsValue, this.maxDate];
 
   }
@@ -141,29 +123,7 @@ export class RequestedDocComponent implements OnInit {
     this.startDate = this.formatDate(this.bsRangeValue[0]);
     this.endDate = this.formatDate(this.bsRangeValue[1]);
 
-    //console.log("kkkkkkkk",this.startDate,this.endDate);
-
     this.approvedDocumentList(localStorage.getItem('loggedInUserId'))
-
-    // //console.log(this.catName);
-
-    // this.getFileListDetails()
-
-    // this.loginService.getFileListforOther(this.catName,this.startDate, this.endDate).subscribe({
-    //   next: (event: any) => {
-    //     if (event instanceof HttpResponse) {
-    //       this.fileList = event.body.data;
-    //       //console.log("fileList data for Others************** ", this.fileList);
-
-
-    //     }
-    //   },
-    //   error: (err: any) => {
-    //     if (err.error && err.error.message) {
-    //       this['msg'] += " " + err.error.message;
-    //     }
-    //   },
-    // });
 
   }
 
@@ -179,48 +139,18 @@ export class RequestedDocComponent implements OnInit {
 
     this.setLast7Days();
 
-
-    // this['router'].queryParams.subscribe((params: { [x: string]: string | number; }) => {
-    //     this.userId = +params['userId']; 
-    //     //console.log("User ID:", this.userId); 
-    //   });
-
-    //   this.userName = localStorage.getItem('loggedUserName') ?? '';
-    //   //console.log("User Name:", this.userName);  
-
-
     this.loggedUserId = localStorage.getItem('loggedInUserId');
-    //console.log("UserXXXX",this.loggedUserId);
-
-    //   this.loggedSuperUserId = localStorage.getItem('loggedSuperUserId');
-    // //console.log("SuperUserXXXX",this.loggedSuperUserId);
-
-
-    // if(this.loggedUserId && !this.loggedSuperUserId){
-    //   this.approvedDocumentList(this.loggedUserId);
-    // }if(!this.loggedUserId && this.loggedSuperUserId){
-    //   this.approvedDocumentList(this.loggedSuperUserId);
-    // }
-
-    // this.approvedDocumentList(this.loggedUserId);
-
-
     this.getRole = localStorage.getItem('role');
     if (this.getRole == "Admin") {
       this.roleFlag = true;
-
-      //console.log(this.roleFlag)
     } if (this.getRole == "Librarian") {
       this.roleFlag = true;
     } if (this.getRole == "User") {
       this.roleFlag = false;
-      //console.log(this.roleFlag)
     } if (this.getRole == "SuperUser") {
       this.roleFlag = false;
-      //console.log(this.roleFlag)
     } if (this.getRole == "Hod") {
       this.roleFlag = false;
-      //console.log(this.roleFlag)
     }
 
 
@@ -239,17 +169,9 @@ export class RequestedDocComponent implements OnInit {
         if (event instanceof HttpResponse) {
           const responseData = event.body.data;
 
-
-
-          //console.log("nnnnnnnnn;;;",responseData);
-
-
           const filteredData = responseData.filter((item: getcontactlist) => item.documentApprovalStatus === 'A');
 
           this.totalData = filteredData.length;
-
-          //console.log("LLLLLLLLLL", filteredData);
-
           filteredData.map((item: getcontactlist, index: number) => {
             const serialNumber = index + 1;
             if (index >= this.skip && serialNumber <= this.limit) {
@@ -279,7 +201,6 @@ export class RequestedDocComponent implements OnInit {
         return 'Rejected';
       case 'P':
         return 'Pending';
-      // Add more cases as needed
       default:
         return statusCode; // Fallback to the original status if no match
     }
@@ -304,7 +225,6 @@ export class RequestedDocComponent implements OnInit {
     this.loginService.searchDocuments('').subscribe({
       next: (event: any) => {
         if (event instanceof HttpResponse) {
-          //console.log('API Response:', event.body);  
 
           if (event.body && event.body.data && Array.isArray(event.body.data)) {
             this.documentList = event.body.data.map((doc: any) => ({
@@ -332,8 +252,6 @@ export class RequestedDocComponent implements OnInit {
     this.loginService.searchDocuments(this.searchQuery).subscribe({
       next: (event: any) => {
         if (event instanceof HttpResponse) {
-          //console.log('API Response:', event.body); 
-
           if (event.body && event.body.data && Array.isArray(event.body.data)) {
             this.documentList = event.body.data.map((doc: any) => ({
               displayText: `${doc.uniqueFileName} (${doc.docVersion})`,
@@ -366,7 +284,6 @@ export class RequestedDocComponent implements OnInit {
     this.plant = doc.plant;
     this.selectedDocument = doc.displayText;
     this.searchQuery = doc.displayText;
-    // this.requestedFileName = doc.fileName
     this.documentList = [];
 
     if (this.documentId != null) {
@@ -381,43 +298,30 @@ export class RequestedDocComponent implements OnInit {
   onSubmit() {
     if (this.loggedUserId && !this.loggedSuperUserId) {
       this.generatedBy = this.loggedUserId;
-      //console.log(" this.generatedBy", this.generatedBy);
-
     } if (!this.loggedUserId && this.loggedSuperUserId) {
       this.generatedBy = this.loggedSuperUserId;
-      //console.log(" this.generatedBy", this.generatedBy);
     }
 
 
     const formData = new FormData();
     if (this.files.length === 0) {
-      //console.log("No files selected. Submitting form with empty data.");
       this.uploadDocumentFlag = true;
       this.disableSubmitBtn = true;
     } else {
       for (const file of this.files) {
-        //console.log("Selected file:", file);
         formData.append("fileName", file);
       }
     }
-
-    // formData.append("fileName", this.requestProof); 
     formData.append("documentId", this.documentId);
     formData.append("generateBy", this.generatedBy);
     formData.append("departmentName", this.departmentId);
     formData.append("plantName", this.plant);
     formData.append("documentApprovalStatus", "P");
     formData.append("remarks", this.remarks);
-
-    //console.log(formData)
-
     this.loginService.requestSubmit(formData).subscribe({
       next: (event: any) => {
         if (event instanceof HttpResponse) {
           this.res = event.body;
-
-          //console.log(this.res.message);
-
           if (this.res.message == "Success!!") {
             this.successfulSubmitAlert();
           }
@@ -456,7 +360,6 @@ export class RequestedDocComponent implements OnInit {
       title: "Oops...",
       text: "Something went wrong!",
     }).then(() => {
-      // Reload the page when the user clicks "OK"
       window.location.reload();
     });
   }
@@ -467,8 +370,6 @@ export class RequestedDocComponent implements OnInit {
       title: "Oops...",
       text: "The form was not submitted properly!",
     }).then(() => {
-
-      // window.location.reload();
     });
   }
 
@@ -488,7 +389,6 @@ export class RequestedDocComponent implements OnInit {
 
   deleteFile(index: number) {
     if (this['files'][index].progress < 100) {
-      //console.log("Upload in progress.");
       return;
     }
     this['files'].splice(index, 1);
@@ -576,8 +476,6 @@ export class RequestedDocComponent implements OnInit {
 
   public sortData(sort: Sort) {
     const data = this.contactlist.slice();
-
-    /* eslint-disable @typescript-eslint/no-explicit-any */
     if (!sort.active || sort.direction === '') {
       this.contactlist = data;
     } else {
