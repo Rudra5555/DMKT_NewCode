@@ -158,7 +158,6 @@ export class HeaderOneComponent implements OnInit {
 
       this.loginService.getNotifications(this.loggedUserId).subscribe(
         (response: any) => {
-          // //console.log('API Response:', response);
           if (response.body && response.body.status === 200) {
             this.notificationData = response.body.data.map((notification: any) => ({
               id: notification.documentId,
@@ -175,10 +174,8 @@ export class HeaderOneComponent implements OnInit {
               hodName: notification.executerName || 'HOD',
               uploadImg: notification.uploadImg,
             }));
-            //console.log('notificationData', this.notificationData);
             this.notificationCount = this.notificationData.length;
           } else {
-            //console.log('API Response Error:', response.body);
           }
         },
         (error) => {
@@ -186,7 +183,6 @@ export class HeaderOneComponent implements OnInit {
         }
       );
     } else {
-      //console.log('No HOD ID provided, skipping API call.');
     }
 
     this.notificationData = this.hodNotify
@@ -201,7 +197,7 @@ export class HeaderOneComponent implements OnInit {
 
 
   public userNotificationBell(userId: any) {
-    //console.log(userId);
+
     if (!userId) {
       return;
     } else {
@@ -210,9 +206,9 @@ export class HeaderOneComponent implements OnInit {
         next: (event: any) => {
           if (event instanceof HttpResponse) {
             this.resp = event.body.data
-            //console.log(JSON.stringify(this.resp))
+
             this.respData = this.resp;
-            //console.log('Stored Data:', this.respData);
+
             this.userNotificationData = this.respData;
             this.userNotifyCount = this.userNotificationData.length;
 
@@ -290,11 +286,11 @@ export class HeaderOneComponent implements OnInit {
 
 
 
-    //console.log("even",event.target.value);
+
     this.approverStatus = event.target.value;
     if (this.approverStatus == "R") {
       this.reasonFlag = true;
-      //console.log("inside Reject");
+
 
     } if (this.approverStatus == "A") {
       this.disableSubmitBtn = false;
@@ -305,7 +301,7 @@ export class HeaderOneComponent implements OnInit {
 
 
     if (status == 'R' && reason == '') {
-      //console.log(status, this.disableSubmitBtn);
+
       console.error('Provide the reason for the rejection!');
       this.rejectReasonFlag = true;
       this.disableSubmitBtn = true;
@@ -316,7 +312,7 @@ export class HeaderOneComponent implements OnInit {
     } if (status == 'A') {
       this.disableSubmitBtn = false;
     } else {
-      //console.log(status, this.disableSubmitBtn);
+
       this.rejectReasonFlag = false;
       this.disableSubmitBtn = true;
     }
@@ -327,7 +323,7 @@ export class HeaderOneComponent implements OnInit {
 
 
   rejectReason(event: any) {
-    //console.log("reason",event.target.value);
+
     const rejectReason = event.target.value
     if (rejectReason) {
       this.disableSubmitBtn = false;
@@ -362,13 +358,12 @@ export class HeaderOneComponent implements OnInit {
       reason: reason
     };
 
-    //console.log('onSubmit', JSON.stringify(payload));
 
     this.loginService.updateDocumentStatus(payload).subscribe((response: Object | null) => {
       if (response && (response as UpdateDocumentStatusResponse).status === 200) {
         const typedResponse = response as UpdateDocumentStatusResponse; // Type assertion
         const message = typedResponse.message; // Extract the message from the response
-        //console.log("on submit HOD Modal:",message);
+
 
 
         if (message && message !== 'Error!!') {
@@ -442,8 +437,6 @@ export class HeaderOneComponent implements OnInit {
     const selectedItem = this.notificationData.find(item => item.requestorName === requestorName);
     if (selectedItem) {
       this.selectedHodItem = selectedItem;
-      // Optionally log or debug
-      //console.log('Selected Item:', this.selectedHodItem);
     } else {
       console.error('Item not found for:', requestorName);
     }
@@ -489,9 +482,9 @@ export class HeaderOneComponent implements OnInit {
   }
 
   public logout() {
-    //console.log("logout   ")
+
     sessionStorage.getItem("user_role")
-    //sessionStorage.clear()
+
     this.router.navigate([routes.login])
   }
 

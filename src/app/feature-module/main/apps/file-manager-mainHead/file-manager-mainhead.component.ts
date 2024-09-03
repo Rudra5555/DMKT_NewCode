@@ -8,7 +8,7 @@ import { pageSelection } from 'src/app/feature-module/employee/employees/departm
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { MatChipEditedEvent, MatChipInputEvent } from '@angular/material/chips';
 import { FormGroup, FormBuilder, Validators, ReactiveFormsModule } from "@angular/forms";
-import { clientsDatas, companiesList} from 'src/app/core/core.index';
+import { clientsDatas, companiesList } from 'src/app/core/core.index';
 import { FileManagementService } from 'src/app/services/file-management.service';
 import { HttpResponse } from '@angular/common/http';
 import { filter, flatMap, of, Subject, switchMap, takeUntil } from 'rxjs';
@@ -25,17 +25,16 @@ import { LoginComponentService } from 'src/app/services/login-component.service'
   templateUrl: './file-manager-mainhead.component.html',
   styleUrl: './file-manager-mainhead.component.scss'
 })
-export class FileManagerMainheadComponent implements OnInit , OnDestroy {
-[x: string]: any;
+export class FileManagerMainheadComponent implements OnInit, OnDestroy {
+  [x: string]: any;
   public searchDataValue = '';
   public routes = routes
   public filter = false;
-  elem=document.documentElement
+  elem = document.documentElement
   isFilterDropdownOpen: boolean = false;
   bsValue = new Date();
   bsRangeValue: Date[] = [];
   maxDate = new Date();
-  // pagination variables
   public lastIndex = 0;
   public pageSize = 10;
   public totalData = 0;
@@ -50,60 +49,52 @@ export class FileManagerMainheadComponent implements OnInit , OnDestroy {
 
   dataSource!: MatTableDataSource<getfileList>;
   public fileList: Array<getfileList> = [];
-  // public fileList: any;
   public totalPages = 0;
   public message: any;
   public selectedFiles: any;
-  public uploadFileForm!: FormGroup ;
-    public editClientForm!: FormGroup ;
-   public multipleFiles: File[] = [];
-   public getRole:any;
-  //  public fileList:any;
-   public bigId:any;
-   public roleFlag: boolean = false;
+  public uploadFileForm!: FormGroup;
+  public editClientForm!: FormGroup;
+  public multipleFiles: File[] = [];
+  public getRole: any;
+  public bigId: any;
+  public roleFlag: boolean = false;
 
-   departmentName:any;
-   subAreaName: any;
-   subAreaNameOnHeader:any;
+  departmentName: any;
+  subAreaName: any;
+  subAreaNameOnHeader: any;
 
-   categoryList = new Map();
-   mainHead:any;
-   plants:any;
+  categoryList = new Map();
+  mainHead: any;
+  plants: any;
 
-   doc: string = '';
-   viewer: ViewerType = 'google';
-   selectedType = 'xlsx';
+  doc: string = '';
+  viewer: ViewerType = 'google';
+  selectedType = 'xlsx';
 
-   startDate:any;
-   endDate:any;
-catName:any;
-catId:any
-   loggedUserRole:any;
+  startDate: any;
+  endDate: any;
+  catName: any;
+  catId: any
+  loggedUserRole: any;
 
-   respData:any;
+  respData: any;
 
   private unsubscribe$ = new Subject<void>();
 
 
   //** / pagination variables
-  constructor(private data: DataService, _uploadService: FileManagementService, private formBuilder: FormBuilder,private route: ActivatedRoute, private router: Router,private datePipe: DatePipe,private loginService : LoginComponentService) {
-   
+  constructor(private data: DataService, _uploadService: FileManagementService, private formBuilder: FormBuilder, private route: ActivatedRoute, private router: Router, private datePipe: DatePipe, private loginService: LoginComponentService) {
+
 
     this.route.queryParams.subscribe(params => {
       this.catName = params['catName'];
       this.catId = params['catId'];
       this.departmentName = params['DepartmentName'];
       this.subAreaName = params['subAreaName'];
-      this.categoryList=params['categoryList'];
-       this.mainHead = params['mainHead'];
-     this.plants =params['plants'];
-
-      //console.log(this.departmentName,this.subAreaName,this.mainHead,this.plants);
-      
-      
+      this.categoryList = params['categoryList'];
+      this.mainHead = params['mainHead'];
+      this.plants = params['plants'];
       this.subAreaNameOnHeader = this.capitalizeFirstLetter(params['subAreaName']);
-      //console.log("proper naming: ", this.subAreaNameOnHeader);
-      
     });
 
 
@@ -116,91 +107,56 @@ catId:any
 
     this.bsRangeValue = [startDate, endDate];
     this.onDateRangeSelected();
-   
+
   }
 
   onDateRangeSelected() {
     this.startDate = this.formatDate(this.bsRangeValue[0]);
-     this.endDate = this.formatDate(this.bsRangeValue[1]);
+    this.endDate = this.formatDate(this.bsRangeValue[1]);
+    this.getFileListDetails()
 
-    //console.log(this.startDate,this.endDate);
-  
-
-  //console.log(this.catName);
-
-  this.getFileListDetails()
-  
-    // this.loginService.getFileListforOther(this.catName,this.startDate, this.endDate).subscribe({
-    //   next: (event: any) => {
-    //     if (event instanceof HttpResponse) {
-    //       this.fileList = event.body.data;
-    //       //console.log("fileList data for Others************** ", this.fileList);
-  
-
-    //     }
-    //   },
-    //   error: (err: any) => {
-    //     if (err.error && err.error.message) {
-    //       this['msg'] += " " + err.error.message;
-    //     }
-    //   },
-    // });
-    
   }
-  
+
   formatDate(date: Date): string {
     return this.datePipe.transform(date, 'yyyy-MM-dd')!;
   }
 
 
- 
+
   ngOnInit(): void {
-    
 
-    this.loggedUserRole=localStorage.getItem("role")
 
-    //console.log("userRoles from file manager;;;;;;",this.loggedUserRole);
-    
+    this.loggedUserRole = localStorage.getItem("role")
     this.setLast15Days();
 
     this.route.queryParams.subscribe(params => {
       this.departmentName = params['DepartmentName'];
       this.subAreaName = params['subAreaName'];
-      
+
       this.subAreaNameOnHeader = this.capitalizeFirstLetter(params['subAreaName']);
-      //console.log("proper naming: ", this.subAreaNameOnHeader);
-      
+
     });
 
 
 
-    
-
-   this.getRole = localStorage.getItem('role');
-   if(this.getRole == "Admin"){
-    this.roleFlag = true;
-    
-    //console.log(this.roleFlag)
-  }if(this.getRole == "Librarian"){
-    this.roleFlag = true;
-  }if(this.getRole == "User"){
-    this.roleFlag = false;
-    //console.log(this.roleFlag)
-  }if(this.getRole == "SuperUser"){
-    this.roleFlag = false;
-    //console.log(this.roleFlag)
-  }if(this.getRole == "Hod"){
-    this.roleFlag = false;
-    //console.log(this.roleFlag)
-  }
 
 
+    this.getRole = localStorage.getItem('role');
+    if (this.getRole == "Admin") {
+      this.roleFlag = true;
 
-    
-    // this.getTableData();
-    // this.getFileListDetails()
+    } if (this.getRole == "Librarian") {
+      this.roleFlag = true;
+    } if (this.getRole == "User") {
+      this.roleFlag = false;
+    } if (this.getRole == "SuperUser") {
+      this.roleFlag = false;
+    } if (this.getRole == "Hod") {
+      this.roleFlag = false;
+    }
+
     this.uploadFileForm = this.formBuilder.group({
-  
+
       uploadFile: ["", [Validators.required]],
       area: ["", [Validators.required]],
       deptName: ["", [Validators.required]],
@@ -217,17 +173,16 @@ catId:any
     this.fileList = [];
     this.serialNumberArray = [];
 
-    this.loginService.getFileListforOther(this.catName,this.startDate, this.endDate).subscribe({
+    this.loginService.getFileListforOther(this.catName, this.startDate, this.endDate).subscribe({
       next: (event: any) => {
         if (event instanceof HttpResponse) {
           this.respData = event.body.data;
-          //console.log("fileList data file manager:::::::: ", this.fileList);
-  
+
           const convertToKB = (bytes: number): number => {
             return Math.round(bytes / 1024);
           };
-  
-          
+
+
           this.fileList = this.respData.filter((item: any) => {
             return item.listOfDocumentVersoinDtos.some((version: any) => {
               if (this.loggedUserRole === 'User') {
@@ -246,27 +201,26 @@ catId:any
           this.fileList.map((item: getfileList, index: number) => {
             const serialNumber = index + 1;
             if (index >= this.skip && serialNumber <= this.limit) {
-                item.id = serialNumber;
-                // this.fileList.push(item);
-                this.serialNumberArray.push(serialNumber);
+              item.id = serialNumber;
+              this.serialNumberArray.push(serialNumber);
             }
-        });
-  
-        this.dataSource = new MatTableDataSource<getfileList>(this.fileList);
-        this.calculateTotalPages(this.fileList.length, this.pageSize);
-          
+          });
+
+          this.dataSource = new MatTableDataSource<getfileList>(this.fileList);
+          this.calculateTotalPages(this.fileList.length, this.pageSize);
+
           this.fileList.forEach((item: any) => {
             item.selectedVersion = this.getLatestVersion(item.listOfDocumentVersoinDtos);
             item.listOfDocumentVersoinDtos.forEach((version: any) => {
               version.fileSizeKB = convertToKB(parseInt(version.fileSize, 10));
             });
           });
-  
-          
+
+
           if (this.fileList.length > 0 && this.fileList[0].selectedVersion) {
             this.doc = this.fileList[0].selectedVersion.fileUrl;
           }
-  
+
         }
       },
       error: (err: any) => {
@@ -277,7 +231,7 @@ catId:any
     });
   }
 
- 
+
   capitalizeFirstLetter(string: string): string {
     if (!string) return '';
     return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
@@ -287,8 +241,6 @@ catId:any
 
   public sortData(sort: Sort) {
     const data = this.fileList.slice();
-
-    /* eslint-disable @typescript-eslint/no-explicit-any */
     if (!sort.active || sort.direction === '') {
       this.fileList = data;
     } else {
@@ -359,7 +311,7 @@ catId:any
     this.isFilterDropdownOpen = !this.isFilterDropdownOpen;
   }
   fullscreen() {
-    if(!document.fullscreenElement) {
+    if (!document.fullscreenElement) {
       this.elem.requestFullscreen();
     }
     else {
@@ -375,117 +327,116 @@ catId:any
   readonly separatorKeysCodes = [ENTER, COMMA] as const;
 
 
-selected1 = 'option1';
+  selected1 = 'option1';
 
-selectFiles(_event: any): void {
-  
-}
+  selectFiles(_event: any): void {
 
-
-onMultipleSelect(event: { addedFiles: File[] }) {
-  this.multipleFiles.push(...event.addedFiles);
-  this.selectedFiles = this.multipleFiles;
-  //console.log("file capchurd :",this.multipleFiles)
-}
-
-onRemoveMultiple(event: File) {
-  this.multipleFiles.splice(this.multipleFiles.indexOf(event), 1);
-}
-
-upload(file: File): void {
-//console.log(file);
-if (file) {
-  this['uploadService'].upload(file).subscribe({
-    next: (event: any) => {
-      if (event instanceof HttpResponse) {
-        const msg = file.name + ": Successful!";
-
-      }
-    },
-    error: (err: any) => {
-      let msg = file.name + ": Failed!";
-
-      if (err.error && err.error.message) {
-        msg += " " + err.error.message;
-      }
-
-    }
-  });
-}
-}
-
-
-
-
-uploadFiles(): void {
-this.message = [];
-
-if (this.selectedFiles) {
-  for (let i = 0; i < this.selectedFiles.length; i++) {
-    this.upload(this.selectedFiles[i]);
   }
-  this.selectedFiles = undefined;
-}
-}
-
-onSubmit(){
-console.warn('Your data has been submitted', this.uploadFileForm.value);
 
 
+  onMultipleSelect(event: { addedFiles: File[] }) {
+    this.multipleFiles.push(...event.addedFiles);
+    this.selectedFiles = this.multipleFiles;
+  }
 
-let modalData = {
-  'uploadFile': this.uploadFileForm.controls['uploadFile'].value,
-  'departmentName' : this.uploadFileForm.controls['departmentName'].value,
-  'isStatutoryDocument' : this.uploadFileForm.controls['isStatutoryDocument'].value
-}
+  onRemoveMultiple(event: File) {
+    this.multipleFiles.splice(this.multipleFiles.indexOf(event), 1);
+  }
 
-console.warn('Your data has been submitted', modalData);
+  upload(file: File): void {
 
-if (modalData) {
-  this['uploadService'].upload(modalData).subscribe({
-    next: (event: any) => {
-      if (event instanceof HttpResponse) {
-        const msg = modalData + ": Successful!";
+    if (file) {
+      this['uploadService'].upload(file).subscribe({
+        next: (event: any) => {
+          if (event instanceof HttpResponse) {
+            const msg = file.name + ": Successful!";
 
-      }
-    },
-    error: (err: any) => {
-      let msg = modalData + ": Failed!";
+          }
+        },
+        error: (err: any) => {
+          let msg = file.name + ": Failed!";
 
-      if (err.error && err.error.message) {
-        msg += " " + err.error.message;
-      }
+          if (err.error && err.error.message) {
+            msg += " " + err.error.message;
+          }
+
+        }
+      });
     }
-  });
-}
-
-
-this.uploadFileForm.reset();
-
-}
-
-ngOnDestroy() {
-  this['unsubscribe$'].next();
-  this['unsubscribe$'].complete();
-}
+  }
 
 
 
-getLatestVersion(versions: any[]): any {
-  return versions.reduce((latest, version) => {
-    return new Date(version.versionReleaseDate) > new Date(latest.versionReleaseDate) ? version : latest;
-  });
-}
 
-onVersionChange(item: any, version: any) {
-  item.selectedVersion = version;
-  this.doc = version.fileUrl;
-}
+  uploadFiles(): void {
+    this.message = [];
+
+    if (this.selectedFiles) {
+      for (let i = 0; i < this.selectedFiles.length; i++) {
+        this.upload(this.selectedFiles[i]);
+      }
+      this.selectedFiles = undefined;
+    }
+  }
+
+  onSubmit() {
+    console.warn('Your data has been submitted', this.uploadFileForm.value);
 
 
 
-convertBytesToKB(bytes: number): string {
-  return (bytes / 1024).toFixed(2) + ' KB';
-}
- 
+    let modalData = {
+      'uploadFile': this.uploadFileForm.controls['uploadFile'].value,
+      'departmentName': this.uploadFileForm.controls['departmentName'].value,
+      'isStatutoryDocument': this.uploadFileForm.controls['isStatutoryDocument'].value
+    }
+
+    console.warn('Your data has been submitted', modalData);
+
+    if (modalData) {
+      this['uploadService'].upload(modalData).subscribe({
+        next: (event: any) => {
+          if (event instanceof HttpResponse) {
+            const msg = modalData + ": Successful!";
+
+          }
+        },
+        error: (err: any) => {
+          let msg = modalData + ": Failed!";
+
+          if (err.error && err.error.message) {
+            msg += " " + err.error.message;
+          }
+        }
+      });
+    }
+
+
+    this.uploadFileForm.reset();
+
+  }
+
+  ngOnDestroy() {
+    this['unsubscribe$'].next();
+    this['unsubscribe$'].complete();
+  }
+
+
+
+  getLatestVersion(versions: any[]): any {
+    return versions.reduce((latest, version) => {
+      return new Date(version.versionReleaseDate) > new Date(latest.versionReleaseDate) ? version : latest;
+    });
+  }
+
+  onVersionChange(item: any, version: any) {
+    item.selectedVersion = version;
+    this.doc = version.fileUrl;
+  }
+
+
+
+  convertBytesToKB(bytes: number): string {
+    return (bytes / 1024).toFixed(2) + ' KB';
+  }
+
 }

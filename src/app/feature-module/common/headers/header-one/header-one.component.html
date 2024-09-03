@@ -44,7 +44,7 @@
 			<div class="dropdown-menu notifications">
 				<div class="topnav-dropdown-header">
 					<span class="notification-title">Notifications</span>
-					<!-- <a href="javascript:void(0)" class="clear-noti"> Clear All </a> -->
+
 				</div>
 				<div class="noti-content">
 					<ul class="notification-list" *ngFor="let item of notificationData;">
@@ -57,7 +57,7 @@
 									<div class="media-body flex-grow-1">
 										<p class="noti-details"><span class="noti-title">{{item.requestorName}}</span>
 											reuqested a document <span class="noti-title">{{item.docName}}</span></p>
-										<!-- <p class="noti-time"><span class="notification-time">4 mins ago</span></p> -->
+
 									</div>
 								</div>
 							</a>
@@ -66,7 +66,7 @@
 					</ul>
 				</div>
 				<div class="topnav-dropdown-footer">
-					<!-- <a [routerLink] = "routes.activities">View all Notifications</a> -->
+
 				</div>
 			</div>
 		</li>
@@ -80,7 +80,7 @@
 			<div class="dropdown-menu notifications">
 				<div class="topnav-dropdown-header">
 					<span class="notification-title">Notifications</span>
-					<!-- <a href="javascript:void(0)" class="clear-noti"> Clear All </a> -->
+
 				</div>
 				<div class="noti-content">
 					<ul class="notification-list" *ngFor="let item of this.resp;">
@@ -111,7 +111,7 @@
 					</ul>
 				</div>
 				<div class="topnav-dropdown-footer">
-					<!-- <a [routerLink] = "routes.activities">View all Notifications</a> -->
+
 				</div>
 			</div>
 		</li>
@@ -124,12 +124,12 @@
 			<a href="javascript:void(0);" class="dropdown-toggle nav-link" data-bs-toggle="dropdown">
 				<span class="user-img me-2"><img src="assets/img/avatar/avatar-27.jpg" alt="">
 					<span class="status online"></span></span>
-				<!-- <span>Admin-</span> -->
+
 				<span style="color: rgb(255, 255, 255);">{{uname}}</span>
 			</a>
 			<div class="dropdown-menu">
 				<a class="dropdown-item" style="color: black;" [routerLink]="routes.employeeProfile">My Profile</a>
-				<!-- <a class="dropdown-item"  style="color: black;" [routerLink]="'/settings/company-settings'">Settings</a> -->
+
 				<a class="dropdown-item" style="color: black;" (click)="logout()">Logout</a>
 			</div>
 		</li>
@@ -191,7 +191,8 @@
 										<tr>
 											<td rowspan="2"
 												style="padding: 8px; text-align: left; vertical-align: middle;">
-												<strong>Plant Name:</strong></td>
+												<strong>Plant Name:</strong>
+											</td>
 											<td rowspan="2"
 												style="padding: 8px;text-align: center; vertical-align: middle;">{{
 												selectFileData?.plantName }}</td>
@@ -200,7 +201,8 @@
 										<tr>
 											<td rowspan="2"
 												style="padding: 8px; text-align: left; vertical-align: middle;">
-												<strong>Approver/Rejecter’s Name:</strong></td>
+												<strong>Approver/Rejecter’s Name:</strong>
+											</td>
 											<td rowspan="2"
 												style="padding: 8px;text-align: center; vertical-align: middle;">{{
 												selectFileData?.executerName}}</td>
@@ -209,7 +211,8 @@
 										<tr>
 											<td rowspan="2"
 												style="padding: 8px; text-align: left; vertical-align: middle;">
-												<strong>Department Name:</strong></td>
+												<strong>Department Name:</strong>
+											</td>
 											<td rowspan="2"
 												style="padding: 8px;text-align: center; vertical-align: middle;">{{
 												selectFileData?.departmentName }}</td>
@@ -218,7 +221,8 @@
 										<tr>
 											<td rowspan="2"
 												style="padding: 8px; text-align: left; vertical-align: middle;">
-												<strong>Unique Document Name:</strong></td>
+												<strong>Unique Document Name:</strong>
+											</td>
 											<td rowspan="2"
 												style="padding: 8px;text-align: center; vertical-align: middle;position: relative;">
 												<div class="short-name">
@@ -233,10 +237,11 @@
 										<tr>
 											<td rowspan="2"
 												style="padding: 8px; text-align: left; vertical-align: middle;">
-												<strong>Status:</strong></td>
+												<strong>Status:</strong>
+											</td>
 											<td rowspan="2"
 												style="padding: 8px;text-align: center; vertical-align: middle;">
-												<!-- {{ selectFileData?.documentApprovalStatus }} -->
+
 												{{ getApprovalStatusUserModal(selectFileData?.documentApprovalStatus) }}
 											</td>
 										</tr>
@@ -244,7 +249,8 @@
 										<tr *ngIf="!userReasonFlag">
 											<td rowspan="2"
 												style="padding: 8px; text-align: left; vertical-align: middle;">
-												<strong>Reason:</strong></td>
+												<strong>Reason:</strong>
+											</td>
 											<td rowspan="2"
 												style="padding: 8px;text-align: center; vertical-align: middle;">{{
 												selectFileData?.reason }}</td>
@@ -373,9 +379,7 @@
 												[disabled]="disableSubmitBtn">
 												Submit
 											</button>
-											<!-- <button class="btn btn-primary" data-bs-dismiss="modal" (click)="updateDocumentStatus('R')" type="button" style="background-color: rgb(247, 80, 3)">
-										Reject
-									</button> -->
+
 										</div>
 									</div>
 								</div>

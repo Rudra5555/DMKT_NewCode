@@ -18,13 +18,13 @@ export class DataService implements OnInit {
 
 
   allAppliedCandidates!: Array<object>;
-  userRole:any;
+  userRole: any;
   behaviorSubject = new BehaviorSubject<string>('')
 
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
   ngOnInit(): void {
-   //console.log("data service%%%% :",localStorage.getItem('ami'))
+
   }
 
   public getEmployees(): Observable<apiResultFormat> {
@@ -113,7 +113,7 @@ export class DataService implements OnInit {
       })
     );
   }
-  
+
   public getTickets(): Observable<apiResultFormat> {
     return this.http.get<apiResultFormat>('assets/JSON/tickets.json').pipe(
       map((res: apiResultFormat) => {
@@ -665,7 +665,7 @@ export class DataService implements OnInit {
       })
     );
   }
-  
+
 
   public sideBar: SideBar[] = [
     {
@@ -674,7 +674,7 @@ export class DataService implements OnInit {
       showAsTab: false,
       separateRoute: false,
       menu: [
-       
+
       ],
     },
 
@@ -684,7 +684,7 @@ export class DataService implements OnInit {
       showAsTab: false,
       separateRoute: false,
       menu: [
-  
+
         {
           menuValue: 'Admin Dashboard',
           route: routes.admin,
@@ -692,11 +692,11 @@ export class DataService implements OnInit {
           showSubRoute: false,
           icon: 'user',
           base: 'clients',
-          page1:'client-page',
+          page1: 'client-page',
           materialicons: 'person',
           subMenus: [],
         },
-        ]
+      ]
 
     },
 
@@ -709,7 +709,7 @@ export class DataService implements OnInit {
       showAsTab: false,
       separateRoute: false,
       menu: [
-  
+
         {
           menuValue: 'User Management',
           route: routes.clientPage,
@@ -717,21 +717,11 @@ export class DataService implements OnInit {
           showSubRoute: false,
           icon: 'users',
           base: 'clients',
-          page1:'client-page',
+          page1: 'client-page',
           materialicons: 'person',
           subMenus: [],
         },
-        // {
-        //   menuValue: ' Requested Document List',
-        //   route: routes.RequestedDoc,
-        //   hasSubRoute: false,
-        //   showSubRoute: false,
-        //   icon: 'book-open',
-        //   base: 'HOD',
-        //   materialicons: 'person',
-        //   subMenus: [],
-        // },
-      
+
         {
           menuValue: ' Document ',
           route: routes.employee,
@@ -743,60 +733,19 @@ export class DataService implements OnInit {
           subMenus: [],
         },]
 
-    },
+    },
 
-{
-  tittle: '',
-  icon: '',
-  showAsTab: true,
-  separateRoute: false,
-  menu: [
-    // {
-    //   menuValue: 'About Us',
-    //   route: routes.apps,
-    //   hasSubRouteTwo: true,
-    //   showSubRoute: false,
-    //   icon: 'users',
-    //   base: 'apps',
-    //   materialicons: 'dashboard',
-    //   subMenus: [
-    //     {
-    //       menuValue: 'User Manual',
-    //       route: routes.blankpage,
-    //       base: 'apps',
-    //       customSubmenuTwo: false,
-    //     },
-    //     {
-    //       menuValue: 'Contact Us',
-    //       route: routes.blankpage,
-    //       base: 'apps',
-    //       customSubmenuTwo: false,
-    //     },
+    {
+      tittle: '',
+      icon: '',
+      showAsTab: true,
+      separateRoute: false,
+      menu: [
 
+      ]
+    },
 
-    //     {
-    //       menuValue: 'Compliance',
-    //       hasSubRoute: true,
-    //       showSubRoute: false,
-    //       route: routes.blankpage,
-    //       customSubmenuTwo: false,
-    //     },
-        
-    //     {
-    //       menuValue: 'Helping Document',
-    //       hasSubRoute: true,
-    //       showSubRoute: false,
-    //       route: routes.blankpage,
-    //       customSubmenuTwo: false,
-    //     },
-    //   ]
-    //   }
-
-
-  ]
-},
-   
-  ];
+  ];
 
 
 
@@ -808,7 +757,7 @@ export class DataService implements OnInit {
       showAsTab: false,
       separateRoute: false,
       menu: [
-  
+
         {
           menuValue: 'Librarian Dashboard',
           route: routes.employee,
@@ -819,76 +768,8 @@ export class DataService implements OnInit {
           materialicons: 'person',
           subMenus: [],
         },
-        // {
-        //   menuValue: 'Master Data',
-        //   // route: routes.MainHeadComponent,
-        //   hasSubRouteTwo: true,
-        //   showSubRoute: false,
-        //   icon: '',
-        //   base: 'admin',
-        //   materialicons: 'person',
-        //   subMenus: [
-        //     {
-        //       menuValue: 'Main Head',
-        //       route: routes.MainHeadComponent,
-        //       base: 'apps',
-        //       customSubmenuTwo: false,
-        //     },
-        //     {
-        //       menuValue: 'Plants',
-        //       route: routes.PlantComponent,
-        //       base: 'apps',
-        //       customSubmenuTwo: false,
-        //     },
 
 
-        //     {
-        //       menuValue: 'Department',
-        //       route: routes.DepartmentComponent,
-        //       hasSubRoute: true,
-        //       showSubRoute: false,
-        //       customSubmenuTwo: false,
-        //     },
-            
-        //     {
-        //       menuValue: 'Sub-Area',
-        //       route: routes.SubAreaComponent,
-        //       hasSubRoute: true,
-        //       showSubRoute: false,
-        //       customSubmenuTwo: false,
-        //     },
-        //   ],
-        // },
-        // {
-        //   menuValue: 'Plants',
-        //   route: routes.PlantComponent,
-        //   hasSubRoute: false,
-        //   showSubRoute: false,
-        //   icon: 'book',
-        //   base: 'admin',
-        //   materialicons: 'person',
-        //   subMenus: [],
-        // },
-        // {
-        //   menuValue: 'Department',
-        //   route: routes.DepartmentComponent,
-        //   hasSubRoute: false,
-        //   showSubRoute: false,
-        //   icon: 'book',
-        //   base: 'admin',
-        //   materialicons: 'person',
-        //   subMenus: [],
-        // },
-        // {
-        //   menuValue: 'Sub-Area',
-        //   route: routes.SubAreaComponent,
-        //   hasSubRoute: false,
-        //   showSubRoute: false,
-        //   icon: 'book',
-        //   base: 'admin',
-        //   materialicons: 'person',
-        //   subMenus: [],
-        // },
         {
           menuValue: 'Recent Updated Documents',
           route: routes.LibRecentUploaded,
@@ -900,7 +781,7 @@ export class DataService implements OnInit {
           subMenus: [],
         },
       ]
-        
+
 
     },
     {
@@ -909,7 +790,7 @@ export class DataService implements OnInit {
       showAsTab: false,
       separateRoute: false,
       menu: [
-  
+
         {
           menuValue: 'Upload Document',
           route: routes.UploadDoc,
@@ -920,84 +801,36 @@ export class DataService implements OnInit {
           materialicons: 'person',
           subMenus: [],
         },
-        // {
-        //   menuValue: ' Requested Document List',
-        //   route: routes.RequestedDoc,
-        //   hasSubRoute: false,
-        //   showSubRoute: false,
-        //   icon: 'book-open',
-        //   base: 'HOD',
-        //   materialicons: 'person',
-        //   subMenus: [],
-        // },
+
       ]
 
     },
-    
-     {
+
+    {
       tittle: '',
       icon: '',
       showAsTab: true,
       separateRoute: false,
       menu: [
-        // {
-        //   menuValue: 'About Us',
-        //   route: routes.apps,
-        //   hasSubRouteTwo: true,
-        //   showSubRoute: false,
-        //   icon: 'users',
-        //   base: 'apps',
-        //   materialicons: 'dashboard',
-        //   subMenus: [
-        //     {
-        //       menuValue: 'User Manual',
-        //       route: routes.blankpage,
-        //       base: 'apps',
-        //       customSubmenuTwo: false,
-        //     },
-        //     {
-        //       menuValue: 'Contact Us',
-        //       route: routes.blankpage,
-        //       base: 'apps',
-        //       customSubmenuTwo: false,
-        //     },
 
-
-        //     {
-        //       menuValue: 'Compliance',
-        //       hasSubRoute: true,
-        //       showSubRoute: false,
-        //       route: routes.blankpage,
-        //       customSubmenuTwo: false,
-        //     },
-            
-        //     {
-        //       menuValue: 'Helping Document',
-        //       hasSubRoute: true,
-        //       showSubRoute: false,
-        //       route: routes.blankpage,
-        //       customSubmenuTwo: false,
-        //     },
-        //   ]
-        //   }
 
 
       ]
     },
-    
-   
+
+
   ];
 
 
   public sideBar2: SideBar[] = [
- 
+
     {
       tittle: '',
       icon: '',
       showAsTab: false,
       separateRoute: false,
       menu: [
-  
+
         {
           menuValue: 'User Dashboard',
           route: routes.employee,
@@ -1016,17 +849,7 @@ export class DataService implements OnInit {
       showAsTab: false,
       separateRoute: false,
       menu: [
-  
-        // {
-        //   menuValue: 'Request Document Form',
-        //   route: routes.requestform,
-        //   hasSubRoute: false,
-        //   showSubRoute: false,
-        //   icon: 'box',
-        //   base: 'admin',
-        //   materialicons: 'person',
-        //   subMenus: [],
-        // },
+
         {
           menuValue: ' Requested Document List',
           route: routes.RequestedDoc,
@@ -1037,34 +860,9 @@ export class DataService implements OnInit {
           materialicons: 'person',
           subMenus: [],
         },]
-      
+
 
     },
-
-    // {
-    //   tittle: '',
-    //   icon: '',
-    //   showAsTab: true,
-    //   separateRoute: false,
-    //   menu: [
-    //     {
-    //       menuValue: ' Requested Document List',
-    //       route: routes.RequestedDoc,
-    //       hasSubRouteTwo: true,
-    //       showSubRoute: false,
-    //       icon: 'list',
-    //       base: 'HOD',
-    //       materialicons: 'person',
-    //       subMenus: [
-          
-    //       ]
-    //       }
-
-
-    //   ]
-    // },
-    
-   
 
 
 
@@ -1077,66 +875,27 @@ export class DataService implements OnInit {
       showAsTab: true,
       separateRoute: false,
       menu: [
-        // {
-        //   menuValue: 'About Us',
-        //   route: routes.apps,
-        //   hasSubRouteTwo: true,
-        //   showSubRoute: false,
-        //   icon: 'users',
-        //   base: 'apps',
-        //   materialicons: 'dashboard',
-        //   subMenus: [
-        //     {
-        //       menuValue: 'User Manual',
-        //       route: routes.blankpage,
-        //       base: 'apps',
-        //       customSubmenuTwo: false,
-        //     },
-        //     {
-        //       menuValue: 'Contact Us',
-        //       route: routes.blankpage,
-        //       base: 'apps',
-        //       customSubmenuTwo: false,
-        //     },
 
-
-        //     {
-        //       menuValue: 'Compliance',
-        //       hasSubRoute: true,
-        //       showSubRoute: false,
-        //       route: routes.blankpage,
-        //       customSubmenuTwo: false,
-        //     },
-            
-        //     {
-        //       menuValue: 'Helping Document',
-        //       hasSubRoute: true,
-        //       showSubRoute: false,
-        //       route: routes.blankpage,
-        //       customSubmenuTwo: false,
-        //     },
-        //   ]
-        //   }
 
 
       ]
     },
-    
-   
+
+
   ];
 
 
 
-    public sideBar3: SideBar[] = [
-    
-    
+  public sideBar3: SideBar[] = [
+
+
     {
       tittle: '',
       icon: '',
       showAsTab: false,
       separateRoute: false,
       menu: [
-  
+
         {
           menuValue: 'SuperUser Dashboard',
           route: routes.employee,
@@ -1155,17 +914,8 @@ export class DataService implements OnInit {
       showAsTab: false,
       separateRoute: false,
       menu: [
-  
-        // {
-        //   menuValue: 'Request Document Form',
-        //   route: routes.requestform,
-        //   hasSubRoute: false,
-        //   showSubRoute: false,
-        //   icon: 'box',
-        //   base: 'admin',
-        //   materialicons: 'person',
-        //   subMenus: [],
-        // },
+
+
         {
           menuValue: ' Requested Document List',
           route: routes.RequestedDoc,
@@ -1176,7 +926,7 @@ export class DataService implements OnInit {
           materialicons: 'person',
           subMenus: [],
         },]
-      
+
 
     },
     {
@@ -1185,51 +935,11 @@ export class DataService implements OnInit {
       showAsTab: true,
       separateRoute: false,
       menu: [
-        // {
-        //   menuValue: 'About Us',
-        //   route: routes.apps,
-        //   hasSubRouteTwo: true,
-        //   showSubRoute: false,
-        //   icon: 'users',
-        //   base: 'apps',
-        //   materialicons: 'dashboard',
-        //   subMenus: [
-        //     {
-        //       menuValue: 'User Manual',
-        //       route: routes.blankpage,
-        //       base: 'apps',
-        //       customSubmenuTwo: false,
-        //     },
-        //     {
-        //       menuValue: 'Contact Us',
-        //       route: routes.blankpage,
-        //       base: 'apps',
-        //       customSubmenuTwo: false,
-        //     },
-
-
-        //     {
-        //       menuValue: 'Compliance',
-        //       hasSubRoute: true,
-        //       showSubRoute: false,
-        //       route: routes.blankpage,
-        //       customSubmenuTwo: false,
-        //     },
-            
-        //     {
-        //       menuValue: 'Helping Document',
-        //       hasSubRoute: true,
-        //       showSubRoute: false,
-        //       route: routes.blankpage,
-        //       customSubmenuTwo: false,
-        //     },
-        //   ]
-        //   }
 
 
       ]
     },
-   
+
   ];
 
   public sideBar4: SideBar[] = [
@@ -1240,7 +950,7 @@ export class DataService implements OnInit {
       showAsTab: false,
       separateRoute: false,
       menu: [
-  
+
         {
           menuValue: 'HOD Dashboard',
           route: routes.employee,
@@ -1259,37 +969,8 @@ export class DataService implements OnInit {
       showAsTab: false,
       separateRoute: false,
       menu: [
-  
-        // {
-        //   menuValue: 'Request Document Form',
-        //   route: routes.requestform,
-        //   hasSubRoute: false,
-        //   showSubRoute: false,
-        //   icon: 'file',
-        //   base: 'HOD',
-        //   materialicons: 'person',
-        //   subMenus: [],
-        // },
-        // {
-        //   menuValue: 'Approve Document Request',
-        //   route: routes.approvalList,
-        //   hasSubRoute: false,
-        //   showSubRoute: false,
-        //   icon: 'user-check',
-        //   base: 'HOD',
-        //   materialicons: 'person',
-        //   subMenus: [],
-        // },
-        // {
-        //   menuValue: ' Requested Document List',
-        //   route: routes.RequestedDoc,
-        //   hasSubRoute: false,
-        //   showSubRoute: false,
-        //   icon: 'file-text',
-        //   base: 'HOD',
-        //   materialicons: 'person',
-        //   subMenus: [],
-        // }
+
+
       ]
 
     },
@@ -1299,47 +980,6 @@ export class DataService implements OnInit {
       showAsTab: true,
       separateRoute: false,
       menu: [
-        // {
-        //   menuValue: 'About Us',
-        //   route: routes.apps,
-        //   hasSubRouteTwo: true,
-        //   showSubRoute: false,
-        //   icon: 'users',
-        //   base: 'apps',
-        //   materialicons: 'dashboard',
-        //   subMenus: [
-        //     {
-        //       menuValue: 'User Manual',
-        //       route: routes.blankpage,
-        //       base: 'apps',
-        //       customSubmenuTwo: false,
-        //     },
-        //     {
-        //       menuValue: 'Contact Us',
-        //       route: routes.blankpage,
-        //       base: 'apps',
-        //       customSubmenuTwo: false,
-        //     },
-
-
-        //     {
-        //       menuValue: 'Compliance',
-        //       hasSubRoute: true,
-        //       showSubRoute: false,
-        //       route: routes.blankpage,
-        //       customSubmenuTwo: false,
-        //     },
-            
-        //     {
-        //       menuValue: 'Helping Document',
-        //       hasSubRoute: true,
-        //       showSubRoute: false,
-        //       route: routes.blankpage,
-        //       customSubmenuTwo: false,
-        //     },
-        //   ]
-        //   }
-
 
       ]
     },
@@ -1347,31 +987,6 @@ export class DataService implements OnInit {
   ];
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
   public getSideBarData: BehaviorSubject<Array<SideBar>> = new BehaviorSubject<
     Array<SideBar>
   >(this.sideBar);
@@ -1385,75 +1000,57 @@ export class DataService implements OnInit {
   }
 
   public getSideBarData1: BehaviorSubject<Array<SideBar>> = new BehaviorSubject<
-  Array<SideBar>
->(this.sideBar1);
-public resetData1(): void {
-  this.sideBar1.map((res: SideBar) => {
-    res.showAsTab = false;
-    res.menu.map((menus: SideBarMenu) => {
-      menus.showSubRoute = false;
+    Array<SideBar>
+  >(this.sideBar1);
+  public resetData1(): void {
+    this.sideBar1.map((res: SideBar) => {
+      res.showAsTab = false;
+      res.menu.map((menus: SideBarMenu) => {
+        menus.showSubRoute = false;
+      });
     });
-  });
-}
+  }
 
 
-public getSideBarData2: BehaviorSubject<Array<SideBar>> = new BehaviorSubject<
-Array<SideBar>
->(this.sideBar2);
-public resetData2(): void {
-this.sideBar2.map((res: SideBar) => {
-  res.showAsTab = false;
-  res.menu.map((menus: SideBarMenu) => {
-    menus.showSubRoute = false;
-  });
-});
-}
-
-
-
-public getSideBarData3: BehaviorSubject<Array<SideBar>> = new BehaviorSubject<
-Array<SideBar>
->(this.sideBar3);
-public resetData3(): void {
-this.sideBar3.map((res: SideBar) => {
-  res.showAsTab = false;
-  res.menu.map((menus: SideBarMenu) => {
-    menus.showSubRoute = false;
-  });
-});
-}
-
-public getSideBarData4: BehaviorSubject<Array<SideBar>> = new BehaviorSubject<
-Array<SideBar>
->(this.sideBar4);
-public resetData4(): void {
-this.sideBar4.map((res: SideBar) => {
-  res.showAsTab = false;
-  res.menu.map((menus: SideBarMenu) => {
-    menus.showSubRoute = false;
-  });
-});
-}
+  public getSideBarData2: BehaviorSubject<Array<SideBar>> = new BehaviorSubject<
+    Array<SideBar>
+  >(this.sideBar2);
+  public resetData2(): void {
+    this.sideBar2.map((res: SideBar) => {
+      res.showAsTab = false;
+      res.menu.map((menus: SideBarMenu) => {
+        menus.showSubRoute = false;
+      });
+    });
+  }
 
 
 
+  public getSideBarData3: BehaviorSubject<Array<SideBar>> = new BehaviorSubject<
+    Array<SideBar>
+  >(this.sideBar3);
+  public resetData3(): void {
+    this.sideBar3.map((res: SideBar) => {
+      res.showAsTab = false;
+      res.menu.map((menus: SideBarMenu) => {
+        menus.showSubRoute = false;
+      });
+    });
+  }
+
+  public getSideBarData4: BehaviorSubject<Array<SideBar>> = new BehaviorSubject<
+    Array<SideBar>
+  >(this.sideBar4);
+  public resetData4(): void {
+    this.sideBar4.map((res: SideBar) => {
+      res.showAsTab = false;
+      res.menu.map((menus: SideBarMenu) => {
+        menus.showSubRoute = false;
+      });
+    });
+  }
 
 
-
-
-
-
-//   public getSideBarData2: BehaviorSubject<Array<HorizontalSideBar>> = new BehaviorSubject<
-//   Array<HorizontalSideBar>
-// >(this.sideBar2);
-// public resetData2(): void {
-//   this.sideBar.map((res: SideBar) => {
-//     res.showAsTab = false;
-//     res.menu.map((menus: SideBarMenu) => {
-//       menus.showSubRoute = false;
-//     });
-//   });
-// }
   allCustomPolicy = [
     {
       id: 1,
@@ -2028,8 +1625,8 @@ this.sideBar4.map((res: SideBar) => {
     return this.http.get<apiResultFormat>('assets/JSON/doc-list.json').pipe(
       map((res: apiResultFormat) => {
         return res;
-      })
-    );
-  }
-  
+      })
+    );
+  }
+
 }

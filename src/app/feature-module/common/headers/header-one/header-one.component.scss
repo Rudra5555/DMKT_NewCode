@@ -1,26 +1,30 @@
-.bar-icon{
-    color: black;
+.bar-icon {
+  color: black;
 }
+
 img {
-    overflow-clip-margin: content-box;
-    overflow: clip;
+  overflow-clip-margin: content-box;
+  overflow: clip;
 }
+
 img {
-    max-width: 100%;
-    height: auto;
-    vertical-align: middle;
+  max-width: 100%;
+  height: auto;
+  vertical-align: middle;
 }
+
 @media only screen and (max-width: 995px) {
 
-    img{
-      
-        display: none;
-    }
+  img {
+
+    display: none;
   }
+}
+
 .header {
-    background: #f2f9fb !important;
-    background: linear-gradient(to right, #f2f9fb 0%, #00820e 100%) !important;
-    border-color: transparent;
+  background: #f2f9fb !important;
+  background: linear-gradient(to right, #f2f9fb 0%, #00820e 100%) !important;
+  border-color: transparent;
 }
 
 
@@ -28,83 +32,85 @@ img {
 // tab
 
 .card.flex-fill {
-    max-height: 400px;
-    overflow-y: auto;
+  max-height: 400px;
+  overflow-y: auto;
 }
 
 label#RequestedDocumentName {
-    margin-top: 19px;
+  margin-top: 19px;
 }
-// div#secondColumn {
-//     margin-top: 97px;
-// }
+
 
 .short-name {
-    cursor: pointer;
-    display: inline-block;
-    max-width: 150px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  
-  .full-name-tooltip {
-    display: none;
-    position: absolute;
-    background-color: #fff;
-    border: 1px solid #ccc;
-    padding: 5px;
-    white-space: nowrap;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-    bottom: 57%; /* Position the tooltip above the text */
-    left: 0;
-    margin-bottom: 5px; /* Space between the text and the tooltip */
-  }
-  
-  .short-name:hover + .full-name-tooltip {
-    display: block;
-    z-index: 1;
-  }
+  cursor: pointer;
+  display: inline-block;
+  max-width: 150px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 
-  .short-name-hod {
-    cursor: pointer;
-    display: inline-block;
-    max-width: 150px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  
-  .full-Hodname-tooltip {
-    display: none;
-    position: absolute;
-    background-color: #fff;
-    border: 1px solid #ccc;
-    padding: 5px;
-    white-space: nowrap;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-    bottom: 67%;
-    left: 50%;
-    margin-bottom: 5px; /* Space between the text and the tooltip */
-  }
-  
-  .short-name-hod:hover + .full-Hodname-tooltip {
-    display: block;
-    z-index: 1;
-  }
+.full-name-tooltip {
+  display: none;
+  position: absolute;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  padding: 5px;
+  white-space: nowrap;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  bottom: 57%;
+  /* Position the tooltip above the text */
+  left: 0;
+  margin-bottom: 5px;
+  /* Space between the text and the tooltip */
+}
 
-  .text-pending {
-    color: rgb(165, 165, 2);
-  }
-  
-  .text-approved {
-    color: green;
-  }
-  
-  .text-rejected {
-    color: red;
-  }
-  select.statusDropdown {
-    width: 81%;
-    height: 35px;
+.short-name:hover+.full-name-tooltip {
+  display: block;
+  z-index: 1;
+}
+
+.short-name-hod {
+  cursor: pointer;
+  display: inline-block;
+  max-width: 150px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.full-Hodname-tooltip {
+  display: none;
+  position: absolute;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  padding: 5px;
+  white-space: nowrap;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  bottom: 67%;
+  left: 50%;
+  margin-bottom: 5px;
+  /* Space between the text and the tooltip */
+}
+
+.short-name-hod:hover+.full-Hodname-tooltip {
+  display: block;
+  z-index: 1;
+}
+
+.text-pending {
+  color: rgb(165, 165, 2);
+}
+
+.text-approved {
+  color: green;
+}
+
+.text-rejected {
+  color: red;
+}
+
+select.statusDropdown {
+  width: 81%;
+  height: 35px;
 }
