@@ -4,7 +4,6 @@ import { DashboardComponent } from "./dashboard.component";
 import { AdminDashboardComponent } from "./admin-dashboard/admin-dashboard.component";
 import { HodDashboardComponent } from "./hod-dashboard/hod-dashboard.component";
 import { UserDashboardComponent } from "./user-dashboard/user-dashboard.component";
-// import { DealsComponent } from "../../crm/deals/deals.component";
 import { DealsDashboardComponent } from "./deals-dashboard/deals-dashboard.component";
 import { LeadsDashboardComponent } from "./leads-dashboard/leads-dashboard.component";
 import { FileManagerComponent } from "../apps/file-manager/file-manager.component";
@@ -19,7 +18,7 @@ const routes: Routes = [
       { path: "admin", component: AdminDashboardComponent },
       { path: "hod", component: HodDashboardComponent },
       { path: "user", component: UserDashboardComponent },
-      { path: "deals", component: DealsDashboardComponent},
+      { path: "deals", component: DealsDashboardComponent },
       { path: "librarian", component: LeadsDashboardComponent },
       { path: "fileManagement", component: FileManagerComponent },
     ],
@@ -30,4 +29,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class DashboardRoutingModule {}
+export class DashboardRoutingModule { }

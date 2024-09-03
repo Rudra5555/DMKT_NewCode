@@ -15,7 +15,7 @@ export type ChartOptions = {
   dataLabels: ApexDataLabels | any;
   plotOptions: ApexPlotOptions | any;
   xaxis: ApexXAxis | any;
-  
+
 
 };
 @Component({
@@ -33,65 +33,65 @@ export class DealsDashboardComponent {
   public chartOptions2: Partial<ChartOptions> | any;
   public chartOptions3: Partial<ChartOptions> | any;
   public chartOptions4: Partial<ChartOptions> | any;
- 
+
 
   constructor() {
     this.chartOptions = {
       series: [{
         data: [400, 220, 448,],
-        color:'#F96C85'
-    }],
+        color: '#F96C85'
+      }],
       chart: {
         type: "bar",
         height: 150
       },
       plotOptions: {
         bar: {
-          
+
           horizontal: true
         }
       },
       dataLabels: {
         enabled: false
       },
-      
+
       xaxis: {
         categories: ['Conversation', 'Follow Up', 'Inpipeline'
-      ],
+        ],
       }
     };
     this.chartOptions2 = {
       series: [{
         data: [400, 220, 448,],
-        color:'#77D882'
-    }],
+        color: '#77D882'
+      }],
       chart: {
         type: "bar",
         height: 150
       },
       plotOptions: {
         bar: {
-          
+
           horizontal: true
         }
       },
       dataLabels: {
         enabled: false
       },
-      
+
       xaxis: {
         categories: ['Conversation', 'Follow Up', 'Inpipeline'
-      ],
+        ],
       }
     };
     this.chartOptions3 = {
       series: [{
         name: "sales",
-       
+
         data: [{
           x: 'Inpipeline',
           y: 400,
-          
+
         }, {
           x: 'Follow Up',
           y: 30
@@ -104,7 +104,7 @@ export class DealsDashboardComponent {
         }, {
           x: 'Won',
           y: 470
-        },{
+        }, {
           x: 'Lost',
           y: 180
         }]
@@ -116,11 +116,11 @@ export class DealsDashboardComponent {
       },
       plotOptions: {
         bar: {
-         
+
           borderRadiusApplication: 'around',
         }
       },
-     
+
       xaxis: {
         type: 'category',
         group: {
@@ -128,10 +128,10 @@ export class DealsDashboardComponent {
             fontSize: '7px',
             fontWeight: 700,
           },
-        
+
         }
       },
-     
+
     };
     this.chartOptions4 = {
       series: [
@@ -163,7 +163,7 @@ export class DealsDashboardComponent {
     };
     this.maxDate.setDate(this.maxDate.getDate() + 7);
     this.bsRangeValue = [this.bsValue, this.maxDate];
-   
+
   }
   elem = document.documentElement;
   fullscreen() {

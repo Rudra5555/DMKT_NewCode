@@ -10,29 +10,26 @@ import { NgApexchartsModule } from 'ng-apexcharts';
 import { DealsDashboardComponent } from './deals-dashboard/deals-dashboard.component';
 import { LeadsDashboardComponent } from './leads-dashboard/leads-dashboard.component';
 import { SharedModule } from 'src/app/shared/shared.module';
-import {IgxLegendModule, IgxDataChartCoreModule, IgxDataChartCategoryModule, IgxDataChartCategoryCoreModule, IgxDataChartInteractivityModule, IgxDataChartVerticalCategoryModule, IgxDataChartVerticalCategoryCoreModule, IgxDataChartScatterCoreModule, IgxDataChartScatterModule } from 'igniteui-angular-charts';
+import { IgxLegendModule, IgxDataChartCoreModule, IgxDataChartCategoryModule, IgxDataChartCategoryCoreModule, IgxDataChartInteractivityModule, IgxDataChartVerticalCategoryModule, IgxDataChartVerticalCategoryCoreModule, IgxDataChartScatterCoreModule, IgxDataChartScatterModule } from 'igniteui-angular-charts';
 import { CanvasJSAngularChartsModule } from '@canvasjs/angular-charts';
 import { AppComponent } from 'src/app/app.component';
 import { FormsModule } from '@angular/forms';
 import { NgChartsModule } from 'ng2-charts';
-import {DashboardModalComponent} from './dashboard-modal/dashboard-modal.component'
+import { DashboardModalComponent } from './dashboard-modal/dashboard-modal.component'
 import { FooterComponent } from '../../common/footer/footer/footer.component';
 
 
 
 
 
-// import {NgxChartsModule} from '@swimlane/ngx-charts'
-// import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
 
 
 
 @NgModule({
   declarations: [
     DashboardModalComponent,
-    // FooterComponent,
-    // AppComponent,
-    // other components
+
   ],
   imports: [
     BrowserModule,
@@ -45,22 +42,15 @@ import { FooterComponent } from '../../common/footer/footer/footer.component';
     IgxDataChartScatterCoreModule,
     CanvasJSAngularChartsModule,
     IgxDataChartScatterModule,
-  
+
     NgChartsModule
 
-  
+
   ],
   providers: [],
-  // schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  // bootstrap: [AppComponent]
+
 })
 export class AppModule { }
-
-
-
-
-
-
 
 @NgModule({
   declarations: [
@@ -70,14 +60,14 @@ export class AppModule { }
     UserDashboardComponent,
     DealsDashboardComponent,
     LeadsDashboardComponent,
-    
+
   ],
   imports: [
     CommonModule,
     DashboardRoutingModule,
     NgApexchartsModule,
-   
+
     SharedModule,
   ],
 })
-export class DashboardModule {}
+export class DashboardModule { }

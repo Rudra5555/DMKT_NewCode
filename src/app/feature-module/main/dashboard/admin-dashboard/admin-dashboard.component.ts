@@ -39,7 +39,6 @@ export class AdminDashboardComponent implements OnInit {
   date: any;
   departmentData: any;
   resArray: any;
-  // dateArray: any;
   dateArray: string[] = [];
   deptDataArray: any[] = [];
 
@@ -101,16 +100,16 @@ export class AdminDashboardComponent implements OnInit {
       next: (event: any) => {
         if (event instanceof HttpResponse) {
           this.res = event.body;
-          //console.log("ooooooo",this.res);
+
 
           this.res = event.body.response.filter((file: any) =>
             !file.isHodDocument && !file.isStatutory && !file.isRestrictedDocument
           );
           this.fileList = this.res;
-          //console.log(this.fileList);
+
           if (this.fileList == "") {
             this.noRecordFlag = true;
-            //console.log("No Record Found!!");
+
 
           }
 
@@ -131,7 +130,7 @@ export class AdminDashboardComponent implements OnInit {
       next: (event: any) => {
         if (event instanceof HttpResponse) {
           this.res = event.body;
-          // //console.log("chart api res for Pie***********:::::::::::: ", this.res);
+
         }
       },
       error: (err: any) => {
@@ -230,7 +229,7 @@ export class AdminDashboardComponent implements OnInit {
       next: (event: any) => {
         if (event instanceof HttpResponse) {
           this.totalDepartment = event.body.data.totalNumberOfDepartment;
-          // //console.log("total dept count:::::::::::::::::: ", this.totalDepartment);
+
 
         }
       },

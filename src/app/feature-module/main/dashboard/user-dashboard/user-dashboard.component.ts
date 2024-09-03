@@ -43,13 +43,10 @@ export class UserDashboardComponent implements OnInit {
   optionArr: any;
   backButtonList: any = []
   categoryList = new Map();
-
-  // public data:any;
-  // public msg:any;
   data: any[] = [];
   msg: string = '';
   allData: any[] = [];
-  // selected: string;
+
 
 
   colors = ['#fc0859', '#ff6a00', '#00ff00', '#00ab52', '#0800a7', '#ff00ff', '#dcfe00', '#00c39f'];
@@ -75,14 +72,13 @@ export class UserDashboardComponent implements OnInit {
   public getColor() {
 
     this.randomItem = this.colors[Math.floor(Math.random() * this.colors.length)];
-    //console.log('s',this.randomItem);
   }
 
 
 
   ngOnInit(): void {
     let userIdd = localStorage.getItem('loggedUserId');
-    //console.log("UserXXXX",userIdd);
+
 
     this.optionCategory = "department"
     this.getDataByCategory(this.optionCategory);
@@ -90,19 +86,17 @@ export class UserDashboardComponent implements OnInit {
     this.getAllCategory()
     this.allCategoryListHead();
     this.uname = localStorage.getItem("loggedUserName");
-    //console.log("header ====>",this.uname)
+
 
 
     this.getAllFilesForm = this.formBuilder.group({
-      dropDownData: ["", [Validators.required]],   /**this.formBuilder.array([]) */
+      dropDownData: ["", [Validators.required]],
 
 
     });
 
 
   }
-
-
 
   onClick(): void {
     this.autoScroll.nativeElement.scrollIntoView({ behavior: 'smooth' });
@@ -123,7 +117,7 @@ export class UserDashboardComponent implements OnInit {
 
   public onSubmit() {
 
-    //console.log('hgfhjsdgfjsdh=',this.getAllFilesForm.controls['dropDownData'].value,);
+
     this.optionCategory = this.getAllFilesForm.controls['dropDownData'].value
 
     this.getDataByCategory(this.optionCategory)
@@ -134,17 +128,16 @@ export class UserDashboardComponent implements OnInit {
 
   public searchText(searchTxt: string) {
     var getData = this.getAllFilesForm.value.dropDownData;
-    //console.log("from modal search : ", searchTxt)
+
 
     if (searchTxt.length > 0) {
       this.modalMyData = this.modalFileList.filter((res: { name: string; }) => {
 
         return res.name.toLowerCase().includes(searchTxt.toLowerCase());
       });
-      //console.log("name==="+JSON.stringify( this.modalMyData))
+
 
     } else {
-      // alert("hhhhhhhhhhhh"+JSON.stringify(this.lstSearchListTmp))
       this.modalMyData = this.modalFileListTmp;
     }
   }
@@ -193,7 +186,6 @@ export class UserDashboardComponent implements OnInit {
     });
   }
 
-  //new changes
   allCategoryListHead() {
 
     this.loginService.allCategoryListHead().subscribe({

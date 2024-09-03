@@ -17,22 +17,20 @@ export class HodDashboardComponent implements OnInit {
   constructor(private router: ActivatedRoute) {
     const currentState = this.router.queryParams.subscribe((params) => {
       this.uName = params["userName"];
-      //console.log("23333333333333333=", JSON.stringify(this.uName));
-      //console.log("ggggggggggggg=",localStorage.getItem("ami"))
+
     });
   }
 
   ngOnInit(): void {
-    // window.onload;
-    //location.reload();
+
     const getSessionData = sessionStorage.getItem("Email");
-    //console.log("from admin dashboard session:" + getSessionData);
+
 
     const getLocal = localStorage.getItem("EmailId");
-    //console.log("from admin dashboard localstorage : " + getLocal);
+
 
     this.userRole = localStorage.getItem("user_role");
-    //console.log("Role from admin dashboard localstorage : " + this.userRole);
+
   }
 
   @ViewChild(BaseChartDirective) chart!: BaseChartDirective;
