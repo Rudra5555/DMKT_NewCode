@@ -92,12 +92,9 @@ export class FileManagerComponent implements OnInit , OnDestroy {
       this.categoryList=params['categoryList'];
        this.mainHead = params['mainHead'];
      this.plants =params['plants'];
-
-      //console.log(this.departmentName,this.subAreaName,this.mainHead,this.plants);
       
       
       this.subAreaNameOnHeader = this.capitalizeFirstLetter(params['subAreaName']);
-      //console.log("proper naming: ", this.subAreaNameOnHeader);
       
     });
 
@@ -118,8 +115,6 @@ export class FileManagerComponent implements OnInit , OnDestroy {
     this.startDate = this.formatDate(this.bsRangeValue[0]);
      this.endDate = this.formatDate(this.bsRangeValue[1]);
 
-    //console.log(this.startDate,this.endDate);
-    //console.log("oooooooooooo",this.departmentName,this.subAreaName,this.mainHead,this.plants);
     this.getFileListDetails();
   }
   
@@ -134,7 +129,6 @@ export class FileManagerComponent implements OnInit , OnDestroy {
 
     this.loggedUserRole=localStorage.getItem("role")
 
-    //console.log("userRoles from file manager;;;;;;",this.loggedUserRole);
     
     this.setLast15Days();
 
@@ -143,7 +137,6 @@ export class FileManagerComponent implements OnInit , OnDestroy {
       this.subAreaName = params['subAreaName'];
       
       this.subAreaNameOnHeader = this.capitalizeFirstLetter(params['subAreaName']);
-      //console.log("proper naming: ", this.subAreaNameOnHeader);
       
     });
 
@@ -156,13 +149,9 @@ export class FileManagerComponent implements OnInit , OnDestroy {
       if (params['fileList']) {
         this.fileList = JSON.parse(decodeURIComponent(params['fileList']));
     
-        //console.log("mmmmmmmm",this.fileList);
-        
-    
         const convertToKB = (bytes: number): number => {
           return Math.round((bytes / 1024) );
         };
-    
           
         this.fileList = this.fileList.filter((item: any) => {
           return item.listOfDocumentVersoinDtos.some((version: any) => {
@@ -177,17 +166,7 @@ export class FileManagerComponent implements OnInit , OnDestroy {
           });
         });
         
-      //   this.fileList.map((item: getfileList, index: number) => {
-      //     const serialNumber = index + 1;
-      //     if (index >= this.skip && serialNumber <= this.limit) {
-      //         item.id = serialNumber;
-      //         this.fileList.push(item);
-      //         this.serialNumberArray.push(serialNumber);
-      //     }
-      // });
-    
-      // this.dataSource = new MatTableDataSource<getfileList>(this.fileList);
-        
+
         this.fileList.forEach((item: any) => {
           item.selectedVersion = this.getLatestVersion(item.listOfDocumentVersoinDtos);
           item.listOfDocumentVersoinDtos.forEach((version: any) => {
@@ -195,22 +174,13 @@ export class FileManagerComponent implements OnInit , OnDestroy {
           });
         });
     
-    
-        this.fileList.forEach((item: any) => {
-          item.selectedVersion = this.getLatestVersion(item.listOfDocumentVersoinDtos);
-          item.listOfDocumentVersoinDtos.forEach((version: any) => {
-            version.fileSizeKB = convertToKB(parseInt(version.fileSize, 10));
-          });
-        });
     
         if (this.fileList.length > 0 && this.fileList[0].selectedVersion) {
           this.doc = this.fileList[0].selectedVersion.fileUrl;
         
         }
-    
-        //console.log("Decoded fileList data with file sizes in KB:", this.fileList);
       } else {
-        //console.log("No fileList data found in query parameters.");
+
           } 
         }); 
 
@@ -222,24 +192,19 @@ export class FileManagerComponent implements OnInit , OnDestroy {
    if(this.getRole == "Admin"){
     this.roleFlag = true;
     
-    //console.log(this.roleFlag)
   }if(this.getRole == "Librarian"){
     this.roleFlag = true;
   }if(this.getRole == "User"){
     this.roleFlag = false;
-    //console.log(this.roleFlag)
+
   }if(this.getRole == "SuperUser"){
     this.roleFlag = false;
-    //console.log(this.roleFlag)
+
   }if(this.getRole == "Hod"){
     this.roleFlag = false;
-    //console.log(this.roleFlag)
+  
   }
 
-
-
-    
-    // this.getTableData();
     this.getFileListDetails()
     this.uploadFileForm = this.formBuilder.group({
   
@@ -255,21 +220,21 @@ export class FileManagerComponent implements OnInit , OnDestroy {
 
   }
 
+ 
+
   getFileListDetails() {
     this.fileList = [];
     this.serialNumberArray = [];
-
+  
     this.loginService.getFileLists(this.mainHead, this.plants, this.departmentName, this.subAreaName, this.startDate, this.endDate).subscribe({
       next: (event: any) => {
         if (event instanceof HttpResponse) {
           this.respData = event.body.documentLists;
-          //console.log("fileList data file manager:::::::: ", this.fileList);
   
-          const convertToKB = (bytes: number): number => {
-            return Math.round(bytes / 1024);
+          const convertToKB = (bytes: number): string => {
+            return (bytes / 1024).toFixed(2);
           };
   
-          
           this.fileList = this.respData.filter((item: any) => {
             return item.listOfDocumentVersoinDtos.some((version: any) => {
               if (this.loggedUserRole === 'User') {
@@ -282,21 +247,20 @@ export class FileManagerComponent implements OnInit , OnDestroy {
               return false;
             });
           });
-
+  
           this.totalData = this.fileList.length;
-
+  
           this.fileList.map((item: getfileList, index: number) => {
             const serialNumber = index + 1;
             if (index >= this.skip && serialNumber <= this.limit) {
-                item.id = serialNumber;
-                // this.fileList.push(item);
-                this.serialNumberArray.push(serialNumber);
+              item.id = serialNumber;
+              this.serialNumberArray.push(serialNumber);
             }
-        });
+          });
   
-        this.dataSource = new MatTableDataSource<getfileList>(this.fileList);
-        this.calculateTotalPages(this.fileList.length, this.pageSize);
-          
+          this.dataSource = new MatTableDataSource<getfileList>(this.fileList);
+          this.calculateTotalPages(this.fileList.length, this.pageSize);
+  
           this.fileList.forEach((item: any) => {
             item.selectedVersion = this.getLatestVersion(item.listOfDocumentVersoinDtos);
             item.listOfDocumentVersoinDtos.forEach((version: any) => {
@@ -304,7 +268,6 @@ export class FileManagerComponent implements OnInit , OnDestroy {
             });
           });
   
-          
           if (this.fileList.length > 0 && this.fileList[0].selectedVersion) {
             this.doc = this.fileList[0].selectedVersion.fileUrl;
           }
@@ -318,6 +281,7 @@ export class FileManagerComponent implements OnInit , OnDestroy {
       },
     });
   }
+  
 
  
   capitalizeFirstLetter(string: string): string {
@@ -327,31 +291,6 @@ export class FileManagerComponent implements OnInit , OnDestroy {
 
 
 
-
-  // private getTableData(): void {
-
- 
-    
-
-  //   this.doclist = [];
-  //   this.serialNumberArray = [];
-
-  //   this.data.getDoclist().subscribe((res: apiResultFormat) => {
-  //     this.totalData = res.totalData;
-  //     res.data.map((res: getdoclist, index: number) => {
-  //       const serialNumber = index + 1;
-  //       if (index >= this.skip && serialNumber <= this.limit) {
-  //         res.id = serialNumber;
-  //         this.doclist.push(res);
-  //         this.serialNumberArray.push(serialNumber);
-  //       }
-  //     });
-  //     this.dataSource = new MatTableDataSource<getdoclist>(this.doclist);
-  //     this.calculateTotalPages(this.totalData, this.pageSize);
-  //   });
-
- 
-  // }
 
   public sortData(sort: Sort) {
     const data = this.fileList.slice();
@@ -520,8 +459,7 @@ if (modalData) {
     next: (event: any) => {
       if (event instanceof HttpResponse) {
         const msg = modalData + ": Successful!";
-        // this.message.push(msg);
-      //  this.fileInfos = this.uploadService.getFiles();
+    
       }
     },
     error: (err: any) => {
@@ -531,15 +469,9 @@ if (modalData) {
         msg += " " + err.error.message;
       }
 
-      // this.message.push(msg);
-     // this.fileInfos = this.uploadService.getFiles();
     }
   });
 }
-
-
-
-
 
 
 this.uploadFileForm.reset();
@@ -559,11 +491,17 @@ getLatestVersion(versions: any[]): any {
   });
 }
 
-onVersionChange(item: any, version: any) {
-  item.selectedVersion = version;
-  this.doc = version.fileUrl;
-}
 
+onVersionChange(item: any, selectedVersion: any) {
+
+  item.selectedVersion = selectedVersion;
+
+  if (item.selectedVersion) {
+    item.newUniqueFileName = item.selectedVersion.newUniqueFileName; 
+    this.doc = item.selectedVersion.fileUrl; 
+    // console.log(`Version changed to: ${item.selectedVersion.versionName}, File Name: ${item.newUniqueFileName}`);
+  }
+}
 
 
 convertBytesToKB(bytes: number): string {

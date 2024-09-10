@@ -47,6 +47,8 @@ export class UserDashboardComponent implements OnInit {
   msg: string = '';
   allData: any[] = [];
 
+  mainHeadName: any;
+  plantType: any;
 
 
   colors = ['#fc0859', '#ff6a00', '#00ff00', '#00ab52', '#0800a7', '#ff00ff', '#dcfe00', '#00c39f'];
@@ -62,9 +64,9 @@ export class UserDashboardComponent implements OnInit {
   subAreaDataList: any[] = [];
   bsRangeValue: Date[] | undefined;
 
-
-
   constructor(private formBuilder: FormBuilder, private router: Router, private loginService: LoginComponentService, private datePipe: DatePipe) {
+
+    
 
   }
 
@@ -73,6 +75,8 @@ export class UserDashboardComponent implements OnInit {
 
     this.randomItem = this.colors[Math.floor(Math.random() * this.colors.length)];
   }
+
+  
 
 
 
@@ -228,6 +232,8 @@ export class UserDashboardComponent implements OnInit {
 
     if (catId == 'main-head') {
       this.categoryList.set(catId, catName);
+
+      this.mainHeadName = catName;
     }
 
 
@@ -259,6 +265,8 @@ export class UserDashboardComponent implements OnInit {
 
     if (catId == 'plants') {
       this.categoryList.set(catId, catName);
+
+      this.plantType = catName;
     }
 
     if (catId == "plants") {
@@ -301,6 +309,8 @@ export class UserDashboardComponent implements OnInit {
   getFileListDetails(departmentName: string, subAreaName: string, categoryList: Map<any, any>, startDate: any, endDate: any) {
     const mainHead = categoryList.get('main-head');
     const plants = categoryList.get('plants');
+    
+
     this.loginService.getFileList(categoryList, departmentName, subAreaName, startDate, endDate).subscribe({
       next: (event: any) => {
         if (event instanceof HttpResponse) {

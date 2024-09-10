@@ -144,7 +144,7 @@
                 
                 <td>
                   <h2 class="table-avatar d-flex">
-                    {{ item.listOfDocumentVersoinDtos[0].newUniqueFileName }}
+                    {{ item.listOfDocumentVersoinDtos[0].newUniqueFileName}}
                   </h2>
                 </td>
                 <td>{{ item.documentType }}</td>
@@ -161,11 +161,12 @@
                       *ngFor="let version of item.listOfDocumentVersoinDtos"
                       [value]="version"
                     >
-                      {{ version.versionName }} -
-                      {{ version.versionReleaseDate }}
+                      {{ version.versionName }} - {{ version.versionReleaseDate }}
                     </mat-option>
                   </mat-select>
                 </td>
+                
+                
                 <td>{{ item.listOfDocumentVersoinDtos[0].fileSize }} KB</td>
                 <td class="text-center">
                   <a
