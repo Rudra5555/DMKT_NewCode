@@ -6,6 +6,36 @@ import { UploadDocumentComponentService } from 'src/app/services/upload-document
 import Swal from 'sweetalert2';
 import { routes } from 'src/app/core/helpers/routes/routes';
 
+
+export interface Option {
+  value: string;
+  label: string;
+  children?: Option[];
+}
+
+export const OPTIONS: Option[] = [
+  {
+    value: 'fruits',
+    label: 'Fruits',
+    children: [
+      { value: 'apple', label: 'Apple' },
+      { value: 'banana', label: 'Banana' }
+    ]
+  },
+  {
+    value: 'vegetables',
+    label: 'Vegetables',
+    children: [
+      { value: 'carrot', label: 'Carrot' },
+      { value: 'broccoli', label: 'Broccoli' }
+    ]
+  }
+];
+
+
+
+
+
 @Component({
   selector: 'app-upload-doc',
   templateUrl: './upload-doc.component.html',
@@ -42,28 +72,78 @@ export class UploadDocComponent implements OnInit {
   selectedCatNameAbbr: any;
   selectedDeptCatNameAbbr: any;
   selectedSubAreaCatNameAbbr: any;
+  options: Option[] = OPTIONS;
+  selectedValue: string | undefined;
+
 
   constructor(
     private uploadService: FileManagementService,
     private formBuilder: FormBuilder,
     private uploadDocument: UploadDocumentComponentService
-  ) { }
-
-  ngOnInit(): void {
-    this.getAllMainHeadData();
+  ) {
 
     this.uploadFileForm = this.formBuilder.group({
       uploadFile: ["", [Validators.required]],
-      selectedCatName: ["", [Validators.required]],
-      plantOption: ["", [Validators.required]],
-      selectedDeptCatName: ["", [Validators.required]],
+      mainHead: ['', Validators.required],
+      plants: ["", [Validators.required]],
+      department: ["", [Validators.required]],
       subArea: ["", [Validators.required]],
-      docType: ["", [Validators.required]],
+      documentType: ["", [Validators.required]],
+      storageLocation: ["", [Validators.required]],
       isStatutoryDocument: ["", [Validators.required]],
       isRestrictedDocument: ["", [Validators.required]],
       isHodDocument: ["", [Validators.required]],
     });
-    this.updateSubmitButtonState();
+
+  }
+
+  ngOnInit(): void {
+
+
+
+    this.uploadFileForm.get('mainHead')?.valueChanges.subscribe(value => {
+      const [catName, abbreviation] = value.split('~');
+      this.selectedCatName = catName;
+      this.selectedCatNameAbbr = abbreviation
+
+      if (catName != 'POWER O&M') {
+        this.plantList = [];
+        this.departmentList = [];
+        this.subAreaList = [];
+      }
+      this.getMainHeadList(catName, "main-head");
+
+    });
+
+
+    this.uploadFileForm.get('plants')?.valueChanges.subscribe(value => {
+      if (value != null) {
+        this.getAllPlantList(value, "plants");
+        this.plantOption = value;
+      } else {
+        console.log("No plant selected or value is null.");
+
+      }
+    });
+
+
+    this.uploadFileForm.get('department')?.valueChanges.subscribe(value => {
+      const [deptName, deptAbbr] = value.split('~');
+      this.getSubAreaList(deptName, "department");
+      this.selectedDeptCatName = deptName;
+      this.selectedDeptCatNameAbbr = deptAbbr;
+
+    });
+
+    this.uploadFileForm.get('subArea')?.valueChanges.subscribe(value => {
+      const [subAreaName, subAreaAbbr] = value.split('~');
+      this.selectedSubAreaCatName = subAreaName;
+      this.selectedSubAreaCatNameAbbr = subAreaAbbr;
+    });
+
+
+    this.getAllMainHeadData();
+
   }
 
   onFileDropped($event: any) {
@@ -73,7 +153,6 @@ export class UploadDocComponent implements OnInit {
 
   fileBrowseHandler(files: any) {
     this.prepareFilesList(files.target.files);
-
   }
 
   deleteFile(index: number) {
@@ -81,8 +160,9 @@ export class UploadDocComponent implements OnInit {
       return;
     }
     this.files.splice(index, 1);
+
     this.calculateTotalFileSize(this.files);
-    this.updateSubmitButtonState();
+    this.uploadFileForm.get('uploadFile')?.setValue(this.files);
   }
 
   uploadFilesSimulator(index: number) {
@@ -107,14 +187,18 @@ export class UploadDocComponent implements OnInit {
     for (const item of files) {
       item.progress = 0;
       this.files.push(item);
+
       this.calculateTotalFileSize(this.files);
     }
-    this.fileDropEl.nativeElement.value = "";
     this.uploadFilesSimulator(0);
-    this.updateSubmitButtonState();
+    this.uploadFileForm.get('uploadFile')?.setValue(this.files);
 
   }
 
+  clearFileInput() {
+
+    this.files = [];
+  }
 
   calculateTotalFileSize(files: Array<any>) {
     const fiftyMB = 2 * 1024 * 1024;
@@ -129,7 +213,8 @@ export class UploadDocComponent implements OnInit {
     } else {
       this.uploadDocumentSizeFlag = true;
     }
-    this.updateSubmitButtonState();
+
+
   }
 
 
@@ -156,8 +241,6 @@ export class UploadDocComponent implements OnInit {
       this.departmentList = [];
       this.subAreaList = [];
     }
-    this.onMainHeadChange(this.selectedCatName, this.selectedCatNameAbbr);
-    this.updateSubmitButtonState();
   }
 
   selectedPlant(event: any) {
@@ -170,21 +253,22 @@ export class UploadDocComponent implements OnInit {
       this.plantFlag = false;
 
     }
-    this.getAllPlantList(this.plantOption, "plants");
-    this.updateSubmitButtonState();
+
   }
 
   selectedDepartment(event: any) {
     const [catName, abbreviation] = event.value.split('~');
     this.selectedDeptCatName = catName;
     this.selectedDeptCatNameAbbr = abbreviation;
-
     if (this.selectedDeptCatName != null) {
       this.departmentFlag = false;
     }
 
-    this.getSubAreaList(this.selectedDeptCatName, "department");
-    this.updateSubmitButtonState();
+    if (this.selectedDeptCatName !== null && this.selectedDeptCatName !== undefined) {
+      this.getSubAreaList(this.selectedDeptCatName, "department");
+    } else {
+      console.log("selectedDeptCatName is null or undefined.");
+    }
   }
 
   selectedSubArea(event: any) {
@@ -194,7 +278,7 @@ export class UploadDocComponent implements OnInit {
     if (this.selectedSubAreaCatName != null) {
       this.subAreaFlag = false;
     }
-    this.updateSubmitButtonState();
+
   }
 
   selectedDocumentType(event: any) {
@@ -202,7 +286,7 @@ export class UploadDocComponent implements OnInit {
     if (this.documentTypeOption != null) {
       this.documentTypeFlag = false;
     }
-    this.updateSubmitButtonState();
+
   }
 
   storageLocationType(event: any) {
@@ -210,13 +294,7 @@ export class UploadDocComponent implements OnInit {
     if (this.storageLocationOption != null) {
       this.storageLocationFlag = false;
     }
-    this.updateSubmitButtonState();
-  }
 
-
-
-  updateSubmitButtonState() {
-    this.disableSubmitBtn = this.uploadDocumentSizeFlag || this.uploadDocumentFlag || this.mainHeadFlag || this.plantFlag || this.departmentFlag || this.subAreaFlag || this.documentTypeFlag || this.storageLocationFlag;
   }
 
 
@@ -224,6 +302,14 @@ export class UploadDocComponent implements OnInit {
 
 
   onSubmit(): void {
+
+
+    if (this.uploadFileForm.controls['documentType']) {
+      this.documentTypeOption = this.uploadFileForm.value.documentType;
+    }
+    if (this.uploadFileForm.controls['storageLocation']) {
+      this.storageLocationOption = this.uploadFileForm.value.storageLocation;
+    }
 
 
     let isStatutoryDocument = this.uploadFileForm.controls['isStatutoryDocument'].value;
@@ -236,59 +322,23 @@ export class UploadDocComponent implements OnInit {
 
 
 
+
+
     const formData = new FormData();
     for (const file of this.files) {
+
+      // console.log("this selectedFiles",file);
+
       formData.append("file", file);
     }
 
-    if (!this.selectedCatName) {
-
-      this.mainHeadFlag = true;
-    } else {
-      this.mainHeadFlag = false;
-    }
-
-    if (!this.plantOption) {
-      this.plantFlag = true;
-    } else {
-      this.plantFlag = false;
-    }
-
-    if (!this.selectedDeptCatName) {
-      this.departmentFlag = true;
-    } else {
-      this.departmentFlag = false;
-    }
-
-    if (!this.selectedSubAreaCatName) {
-      this.subAreaFlag = true;
-    } else {
-      this.subAreaFlag = false;
-    }
-
-    if (!this.documentTypeOption) {
-      this.documentTypeFlag = true;
-    } else {
-      this.documentTypeFlag = false;
-    }
-
-    if (!this.storageLocationOption) {
-      this.storageLocationFlag = true;
-    } else {
-      this.storageLocationFlag = false;
-    }
 
 
-    if (this.files.length === 0) {
-      this.uploadDocumentFlag = true;
-    } else {
-      this.uploadDocumentFlag = false;
 
-    }
 
-    this.updateSubmitButtonState();
 
-    if (this.selectedCatName && this.plantOption && this.selectedDeptCatName && this.selectedSubAreaCatName && this.documentTypeOption && this.storageLocationOption && this.files.length > 0) {
+
+    if (this.plantOption != '' && this.selectedDeptCatName != '' && this.selectedSubAreaCatName != '' && this.files.length > 0) {
       const modalData = {
         "mainHead": this.selectedCatName,
         "mainHeadAbbr": this.selectedCatNameAbbr,
@@ -302,7 +352,6 @@ export class UploadDocComponent implements OnInit {
         "isStatutory": isStatutoryDocument,
         "isRestrictedDocument": isRestrictedDocument,
         "hodRestricted": ishodRestricted
-
       };
 
       formData.append("requestbody", JSON.stringify(modalData));
@@ -311,6 +360,18 @@ export class UploadDocComponent implements OnInit {
       this.uploadService.upload(formData).subscribe({
         next: (event: any) => {
           if (event instanceof HttpResponse) {
+
+            this.uploadFileForm.get('uploadFile')?.reset('');
+            this.uploadFileForm.get('mainHead')?.reset('');
+            this.uploadFileForm.get('plants')?.reset('');
+            this.uploadFileForm.get('department')?.reset('');
+            this.uploadFileForm.get('subArea')?.reset('');
+            this.uploadFileForm.get('documentType')?.reset('');
+            this.uploadFileForm.get('storageLocation')?.reset('');
+            this.uploadFileForm.controls['isStatutoryDocument'].reset();
+            this.uploadFileForm.controls['isRestrictedDocument'].reset();
+            this.uploadFileForm.controls['isHodDocument'].reset();
+            this.clearFileInput();
             this.successfulSubmitAlert();
           }
         },
@@ -334,13 +395,24 @@ export class UploadDocComponent implements OnInit {
         "hodRestricted": ishodRestricted
 
       };
+
       formData.append("requestbody", JSON.stringify(modalData));
 
 
       this.uploadService.upload(formData).subscribe({
         next: (event: any) => {
           if (event instanceof HttpResponse) {
-
+            this.uploadFileForm.get('uploadFile')?.reset('');
+            this.uploadFileForm.get('mainHead')?.reset('');
+            this.uploadFileForm.get('plants')?.reset('');
+            this.uploadFileForm.get('department')?.reset('');
+            this.uploadFileForm.get('subArea')?.reset('');
+            this.uploadFileForm.get('documentType')?.reset('');
+            this.uploadFileForm.get('storageLocation')?.reset('');
+            this.uploadFileForm.controls['isStatutoryDocument'].reset();
+            this.uploadFileForm.controls['isRestrictedDocument'].reset();
+            this.uploadFileForm.controls['isHodDocument'].reset();
+            this.clearFileInput();
 
             this.successfulSubmitAlert();
           }
@@ -351,6 +423,8 @@ export class UploadDocComponent implements OnInit {
       });
 
     }
+
+
 
 
   }
@@ -369,47 +443,53 @@ export class UploadDocComponent implements OnInit {
     });
   }
 
-  onMainHeadChange(selectedValue: string, selectedAbbr: string) {
-    this.getPlantList(selectedValue, "main-head", selectedAbbr);
-  }
 
-  getPlantList(selectedValue: string, mainHead: string, selectedAbbr: string) {
-    this.uploadDocument.allDataList(selectedValue, mainHead).subscribe({
-      next: (event: any) => {
-        if (event instanceof HttpResponse) {
-          this.plantList = event.body?.categoryList || [];
+  getMainHeadList(selectedValue: string, mainHead: string) {
+
+    if (selectedValue != '' && mainHead != null) {
+
+      this.uploadDocument.allDataList(selectedValue, mainHead).subscribe({
+        next: (event: any) => {
+          if (event instanceof HttpResponse) {
+            this.plantList = event.body?.categoryList || [];
+          }
+        },
+        error: (err: any) => {
+          console.error(err);
         }
-      },
-      error: (err: any) => {
-        console.error(err);
-      }
-    });
+      });
+    }
   }
 
   getAllPlantList(selectedValue: string, plantHeader: string) {
-    this.uploadDocument.allPlantList(selectedValue, plantHeader).subscribe({
-      next: (event: any) => {
-        if (event instanceof HttpResponse) {
-          this.departmentList = event.body?.categoryList || [];
+
+    if (selectedValue != '' && plantHeader != null) {
+      this.uploadDocument.allPlantList(selectedValue, plantHeader).subscribe({
+        next: (event: any) => {
+          if (event instanceof HttpResponse) {
+            this.departmentList = event.body?.categoryList || [];
+          }
+        },
+        error: (err: any) => {
+          console.error(err);
         }
-      },
-      error: (err: any) => {
-        console.error(err);
-      }
-    });
+      });
+    }
   }
 
   getSubAreaList(selectedValue: string, departmentHeader: string) {
-    this.uploadDocument.allSubAreaList(selectedValue, departmentHeader).subscribe({
-      next: (event: any) => {
-        if (event instanceof HttpResponse) {
-          this.subAreaList = event.body?.categoryList || [];
+    if (selectedValue != '' && departmentHeader != null) {
+      this.uploadDocument.allSubAreaList(selectedValue, departmentHeader).subscribe({
+        next: (event: any) => {
+          if (event instanceof HttpResponse) {
+            this.subAreaList = event.body?.categoryList || [];
+          }
+        },
+        error: (err: any) => {
+          console.error(err);
         }
-      },
-      error: (err: any) => {
-        console.error(err);
-      }
-    });
+      });
+    }
   }
 
   successfulSubmitAlert() {
@@ -421,7 +501,7 @@ export class UploadDocComponent implements OnInit {
       timer: 1500
     }).then(() => {
 
-      window.location.reload();
+      // window.location.reload();
 
     });
   }

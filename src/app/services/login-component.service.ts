@@ -12,6 +12,8 @@ export class LoginComponentService {
 
  private baseUrl = 'http://103.168.18.28:8080';
 
+//  private baseUrl = 'http://10.101.71.204:9090';
+
   constructor(private http: HttpClient) { }
 
 

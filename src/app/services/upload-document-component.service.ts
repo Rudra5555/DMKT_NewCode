@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 })
 export class UploadDocumentComponentService {
   // private baseUrl = 'http://localhost:8080';
-  // private serverBaseUrl = 'http://103.168.18.28:8080';
+  // private serverBaseUrl = 'http://10.101.71.204:9090';
 
  private baseUrl = 'http://103.168.18.28:8080';
 
