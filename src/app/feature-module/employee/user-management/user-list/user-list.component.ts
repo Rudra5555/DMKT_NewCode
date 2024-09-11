@@ -1,14 +1,17 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder } from '@angular/forms';
 import { Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { Validators } from 'ngx-editor';
 import { DataService, apiResultFormat, getClient, routes } from 'src/app/core/core.index';
+import { UploadDocumentComponentService } from 'src/app/services/upload-document-component.service';
 
 @Component({
-  selector: 'app-clients-list',
-  templateUrl: './clients-list.component.html',
-  styleUrls: ['./clients-list.component.scss']
+  selector: 'app-user-list',
+  templateUrl: './user-list.component.html',
+  styleUrls: ['./user-list.component.scss']
 })
-export class ClientsListComponent implements OnInit {
+export class UserListComponent implements OnInit {
   public clientsData: Array<getClient> = [];
   public searchDataValue = '';
   dataSource!: MatTableDataSource<getClient>;
@@ -26,8 +29,28 @@ export class ClientsListComponent implements OnInit {
   public pageSelection: Array<pageSelection> = [];
   public totalPages = 0;
   //** / pagination variables
+  // constructor(private data: DataService) {}
 
-  constructor(private data: DataService) {}
+  constructor(
+    private data: DataService,
+    private formBuilder: FormBuilder,
+
+  ) {
+
+    // this.uploadFileForm = this.formBuilder.group({
+    //   uploadFile: ["", [Validators.required]],
+    //   mainHead: ['', Validators.required],
+    //   plants: ["", [Validators.required]],
+    //   department: ["", [Validators.required]],
+    //   subArea: ["", [Validators.required]],
+    //   documentType: ["", [Validators.required]],
+    //   storageLocation: ["", [Validators.required]],
+    //   isStatutoryDocument: ["", [Validators.required]],
+    //   isRestrictedDocument: ["", [Validators.required]],
+    //   isHodDocument: ["", [Validators.required]],
+    // });
+
+  }
 
   ngOnInit(): void {
     this.getTableData();

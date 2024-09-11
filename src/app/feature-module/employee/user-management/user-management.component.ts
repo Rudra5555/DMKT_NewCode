@@ -1,13 +1,13 @@
 import { Component,HostListener, NgZone } from '@angular/core';
 
 @Component({
-  selector: 'app-clients',
-  templateUrl: './clients.component.html',
-  styleUrls: ['./clients.component.scss']
+  selector: 'app-user-management',
+  templateUrl: './user-management.component.html',
+  styleUrls: ['./user-management.component.scss']
 })
 
 @HostListener('window: resize', ['$event'])
-export class ClientsComponent  {
+export class UserManagementComponent  {
   public innerHeight!: string;
 
   getScreenHeight() {

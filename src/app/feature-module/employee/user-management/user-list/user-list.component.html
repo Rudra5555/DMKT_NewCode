@@ -1,4 +1,4 @@
-<app-clients-modal></app-clients-modal>
+<app-user-management-modal></app-user-management-modal>
 <!-- Page Content -->
 <div class="content container-fluid">
   <!-- Page Header -->
@@ -8,7 +8,7 @@
         <h3 class="page-title">User Management</h3>
         <ul class="breadcrumb">
           <li class="breadcrumb-item"><a [routerLink]="routes.adminDashboard">Dashboard</a></li>
-          <li class="breadcrumb-item active">User Management</li>
+          <!-- <li class="breadcrumb-item active">User Management</li> -->
         </ul>
       </div>
       <div class="col-auto float-end ms-auto">
@@ -93,8 +93,8 @@
             <tr>
               <td>
                 <h2 class="table-avatar">
-                  <a [routerLink]="routes.clientProfile" class="avatar"><img [src]="client.img" alt="" /></a>
-                  <a [routerLink]="routes.clientProfile">{{
+                  <a [routerLink]="routes.userProfile" class="avatar"><img [src]="client.img" alt="" /></a>
+                  <a [routerLink]="routes.userProfile">{{
                     client.company
                     }}</a>
                 </h2>

@@ -115,8 +115,8 @@ export class routes {
   public static get overtime(): string {
     return this.baseUrl + '/employees/overtime';
   }
-  public static get clientList(): string {
-    return this.baseUrl + '/clients/client-list';
+  public static get userList(): string {
+    return this.baseUrl + '/user-management/user-list';
   }
   public static get projects(): string {
     return this.baseUrl + '/projects';
@@ -332,8 +332,8 @@ export class routes {
   public static get employeeProfile(): string {
     return this.baseUrl + '/employees/employee-profile';
   }
-  public static get clientProfile(): string {
-    return this.baseUrl + '/clients/client-profile';
+  public static get userProfile(): string {
+    return this.baseUrl + '/user-management/user-management-profile';
   }
   public static get loginpro(): string {
     return this.baseUrl + '/login';
