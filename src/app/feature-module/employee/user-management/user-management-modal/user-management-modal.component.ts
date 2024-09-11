@@ -4,11 +4,11 @@ import { IDropdownSettings } from 'ng-multiselect-dropdown';
 // import {  IDropdownSettings } from 'ng-multiselect-dropdown';
 
 @Component({
-  selector: 'app-clients-modal',
-  templateUrl: './clients-modal.component.html',
-  styleUrls: ['./clients-modal.component.scss']
+  selector: 'app-user-management-modal',
+  templateUrl: './user-management-modal.component.html',
+  styleUrls: ['./user-management-modal.component.scss']
 })
-export class ClientsModalComponent implements OnInit {
+export class UserManagementModalComponent implements OnInit {
   public addClientForm!: FormGroup ;
   public editClientForm!: FormGroup ;
   public dropdownList:any;
@@ -52,7 +52,7 @@ export class ClientsModalComponent implements OnInit {
       clientId: ["", [Validators.required]],
     });
 
-    //Edit Clients Form
+    //Edit UserManagement Form
     this.editClientForm = this.formBuilder.group({
       editClientName: ["", [Validators.required]],
       editClientPhone: ["", [Validators.required]],

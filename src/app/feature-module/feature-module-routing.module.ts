@@ -33,10 +33,10 @@ const routes: Routes = [
           ),
       },
       {
-        path: 'clients',
+        path: 'user-management',
         loadChildren: () =>
-          import('./employee/clients/clients.module').then(
-            (m) => m.ClientsModule
+          import('./employee/user-management/user-management.module').then(
+            (m) => m.UserManagementModule
           ),
       },
       {
