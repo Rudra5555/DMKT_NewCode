@@ -18,7 +18,6 @@ import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 @NgModule({
   declarations: [
     ClientsComponent,
-    ClientsContentPageComponent,
     ClientsListComponent,
     ClientsProfileComponent,
     ClientsModalComponent

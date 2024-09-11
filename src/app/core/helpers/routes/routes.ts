@@ -115,8 +115,8 @@ export class routes {
   public static get overtime(): string {
     return this.baseUrl + '/employees/overtime';
   }
-  public static get clientPage(): string {
-    return this.baseUrl + '/clients/client-page';
+  public static get clientList(): string {
+    return this.baseUrl + '/clients/client-list';
   }
   public static get projects(): string {
     return this.baseUrl + '/projects';

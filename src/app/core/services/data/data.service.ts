@@ -712,12 +712,12 @@ export class DataService implements OnInit {
 
         {
           menuValue: 'User Management',
-          route: routes.clientPage,
+          route: routes.clientList,
           hasSubRoute: false,
           showSubRoute: false,
           icon: 'users',
           base: 'clients',
-          page1: 'client-page',
+          page1: 'client-list',
           materialicons: 'person',
           subMenus: [],
         },
