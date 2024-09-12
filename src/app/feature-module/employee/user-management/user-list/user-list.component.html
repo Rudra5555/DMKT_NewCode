@@ -79,11 +79,12 @@
         <table matSort (matSortChange)="sortData($event)" class="table table-striped custom-table datatable">
           <thead>
             <tr>
-              <th mat-sort-header="company">Name</th>
-              <th mat-sort-header="clientId">Client ID</th>
-              <th mat-sort-header="name">Contact Person</th>
+              <th mat-sort-header="name">Name</th>
+              <th mat-sort-header="clientId">Employee ID</th>
+              <th mat-sort-header="company">Immediate Manager</th>
               <th mat-sort-header="email">Email</th>
               <th mat-sort-header="phone">Mobile</th>
+              <th mat-sort-header="role">User Role</th>
               <th mat-sort-header="status">Status</th>
               <th class="text-end">Action</th>
             </tr>
@@ -95,14 +96,15 @@
                 <h2 class="table-avatar">
                   <a [routerLink]="routes.userProfile" class="avatar"><img [src]="client.img" alt="" /></a>
                   <a [routerLink]="routes.userProfile">{{
-                    client.company
+                    client.name
                     }}</a>
                 </h2>
               </td>
               <td>{{ client.clientId }}</td>
-              <td>{{ client.name }}</td>
+              <td>{{ client.company }}</td>
               <td>{{ client.email }}</td>
               <td>{{ client.phone }}</td>
+              <td>{{ client.role }}</td>
               <td>
                 <div class="dropdown action-label">
                   <a href="javascript:void(0);" class="btn btn-white btn-sm btn-rounded dropdown-toggle"
@@ -123,15 +125,16 @@
               </td>
               <td class="text-end">
                 <div class="dropdown dropdown-action">
-                  <a class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i
-                      class="material-icons">more_vert</i></a>
-                  <div class="dropdown-menu dropdown-menu-right">
+                  <!-- <a class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i
+                      class="material-icons">more_vert</i></a> -->
+                  <!-- <div class="dropdown-menu dropdown-menu-right">
                     <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#edit_client"><i
-                        class="fa-solid fa-pencil m-r-5"></i> Edit</a>
+                        class="fa-solid fa-pencil m-r-5"></i> Edit</a> -->
                     <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#delete_client"><i
-                        class="fa-regular fa-trash-can m-r-5"></i> Delete</a>
+                        class="fa-regular fa-trash-can m-r-5" style="color: rgb(255, 61, 61)"></i></a> 
+                      
                   </div>
-                </div>
+                <!-- </div> -->
               </td>
             </tr>
             }
