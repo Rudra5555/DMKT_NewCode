@@ -2,11 +2,11 @@ import { Component } from '@angular/core';
 import { routes } from 'src/app/core/core.index';
 
 @Component({
-  selector: 'app-clients-profile',
-  templateUrl: './clients-profile.component.html',
-  styleUrls: ['./clients-profile.component.scss']
+  selector: 'app-user-management-profile',
+  templateUrl: './user-management-profile.component.html',
+  styleUrls: ['./user-management-profile.component.scss']
 })
-export class ClientsProfileComponent {
+export class UserManagementProfileComponent {
   public routes = routes;
   isClassAdded = false;
   isHiddenTask = false;

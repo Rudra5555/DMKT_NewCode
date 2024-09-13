@@ -457,6 +457,14 @@
     margin-top: 50%;
     margin-left: 50%;
 }
+.profile-split {
+  color: black; /* Default color */
+  text-decoration: none; /* Remove underline if needed */
+}
+
+.profile-split:hover {
+  color: blue; /* Change color on hover */
+}
 
 
 

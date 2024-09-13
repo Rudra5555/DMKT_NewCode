@@ -42,7 +42,8 @@ export class AdminDashboardComponent implements OnInit {
   dateArray: string[] = [];
   deptDataArray: any[] = [];
 
-  fileList: any;
+  // fileList: any;
+  fileList: any[] = [];
 
   fileCount: any;
   incCount: any;
@@ -101,17 +102,20 @@ export class AdminDashboardComponent implements OnInit {
         if (event instanceof HttpResponse) {
           this.res = event.body;
 
+          this.res = event.body.response;
 
-          this.res = event.body.response.filter((file: any) =>
-            !file.isHodDocument && !file.isStatutory && !file.isRestrictedDocument
-          );
+          // this.res = event.body.response.filter((file: any) =>
+          //   !file.isHodDocument && !file.isStatutory && !file.isRestrictedDocument
+          // );
           this.fileList = this.res;
+          console.log(this.fileList);
+          
 
-          if (this.fileList == "") {
-            this.noRecordFlag = true;
+          // if (this.fileList == "") {
+          //   this.noRecordFlag = true;
 
 
-          }
+          // }
 
         }
       },

@@ -712,12 +712,12 @@ export class DataService implements OnInit {
 
         {
           menuValue: 'User Management',
-          route: routes.clientPage,
+          route: routes.userList,
           hasSubRoute: false,
           showSubRoute: false,
           icon: 'users',
           base: 'clients',
-          page1: 'client-page',
+          page1: 'client-list',
           materialicons: 'person',
           subMenus: [],
         },
@@ -813,7 +813,17 @@ export class DataService implements OnInit {
       separateRoute: false,
       menu: [
 
-
+        {
+          menuValue: 'User Management',
+          route: routes.userList,
+          hasSubRoute: false,
+          showSubRoute: false,
+          icon: 'users',
+          base: 'clients',
+          page1: 'client-list',
+          materialicons: 'person',
+          subMenus: [],
+        }
 
       ]
     },
