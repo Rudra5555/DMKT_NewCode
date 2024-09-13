@@ -1,0 +1,109 @@
+<div id="LibrarianUploadPage" class="modal custom-modal fade" role="dialog">
+	<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Librarian Document Details</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<div>
+					<div class="col-md-12">
+						<div class="card flex-fill">
+							<div class="card-body">
+								<!-- <table style="width:100%; border-collapse: collapse;">
+									<thead>
+										<tr>
+											<td rowspan="2" style="text-align: left; width: 20%;">
+												<ng-container *ngIf="selectFileData?.documentType">
+													<img src="assets/img/{{ selectFileData.documentType }}.png"
+														style="max-width: 40%; padding-bottom: 5%;">
+												</ng-container>
+											</td>
+
+
+											<td rowspan="2" style="text-align: center; width: 80%; padding-left: 10px;">
+												<strong style="padding-bottom: 43%;">{{ selectFileData?.documentName
+													}}</strong>
+											</td>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td rowspan="2"
+												style="padding: 8px; text-align: left; vertical-align: middle;">
+												<strong>Plant Name:</strong>
+											</td>
+											<td rowspan="2"
+												style="padding: 8px;text-align: center; vertical-align: middle;">{{
+												selectFileData?.plantName }}</td>
+										</tr>
+										<tr></tr>
+										<tr>
+											<td rowspan="2"
+												style="padding: 8px; text-align: left; vertical-align: middle;">
+												<strong>Approver/Rejecter’s Name:</strong>
+											</td>
+											<td rowspan="2"
+												style="padding: 8px;text-align: center; vertical-align: middle;">{{
+												selectFileData?.executerName}}</td>
+										</tr>
+										<tr></tr>
+										<tr>
+											<td rowspan="2"
+												style="padding: 8px; text-align: left; vertical-align: middle;">
+												<strong>Department Name:</strong>
+											</td>
+											<td rowspan="2"
+												style="padding: 8px;text-align: center; vertical-align: middle;">{{
+												selectFileData?.departmentName }}</td>
+										</tr>
+										<tr></tr>
+										<tr>
+											<td rowspan="2"
+												style="padding: 8px; text-align: left; vertical-align: middle;">
+												<strong>Unique Document Name:</strong>
+											</td>
+											<td rowspan="2"
+												style="padding: 8px;text-align: center; vertical-align: middle;position: relative;">
+												<div class="short-name">
+													{{ selectFileData?.uniqueDocumentName | slice:0:10 }}...
+												</div>
+												<div class="full-name-tooltip">
+													{{ selectFileData?.uniqueDocumentName }}
+												</div>
+											</td>
+										</tr>
+										<tr></tr>
+										<tr>
+											<td rowspan="2"
+												style="padding: 8px; text-align: left; vertical-align: middle;">
+												<strong>Status:</strong>
+											</td>
+											<td rowspan="2"
+												style="padding: 8px;text-align: center; vertical-align: middle;">
+
+												{{ getApprovalStatusUserModal(selectFileData?.documentApprovalStatus) }}
+											</td>
+										</tr>
+										<tr></tr>
+										<tr *ngIf="!userReasonFlag">
+											<td rowspan="2"
+												style="padding: 8px; text-align: left; vertical-align: middle;">
+												<strong>Reason:</strong>
+											</td>
+											<td rowspan="2"
+												style="padding: 8px;text-align: center; vertical-align: middle;">{{
+												selectFileData?.reason }}</td>
+										</tr>
+									</tbody>
+								</table> -->
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

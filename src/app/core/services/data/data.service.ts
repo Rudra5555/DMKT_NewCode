@@ -859,7 +859,18 @@ export class DataService implements OnInit {
           base: 'HOD',
           materialicons: 'person',
           subMenus: [],
-        },]
+        },
+        {
+          menuValue: 'Document Upload Page',
+          route: routes.UserDocumentUpload,
+          hasSubRoute: false,
+          showSubRoute: false,
+          icon: 'file-upload',
+          base: 'HOD',
+          materialicons: 'person',
+          subMenus: [],
+        },
+      ]
 
 
     },

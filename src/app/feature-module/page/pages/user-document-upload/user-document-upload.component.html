@@ -1,0 +1,80 @@
+<!-- Page Content -->
+<div class="content container-fluid">
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="row">
+            <div class="col-sm-12">
+                <h3 class="page-title">Document Upload Page</h3>
+                <ul class="breadcrumb">
+                    <!-- <li class="breadcrumb-item"><a [routerLink]="routes.adminDashboard">Dashboard</a></li> -->
+                    <!-- <li class="breadcrumb-item active">Blank Page</li> -->
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <form [formGroup]="uploadFileForm" (ngSubmit)="onSubmit()">
+    <div class="card-container" >
+<div class="row">
+     <div class="col-sm-12">
+                  <div class="input-block mb-3">
+                    <label class="col-form-label" for="">Upload Files <span class="text-danger">(.pdf, .docx, .xlsx, .jpeg,.dwg)*</span></label>
+                 
+              <div class="card" >
+                <div class="card-header">
+                  <h5 class="card-title">Multiple File Upload</h5>
+                </div>
+                <div class="container" appDnd (fileDropped)="onFileDropped($event)" >
+                  <input type="file" #fileDropRef id="fileDropRef"  multiple (change)="fileBrowseHandler($event)" />
+                  <img src="assets/img/dnd/ic-upload-file.svg" alt="">
+                  <h3>Drag and drop file here</h3>
+                  <h3>or</h3>
+                  <label for="fileDropRef">Browse for file</label>
+                </div>
+                <div class="files-list" >
+                  <div class="single-file" *ngFor="let file of files; let i = index" style="overflow-y: auto;">
+                    <img src="assets/img/dnd/ic-file.svg" width="45px" alt="file">
+                    <div class="info">
+                      <h4 class="name">{{ file?.name }}</h4>
+                      <p class="size">{{ formatBytes(file?.size) }}</p>
+                      <app-progress [progress]="file?.progress"></app-progress>
+                    </div>
+                    <img src="assets/img/dnd/ic-delete-file.svg" class="delete" width="20px" alt="file" (click)="deleteFile(i)">
+                  </div>
+                </div>
+                <div *ngIf="uploadDocumentFlag || uploadDocumentSizeFlag"  class="text-danger" style="margin-left: 2%; padding-bottom: 4%;">
+                  Upload Document is required and File size should be under 2MB.
+                </div>
+
+                <div class="contact-input-set">
+                      <div class="col-lg-12">
+                        <div class="input-block mb-3">
+                          <label class="col-form-label">Remarks<span class="text-danger">*</span>
+                          </label>
+                          <textarea formControlName="remarks"  class="form-control" rows="3"></textarea>
+                        </div>
+                      </div>
+                      <div *ngIf="uploadFileForm.get('remarks')?.invalid && (uploadFileForm.get('remarks')?.touched || uploadFileForm.get('remarks')?.dirty) || remarkFlag " class="text-danger">
+                        Please give your remarks.
+                    </div> 
+                  </div>
+                
+                      
+
+                <div class="submit-section">
+                    <button class="btn submit-btn"  type="submit" >Submit</button>
+                  </div>
+              </div>
+              
+
+                    </div>
+                   
+                  </div>
+                
+
+</div>
+    </div>
+</form>
+
+    </div>

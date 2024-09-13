@@ -383,6 +383,9 @@ export class routes {
   public static get blankpage(): string {
     return this.baseUrl + '/pages/blank-page';
   }
+  public static get UserDocumentUpload(): string {
+    return this.baseUrl + '/pages/upload-documents';
+  }
   public static get acceptrequest(): string {
     return this.baseUrl + '/pages/accept-request';
   }
