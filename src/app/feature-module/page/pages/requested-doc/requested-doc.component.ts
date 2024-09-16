@@ -114,7 +114,6 @@ export class RequestedDocComponent implements OnInit {
     const endDate = new Date();
     const startDate = new Date();
     startDate.setDate(endDate.getDate() - 6);
-
     this.bsRangeValue = [startDate, endDate];
     this.onDateRangeSelected();
   }
@@ -122,9 +121,7 @@ export class RequestedDocComponent implements OnInit {
   onDateRangeSelected() {
     this.startDate = this.formatDate(this.bsRangeValue[0]);
     this.endDate = this.formatDate(this.bsRangeValue[1]);
-
     this.approvedDocumentList(localStorage.getItem('loggedInUserId'))
-
   }
 
   formatDate(date: Date): string {

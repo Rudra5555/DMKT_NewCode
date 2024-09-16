@@ -32,6 +32,7 @@ import { ProgressComponent } from './upload-doc/progress/progress.component';
 import { NgxDocViewerModule } from 'ngx-doc-viewer';
 import { LibRecentUploadedComponent } from './lib-recent-uploaded/lib-recent-uploaded.component';
 import { UserDocumentUpload } from './user-document-upload/user-document-upload.component';
+import { VerifyUploadedDocumentComponent } from './verify-uploaded-document/verify-uploaded-document.component';
 
 
 
@@ -59,7 +60,8 @@ import { UserDocumentUpload } from './user-document-upload/user-document-upload.
     SubAreaComponent,
     ProgressComponent,
     LibRecentUploadedComponent,
-    UserDocumentUpload
+    UserDocumentUpload,
+    VerifyUploadedDocumentComponent
     
   ],
   imports: [

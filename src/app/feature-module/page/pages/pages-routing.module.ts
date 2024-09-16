@@ -22,6 +22,7 @@ import { DepartmentComponent } from './department/department.component';
 import { SubAreaComponent } from './sub-area/sub-area.component';
 import { LibRecentUploadedComponent } from './lib-recent-uploaded/lib-recent-uploaded.component';
 import { UserDocumentUpload } from './user-document-upload/user-document-upload.component';
+import { VerifyUploadedDocumentComponent } from './verify-uploaded-document/verify-uploaded-document.component';
 
 
 
@@ -52,7 +53,8 @@ const routes: Routes = [
       { path: "department", component: DepartmentComponent },
       { path: "sub-area", component: SubAreaComponent },
       { path: "recent-uploaded-documents", component: LibRecentUploadedComponent },
-      { path: "upload-documents", component: UserDocumentUpload }
+      { path: "upload-documents", component: UserDocumentUpload },
+      { path: "verify-uploaded-document", component: VerifyUploadedDocumentComponent }
       
       
     ] 

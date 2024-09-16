@@ -823,7 +823,17 @@ export class DataService implements OnInit {
           page1: 'client-list',
           materialicons: 'person',
           subMenus: [],
-        }
+        },
+        {
+          menuValue: 'Verify Uploaded Document',
+          route: routes.verifyuploadeddocument,
+          hasSubRoute: false,
+          showSubRoute: false,
+          icon: 'file-upload',
+          base: 'HOD',
+          materialicons: 'person',
+          subMenus: [],
+        },
 
       ]
     },

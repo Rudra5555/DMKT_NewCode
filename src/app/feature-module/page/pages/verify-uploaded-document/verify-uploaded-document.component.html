@@ -1,0 +1,425 @@
+<!-- Page Content -->
+<div class="content container-fluid" style="height: 90vh;">
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="row">
+            <div class="col-sm-12">
+                <h3 class="page-title">Verify Uploaded Document</h3>
+                <ul class="breadcrumb">
+                    <!-- <li class="breadcrumb-item"><a [routerLink]="routes.adminDashboard">Dashboard</a></li>
+                    <li class="breadcrumb-item active">Blank Page</li> -->
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- /Page Header -->
+
+    <div class="filter-section">
+      <ul>
+        <li>
+          <div class="filter-section">
+            <div class="col-xl-12">
+              <div class="daterange-picker d-flex centered-div">
+                <div class="form-sort">
+                  <i class="las la-calendar"></i>
+                  <input type="text" class="form-control date-range bookingrange" #drp="bsDaterangepicker"
+                    bsDaterangepicker />
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </li>
+
+        <li>
+        </li>
+
+
+        <li>
+          <div class="search-set">
+            <div class="search-input">
+
+              <div class="dataTables_filter">
+                <label>
+                  <input style="height:43px" 
+                   type="search"
+                    class="form-control" placeholder="Search..." />
+                </label>
+              </div>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <div class="row">
+      <div class="col-md-12">
+        <div class="table_header">
+          <div class="row">
+            <div class="col-sm-12 col-md-6">
+              <div class="dataTables_length">
+                <label class="col-form-label" for="">
+                  Show
+                  <select  
+                    class="form-control form-control-sm">
+                    <option value="10">10</option>
+                    <option value="25">25</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                  </select>
+                  Entries
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="table-responsive">
+          <table matSort 
+            class="table table-striped custom-table datatable contact-table">
+            <thead>
+              <tr>
+                <th mat-sort-header="documentName">Document Name</th>
+                <th mat-sort-header="requestorDepartment">Requestor Department</th>
+                <th mat-sort-header="requestorId">Requestor Id</th>
+                <th mat-sort-header="executorName">Executor Name</th>
+                <th mat-sort-header="action">Action</th>
+                <th mat-sort-header="status">Status</th>
+                
+              </tr>
+            </thead>
+            <tbody>
+              <tr >
+                <td>
+                  <h2 class="table-avatar d-flex">
+                    <a class="profile-split d-flex flex-column">
+                        <!-- {{ item.uniqueDocumentName }} -->
+                    </a>
+                  </h2>
+                </td>
+
+                <td>
+                  <!-- {{ item.departmentName }} -->
+
+                </td>
+
+                <td>
+                  <!-- {{ item.executerName }} -->
+
+                </td>
+                <td>
+                 
+                </td>
+                <td>
+                    <a class="dropdown-item" >
+                        <i class="fas fa-download" style="color: rgb(0, 117, 234);margin-left: 18%;"></i>
+                      </a>
+                </td>
+                <td class="text-center">
+                
+                    <button class="btn submit-btn approve-btn" type="submit" data-bs-toggle="modal"
+                    data-bs-target="#uploadDocumentModal">Approve</button>
+                    <button class="btn submit-btn reject-btn" type="submit" data-bs-toggle="modal" data-bs-target="#rejectDocumentModal">Reject</button>
+                </td>
+              </tr>
+
+              <!-- <tr>
+                <td colspan="6" style="text-align: center; color: red">
+                  No Records Found!
+                </td>
+              </tr> -->
+
+            </tbody>
+          </table>
+        </div>
+        <!-- <div class="table_footer">
+          <div class="col-sm-12 col-md-5">
+            <div class="dataTables_info">
+              Showing {{ serialNumberArray[0] }} to
+              {{ serialNumberArray[serialNumberArray.length - 2] }} of
+              {{ totalData }} entries
+            </div>
+          </div>
+
+          <div class="col-sm-12 col-md-7">
+            <div class="pagination_section">
+              <ul class="pagination">
+                <li class="page-item" [ngClass]="{
+                  disabled: currentPage === 1
+                }">
+                  <a (click)="getMoreData('previous')" class="page-link" href="javascript:void(0);" tabindex="-1"><i
+                      class="fa fa-angle-double-left"></i></a>
+                </li>
+
+                @for (item of pageNumberArray; track item; let i = $index) {
+                <li class="page-item" [class.active]="item === currentPage" [ngClass]="
+                    (pageNumberArray[currentPage - 2] > item &&
+                      item !== 1 &&
+                      pageNumberArray.length > 6) ||
+                    (pageNumberArray[currentPage] < item &&
+                      item !== 1 &&
+                      pageNumberArray.length > 6 &&
+                      pageNumberArray.length !== item)
+                      ? 'hide-page-no'
+                      : 'show-page-no'
+                  ">
+                  <a (click)="moveToPage(item)" class="page-link" href="javascript:void(0);">
+                    {{ item }}
+                  </a>
+                </li>
+                @if (
+                i === 0 && pageNumberArray.length > 6 && currentPage > 2
+                ) {
+                <li class="page-item" [hidden]="currentPage === 1" (click)="moveToPage(currentPage - 2)"
+                  (keydown.enter)="moveToPage(currentPage - 2)" tabindex="0">
+                  <a class="page-link" href="javascript:void(0);"> ... </a>
+                </li>
+                }
+                @if (
+                i === pageNumberArray.length - 2 &&
+                pageNumberArray.length > 6
+                ) {
+                <li [hidden]="
+                    currentPage >=
+                      pageNumberArray[pageNumberArray.length - 2] ||
+                    totalData < serialNumberArray[serialNumberArray.length - 1]
+                  " class="page-item" (click)="moveToPage(currentPage + 2)"
+                  (keydown.enter)="moveToPage(currentPage + 2)" tabindex="0">
+                  <a class="page-link" href="javascript:void(0);"> ... </a>
+                </li>
+                }
+                }
+
+                <li class="page-item" [ngClass]="{
+                  disabled:
+                    currentPage ===
+                      pageNumberArray[pageNumberArray.length - 1] ||
+                      contactlist.length === 0
+                }">
+                  <a (click)="getMoreData('next')" class="page-link" href="javascript:void(0);"><i
+                      class=" fa fa-angle-double-right"></i>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div> -->
+      </div>
+    </div>
+ 
+</div>
+
+
+
+
+
+
+
+
+<div class="modal firstModal custom-modal fade" id="uploadDocumentModal" role="dialog">
+    <div class="modal-dialog modal-dialog-right modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div>
+            <h2>Upload Approved Document</h2>
+          </div>
+          <button type="button" id="closeModalBtn" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <form [formGroup]="uploadFileForm" (ngSubmit)="onSubmit()">
+                <div class="row">
+                  <div class="col-sm-6">
+                    <div class="input-block mb-3">
+                      <label class="col-form-label" for="">Upload Files <span class="text-danger">(.pdf, .docx, .xlsx, .jpeg,.dwg)*</span></label>
+                   
+                <div class="card">
+                  <div class="card-header">
+                    <h5 class="card-title">Multiple File Upload</h5>
+                  </div>
+                  <div class="container" style="width: 347px;" appDnd (fileDropped)="onFileDropped($event)" >
+                    <input type="file" #fileDropRef id="fileDropRef"  multiple (change)="fileBrowseHandler($event)" />
+                    <img src="assets/img/dnd/ic-upload-file.svg" alt="">
+                    <h3>Drag and drop file here</h3>
+                    <h3>or</h3>
+                    <label for="fileDropRef">Browse for file</label>
+                  </div>
+                  <div class="files-list" style="overflow-y: auto; height:150px">
+                    <div class="single-file" *ngFor="let file of files; let i = index" style="overflow-y: auto;">
+                      <img src="assets/img/dnd/ic-file.svg" width="45px" alt="file">
+                      <div class="info">
+                        <h4 class="name">{{ file?.name }}</h4>
+                        <p class="size">{{ formatBytes(file?.size) }}</p>
+                        <app-progress [progress]="file?.progress"></app-progress>
+                      </div>
+                      <img src="assets/img/dnd/ic-delete-file.svg" class="delete" width="20px" alt="file" (click)="deleteFile(i)">
+                    </div>
+                  </div>
+                </div>
+                
+  
+                      </div>
+                      <div *ngIf="uploadDocumentFlag || uploadDocumentSizeFlag"  class="text-danger">
+                        Upload Document is required and File size should be under 2MB.
+                      </div>
+                    </div>
+                    <div class="col-sm-6">
+                      <div class="input-block mb-3">
+                        <label class="col-form-label">Main Heads<span class="text-danger">*</span></label>
+                        <mat-select formControlName="mainHead" class="custom-mat-select select"  
+                         placeholder="Select" required>
+                          <mat-option value="">--Select--</mat-option>
+                          <mat-option *ngFor="let item of mainHeadList;" [value]="item.catName + '~' + item.abbreviation">{{item.catName}}</mat-option>
+                        </mat-select>
+                        <!-- <div *ngIf="mainHeadFlag" class="text-danger">
+                          Main Head is required.
+                        </div> -->
+                        <div *ngIf="uploadFileForm.get('mainHead')?.invalid && (uploadFileForm.get('mainHead')?.touched || uploadFileForm.get('mainHead')?.dirty)" class="text-danger">
+                          Main Head is required.
+                        </div>
+                      </div>      
+                       <!-- (selectionChange)="selectedMainHead($event)" -->     
+  
+                      <div class="input-block mb-3" *ngIf="plantList.length != 0">
+                        <label class="col-form-label">Plants <span class="text-danger">*</span></label>
+                        <mat-select formControlName="plants" class="custom-mat-select select" placeholder="Select" >
+                          <mat-option value="">--Select--</mat-option>
+                          <mat-option *ngFor="let element of plantList" [value]="element.catName" >{{element.catName}}</mat-option>
+                        </mat-select>
+                        <!-- <div *ngIf="plantFlag" class="text-danger">
+                          Plant is required.
+                        </div> -->
+                        <div *ngIf="uploadFileForm.get('plants')?.invalid && (uploadFileForm.get('plants')?.touched || uploadFileForm.get('plants')?.dirty)" class="text-danger">
+                          Plant is required.
+                        </div>
+  
+                      </div>
+  
+                      <!-- (selectionChange)="selectedPlant($event)" -->
+  
+                      <div class="input-block mb-3" *ngIf="departmentList.length != 0">
+                        <label class="col-form-label">Department <span class="text-danger">*</span></label>
+                        <mat-select formControlName="department" class="custom-mat-select select" placeholder="Select" >
+                          <mat-option value="">--Select--</mat-option>
+                          <mat-option *ngFor="let element of departmentList" [value]="element.catName + '~' + element.abbreviation" >{{element.catName}}</mat-option>
+                        </mat-select>
+                        <!-- <div *ngIf="departmentFlag" class="text-danger">
+                          Department is required.
+                        </div> -->
+                        <div *ngIf="uploadFileForm.get('department')?.invalid && (uploadFileForm.get('department')?.touched || uploadFileForm.get('department')?.dirty)" class="text-danger">
+                          Department is required.
+                        </div>
+                      </div>
+                      <!-- (selectionChange)="selectedDepartment($event)" -->
+  
+  
+                      <div class="input-block mb-3" *ngIf="subAreaList.length != 0">
+                        <label class="col-form-label">Sub-Area <span class="text-danger">*</span></label>
+                        <mat-select formControlName="subArea" class="custom-mat-select select" placeholder="Select"
+                          required>
+                          <!-- (selectionChange)="selectedSubArea($event)" -->
+                          <mat-option value="">--Select--</mat-option>
+                          <mat-option *ngFor="let element of subAreaList" [value]="element.catName + '~' + element.abbreviation"  >{{element.catName}}</mat-option>
+                          </mat-select>
+                          <!-- <div *ngIf="subAreaFlag" class="text-danger">
+                            Sub Area is required.
+                          </div> -->
+                          <div *ngIf="uploadFileForm.get('subArea')?.invalid && (uploadFileForm.get('subArea')?.touched || uploadFileForm.get('subArea')?.dirty)" class="text-danger">
+                            Sub Area is required.
+                          </div>
+                      </div>
+  
+                        <div class="input-block mb-3">
+                          <label class="col-form-label"> Document Type<span class="text-danger">*</span></label>
+                          <mat-select formControlName="documentType" class="custom-mat-select select" placeholder="Select"  required>
+                            <mat-option value="">--Select--</mat-option>
+                            <mat-option value="LETTER">Letter</mat-option>
+                            <mat-option value="DOCUMENT">Document</mat-option>
+                            <mat-option value="BOM">BOM</mat-option>
+                            <mat-option value="DRAWING">Drawing</mat-option>
+                            <mat-option value="BOQ">BOQ</mat-option>
+                            <mat-option value="COMPLIANCE DOCUMENT">Compliance Document</mat-option>
+                          </mat-select>
+                          <div *ngIf="uploadFileForm.get('documentType')?.invalid && (uploadFileForm.get('documentType')?.touched || uploadFileForm.get('documentType')?.dirty)" class="text-danger">
+                            Document Type is required.
+                          </div>
+                        </div>
+                          <div class="input-block mb-3">
+                          <label class="col-form-label">Storage Location<span class="text-danger">*</span></label>
+                          <mat-select formControlName="storageLocation" class="custom-mat-select select" placeholder="Select"   required>
+                            <mat-option value="">--Select--</mat-option>
+                            <mat-option value="SOFTCOPY">Soft Copy</mat-option>
+                            <mat-option value="HARDCOPY">Hard Copy</mat-option>
+                          </mat-select>
+           
+                          <div *ngIf="uploadFileForm.get('storageLocation')?.invalid && (uploadFileForm.get('storageLocation')?.touched || uploadFileForm.get('storageLocation')?.dirty)" class="text-danger">
+                            Storage Location is required.
+                          </div>
+                      
+                        </div>
+                        
+                        
+  <br><br>
+                  <div class="form-check mb-3">
+                    <label class="custom_check">
+                      <input type="checkbox" name="rememberme" class="rememberme" checked id="validationFormCheck" formControlName="isStatutoryDocument" required>
+                      <span class="checkmark" style="color: blue;"></span>
+                    </label>
+                    <label class="chbox" for="validationFormCheck">Statutory Documents</label>
+                    <div class="invalid-feedback">Special documents which can only be allowed who has Special Permission
+                    </div>
+                  </div>
+  
+                  <div class="form-check mb-3">
+                    <label class="custom_check">
+                      <input type="checkbox" name="rememberme" class="rememberme" checked id="validationFormCheck1" formControlName="isRestrictedDocument" required>
+                      <span class="checkmark"></span>
+                    </label>
+                    <label class="chbox"  for="validationFormCheck1">Restricted Documents</label>
+                    <div class="invalid-feedback">Special documents which can only be allowed who has Special Permission
+                    </div>
+                  </div>
+  
+                  <div class="form-check mb-3">
+                    <label class="custom_check">
+                      <input type="checkbox" name="rememberme" class="rememberme" ng-checked="expression" id="validationFormCheck2" formControlName="isHodDocument" required>
+                      <span class="checkmark"></span>
+                    </label>
+                    <label class="chbox" for="validationFormCheck2">Confidential Document</label>
+                    <div class="invalid-feedback">Special documents which can only be allowed who has Special Permission
+                    </div>
+                  </div>
+                    </div> 
+                    
+                  </div>
+                                  <div class="submit-section">
+                                    <button class="btn submit-btn"  type="submit" >Submit</button>
+                                    <!-- [disabled]="   " -->
+                                  </div>
+                                </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+  <div class="modal fade" id="rejectDocumentModal" tabindex="-1" aria-labelledby="rejectDocumentModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="rejectDocumentModalLabel">Provide Remarks</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <textarea id="rejectRemarks" class="form-control" placeholder="Enter your remarks here..." rows="4" [formControl]="remarkControl"></textarea>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-info" id="submitRejectRemarks" (click)="submitRemarks()" [disabled]="remarkControl.invalid">Submit</button>
+        </div>
+      </div>
+    </div>
+  </div>
