@@ -44,7 +44,7 @@ export const OPTIONS: Option[] = [
   templateUrl: './verify-uploaded-document.component.html',
   styleUrls: ['./verify-uploaded-document.component.scss']
 })
-export class VerifyUploadedDocumentComponent implements OnInit{
+export class VerifyUploadedDocumentComponent implements OnInit {
   // @ViewChild("fileDropRef", { static: false }) fileDropEl!: ElementRef;
   files: any[] = [];
   public routes = routes;
@@ -97,7 +97,7 @@ export class VerifyUploadedDocumentComponent implements OnInit{
       isRestrictedDocument: ["", [Validators.required]],
       isHodDocument: ["", [Validators.required]],
     });
-    
+
   }
 
   ngOnInit(): void {
@@ -159,7 +159,7 @@ export class VerifyUploadedDocumentComponent implements OnInit{
       console.log('Remarks:', remarks);
     }
   }
-  
+
 
   onFileDropped($event: any) {
     this.prepareFilesList($event);
@@ -318,7 +318,6 @@ export class VerifyUploadedDocumentComponent implements OnInit{
 
   onSubmit(): void {
 
-
     if (this.uploadFileForm.controls['documentType']) {
       this.documentTypeOption = this.uploadFileForm.value.documentType;
     }
@@ -326,18 +325,12 @@ export class VerifyUploadedDocumentComponent implements OnInit{
       this.storageLocationOption = this.uploadFileForm.value.storageLocation;
     }
 
-
     let isStatutoryDocument = this.uploadFileForm.controls['isStatutoryDocument'].value;
     let isRestrictedDocument = this.uploadFileForm.controls['isRestrictedDocument'].value;
     let ishodRestricted = this.uploadFileForm.controls['isHodDocument'].value;
-
     isStatutoryDocument = isStatutoryDocument === "" ? false : true;
     isRestrictedDocument = isRestrictedDocument === "" ? false : true;
     ishodRestricted = ishodRestricted === "" ? false : true;
-
-
-
-
 
     const formData = new FormData();
     for (const file of this.files) {
@@ -347,13 +340,8 @@ export class VerifyUploadedDocumentComponent implements OnInit{
       formData.append("file", file);
     }
 
-
-
-
-
-
-
-    if (this.plantOption != '' && this.selectedDeptCatName != '' && this.selectedSubAreaCatName != '' && this.files.length > 0) {
+    if (this.plantOption != null && this.selectedDeptCatName != null && this.selectedDeptCatNameAbbr != null && this.selectedSubAreaCatName != null && this.selectedSubAreaCatNameAbbr != null && this.files.length > 0) {
+    
       const modalData = {
         "mainHead": this.selectedCatName,
         "mainHeadAbbr": this.selectedCatNameAbbr,
@@ -368,9 +356,8 @@ export class VerifyUploadedDocumentComponent implements OnInit{
         "isRestrictedDocument": isRestrictedDocument,
         "hodRestricted": ishodRestricted
       };
-
+      console.log(modalData);
       formData.append("requestbody", JSON.stringify(modalData));
-
 
       this.uploadService.upload(formData).subscribe({
         next: (event: any) => {
@@ -394,7 +381,8 @@ export class VerifyUploadedDocumentComponent implements OnInit{
           this.unsuccessfulSubmitAlert();
         }
       });
-    } else {
+      return;
+    } if (this.plantOption == null && this.selectedDeptCatName == null && this.selectedSubAreaCatName == null && this.documentTypeOption != '' && this.storageLocationOption != '') {
       const modalData = {
         "mainHead": this.selectedCatName,
         "mainHeadAbbr": this.selectedCatNameAbbr,
@@ -410,9 +398,10 @@ export class VerifyUploadedDocumentComponent implements OnInit{
         "hodRestricted": ishodRestricted
 
       };
+      console.log(modalData);
+
 
       formData.append("requestbody", JSON.stringify(modalData));
-
 
       this.uploadService.upload(formData).subscribe({
         next: (event: any) => {
@@ -428,19 +417,41 @@ export class VerifyUploadedDocumentComponent implements OnInit{
             this.uploadFileForm.controls['isRestrictedDocument'].reset();
             this.uploadFileForm.controls['isHodDocument'].reset();
             this.clearFileInput();
-
             this.successfulSubmitAlert();
           }
         },
         error: (err: any) => {
+          this.uploadFileForm.get('uploadFile')?.reset('');
+          this.uploadFileForm.get('mainHead')?.reset('');
+          this.uploadFileForm.get('plants')?.reset('');
+          this.uploadFileForm.get('department')?.reset('');
+          this.uploadFileForm.get('subArea')?.reset('');
+          this.uploadFileForm.get('documentType')?.reset('');
+          this.uploadFileForm.get('storageLocation')?.reset('');
+          this.uploadFileForm.controls['isStatutoryDocument'].reset();
+          this.uploadFileForm.controls['isRestrictedDocument'].reset();
+          this.uploadFileForm.controls['isHodDocument'].reset();
+          this.clearFileInput();
           this.unsuccessfulSubmitAlert();
         }
       });
+      return;
+    } else {
+      console.log("End of if and else");
+      this.uploadFileForm.get('uploadFile')?.reset('');
+      this.uploadFileForm.get('mainHead')?.reset('');
+      this.uploadFileForm.get('plants')?.reset('');
+      this.uploadFileForm.get('department')?.reset('');
+      this.uploadFileForm.get('subArea')?.reset('');
+      this.uploadFileForm.get('documentType')?.reset('');
+      this.uploadFileForm.get('storageLocation')?.reset('');
+      this.uploadFileForm.controls['isStatutoryDocument'].reset();
+      this.uploadFileForm.controls['isRestrictedDocument'].reset();
+      this.uploadFileForm.controls['isHodDocument'].reset();
+      this.clearFileInput();
+      this.unsuccessfulSubmitAlert();
 
     }
-
-
-
 
   }
 
@@ -529,7 +540,7 @@ export class VerifyUploadedDocumentComponent implements OnInit{
     });
   }
 
-  
+
 
 
 

@@ -68,7 +68,7 @@ export class UploadDocComponent implements OnInit {
   public departmentFlag: boolean = false;
   public submitted: boolean = false;
   public uploadDocumentSizeFlag: boolean = false;
-  public disableSubmitBtn: boolean = false;
+  public disableSubmitBtn: boolean = true;
   selectedCatNameAbbr: any;
   selectedDeptCatNameAbbr: any;
   selectedSubAreaCatNameAbbr: any;
@@ -147,11 +147,12 @@ export class UploadDocComponent implements OnInit {
   }
 
   onFileDropped($event: any) {
-    this.prepareFilesList($event);
+        this.prepareFilesList($event);
 
   }
 
   fileBrowseHandler(files: any) {
+    console.log("upload agaiannn");
     this.prepareFilesList(files.target.files);
   }
 
@@ -196,7 +197,6 @@ export class UploadDocComponent implements OnInit {
   }
 
   clearFileInput() {
-
     this.files = [];
   }
 
@@ -297,12 +297,16 @@ export class UploadDocComponent implements OnInit {
 
   }
 
+  isSubmitDisabled(): boolean {
+    return !(this.plantOption !== '' && 
+             this.selectedDeptCatName !== '' && 
+             this.selectedSubAreaCatName !== '' && 
+             this.files.length > 0);
+  }
 
-
-
+ 
 
   onSubmit(): void {
-
 
     if (this.uploadFileForm.controls['documentType']) {
       this.documentTypeOption = this.uploadFileForm.value.documentType;
@@ -311,18 +315,12 @@ export class UploadDocComponent implements OnInit {
       this.storageLocationOption = this.uploadFileForm.value.storageLocation;
     }
 
-
     let isStatutoryDocument = this.uploadFileForm.controls['isStatutoryDocument'].value;
     let isRestrictedDocument = this.uploadFileForm.controls['isRestrictedDocument'].value;
     let ishodRestricted = this.uploadFileForm.controls['isHodDocument'].value;
-
     isStatutoryDocument = isStatutoryDocument === "" ? false : true;
     isRestrictedDocument = isRestrictedDocument === "" ? false : true;
     ishodRestricted = ishodRestricted === "" ? false : true;
-
-
-
-
 
     const formData = new FormData();
     for (const file of this.files) {
@@ -332,13 +330,8 @@ export class UploadDocComponent implements OnInit {
       formData.append("file", file);
     }
 
-
-
-
-
-
-
-    if (this.plantOption != '' && this.selectedDeptCatName != '' && this.selectedSubAreaCatName != '' && this.files.length > 0) {
+    if (this.plantOption != null && this.selectedDeptCatName != null && this.selectedDeptCatNameAbbr != null && this.selectedSubAreaCatName != null && this.selectedSubAreaCatNameAbbr != null  && this.files.length > 0) {
+     
       const modalData = {
         "mainHead": this.selectedCatName,
         "mainHeadAbbr": this.selectedCatNameAbbr,
@@ -353,9 +346,9 @@ export class UploadDocComponent implements OnInit {
         "isRestrictedDocument": isRestrictedDocument,
         "hodRestricted": ishodRestricted
       };
-
+      console.log(modalData);
       formData.append("requestbody", JSON.stringify(modalData));
-
+     
 
       this.uploadService.upload(formData).subscribe({
         next: (event: any) => {
@@ -379,7 +372,9 @@ export class UploadDocComponent implements OnInit {
           this.unsuccessfulSubmitAlert();
         }
       });
-    } else {
+      return;
+    }if(this.plantOption == null && this.selectedDeptCatName == null && this.selectedSubAreaCatName == null && this.documentTypeOption != '' && this.storageLocationOption != '')
+       {
       const modalData = {
         "mainHead": this.selectedCatName,
         "mainHeadAbbr": this.selectedCatNameAbbr,
@@ -395,10 +390,11 @@ export class UploadDocComponent implements OnInit {
         "hodRestricted": ishodRestricted
 
       };
+      console.log(modalData);
+      
 
       formData.append("requestbody", JSON.stringify(modalData));
-
-
+   
       this.uploadService.upload(formData).subscribe({
         next: (event: any) => {
           if (event instanceof HttpResponse) {
@@ -413,15 +409,41 @@ export class UploadDocComponent implements OnInit {
             this.uploadFileForm.controls['isRestrictedDocument'].reset();
             this.uploadFileForm.controls['isHodDocument'].reset();
             this.clearFileInput();
-
             this.successfulSubmitAlert();
           }
         },
         error: (err: any) => {
+          this.uploadFileForm.get('uploadFile')?.reset('');
+            this.uploadFileForm.get('mainHead')?.reset('');
+            this.uploadFileForm.get('plants')?.reset('');
+            this.uploadFileForm.get('department')?.reset('');
+            this.uploadFileForm.get('subArea')?.reset('');
+            this.uploadFileForm.get('documentType')?.reset('');
+            this.uploadFileForm.get('storageLocation')?.reset('');
+            this.uploadFileForm.controls['isStatutoryDocument'].reset();
+            this.uploadFileForm.controls['isRestrictedDocument'].reset();
+            this.uploadFileForm.controls['isHodDocument'].reset();
+            this.clearFileInput();
           this.unsuccessfulSubmitAlert();
         }
       });
-
+return;
+    }else 
+    {
+      console.log("End of if and else");
+      this.uploadFileForm.get('uploadFile')?.reset('');
+      this.uploadFileForm.get('mainHead')?.reset('');
+      this.uploadFileForm.get('plants')?.reset('');
+      this.uploadFileForm.get('department')?.reset('');
+      this.uploadFileForm.get('subArea')?.reset('');
+      this.uploadFileForm.get('documentType')?.reset('');
+      this.uploadFileForm.get('storageLocation')?.reset('');
+      this.uploadFileForm.controls['isStatutoryDocument'].reset();
+      this.uploadFileForm.controls['isRestrictedDocument'].reset();
+      this.uploadFileForm.controls['isHodDocument'].reset();
+      this.clearFileInput();
+        this.unsuccessfulSubmitAlert();
+      
     }
 
 
@@ -429,12 +451,17 @@ export class UploadDocComponent implements OnInit {
 
   }
 
+
+
+
+
+
+
   getAllMainHeadData() {
     this.uploadDocument.allMainHeadList().subscribe({
       next: (event: any) => {
         if (event instanceof HttpResponse) {
           this.mainHeadList = event.body?.categoryList || [];
-
         }
       },
       error: (err: any) => {

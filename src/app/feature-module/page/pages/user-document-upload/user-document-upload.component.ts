@@ -23,16 +23,11 @@ export class UserDocumentUpload implements OnInit{
   public remarkFlag : boolean = false;
   public uploadDocumentSizeFlag: boolean = false;
 
-
-
   constructor(
-    
     private formBuilder: FormBuilder
-
   ) {
 
     this.uploadFileForm = this.formBuilder.group({
-      
       remarks: ['', Validators.required]
       });
 

@@ -61,14 +61,11 @@
                         <mat-option value="">--Select--</mat-option>
                         <mat-option *ngFor="let item of mainHeadList;" [value]="item.catName + '~' + item.abbreviation">{{item.catName}}</mat-option>
                       </mat-select>
-                      <!-- <div *ngIf="mainHeadFlag" class="text-danger">
-                        Main Head is required.
-                      </div> -->
                       <div *ngIf="uploadFileForm.get('mainHead')?.invalid && (uploadFileForm.get('mainHead')?.touched || uploadFileForm.get('mainHead')?.dirty)" class="text-danger">
                         Main Head is required.
                       </div>
                     </div>      
-                     <!-- (selectionChange)="selectedMainHead($event)" -->     
+   
 
                     <div class="input-block mb-3" *ngIf="plantList.length != 0">
                       <label class="col-form-label">Plants <span class="text-danger">*</span></label>
@@ -76,16 +73,12 @@
                         <mat-option value="">--Select--</mat-option>
                         <mat-option *ngFor="let element of plantList" [value]="element.catName" >{{element.catName}}</mat-option>
                       </mat-select>
-                      <!-- <div *ngIf="plantFlag" class="text-danger">
-                        Plant is required.
-                      </div> -->
                       <div *ngIf="uploadFileForm.get('plants')?.invalid && (uploadFileForm.get('plants')?.touched || uploadFileForm.get('plants')?.dirty)" class="text-danger">
                         Plant is required.
                       </div>
-
                     </div>
 
-                    <!-- (selectionChange)="selectedPlant($event)" -->
+
 
                     <div class="input-block mb-3" *ngIf="departmentList.length != 0">
                       <label class="col-form-label">Department <span class="text-danger">*</span></label>
@@ -93,27 +86,20 @@
                         <mat-option value="">--Select--</mat-option>
                         <mat-option *ngFor="let element of departmentList" [value]="element.catName + '~' + element.abbreviation" >{{element.catName}}</mat-option>
                       </mat-select>
-                      <!-- <div *ngIf="departmentFlag" class="text-danger">
-                        Department is required.
-                      </div> -->
                       <div *ngIf="uploadFileForm.get('department')?.invalid && (uploadFileForm.get('department')?.touched || uploadFileForm.get('department')?.dirty)" class="text-danger">
                         Department is required.
                       </div>
                     </div>
-                    <!-- (selectionChange)="selectedDepartment($event)" -->
+
 
 
                     <div class="input-block mb-3" *ngIf="subAreaList.length != 0">
                       <label class="col-form-label">Sub-Area <span class="text-danger">*</span></label>
                       <mat-select formControlName="subArea" class="custom-mat-select select" placeholder="Select"
                         required>
-                        <!-- (selectionChange)="selectedSubArea($event)" -->
                         <mat-option value="">--Select--</mat-option>
                         <mat-option *ngFor="let element of subAreaList" [value]="element.catName + '~' + element.abbreviation"  >{{element.catName}}</mat-option>
                         </mat-select>
-                        <!-- <div *ngIf="subAreaFlag" class="text-danger">
-                          Sub Area is required.
-                        </div> -->
                         <div *ngIf="uploadFileForm.get('subArea')?.invalid && (uploadFileForm.get('subArea')?.touched || uploadFileForm.get('subArea')?.dirty)" class="text-danger">
                           Sub Area is required.
                         </div>
@@ -122,7 +108,6 @@
                       <div class="input-block mb-3">
                         <label class="col-form-label"> Document Type<span class="text-danger">*</span></label>
                         <mat-select formControlName="documentType" class="custom-mat-select select" placeholder="Select"  required>
-                          <!-- (selectionChange)="selectedDocumentType($event)" -->
                           <mat-option value="">--Select--</mat-option>
                           <mat-option value="LETTER">Letter</mat-option>
                           <mat-option value="DOCUMENT">Document</mat-option>
@@ -131,9 +116,6 @@
                           <mat-option value="BOQ">BOQ</mat-option>
                           <mat-option value="COMPLIANCE DOCUMENT">Compliance Document</mat-option>
                         </mat-select>
-                        <!-- <div *ngIf="documentTypeFlag" class="text-danger">
-                          Document Type is required.
-                        </div> -->
                         <div *ngIf="uploadFileForm.get('documentType')?.invalid && (uploadFileForm.get('documentType')?.touched || uploadFileForm.get('documentType')?.dirty)" class="text-danger">
                           Document Type is required.
                         </div>
@@ -143,37 +125,16 @@
                       <div class="input-block mb-3">
                         <label class="col-form-label">Storage Location<span class="text-danger">*</span></label>
                         <mat-select formControlName="storageLocation" class="custom-mat-select select" placeholder="Select"   required>
-                          <!-- (selectionChange)="storageLocationType($event)" -->
                           <mat-option value="">--Select--</mat-option>
                           <mat-option value="SOFTCOPY">Soft Copy</mat-option>
                           <mat-option value="HARDCOPY">Hard Copy</mat-option>
                         </mat-select>
-                        <!-- <div *ngIf="storageLocationFlag" class="text-danger">
-                          Storage Location type is required.
-                        </div> -->
                         <div *ngIf="uploadFileForm.get('storageLocation')?.invalid && (uploadFileForm.get('storageLocation')?.touched || uploadFileForm.get('storageLocation')?.dirty)" class="text-danger">
                           Storage Location is required.
                         </div>
                     
                       </div>
-                      
-                      <!-- <div class="input-block mb-3">
-                      <mat-form-field appearance="fill">
-                        <mat-label>Choose an option</mat-label>
-                        <mat-select [(value)]="selectedValue">
-                          <ng-container *ngFor="let option of options">
-                            <mat-optgroup [label]="option.label" *ngIf="option.children">
-                              <mat-option *ngFor="let child of option.children" [value]="child.value">
-                                {{ child.label }}
-                              </mat-option>
-                            </mat-optgroup>
-                            <mat-option *ngIf="!option.children" [value]="option.value">
-                              {{ option.label }}
-                            </mat-option>
-                          </ng-container>
-                        </mat-select>
-                      </mat-form-field>
-                      </div> -->
+                   
 
 <br><br>
                 <div class="form-check mb-3">
