@@ -285,4 +285,13 @@ approvedDocList(userId: any,startDate:any , endDate:any): Observable<HttpEvent<a
 }
 
 
+upload(file: FormData): Observable<HttpEvent<any>> {
+  const req = new HttpRequest('POST', `${this.baseUrl}/doc-request/submit-request`, file, {
+    responseType: 'json'  
+  });
+
+  return this.http.request(req);
+}
+
+
 }
