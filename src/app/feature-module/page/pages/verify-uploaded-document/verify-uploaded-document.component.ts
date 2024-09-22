@@ -6,10 +6,10 @@ import { Component, OnInit } from '@angular/core';
 import { FileManagementService } from 'src/app/services/file-management.service';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { UploadDocumentComponentService } from 'src/app/services/upload-document-component.service';
+import { LoginComponentService } from 'src/app/services/login-component.service';
 import Swal from 'sweetalert2';
 import { HttpResponse } from '@angular/common/http';
 declare let $: any;
-
 
 
 
@@ -78,11 +78,19 @@ export class VerifyUploadedDocumentComponent implements OnInit {
   options: Option[] = OPTIONS;
   selectedValue: string | undefined;
   remarkControl = new FormControl('', [Validators.required]);
+  loggedUserId:any;
+  respData: any;
+  fileList: any;
+
+  // ***********
+  workflowDocId: string | null = null;
+  // ***********
 
   constructor(
     private uploadService: FileManagementService,
     private formBuilder: FormBuilder,
-    private uploadDocument: UploadDocumentComponentService
+    private uploadDocument: UploadDocumentComponentService,
+    private loginService : LoginComponentService
   ) {
 
     this.uploadFileForm = this.formBuilder.group({
@@ -102,7 +110,12 @@ export class VerifyUploadedDocumentComponent implements OnInit {
 
   ngOnInit(): void {
 
+    this.loggedUserId = localStorage.getItem('loggedInUserId');
 
+    this.getFileListDetails()
+
+    // console.log("bbbbb",this.loggedUserId);
+    
 
     this.uploadFileForm.get('mainHead')?.valueChanges.subscribe(value => {
       const [catName, abbreviation] = value.split('~');
@@ -149,6 +162,29 @@ export class VerifyUploadedDocumentComponent implements OnInit {
 
 
 
+  }
+
+
+
+  getFileListDetails() {
+  
+    this.loginService.librarianVerifyDoc(this.loggedUserId).subscribe({
+      next: (event: any) => {
+        if (event instanceof HttpResponse) {
+          this.respData = event.body.data;
+          this.fileList = this.respData;
+  
+        console.log("ffffffffff",this.respData);
+        
+  
+        }
+      },
+      error: (err: any) => {
+        if (err.error && err.error.message) {
+          // this['msg'] += " " + err.error.message;
+        }
+      },
+    });
   }
 
 
@@ -312,7 +348,20 @@ export class VerifyUploadedDocumentComponent implements OnInit {
 
   }
 
+// ****************************
 
+  openApproveModal(workflowDocId: string) {
+    this.workflowDocId = workflowDocId;
+    this.uploadFileForm.patchValue({ workflowDocId: workflowDocId });
+  }
+
+  // Handle Reject modal open
+  // openRejectModal(workflowDocId: string) {
+  //   this.workflowDocId = workflowDocId;
+  //   this.remarkControl.patchValue({ workflowDocId: workflowDocId });
+  // }
+
+  // ************************
 
 
 
@@ -359,7 +408,7 @@ export class VerifyUploadedDocumentComponent implements OnInit {
       console.log(modalData);
       formData.append("requestbody", JSON.stringify(modalData));
 
-      this.uploadService.upload(formData).subscribe({
+      this.loginService.upload(formData).subscribe({
         next: (event: any) => {
           if (event instanceof HttpResponse) {
 
@@ -543,6 +592,102 @@ export class VerifyUploadedDocumentComponent implements OnInit {
 
 
 
+
+  // **************************************************************************
+  // public sortData(sort: Sort) {
+  //   const data = this.contactlist.slice();
+  //   if (!sort.active || sort.direction === '') {
+  //     this.contactlist = data;
+  //   } else {
+  //     this.contactlist = data.sort((a: any, b: any) => {
+  //       const aValue = (a as any)[sort.active];
+  //       const bValue = (b as any)[sort.active];
+  //       return (aValue < bValue ? -1 : 1) * (sort.direction === 'asc' ? 1 : -1);
+  //     });
+  //   }
+  // }
+
+  // public searchData(value: string): void {
+  //   this.dataSource.filter = value.trim().toLowerCase();
+  //   this.contactlist = this.dataSource.filteredData;
+  // }
+
+  // public getMoreData(event: string): void {
+  //   if (event === 'next') {
+  //     this.currentPage++;
+  //     this.pageIndex = this.currentPage - 1;
+  //     this.limit += this.pageSize;
+  //     this.skip = this.pageSize * this.pageIndex;
+  //     this.approvedDocumentList(this.loggedUserId);
+  //   } else if (event === 'previous') {
+  //     this.currentPage--;
+  //     this.pageIndex = this.currentPage - 1;
+  //     this.limit -= this.pageSize;
+  //     this.skip = this.pageSize * this.pageIndex;
+  //     this.approvedDocumentList(this.loggedUserId);
+  //   }
+  // }
+
+  // public moveToPage(pageNumber: number): void {
+  //   this.currentPage = pageNumber;
+  //   this.skip = this.pageSelection[pageNumber - 1].skip;
+  //   this.limit = this.pageSelection[pageNumber - 1].limit;
+  //   if (pageNumber > this.currentPage) {
+  //     this.pageIndex = pageNumber - 1;
+  //   } else if (pageNumber < this.currentPage) {
+  //     this.pageIndex = pageNumber + 1;
+  //   }
+  //   this.approvedDocumentList(this.loggedUserId);
+  // }
+  // private calculateTotalPages(totalData: number, pageSize: number): void {
+  //   this.pageNumberArray = [];
+  //   this.totalPages = totalData / pageSize;
+  //   if (this.totalPages % 1 !== 0) {
+  //     this.totalPages = Math.trunc(this.totalPages + 1);
+  //   }
+  //   for (let i = 1; i <= this.totalPages; i++) {
+  //     const limit = pageSize * i;
+  //     const skip = limit - pageSize;
+  //     this.pageNumberArray.push(i);
+  //     this.pageSelection.push({ skip: skip, limit: limit });
+  //   }
+  // }
+  // public changePageSize(): void {
+  //   this.pageSelection = [];
+  //   this.limit = this.pageSize;
+  //   this.skip = 0;
+  //   this.currentPage = 1;
+  //   this.approvedDocumentList(this.loggedUserId);
+  // }
+  // openFilter() {
+  //   this.filter = !this.filter;
+  // }
+  // toggleFilterDropdown() {
+  //   this.isFilterDropdownOpen = !this.isFilterDropdownOpen;
+  // }
+  // fullscreen() {
+  //   if (!document.fullscreenElement) {
+  //     this.elem.requestFullscreen();
+  //   }
+  //   else {
+  //     document.exitFullscreen();
+  //   }
+  // }
+  // public selectedFieldSet = [0];
+  // currentStep = 0;
+  // nextStep() {
+  //   this.currentStep++;
+  // }
+  // addOnBlur = true;
+  // readonly separatorKeysCodes = [ENTER, COMMA] as const;
+
+  // selected1 = 'option1';
+
+  // selectFiles(_event: any): void {
+
+  // }
+
+// ************************************************************************************
 
 
 

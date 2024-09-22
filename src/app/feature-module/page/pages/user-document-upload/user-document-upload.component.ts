@@ -188,7 +188,7 @@ onSubmit(): void {
 
       console.log("Form Data ready for submission:", formData);
 
-      this.loginService.upload(formData).subscribe({
+      this.loginService.userUpload(formData).subscribe({
           next: (event: any) => {
               if (event instanceof HttpResponse) {
                   console.log("Upload successful");
