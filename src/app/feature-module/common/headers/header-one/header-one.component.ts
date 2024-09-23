@@ -73,6 +73,7 @@ export class HeaderOneComponent implements OnInit {
   public uname: any;
   public userRole: any;
   public roleFlag: boolean = true;
+  public roleLibFlag: boolean = true;
   public rejectReasonFlag = false;
   public roleFlagHod: boolean = true;
   public hodNotify!: Array<data>;
@@ -188,9 +189,7 @@ export class HeaderOneComponent implements OnInit {
     this.notificationData = this.hodNotify
 
     if (this.notificationCount != null) {
-
       this.notificationCount = this.notificationData.length;
-
     }
 
   }
@@ -290,8 +289,6 @@ export class HeaderOneComponent implements OnInit {
     this.approverStatus = event.target.value;
     if (this.approverStatus == "R") {
       this.reasonFlag = true;
-
-
     } if (this.approverStatus == "A") {
       this.disableSubmitBtn = false;
       this.reasonFlag = false;
@@ -301,7 +298,6 @@ export class HeaderOneComponent implements OnInit {
 
 
     if (status == 'R' && reason == '') {
-
       console.error('Provide the reason for the rejection!');
       this.rejectReasonFlag = true;
       this.disableSubmitBtn = true;
@@ -312,18 +308,14 @@ export class HeaderOneComponent implements OnInit {
     } if (status == 'A') {
       this.disableSubmitBtn = false;
     } else {
-
       this.rejectReasonFlag = false;
       this.disableSubmitBtn = true;
     }
-
-
   }
 
 
 
   rejectReason(event: any) {
-
     const rejectReason = event.target.value
     if (rejectReason) {
       this.disableSubmitBtn = false;
@@ -460,14 +452,22 @@ export class HeaderOneComponent implements OnInit {
     if (this.userRole == "Admin" || this.userRole == "Librarian") {
       this.roleFlag = true;
       this.roleFlagHod = true;
+      this.roleLibFlag = true;
     }
     if (this.userRole == "User" || this.userRole == "SuperUser") {
       this.roleFlagHod = true;
       this.roleFlag = false;
+      this.roleLibFlag = true;
     }
     if (this.userRole == "HOD") {
       this.roleFlag = true;
       this.roleFlagHod = false;
+      this.roleLibFlag = true;
+    }
+    if(this.userRole == "Librarian"){
+      this.roleLibFlag = false;
+      this.roleFlag = true;
+      this.roleFlagHod = true;
     }
   }
 
