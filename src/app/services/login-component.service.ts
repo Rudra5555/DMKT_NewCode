@@ -285,4 +285,36 @@ approvedDocList(userId: any,startDate:any , endDate:any): Observable<HttpEvent<a
 }
 
 
+userUpload(file: FormData): Observable<HttpEvent<any>> {
+  const req = new HttpRequest('POST', `${this.baseUrl}/doc-request/submit-request`, file, {
+    responseType: 'json'  
+  });
+
+  return this.http.request(req);
+}
+
+
+librarianVerifyDoc(userId: any): Observable<HttpEvent<any>> {
+  const req = new HttpRequest('GET', `${this.baseUrl}/doc-request/view-request/${userId}`, {
+    responseType: 'json'
+  });
+  //console.log(req);
+  return this.http.request(req);
+
+  
+ 
+  
+}
+
+
+upload(file: any): Observable<HttpEvent<any>> {
+  
+    const req = new HttpRequest('POST', `${this.baseUrl}/upload/multiple-doc-upload`, file, {
+      responseType: 'json'
+    });
+
+    return this.http.request(req);
+  }
+
+
 }

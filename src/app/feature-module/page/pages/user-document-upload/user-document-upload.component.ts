@@ -3,7 +3,10 @@
 // import {DataTablesModule} from 'angular-datatables';
 import { routes } from 'src/app/core/helpers/routes/routes';
 import { Component, OnInit } from '@angular/core';
+import { HttpResponse } from '@angular/common/http';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { LoginComponentService } from 'src/app/services/login-component.service';
+import Swal from 'sweetalert2';
 
 declare let $: any;
 
@@ -23,8 +26,10 @@ export class UserDocumentUpload implements OnInit{
   public remarkFlag : boolean = false;
   public uploadDocumentSizeFlag: boolean = false;
 
+  loggedUserId:any;
+
   constructor(
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder, private loginService : LoginComponentService
   ) {
 
     this.uploadFileForm = this.formBuilder.group({
@@ -33,6 +38,10 @@ export class UserDocumentUpload implements OnInit{
 
   }
   ngOnInit(): void {
+
+    this.loggedUserId = localStorage.getItem('loggedInUserId');
+
+
     this.uploadFileForm.get('remarks')?.valueChanges.subscribe(value => {
       this.remarksData = value;
       if (!this.remarksData || this.remarksData.trim() === '') {
@@ -140,56 +149,91 @@ buttonDisable(){
   
 }
 
+onSubmit(): void {
+  console.log("Logged in user ID", this.loggedUserId);
 
-
-onSubmit() {
-  // Reset flags before checks
   this.uploadDocumentFlag = false;
   this.remarkFlag = false;
 
-  // Check if there are no files and set the flag
-  if (this.files.length == 0) {
-    console.log("File Length is 0");
-    this.uploadDocumentFlag = true;
+  if (this.files.length === 0) {
+      console.log("No file selected");
+      this.uploadDocumentFlag = true;
   }
 
-  // Check if remarks are empty or null and set the flag
-  this.remarksData = this.uploadFileForm.get('remarks')?.value; // Ensure remarksData is captured here
+  this.remarksData = this.uploadFileForm.get('remarks')?.value;
   if (!this.remarksData || this.remarksData.trim() === '') {
-    console.log("remarksData is empty");
-    this.remarkFlag = true;
-    console.log("remarkFalg = true");
-  }else{
-    console.log("remarkFalg = false");
+      console.log("Remarks are empty");
+      this.remarkFlag = true;
   }
 
-
-  // If any field is invalid, stop the function execution
   if (this.uploadDocumentFlag || this.remarkFlag) {
-    return; // Prevent form submission if flags are set
+      return;
   }
 
-  // Create formData for files
   const formData = new FormData();
+
   for (const file of this.files) {
-    formData.append("file", file);
+      formData.append("fileName", file);
   }
 
-  // Proceed if the form is valid
-  if (this.uploadFileForm.valid) {
-    this.uploadFileForm.markAllAsTouched();
-    console.log('Remarks:', this.remarksData);
-    formData.append("remarks", this.remarksData);
+  
+  const remarks = this.uploadFileForm.get('remarks')?.value;
+  const requesterId = this.loggedUserId;
 
-    // Log the formData and submit
-    console.log("Form Data ready for submission:", formData);
-    // Add your submission logic here (e.g., API call)
+  formData.append("remarks", remarks);
+  formData.append("requesterId", requesterId.toString());
+
+  if (this.uploadFileForm.valid) {
+      this.uploadFileForm.markAllAsTouched();
+
+      console.log("Form Data ready for submission:", formData);
+
+      this.loginService.userUpload(formData).subscribe({
+          next: (event: any) => {
+              if (event instanceof HttpResponse) {
+                  console.log("Upload successful");
+
+                  this.uploadFileForm.reset();
+                  this.clearFileInput();
+                  this.successfulSubmitAlert();
+              }
+          },
+          error: (err: any) => {
+              console.log("Upload failed", err);
+
+              this.uploadFileForm.reset();
+              this.clearFileInput();
+              this.unsuccessfulSubmitAlert();
+          }
+      });
   }
 }
 
 
 
 
+
+successfulSubmitAlert() {
+  Swal.fire({
+    position: "center",
+    icon: "success",
+    title: "Your document was uploaded successfully",
+    showConfirmButton: false,
+    timer: 1500
+  }).then(() => {
+
+    // window.location.reload();
+
+  });
+}
+
+unsuccessfulSubmitAlert() {
+  Swal.fire({
+    icon: "error",
+    title: "Oops...",
+    text: "Something went wrong!",
+  });
+}
 
   buttonInRowClick(event: any): void {
     event.stopPropagation();

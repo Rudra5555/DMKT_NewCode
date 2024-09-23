@@ -1,11 +1,16 @@
 .container {
-  width: 450px;
-  height: 200px;
+  width: 100%;
+  max-width: 450px; /* Allows it to shrink on smaller screens */
+  height: 220px; /* Slightly increased height */
   padding: 2rem;
   text-align: center;
-  border: dashed 1px #979797;
+  border: dashed 2px #43a943;
+  border-radius: 10px;
+  background: #f9fafc;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   position: relative;
-  margin: 0 auto;
+  margin: 20px auto;
+  transition: all 0.3s ease-in-out;
 
   input {
     opacity: 0;
@@ -39,27 +44,36 @@
 }
 
 .files-list {
-
-    margin-top: 1.5rem;
-    width: 545px;
-    padding-left: 194px;
-    position: relative;
-    left: 161px;
-    padding-right: -33px;
+  width: 100%;
+  max-width: 450px; /* Allows it to shrink on smaller screens */
+  height: 200px; /* Increased height */
+  padding: 2rem;
+  text-align: center;
+  border: dashed 2px hsl(120, 43%, 46%);
+  border-radius: 10px;
+  background: #f9fafc;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  position: relative;
+  margin: 20px auto;
+  transition: all 0.3s ease-in-out;
+  overflow: auto; /* Handles content overflow */
+  box-sizing: border-box; /* Ensures padding is included in height */
 
 
   .single-file {
     display: flex;
     padding: 0.5rem;
+    border-radius: 10px;
     justify-content: space-between;
     align-items: center;
-    border: dashed 1px #979797;
+    border: dashed 2px #ecc57f;
     margin-bottom: 1rem;
 
     img.delete {
       margin-left: 0.5rem;
       cursor: pointer;
       align-self: flex-end;
+      filter: hue-rotate(0deg) brightness(0) saturate(1000%) invert(40%);
     
     }
 
@@ -434,4 +448,98 @@ img#footerLogo {
 .contact-input-set {
   margin-left: 2%;
   margin-right: 2%;
+}
+/* Submit Button Hover Effect */
+.submit-section .submit-btn {
+  font-size: 18px;
+  font-weight: 600;
+  min-width: 200px;
+  border-radius: 50px;
+  padding: 10px 20px;
+  background-color: #43a943;
+  color: white;
+  transition: background-color 0.3s ease, transform 0.3s ease; /* Add smooth transition */
+}
+
+.submit-section .submit-btn:hover {
+  background-color: #36a136; /* Darker green on hover */
+  transform: scale(1.05); /* Slight scale effect on hover */
+  cursor: pointer;
+}
+
+/* File Browse Button Hover Effect */
+.container label {
+  color: white;
+  width: 183px;
+  height: 44px;
+  border-radius: 21.5px;
+  background-color: #43a943;
+  padding: 8px 16px;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.container label:hover {
+  background-color: #36a136; /* Darker green on hover */
+  transform: scale(1.05);
+  cursor: pointer;
+}
+
+/* Delete Button Hover Effect */
+img.delete {
+  margin-left: 0.5rem;
+  cursor: pointer;
+  align-self: flex-end;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+img.delete:hover {
+  opacity: 0.8;
+  transform: scale(1.1); /* Enlarge slightly on hover */
+}
+
+/* Media Icon Hover Effects */
+.top .media-icons a {
+  transition: all 0.4s ease;
+}
+
+.top .media-icons a:hover {
+  color: inherit; /* Keeps original icon color */
+  background-color: #fff; /* White background */
+  transform: scale(1.1); /* Slight scale effect */
+}
+
+/* Breadcrumb Hover Effect */
+.breadcrumb .breadcrumb-item a:hover {
+  color: #0000ff; /* Deep blue color */
+  text-decoration: underline; /* Add underline on hover */
+}
+
+/* Input Box Button Hover Effect */
+.link-boxes .input-box input[type="button"] {
+  background: #fff;
+  color: #140B5C;
+  border: none;
+  font-size: 18px;
+  font-weight: 500;
+  margin: 4px 0;
+  opacity: 0.8;
+  cursor: pointer;
+  transition: all 0.4s ease;
+}
+
+.link-boxes .input-box input[type="button"]:hover {
+  background-color: #e0e0e0; /* Light grey on hover */
+  opacity: 1;
+  transform: scale(1.05);
+}
+
+/* General Button Hover Style */
+button:hover {
+  cursor: pointer;
+  transform: scale(1.05); /* Add slight scale on hover */
+}
+#fileDropRef:hover {
+  background-color: #e0ffee; /* Slight background color change on hover */
+  border-color: #43a943; /* Green border on hover */
+  cursor: pointer;
 }

@@ -825,7 +825,7 @@ export class DataService implements OnInit {
           subMenus: [],
         },
         {
-          menuValue: 'Verify Uploaded Document',
+          menuValue: 'Verify Uploaded Doc',
           route: routes.verifyuploadeddocument,
           hasSubRoute: false,
           showSubRoute: false,

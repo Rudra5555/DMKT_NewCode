@@ -152,7 +152,7 @@ export class UploadDocComponent implements OnInit {
   }
 
   fileBrowseHandler(files: any) {
-    console.log("upload agaiannn");
+    // console.log("upload agaiannn");
     this.prepareFilesList(files.target.files);
   }
 

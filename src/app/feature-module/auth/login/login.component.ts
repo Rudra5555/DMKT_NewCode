@@ -133,14 +133,16 @@ if(loginData){
     next: (event: any) => {
       if (event instanceof HttpResponse) {
         this.data = event.body
-        // //console.log(JSON.stringify(this.data))
+        // console.log("jjjjjjjjjj",JSON.stringify(this.data))
       //  //console.log(resp.value.role)
        
         if(this.data!=null){
          
           if(this.data.response!=null){
             this.getRoleData = this.data.response.role;
-            // //console.log(this.getRoleData)
+
+            // console.log("kkkkkkkkkkk",this.getRoleData)
+
             localStorage.setItem('role', this.getRoleData)
           }
           else{
@@ -184,9 +186,15 @@ if(loginData){
 
 
         if(this.getRoleData == "Librarian"){
+
+          const userId = this.data.response.userId;
+
+          localStorage.setItem("loggedInUserId",userId);
         
           this.router.navigate([routes.employee],{queryParams : this.data.value})
           localStorage.setItem("loggedUserName",this.data.response.userName);
+
+          
         }
 
         if(this.getRoleData == "User"){
