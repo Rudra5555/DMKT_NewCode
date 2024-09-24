@@ -53,6 +53,9 @@ export class VerifyUploadedDocumentComponent implements OnInit {
   public plantList: any[] = [];
   public fileNames: string[] = [];
   public uploadFileForm!: FormGroup;
+
+  public rejectForm!: FormGroup;
+
   public mainHeadList: any[] = [];
   public selectedCatName: any;
   public plantOption: any;
@@ -81,6 +84,7 @@ export class VerifyUploadedDocumentComponent implements OnInit {
   loggedUserId:any;
   respData: any;
   fileList: any;
+  remarks:any;
 
   // ***********
   workflowDocId: string | null = null;
@@ -104,6 +108,10 @@ export class VerifyUploadedDocumentComponent implements OnInit {
       isStatutoryDocument: ["", [Validators.required]],
       isRestrictedDocument: ["", [Validators.required]],
       isHodDocument: ["", [Validators.required]],
+    });
+
+    this.rejectForm = this.formBuilder.group({
+      rejectRemarks: ['', [Validators.required, Validators.minLength(5)]],
     });
 
   }
@@ -190,11 +198,51 @@ export class VerifyUploadedDocumentComponent implements OnInit {
 
 
   submitRemarks() {
-    if (this.remarkControl.valid) {
-      const remarks = this.remarkControl.value;
-      console.log('Remarks:', remarks);
+    if (this.rejectForm.valid) {
+      this.remarks = this.rejectForm.value.rejectRemarks;
+  
+      console.log('Submitted Remarks:', this.remarks);
+  
+      let docStatus = {
+        workflowDocId: this.workflowDocId,
+        status: 'R',
+        executedBy: this.loggedUserId,
+        reason: this.remarks
+      };
+  
+      this.loginService.updateDocStatus(docStatus).subscribe({
+        next: (event: any) => {
+          if (event instanceof HttpResponse) {
+            let updatedDoc = event.body.data;
+            console.log("Updated Document:", updatedDoc);
+  
+            let index = this.fileList.findIndex((doc: any) => doc.workflowDocId === updatedDoc.workflowDocId);
+  
+            if (index !== -1) {
+              this.fileList[index] = updatedDoc;
+            }
+            console.log("Updated File List:", this.fileList);
+  
+            this.successfulSubmitAlert();
+  
+        
+            this.rejectForm.reset(); 
+            this.remarks = '';
+
+            this.getFileListDetails();
+          }
+        },
+        error: (err: any) => {
+          console.error("Error submitting document status:", err);
+          this.unsuccessfulSubmitAlert();
+        }
+      });
+    } else {
+      this.unsuccessfulSubmitAlert();
     }
   }
+  
+
 
 
   onFileDropped($event: any) {
@@ -355,11 +403,10 @@ export class VerifyUploadedDocumentComponent implements OnInit {
     this.uploadFileForm.patchValue({ workflowDocId: workflowDocId });
   }
 
-  // Handle Reject modal open
-  // openRejectModal(workflowDocId: string) {
-  //   this.workflowDocId = workflowDocId;
-  //   this.remarkControl.patchValue({ workflowDocId: workflowDocId });
-  // }
+  openRejectModal(workflowDocId: string) {
+    this.workflowDocId = workflowDocId;
+    this.rejectForm.patchValue({ workflowDocId: workflowDocId });
+  }
 
   // ************************
 
@@ -424,8 +471,49 @@ export class VerifyUploadedDocumentComponent implements OnInit {
             this.uploadFileForm.controls['isHodDocument'].reset();
             this.clearFileInput();
             this.successfulSubmitAlert();
+
+
+            let docStatus = {
+              workflowDocId: this.workflowDocId,  
+              status: 'A',                     
+              executedBy: this.loggedUserId,    
+              reason: ''
+            };
+      
+
+
+            this.loginService.updateDocStatus(docStatus).subscribe({
+
+              next: (event: any) => {
+                if (event instanceof HttpResponse) {
+                  let updatedDoc = event.body.data; 
+                  console.log("Updated Document:", updatedDoc);
+      
+                  let index = this.fileList.findIndex((doc: any) => doc.workflowDocId === updatedDoc.workflowDocId);
+          
+                  if (index !== -1) {
+                    this.fileList[index] = updatedDoc;
+                  }
+
+                  console.log("Updated File List:", this.fileList);
+                }
+              },
+              error: (err: any) => {
+                let msg = docStatus + ": Failed!";
+          
+                if (err.error && err.error.message) {
+                  msg += " " + err.error.message;
+                }
+          
+                this.message.push(msg);
+              }
+            });           
+
+
           }
         },
+
+
         error: (err: any) => {
           this.unsuccessfulSubmitAlert();
         }
@@ -452,7 +540,7 @@ export class VerifyUploadedDocumentComponent implements OnInit {
 
       formData.append("requestbody", JSON.stringify(modalData));
 
-      this.uploadService.upload(formData).subscribe({
+      this.loginService.upload(formData).subscribe({
         next: (event: any) => {
           if (event instanceof HttpResponse) {
             this.uploadFileForm.get('uploadFile')?.reset('');
@@ -467,6 +555,47 @@ export class VerifyUploadedDocumentComponent implements OnInit {
             this.uploadFileForm.controls['isHodDocument'].reset();
             this.clearFileInput();
             this.successfulSubmitAlert();
+
+
+            let docStatus = {
+              workflowDocId: this.workflowDocId,  
+              status: 'A',                     
+              executedBy: this.loggedUserId,    
+              reason: ''
+            };
+      
+
+
+            this.loginService.updateDocStatus(docStatus).subscribe({
+
+              next: (event: any) => {
+                if (event instanceof HttpResponse) {
+                  let updatedDoc = event.body.data; 
+                  console.log("Updated Document:", updatedDoc);
+      
+                  let index = this.fileList.findIndex((doc: any) => doc.workflowDocId === updatedDoc.workflowDocId);
+          
+                  if (index !== -1) {
+                    this.fileList[index] = updatedDoc;
+                  }
+
+                  console.log("Updated File List:", this.fileList);
+                }
+              },
+              error: (err: any) => {
+                let msg = docStatus + ": Failed!";
+          
+                if (err.error && err.error.message) {
+                  msg += " " + err.error.message;
+                }
+          
+                this.message.push(msg);
+              }
+            });        
+
+
+
+            
           }
         },
         error: (err: any) => {
@@ -503,6 +632,7 @@ export class VerifyUploadedDocumentComponent implements OnInit {
     }
 
   }
+
 
   getAllMainHeadData() {
     this.uploadDocument.allMainHeadList().subscribe({
