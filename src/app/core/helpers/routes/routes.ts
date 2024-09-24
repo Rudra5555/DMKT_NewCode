@@ -386,6 +386,9 @@ export class routes {
   public static get verifyuploadeddocument(): string {
     return this.baseUrl + '/pages/verify-uploaded-document';
   }
+  public static get approvedrejectdocument(): string {
+    return this.baseUrl + '/pages/approved-reject-document';
+  }
   public static get UserDocumentUpload(): string {
     return this.baseUrl + '/pages/upload-documents';
   }

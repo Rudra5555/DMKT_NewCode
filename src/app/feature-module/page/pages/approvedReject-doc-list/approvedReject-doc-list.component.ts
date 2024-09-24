@@ -1,10 +1,16 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { HttpResponse } from '@angular/common/http';
-import { FileManagementService } from 'src/app/services/file-management.service';
-import { UploadDocumentComponentService } from 'src/app/services/upload-document-component.service';
-import Swal from 'sweetalert2';
+// import {Component, ViewChild} from '@angular/core';
+// import {MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
+// import {DataTablesModule} from 'angular-datatables';
 import { routes } from 'src/app/core/helpers/routes/routes';
+import { Component, OnInit } from '@angular/core';
+import { FileManagementService } from 'src/app/services/file-management.service';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { UploadDocumentComponentService } from 'src/app/services/upload-document-component.service';
+import { LoginComponentService } from 'src/app/services/login-component.service';
+import Swal from 'sweetalert2';
+import { HttpResponse } from '@angular/common/http';
+declare let $: any;
+
 
 
 export interface Option {
@@ -33,16 +39,13 @@ export const OPTIONS: Option[] = [
 ];
 
 
-
-
-
 @Component({
-  selector: 'app-upload-doc',
-  templateUrl: './upload-doc.component.html',
-  styleUrls: ['./upload-doc.scss']
+  selector: 'app-approvedReject-doc-list',
+  templateUrl: './approvedReject-doc-list.component.html',
+  styleUrls: ['./approvedReject-doc-list.component.scss']
 })
-export class UploadDocComponent implements OnInit {
-  @ViewChild("fileDropRef", { static: false }) fileDropEl!: ElementRef;
+export class ApprovedRejectDocListComponent implements OnInit {
+  // @ViewChild("fileDropRef", { static: false }) fileDropEl!: ElementRef;
   files: any[] = [];
   public routes = routes;
   public message: any;
@@ -50,6 +53,9 @@ export class UploadDocComponent implements OnInit {
   public plantList: any[] = [];
   public fileNames: string[] = [];
   public uploadFileForm!: FormGroup;
+
+  public rejectForm!: FormGroup;
+
   public mainHeadList: any[] = [];
   public selectedCatName: any;
   public plantOption: any;
@@ -68,18 +74,27 @@ export class UploadDocComponent implements OnInit {
   public departmentFlag: boolean = false;
   public submitted: boolean = false;
   public uploadDocumentSizeFlag: boolean = false;
-  public disableSubmitBtn: boolean = true;
+  public disableSubmitBtn: boolean = false;
   selectedCatNameAbbr: any;
   selectedDeptCatNameAbbr: any;
   selectedSubAreaCatNameAbbr: any;
   options: Option[] = OPTIONS;
   selectedValue: string | undefined;
+  remarkControl = new FormControl('', [Validators.required]);
+  loggedUserId:any;
+  respData: any;
+  fileList: any;
+  remarks:any;
 
+  // ***********
+  workflowDocId: string | null = null;
+  // ***********
 
   constructor(
     private uploadService: FileManagementService,
     private formBuilder: FormBuilder,
-    private uploadDocument: UploadDocumentComponentService
+    private uploadDocument: UploadDocumentComponentService,
+    private loginService : LoginComponentService
   ) {
 
     this.uploadFileForm = this.formBuilder.group({
@@ -89,18 +104,26 @@ export class UploadDocComponent implements OnInit {
       department: ["", [Validators.required]],
       subArea: ["", [Validators.required]],
       documentType: ["", [Validators.required]],
-      // subDocumentType: ["", [Validators.required]],
       storageLocation: ["", [Validators.required]],
       isStatutoryDocument: ["", [Validators.required]],
       isRestrictedDocument: ["", [Validators.required]],
       isHodDocument: ["", [Validators.required]],
     });
 
+    this.rejectForm = this.formBuilder.group({
+      rejectRemarks: ['', [Validators.required, Validators.minLength(5)]],
+    });
+
   }
 
   ngOnInit(): void {
 
+    this.loggedUserId = localStorage.getItem('loggedInUserId');
 
+    this.getFileListDetails()
+
+    // console.log("bbbbb",this.loggedUserId);
+    
 
     this.uploadFileForm.get('mainHead')?.valueChanges.subscribe(value => {
       const [catName, abbreviation] = value.split('~');
@@ -145,15 +168,89 @@ export class UploadDocComponent implements OnInit {
 
     this.getAllMainHeadData();
 
+
+
   }
 
+
+
+  getFileListDetails() {
+  
+    this.loginService.librarianVerifyDoc(this.loggedUserId).subscribe({
+      next: (event: any) => {
+        if (event instanceof HttpResponse) {
+          this.respData = event.body.data;
+          this.fileList = this.respData;
+  
+        console.log("ffffffffff",this.respData);
+        
+  
+        }
+      },
+      error: (err: any) => {
+        if (err.error && err.error.message) {
+          // this['msg'] += " " + err.error.message;
+        }
+      },
+    });
+  }
+
+
+
+  submitRemarks() {
+    if (this.rejectForm.valid) {
+      this.remarks = this.rejectForm.value.rejectRemarks;
+  
+      console.log('Submitted Remarks:', this.remarks);
+  
+      let docStatus = {
+        workflowDocId: this.workflowDocId,
+        status: 'R',
+        executedBy: this.loggedUserId,
+        reason: this.remarks
+      };
+  
+      this.loginService.updateDocStatus(docStatus).subscribe({
+        next: (event: any) => {
+          if (event instanceof HttpResponse) {
+            let updatedDoc = event.body.data;
+            console.log("Updated Document:", updatedDoc);
+  
+            let index = this.fileList.findIndex((doc: any) => doc.workflowDocId === updatedDoc.workflowDocId);
+  
+            if (index !== -1) {
+              this.fileList[index] = updatedDoc;
+            }
+            console.log("Updated File List:", this.fileList);
+  
+            this.successfulSubmitAlert();
+  
+        
+            this.rejectForm.reset(); 
+            this.remarks = '';
+
+            this.getFileListDetails();
+          }
+        },
+        error: (err: any) => {
+          console.error("Error submitting document status:", err);
+          this.unsuccessfulSubmitAlert();
+        }
+      });
+    } else {
+      this.unsuccessfulSubmitAlert();
+    }
+  }
+  
+
+
+
   onFileDropped($event: any) {
-        this.prepareFilesList($event);
+    this.prepareFilesList($event);
 
   }
 
   fileBrowseHandler(files: any) {
-    // console.log("upload agaiannn");
     this.prepareFilesList(files.target.files);
   }
 
@@ -198,6 +295,7 @@ export class UploadDocComponent implements OnInit {
   }
 
   clearFileInput() {
+
     this.files = [];
   }
 
@@ -298,14 +396,21 @@ export class UploadDocComponent implements OnInit {
 
   }
 
-  isSubmitDisabled(): boolean {
-    return !(this.plantOption !== '' && 
-             this.selectedDeptCatName !== '' && 
-             this.selectedSubAreaCatName !== '' && 
-             this.files.length > 0);
+// ****************************
+
+  openApproveModal(workflowDocId: string) {
+    this.workflowDocId = workflowDocId;
+    this.uploadFileForm.patchValue({ workflowDocId: workflowDocId });
   }
 
- 
+  openRejectModal(workflowDocId: string) {
+    this.workflowDocId = workflowDocId;
+    this.rejectForm.patchValue({ workflowDocId: workflowDocId });
+  }
+
+  // ************************
+
+
 
   onSubmit(): void {
 
@@ -331,8 +436,8 @@ export class UploadDocComponent implements OnInit {
       formData.append("file", file);
     }
 
-    if (this.plantOption != null && this.selectedDeptCatName != null && this.selectedDeptCatNameAbbr != null && this.selectedSubAreaCatName != null && this.selectedSubAreaCatNameAbbr != null  && this.files.length > 0) {
-     
+    if (this.plantOption != null && this.selectedDeptCatName != null && this.selectedDeptCatNameAbbr != null && this.selectedSubAreaCatName != null && this.selectedSubAreaCatNameAbbr != null && this.files.length > 0) {
+    
       const modalData = {
         "mainHead": this.selectedCatName,
         "mainHeadAbbr": this.selectedCatNameAbbr,
@@ -349,9 +454,8 @@ export class UploadDocComponent implements OnInit {
       };
       console.log(modalData);
       formData.append("requestbody", JSON.stringify(modalData));
-     
 
-      this.uploadService.upload(formData).subscribe({
+      this.loginService.upload(formData).subscribe({
         next: (event: any) => {
           if (event instanceof HttpResponse) {
 
@@ -367,15 +471,55 @@ export class UploadDocComponent implements OnInit {
             this.uploadFileForm.controls['isHodDocument'].reset();
             this.clearFileInput();
             this.successfulSubmitAlert();
+
+
+            let docStatus = {
+              workflowDocId: this.workflowDocId,  
+              status: 'A',                     
+              executedBy: this.loggedUserId,    
+              reason: ''
+            };
+      
+
+
+            this.loginService.updateDocStatus(docStatus).subscribe({
+
+              next: (event: any) => {
+                if (event instanceof HttpResponse) {
+                  let updatedDoc = event.body.data; 
+                  console.log("Updated Document:", updatedDoc);
+      
+                  let index = this.fileList.findIndex((doc: any) => doc.workflowDocId === updatedDoc.workflowDocId);
+          
+                  if (index !== -1) {
+                    this.fileList[index] = updatedDoc;
+                  }
+
+                  console.log("Updated File List:", this.fileList);
+                }
+              },
+              error: (err: any) => {
+                let msg = docStatus + ": Failed!";
+          
+                if (err.error && err.error.message) {
+                  msg += " " + err.error.message;
+                }
+          
+                this.message.push(msg);
+              }
+            });           
+
+
           }
         },
+
+
         error: (err: any) => {
           this.unsuccessfulSubmitAlert();
         }
       });
       return;
-    }if(this.plantOption == null && this.selectedDeptCatName == null && this.selectedSubAreaCatName == null && this.documentTypeOption != '' && this.storageLocationOption != '')
-       {
+    } if (this.plantOption == null && this.selectedDeptCatName == null && this.selectedSubAreaCatName == null && this.documentTypeOption != '' && this.storageLocationOption != '') {
       const modalData = {
         "mainHead": this.selectedCatName,
         "mainHeadAbbr": this.selectedCatNameAbbr,
@@ -392,11 +536,11 @@ export class UploadDocComponent implements OnInit {
 
       };
       console.log(modalData);
-      
+
 
       formData.append("requestbody", JSON.stringify(modalData));
-   
-      this.uploadService.upload(formData).subscribe({
+
+      this.loginService.upload(formData).subscribe({
         next: (event: any) => {
           if (event instanceof HttpResponse) {
             this.uploadFileForm.get('uploadFile')?.reset('');
@@ -411,26 +555,66 @@ export class UploadDocComponent implements OnInit {
             this.uploadFileForm.controls['isHodDocument'].reset();
             this.clearFileInput();
             this.successfulSubmitAlert();
+
+
+            let docStatus = {
+              workflowDocId: this.workflowDocId,  
+              status: 'A',                     
+              executedBy: this.loggedUserId,    
+              reason: ''
+            };
+      
+
+
+            this.loginService.updateDocStatus(docStatus).subscribe({
+
+              next: (event: any) => {
+                if (event instanceof HttpResponse) {
+                  let updatedDoc = event.body.data; 
+                  console.log("Updated Document:", updatedDoc);
+      
+                  let index = this.fileList.findIndex((doc: any) => doc.workflowDocId === updatedDoc.workflowDocId);
+          
+                  if (index !== -1) {
+                    this.fileList[index] = updatedDoc;
+                  }
+
+                  console.log("Updated File List:", this.fileList);
+                }
+              },
+              error: (err: any) => {
+                let msg = docStatus + ": Failed!";
+          
+                if (err.error && err.error.message) {
+                  msg += " " + err.error.message;
+                }
+          
+                this.message.push(msg);
+              }
+            });        
+
+
+
+            
           }
         },
         error: (err: any) => {
           this.uploadFileForm.get('uploadFile')?.reset('');
-            this.uploadFileForm.get('mainHead')?.reset('');
-            this.uploadFileForm.get('plants')?.reset('');
-            this.uploadFileForm.get('department')?.reset('');
-            this.uploadFileForm.get('subArea')?.reset('');
-            this.uploadFileForm.get('documentType')?.reset('');
-            this.uploadFileForm.get('storageLocation')?.reset('');
-            this.uploadFileForm.controls['isStatutoryDocument'].reset();
-            this.uploadFileForm.controls['isRestrictedDocument'].reset();
-            this.uploadFileForm.controls['isHodDocument'].reset();
-            this.clearFileInput();
+          this.uploadFileForm.get('mainHead')?.reset('');
+          this.uploadFileForm.get('plants')?.reset('');
+          this.uploadFileForm.get('department')?.reset('');
+          this.uploadFileForm.get('subArea')?.reset('');
+          this.uploadFileForm.get('documentType')?.reset('');
+          this.uploadFileForm.get('storageLocation')?.reset('');
+          this.uploadFileForm.controls['isStatutoryDocument'].reset();
+          this.uploadFileForm.controls['isRestrictedDocument'].reset();
+          this.uploadFileForm.controls['isHodDocument'].reset();
+          this.clearFileInput();
           this.unsuccessfulSubmitAlert();
         }
       });
-return;
-    }else 
-    {
+      return;
+    } else {
       console.log("End of if and else");
       this.uploadFileForm.get('uploadFile')?.reset('');
       this.uploadFileForm.get('mainHead')?.reset('');
@@ -443,19 +627,11 @@ return;
       this.uploadFileForm.controls['isRestrictedDocument'].reset();
       this.uploadFileForm.controls['isHodDocument'].reset();
       this.clearFileInput();
-        this.unsuccessfulSubmitAlert();
-      
+      this.unsuccessfulSubmitAlert();
+
     }
 
-
-
-
   }
-
-
-
-
-
 
 
   getAllMainHeadData() {
@@ -463,6 +639,7 @@ return;
       next: (event: any) => {
         if (event instanceof HttpResponse) {
           this.mainHeadList = event.body?.categoryList || [];
+
         }
       },
       error: (err: any) => {
@@ -541,4 +718,108 @@ return;
       text: "Something went wrong!",
     });
   }
+
+
+
+
+
+  // **************************************************************************
+  // public sortData(sort: Sort) {
+  //   const data = this.contactlist.slice();
+  //   if (!sort.active || sort.direction === '') {
+  //     this.contactlist = data;
+  //   } else {
+  //     this.contactlist = data.sort((a: any, b: any) => {
+  //       const aValue = (a as any)[sort.active];
+  //       const bValue = (b as any)[sort.active];
+  //       return (aValue < bValue ? -1 : 1) * (sort.direction === 'asc' ? 1 : -1);
+  //     });
+  //   }
+  // }
+
+  // public searchData(value: string): void {
+  //   this.dataSource.filter = value.trim().toLowerCase();
+  //   this.contactlist = this.dataSource.filteredData;
+  // }
+
+  // public getMoreData(event: string): void {
+  //   if (event === 'next') {
+  //     this.currentPage++;
+  //     this.pageIndex = this.currentPage - 1;
+  //     this.limit += this.pageSize;
+  //     this.skip = this.pageSize * this.pageIndex;
+  //     this.approvedDocumentList(this.loggedUserId);
+  //   } else if (event === 'previous') {
+  //     this.currentPage--;
+  //     this.pageIndex = this.currentPage - 1;
+  //     this.limit -= this.pageSize;
+  //     this.skip = this.pageSize * this.pageIndex;
+  //     this.approvedDocumentList(this.loggedUserId);
+  //   }
+  // }
+
+  // public moveToPage(pageNumber: number): void {
+  //   this.currentPage = pageNumber;
+  //   this.skip = this.pageSelection[pageNumber - 1].skip;
+  //   this.limit = this.pageSelection[pageNumber - 1].limit;
+  //   if (pageNumber > this.currentPage) {
+  //     this.pageIndex = pageNumber - 1;
+  //   } else if (pageNumber < this.currentPage) {
+  //     this.pageIndex = pageNumber + 1;
+  //   }
+  //   this.approvedDocumentList(this.loggedUserId);
+  // }
+  // private calculateTotalPages(totalData: number, pageSize: number): void {
+  //   this.pageNumberArray = [];
+  //   this.totalPages = totalData / pageSize;
+  //   if (this.totalPages % 1 !== 0) {
+  //     this.totalPages = Math.trunc(this.totalPages + 1);
+  //   }
+  //   for (let i = 1; i <= this.totalPages; i++) {
+  //     const limit = pageSize * i;
+  //     const skip = limit - pageSize;
+  //     this.pageNumberArray.push(i);
+  //     this.pageSelection.push({ skip: skip, limit: limit });
+  //   }
+  // }
+  // public changePageSize(): void {
+  //   this.pageSelection = [];
+  //   this.limit = this.pageSize;
+  //   this.skip = 0;
+  //   this.currentPage = 1;
+  //   this.approvedDocumentList(this.loggedUserId);
+  // }
+  // openFilter() {
+  //   this.filter = !this.filter;
+  // }
+  // toggleFilterDropdown() {
+  //   this.isFilterDropdownOpen = !this.isFilterDropdownOpen;
+  // }
+  // fullscreen() {
+  //   if (!document.fullscreenElement) {
+  //     this.elem.requestFullscreen();
+  //   }
+  //   else {
+  //     document.exitFullscreen();
+  //   }
+  // }
+  // public selectedFieldSet = [0];
+  // currentStep = 0;
+  // nextStep() {
+  //   this.currentStep++;
+  // }
+  // addOnBlur = true;
+  // readonly separatorKeysCodes = [ENTER, COMMA] as const;
+
+  // selected1 = 'option1';
+
+  // selectFiles(_event: any): void {
+
+  // }
+
+// ************************************************************************************
+
+
+
+
 }
