@@ -80,12 +80,11 @@
 			<div class="dropdown-menu notifications">
 				<div class="topnav-dropdown-header">
 					<span class="notification-title">Notifications</span>
-
 				</div>
 				<div class="noti-content">
 					<ul class="notification-list" *ngFor="let item of this.resp;">
 						<li class="notification-message" (click)="onItemClick(item)">
-							<a data-bs-toggle="modal" data-bs-target="#notificationModal">
+							<a data-bs-toggle="modal" data-bs-target="#notificationModalLib">
 								<div class="chat-block d-flex">
 									<span class="avatar flex-shrink-0">
 										<img src="assets/img/avatar/avatar-27.jpg" alt="">
@@ -115,6 +114,52 @@
 				</div>
 			</div>
 		</li>
+
+
+<!-- Librarian bell icon -->
+<li class="nav-item dropdown" [hidden]="roleLibFlag">
+	<a href="javascript:void(0);" class="dropdown-toggle nav-link" data-bs-toggle="dropdown">
+		<i class="fa-regular fa-bell me-1" style="color:white"></i> <span
+			class="badge rounded-pill">{{userNotifyCount}}</span>
+	</a>
+	<div class="dropdown-menu notifications">
+		<div class="topnav-dropdown-header">
+			<span class="notification-title">Notifications</span>
+		</div>
+		<div class="noti-content">
+			<ul class="notification-list" *ngFor="let item of this.resp;">
+				<li class="notification-message" (click)="onItemClick(item)">
+					<a data-bs-toggle="modal" data-bs-target="#notificationModal">
+						<div class="chat-block d-flex">
+							<span class="avatar flex-shrink-0">
+								<img src="assets/img/avatar/avatar-27.jpg" alt="">
+							</span>
+							<div class="media-body flex-grow-1">
+
+								<p class="noti-details"><span class="noti-title">{{item.executerName}}</span>
+									<span [ngClass]="{
+										'text-pending': item.documentApprovalStatus === 'P',
+										'text-approved': item.documentApprovalStatus === 'A',
+										'text-rejected': item.documentApprovalStatus === 'R'
+									  }">
+										{{ getApprovalStatus(item.documentApprovalStatus) }}
+									</span>
+									<span class="noti-title">{{item.documentName}}</span>
+								</p>
+
+							</div>
+						</div>
+					</a>
+				</li>
+
+			</ul>
+		</div>
+		<div class="topnav-dropdown-footer">
+
+		</div>
+	</div>
+</li>
+
 
 
 
@@ -179,8 +224,6 @@
 														style="max-width: 40%; padding-bottom: 5%;">
 												</ng-container>
 											</td>
-
-
 											<td rowspan="2" style="text-align: center; width: 80%; padding-left: 10px;">
 												<strong style="padding-bottom: 43%;">{{ selectFileData?.documentName
 													}}</strong>
@@ -394,6 +437,128 @@
 		</div>
 	</div>
 </div>
-
-
 <!-- Modal for HOD Ends -->
+
+
+
+
+
+<!-- Modal for Librarian Start -->
+<div id="notificationModalLib1" class="modal custom-modal fade" role="dialog">
+	<div class="modal-dialog modal-dialog-centered modal-md" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Requested Document Details</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<form [formGroup]="hodModalForm">
+				<div class="modal-body">
+					<div>
+						<div class="col-md-12">
+							<div class="">
+								<div class="">
+
+									<table style=" width: 100%; ">
+										<tr>
+											<td style="text-align: left;width: 27%;margin-right: 24px;padding: 4px;">
+												<ng-container *ngIf="selectedHodItem?.DocumentType">
+													<img src="assets/img/{{ selectedHodItem.DocumentType }}.png"
+														style="max-width: 30%; padding-bottom: 5%;">
+												</ng-container>
+											<td><strong>{{ selectedHodItem?.RequestedDocumentName }}</strong></td>
+										</tr>
+										<tr>
+											<td style="width: 30%;padding: 8px; "><strong>Requester Name:</strong></td>
+
+											<td style="padding: 8px;">{{ selectedHodItem?.RequesterName }}</td>
+										</tr>
+										<tr>
+											<td style="width: 50%;padding: 8px;"><strong>Unique Document Name:</strong>
+											</td>
+											<td style="padding: 8px;">
+												<div class="short-name-hod">
+													{{ selectedHodItem?.UniqueDocumentName | slice:0:10 }}...
+												</div>
+												<div class="full-Hodname-tooltip">
+													{{ selectedHodItem?.UniqueDocumentName }}
+												</div>
+											</td>
+										</tr>
+										<tr>
+											<td style="padding: 8px;"><strong>Plant Name:</strong></td>
+											<td style="padding: 8px;">{{ selectedHodItem?.plantName }}</td>
+										</tr>
+										<tr>
+											<td style="padding: 8px;"><strong>Department Name:</strong></td>
+											<td style="padding: 8px;">{{ selectedHodItem?.DepartmentName }}</td>
+										</tr>
+										<tr>
+											<td style="padding: 8px;"><strong>Attachment:</strong></td>
+											<td style="padding: 8px;">
+												<!-- Use Angular's property binding to dynamically set href -->
+												<a *ngIf="selectedHodItem?.uploadImg"
+													[href]="selectedHodItem?.uploadImg"
+													download="selectedHodItem?.uploadImg" target="_blank">
+													<i class="fas fa-eye" style="color: rgb(48, 63, 228)"></i>
+												</a>
+												<span *ngIf="!selectedHodItem?.uploadImg">No attachment available</span>
+											</td>
+										</tr>
+										<tr>
+											<td style="padding: 8px;"><strong>Status:</strong></td>
+											<td style="padding: 8px;">
+												<select class="statusDropdown" formControlName="status"
+													placeholder="Select" (change)="statusSelect($event)">
+													<option value="">--Select--</option>
+													<option value="A">Approved</option>
+													<option value="R">Reject</option>
+												</select>
+												<div *ngIf="hodModalForm.get('status')?.touched && hodModalForm.get('status')?.invalid"
+													class="text-danger">
+													Status is required!
+												</div>
+											</td>
+										</tr>
+										<tr *ngIf="reasonFlag">
+											<td style="padding: 8px;"><strong>Reason:</strong></td>
+											<td> <textarea rows="4" cols="5" [(ngModel)]="reason" class="form-control"
+													formControlName="reason" placeholder="Enter message"
+													(input)="rejectReason($event)"
+													style="height:70px;width: 101%;"></textarea>
+												<div *ngIf="reason == ''  && rejectReasonFlag" class="text-danger">
+													Provide the reason for the rejection!
+												</div>
+											</td>
+										</tr>
+									</table>
+
+
+									<!-- Action Buttons -->
+									<div class="row mt-3">
+										<div class="col-lg-12 text-end">
+											<button class="btn btn-success" data-bs-dismiss="modal"
+												(click)="updateDocumentStatus()" type="button"
+												style="background-color: rgb(36, 160, 4); margin-right: 1%;"
+												[disabled]="disableSubmitBtn">
+												Submit
+											</button>
+
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+					</div>
+				</div>
+			</form>
+
+
+		</div>
+	</div>
+</div>
+<!-- Modal for Librarian Ends -->
+
+
