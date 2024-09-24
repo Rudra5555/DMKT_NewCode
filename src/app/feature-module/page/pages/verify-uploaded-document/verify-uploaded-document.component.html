@@ -71,7 +71,7 @@
           </div>
         </div>
       </div>
-      <div class="table-responsive">
+      <div class="table-responsive"  style="overflow-y: auto; height:430px">
         <table matSort class="table table-striped custom-table datatable contact-table">
           <thead>
             <tr>
@@ -122,21 +122,30 @@
                 </a>
               </td>
 
+
               <!-- <td class="text-center">
-
-                <button class="btn submit-btn approve-btn" type="submit" data-bs-toggle="modal"
-                  data-bs-target="#uploadDocumentModal">Approve</button>
-                <button class="btn submit-btn reject-btn" type="submit" data-bs-toggle="modal"
-                  data-bs-target="#rejectDocumentModal">Reject</button>
-              </td> -->
-
-              <td class="text-center">
                 <button class="btn submit-btn approve-btn" type="button" (click)="openApproveModal(item.workflowDocId)"
                   data-bs-toggle="modal" data-bs-target="#uploadDocumentModal">Approve</button>
                 
-                <button class="btn submit-btn reject-btn" type="button"
+                <button class="btn submit-btn reject-btn" type="button" (click)="openRejectModal(item.workflowDocId)"
                   data-bs-toggle="modal" data-bs-target="#rejectDocumentModal">Reject</button>
+              </td> -->
+
+
+              <td class="text-center">
+                <button *ngIf="item.status === 'A'" class="btn submit-btn approve-btn" type="button" disabled>Approved</button>
+              
+                <button *ngIf="item.status !== 'A'" class="btn submit-btn approve-btn" type="button"
+                  (click)="openApproveModal(item.workflowDocId)" data-bs-toggle="modal" data-bs-target="#uploadDocumentModal">
+                  Approve
+                </button>
+              
+                <button *ngIf="item.status !== 'A'" class="btn submit-btn reject-btn" type="button"
+                  (click)="openRejectModal(item.workflowDocId)" data-bs-toggle="modal" data-bs-target="#rejectDocumentModal">
+                  Reject
+                </button>
               </td>
+              
 
             </tr>
 
@@ -173,8 +182,8 @@
             <div class="col-sm-6">
               <div class="input-block mb-3">
                 <!-- ********* -->
-                <p>{{workflowDocId}}</p>
-                <p>{{loggedUserId}}</p>
+                <!-- <p>{{workflowDocId}}</p>
+                <p>{{loggedUserId}}</p> -->
                 <!-- ********** -->
                 <label class="col-form-label" for="">Upload Files <span class="text-danger">(.pdf, .docx, .xlsx,
                     .jpeg,.dwg)*</span></label>
@@ -359,7 +368,7 @@
 
           </div>
           <div class="submit-section">
-            <button class="btn submit-btn" type="submit">Submit</button>
+            <button class="btn submit-btn" type="submit" data-bs-dismiss="modal" aria-label="Close">Submit</button>
             <!-- [disabled]="   " -->
           </div>
         </form>
@@ -370,49 +379,32 @@
 
 
 
-
-<div class="modal fade" id="rejectDocumentModal" tabindex="-1" aria-labelledby="rejectDocumentModalLabel"
-  aria-hidden="true">
+<div class="modal fade" id="rejectDocumentModal" tabindex="-1" aria-labelledby="rejectDocumentModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="rejectDocumentModalLabel">Provide Remarks</h5>
+        <h5 class="modal-title" id="rejectDocumentModalLabel">Provide Remarks {{workflowDocId}}{{loggedUserId}}</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <textarea id="rejectRemarks" class="form-control" placeholder="Enter your remarks here..." rows="4"
-          [formControl]="remarkControl"></textarea>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-        <button type="button" class="btn btn-info" id="submitRejectRemarks" (click)="submitRemarks()"
-          [disabled]="remarkControl.invalid">Submit</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- <div class="modal fade" id="rejectDocumentModal" role="dialog">
-  <div class="modal-dialog modal-dialog-right modal-md" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Reject Document</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <form [formGroup]="remarkControl" (ngSubmit)="onSubmit()">
+        <form [formGroup]="rejectForm" (ngSubmit)="submitRemarks()">
           <div class="form-group">
-            <label for="rejectionReason">Reason for Rejection</label>
-            <textarea formControlName="rejectionReason" class="form-control" rows="3" placeholder="Enter reason"></textarea>
+            <textarea id="rejectRemarks" class="form-control" placeholder="Enter your remarks here..." rows="4"
+              formControlName="rejectRemarks"></textarea>
+            <div *ngIf="rejectForm.get('rejectRemarks')?.invalid && (rejectForm.get('rejectRemarks')?.touched || rejectForm.get('rejectRemarks')?.dirty)" class="text-danger">
+              Remarks are required and must be at least 5 characters long.
+            </div>
           </div>
-          <div *ngIf="rejectForm.get('rejectionReason')?.invalid && (rejectForm.get('rejectionReason')?.touched || rejectForm.get('rejectionReason')?.dirty)" class="text-danger">
-            Rejection reason is required.
-          </div>
-          <div class="submit-section">
-            <button type="submit" class="btn submit-btn">Submit</button>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn btn-info" [disabled]="rejectForm.invalid">Submit</button>
           </div>
         </form>
       </div>
     </div>
   </div>
-</div> -->
+</div>
+
+
+
+
