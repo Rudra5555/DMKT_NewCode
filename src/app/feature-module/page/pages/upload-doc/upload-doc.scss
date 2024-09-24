@@ -1,11 +1,16 @@
 .container {
-  width: 450px;
-  height: 200px;
+  width: 100%;
+  max-width: 450px; /* Allows it to shrink on smaller screens */
+  height: 220px; /* Slightly increased height */
   padding: 2rem;
   text-align: center;
-  border: dashed 1px #979797;
+  border: dashed 2px #43a943;
+  border-radius: 10px;
+  background: #f9fafc;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   position: relative;
-  margin: 0 auto;
+  margin: 20px auto;
+  transition: all 0.3s ease-in-out;
 
   input {
     opacity: 0;
@@ -39,22 +44,36 @@
 }
 
 .files-list {
-  margin-top: 1.5rem;
-  width: 456px;
-  padding-left: 63px;
+  width: 100%;
+  max-width: 450px; /* Allows it to shrink on smaller screens */
+  height: 200px; /* Increased height */
+  padding: 2rem;
+  text-align: center;
+  border: dashed 2px hsl(120, 43%, 46%);
+  border-radius: 10px;
+  background: #f9fafc;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  position: relative;
+  margin: 20px auto;
+  transition: all 0.3s ease-in-out;
+  overflow: auto; /* Handles content overflow */
+  box-sizing: border-box; /* Ensures padding is included in height */
+
 
   .single-file {
     display: flex;
     padding: 0.5rem;
+    border-radius: 10px;
     justify-content: space-between;
     align-items: center;
-    border: dashed 1px #979797;
+    border: dashed 2px #ecc57f;
     margin-bottom: 1rem;
 
     img.delete {
       margin-left: 0.5rem;
       cursor: pointer;
       align-self: flex-end;
+      filter: hue-rotate(0deg) brightness(0) saturate(1000%) invert(40%);
     
     }
 
