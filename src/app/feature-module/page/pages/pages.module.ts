@@ -33,6 +33,7 @@ import { NgxDocViewerModule } from 'ngx-doc-viewer';
 import { LibRecentUploadedComponent } from './lib-recent-uploaded/lib-recent-uploaded.component';
 import { UserDocumentUpload } from './user-document-upload/user-document-upload.component';
 import { VerifyUploadedDocumentComponent } from './verify-uploaded-document/verify-uploaded-document.component';
+import { ApprovedRejectDocListComponent } from './approvedReject-doc-list/approvedReject-doc-list.component';
 
 
 
@@ -61,7 +62,8 @@ import { VerifyUploadedDocumentComponent } from './verify-uploaded-document/veri
     ProgressComponent,
     LibRecentUploadedComponent,
     UserDocumentUpload,
-    VerifyUploadedDocumentComponent
+    VerifyUploadedDocumentComponent,
+    ApprovedRejectDocListComponent
     
   ],
   imports: [

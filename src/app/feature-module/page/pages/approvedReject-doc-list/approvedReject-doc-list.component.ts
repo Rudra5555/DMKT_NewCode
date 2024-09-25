@@ -9,7 +9,6 @@ import { UploadDocumentComponentService } from 'src/app/services/upload-document
 import { LoginComponentService } from 'src/app/services/login-component.service';
 import Swal from 'sweetalert2';
 import { HttpResponse } from '@angular/common/http';
-import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 declare let $: any;
 
 
@@ -41,11 +40,11 @@ export const OPTIONS: Option[] = [
 
 
 @Component({
-  selector: 'app-verify-uploaded-document',
-  templateUrl: './verify-uploaded-document.component.html',
-  styleUrls: ['./verify-uploaded-document.component.scss']
+  selector: 'app-approvedReject-doc-list',
+  templateUrl: './approvedReject-doc-list.component.html',
+  styleUrls: ['./approvedReject-doc-list.component.scss']
 })
-export class VerifyUploadedDocumentComponent implements OnInit {
+export class ApprovedRejectDocListComponent implements OnInit {
   // @ViewChild("fileDropRef", { static: false }) fileDropEl!: ElementRef;
   files: any[] = [];
   public routes = routes;
@@ -54,8 +53,7 @@ export class VerifyUploadedDocumentComponent implements OnInit {
   public plantList: any[] = [];
   public fileNames: string[] = [];
   public uploadFileForm!: FormGroup;
-  bsConfig: Partial<BsDatepickerConfig>;
-  dateRange: Date[];
+
   public rejectForm!: FormGroup;
 
   public mainHeadList: any[] = [];
@@ -111,16 +109,7 @@ export class VerifyUploadedDocumentComponent implements OnInit {
       isRestrictedDocument: ["", [Validators.required]],
       isHodDocument: ["", [Validators.required]],
     });
-    const today = new Date();
-    this.dateRange = [today, today]; // Set current date as default for both start and end date
 
-    this.bsConfig = {
-      isAnimated: true,
-      adaptivePosition: true,
-      containerClass: 'theme-blue',
-      showWeekNumbers: false,
-      rangeInputFormat: 'MM/DD/YYYY', // Set date format as needed
-      minMode: 'day'};
     this.rejectForm = this.formBuilder.group({
       rejectRemarks: ['', [Validators.required, Validators.minLength(5)]],
     });

@@ -89,6 +89,7 @@ export class UploadDocComponent implements OnInit {
       department: ["", [Validators.required]],
       subArea: ["", [Validators.required]],
       documentType: ["", [Validators.required]],
+      // subDocumentType: ["", [Validators.required]],
       storageLocation: ["", [Validators.required]],
       isStatutoryDocument: ["", [Validators.required]],
       isRestrictedDocument: ["", [Validators.required]],

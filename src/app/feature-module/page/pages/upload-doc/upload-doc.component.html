@@ -34,24 +34,26 @@
                   <h3>or</h3>
                   <label for="fileDropRef">Browse for file</label>
                 </div>
-                <div class="files-list" style="overflow-y: auto; height:150px">
-                  <div class="single-file" *ngFor="let file of files; let i = index" style="overflow-y: auto;">
-                    <img src="assets/img/dnd/ic-file.svg" width="45px" alt="file">
-                    <div class="info">
-                      <h4 class="name">{{ file?.name }}</h4>
-                      <p class="size">{{ formatBytes(file?.size) }}</p>
-                      <app-progress [progress]="file?.progress"></app-progress>
-                    </div>
-                    <img src="assets/img/dnd/ic-delete-file.svg" class="delete" width="20px" alt="file" (click)="deleteFile(i)">
+                <!-- File list section (hidden when no files are uploaded) -->
+              <div class="files-list" *ngIf="files && files.length > 0" style="overflow-y: auto;">
+                <div class="single-file" *ngFor="let file of files; let i = index" style="overflow-y: auto;">
+                  <img src="assets/img/dnd/ic-file.svg" width="45px" alt="file">
+                  <div class="info">
+                    <h4 class="name">{{ file?.name }}</h4>
+                    <p class="size">{{ formatBytes(file?.size) }}</p>
+                    <app-progress [progress]="file?.progress"></app-progress>
                   </div>
+                  <img src="assets/img/dnd/ic-delete-file.svg" class="delete" width="20px" alt="file" (click)="deleteFile(i)">
                 </div>
+              </div>
               </div>
               
 
                     </div>
-                    <div *ngIf="uploadDocumentFlag || uploadDocumentSizeFlag"  class="text-danger">
-                      Upload Document is required and File size should be under 2MB.
-                    </div>
+                     <!-- Error message for file validation -->
+              <div *ngIf="uploadDocumentFlag || uploadDocumentSizeFlag" class="text-danger" style="margin-left: 2%; padding-bottom: 4%;">
+                Upload Document is required and File size should be under 2MB.
+              </div>
                   </div>
                   <div class="col-sm-6">
                     <div class="input-block mb-3">
@@ -119,8 +121,23 @@
                         <div *ngIf="uploadFileForm.get('documentType')?.invalid && (uploadFileForm.get('documentType')?.touched || uploadFileForm.get('documentType')?.dirty)" class="text-danger">
                           Document Type is required.
                         </div>
-                    
                       </div>
+
+                      <!-- <div class="input-block mb-3">
+                        <label class="col-form-label">Sub-Document Type<span class="text-danger">*</span></label>
+                        <mat-select formControlName="subDocumentType" class="custom-mat-select select" placeholder="Select"  required>
+                          <mat-option value="">--Select--</mat-option>
+                          <mat-option value="LETTER">Letter</mat-option>
+                          <mat-option value="DOCUMENT">Document</mat-option>
+                          <mat-option value="BOM">BOM</mat-option>
+                          <mat-option value="DRAWING">Drawing</mat-option>
+                          <mat-option value="BOQ">BOQ</mat-option>
+                          <mat-option value="COMPLIANCE DOCUMENT">Compliance Document</mat-option>
+                        </mat-select>
+                        <div *ngIf="uploadFileForm.get('subDocumentType')?.invalid && (uploadFileForm.get('subDocumentType')?.touched || uploadFileForm.get('subDocumentType')?.dirty)" class="text-danger">
+                          Sub-Document Type is required.
+                        </div>
+                      </div> -->
 
                       <div class="input-block mb-3">
                         <label class="col-form-label">Storage Location<span class="text-danger">*</span></label>

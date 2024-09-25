@@ -834,6 +834,16 @@ export class DataService implements OnInit {
           materialicons: 'person',
           subMenus: [],
         },
+        {
+          menuValue: 'A&R Doc List',
+          route: routes.approvedrejectdocument,
+          hasSubRoute: false,
+          showSubRoute: false,
+          icon: 'book',
+          base: 'HOD',
+          materialicons: 'person',
+          subMenus: [],
+        },
 
       ]
     },

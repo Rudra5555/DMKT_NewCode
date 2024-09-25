@@ -21,9 +21,10 @@
 
     <div class="filter-section">
       <ul>
+       
         <li>
           <div class="filter-section">
-            <div class="col-xl-12">
+            <div class="col-xl-12" style=" margin-left: 0%;">
               <div class="daterange-picker d-flex centered-div">
                 <div class="form-sort">
                   <i class="las la-calendar"></i>
@@ -42,7 +43,19 @@
           </div>
           
         </li>
-        
+        <li>
+          <div class="form-sort" id="filterDoc">
+            <i class="las la-filter"></i>
+            <mat-select
+            class="select leads"
+            placeholder="Select Filter" 
+          >
+            <mat-option value="all">Document Type</mat-option>
+            <mat-option value="web">Hard Copy</mat-option>
+            <mat-option value="web">Soft Copy</mat-option>
+          </mat-select>
+          </div>
+        </li>
 
         <li>
           <div class="search-set">

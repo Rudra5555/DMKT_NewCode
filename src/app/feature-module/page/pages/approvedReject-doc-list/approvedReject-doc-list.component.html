@@ -1,0 +1,172 @@
+<!-- Page Content -->
+<div class="content container-fluid" style="height: 90vh;">
+
+  <!-- Page Header -->
+  <div class="page-header">
+    <div class="row">
+      <div class="col-sm-12">
+        <h3 class="page-title">Verify Uploaded Document</h3>
+        <ul class="breadcrumb">
+          <!-- <li class="breadcrumb-item"><a [routerLink]="routes.adminDashboard">Dashboard</a></li>
+                    <li class="breadcrumb-item active">Blank Page</li> -->
+        </ul>
+      </div>
+    </div>
+  </div>
+  <!-- /Page Header -->
+
+  <div class="filter-section">
+    <ul>
+      <li>
+        <div class="filter-section">
+          <div class="col-xl-12">
+            <div class="daterange-picker d-flex centered-div">
+              <div class="form-sort">
+                <i class="las la-calendar"></i>
+                <input type="text" class="form-control date-range bookingrange" #drp="bsDaterangepicker"
+                  bsDaterangepicker />
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </li>
+
+      <li>
+      </li>
+
+
+      <li>
+        <div class="search-set">
+          <div class="search-input">
+
+            <div class="dataTables_filter">
+              <label>
+                <input style="height:43px" type="search" class="form-control" placeholder="Search..." />
+              </label>
+            </div>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <div class="table_header">
+        <div class="row">
+          <div class="col-sm-12 col-md-6">
+            <div class="dataTables_length">
+              <label class="col-form-label" for="">
+                Show
+                <select class="form-control form-control-sm">
+                  <option value="10">10</option>
+                  <option value="25">25</option>
+                  <option value="50">50</option>
+                  <option value="100">100</option>
+                </select>
+                Entries
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="table-responsive"  style="overflow-y: auto; height:430px">
+        <table matSort class="table table-striped custom-table datatable contact-table">
+          <thead>
+            <tr>
+              <th mat-sort-header="documentName">Document Name</th>
+              <th mat-sort-header="requestorDepartment">Requestor Id</th>
+              <th mat-sort-header="requestorId">Requestor Name</th>
+              <th mat-sort-header="executorName">Executor Name</th>
+              <th mat-sort-header="executedTime">Executed Time</th>
+              <th mat-sort-header="action">Action</th>
+              <th mat-sort-header="status">Status</th>
+
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of fileList">
+              <td>
+                <h2 class="table-avatar d-flex">
+                  <a class="profile-split d-flex flex-column">
+                    {{item.fileName}}
+                  </a>
+                </h2>
+              </td>
+
+              <td>
+                {{ item.generatedBy }}
+
+              </td>
+
+              <td>
+                {{ item.generatedByName }}
+
+              </td>
+              <td>
+                {{ item.executedByName }}
+              </td>
+              <td>
+                {{ item.executedOn }}
+              </td>
+              <!-- <td>
+                    <a class="dropdown-item" >
+                        <i class="fas fa-download" style="color: rgb(0, 117, 234);margin-left: 18%;"></i>
+                      </a>
+                </td> -->
+
+              <td class="text-center">
+                <a class="dropdown-item" [href]="item.fileUrl" target="_blank">
+                  <i class="fa-solid fa-download" style="color: rgb(0, 117, 234)"></i>
+                </a>
+              </td>
+
+
+              <!-- <td class="text-center">
+                <button class="btn submit-btn approve-btn" type="button" (click)="openApproveModal(item.workflowDocId)"
+                  data-bs-toggle="modal" data-bs-target="#uploadDocumentModal">Approve</button>
+                
+                <button class="btn submit-btn reject-btn" type="button" (click)="openRejectModal(item.workflowDocId)"
+                  data-bs-toggle="modal" data-bs-target="#rejectDocumentModal">Reject</button>
+              </td> -->
+
+
+              <td class="text-center">
+                <button *ngIf="item.status === 'A'" class="btn submit-btn approve-btn" type="button" disabled>Approved</button>
+              
+                <button *ngIf="item.status !== 'A'" class="btn submit-btn approve-btn" type="button"
+                  (click)="openApproveModal(item.workflowDocId)" data-bs-toggle="modal" data-bs-target="#uploadDocumentModal">
+                  Approve
+                </button>
+              
+                <button *ngIf="item.status !== 'A'" class="btn submit-btn reject-btn" type="button"
+                  (click)="openRejectModal(item.workflowDocId)" data-bs-toggle="modal" data-bs-target="#rejectDocumentModal">
+                  Reject
+                </button>
+              </td>
+              
+
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
