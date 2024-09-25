@@ -5,6 +5,8 @@ import { DataService, SideBar, SideBarMenu, routes } from 'src/app/core/core.ind
 import { SideBarService } from 'src/app/core/services/side-bar/side-bar.service';
 import { CommonService } from 'src/app/shared/common/common.service';
 import {AdminDashboardComponent} from 'src/app/feature-module/main/dashboard/admin-dashboard/admin-dashboard.component'
+import { LoginComponentService } from 'src/app/services/login-component.service';
+import { HttpResponse } from '@angular/common/http';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -30,12 +32,15 @@ export class SideMenuOneComponent implements OnDestroy,OnInit{
   sub: Subscription = new Subscription;
   @Input() childProperty: any;
   role:any;
+  respData:any;
+  notifiCount:any;
 
   constructor(
     public router: Router,
     private data: DataService,
     private sideBar: SideBarService,
-    private common: CommonService
+    private common: CommonService,
+    private loginService : LoginComponentService
    
   ) {
     //this.userRole = sessionStorage.getItem('user_role')
@@ -102,7 +107,9 @@ export class SideMenuOneComponent implements OnDestroy,OnInit{
   }
   public count = 0;
   ngOnInit(): void {
-    // alert("refreshed");
+
+    this.getUploadDocNotification();
+
     this.rData = localStorage.getItem('role')
 
     if(this.rData == "Admin")
@@ -154,6 +161,28 @@ this.count++;
 
    }
  
+  }
+
+
+  getUploadDocNotification() {
+  
+    this.loginService.libUploadDocNotific().subscribe({
+      next: (event: any) => {
+        if (event instanceof HttpResponse) {
+          this.respData = event.body;
+          this.notifiCount = this.respData.data;
+  
+        console.log("ppppppp",this.notifiCount);
+        
+  
+        }
+      },
+      error: (err: any) => {
+        if (err.error && err.error.message) {
+          // this['msg'] += " " + err.error.message;
+        }
+      },
+    });
   }
 
   
