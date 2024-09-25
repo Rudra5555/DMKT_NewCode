@@ -9,6 +9,7 @@ import { UploadDocumentComponentService } from 'src/app/services/upload-document
 import { LoginComponentService } from 'src/app/services/login-component.service';
 import Swal from 'sweetalert2';
 import { HttpResponse } from '@angular/common/http';
+import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 declare let $: any;
 
 
@@ -53,7 +54,8 @@ export class VerifyUploadedDocumentComponent implements OnInit {
   public plantList: any[] = [];
   public fileNames: string[] = [];
   public uploadFileForm!: FormGroup;
-
+  bsConfig: Partial<BsDatepickerConfig>;
+  dateRange: Date[];
   public rejectForm!: FormGroup;
 
   public mainHeadList: any[] = [];
@@ -109,7 +111,16 @@ export class VerifyUploadedDocumentComponent implements OnInit {
       isRestrictedDocument: ["", [Validators.required]],
       isHodDocument: ["", [Validators.required]],
     });
+    const today = new Date();
+    this.dateRange = [today, today]; // Set current date as default for both start and end date
 
+    this.bsConfig = {
+      isAnimated: true,
+      adaptivePosition: true,
+      containerClass: 'theme-blue',
+      showWeekNumbers: false,
+      rangeInputFormat: 'MM/DD/YYYY', // Set date format as needed
+      minMode: 'day'};
     this.rejectForm = this.formBuilder.group({
       rejectRemarks: ['', [Validators.required, Validators.minLength(5)]],
     });

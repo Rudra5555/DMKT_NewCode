@@ -23,9 +23,14 @@
             <div class="daterange-picker d-flex centered-div">
               <div class="form-sort">
                 <i class="las la-calendar"></i>
-                <input type="text" class="form-control date-range bookingrange" #drp="bsDaterangepicker"
-                  bsDaterangepicker />
+                <input type="text" 
+                       class="form-control date-range bookingrange" 
+                       #drp="bsDaterangepicker" 
+                       [bsConfig]="bsConfig" 
+                       bsDaterangepicker 
+                       [(ngModel)]="dateRange" />
               </div>
+              
             </div>
           </div>
         </div>
@@ -199,7 +204,7 @@
                     <h3>or</h3>
                     <label for="fileDropRef">Browse for file</label>
                   </div>
-                  <div class="files-list" style="overflow-y: auto; height:150px">
+                  <div class="files-list" *ngIf="files && files.length > 0" style="overflow-y: auto;">
                     <div class="single-file" *ngFor="let file of files; let i = index" style="overflow-y: auto;">
                       <img src="assets/img/dnd/ic-file.svg" width="45px" alt="file">
                       <div class="info">
@@ -207,8 +212,7 @@
                         <p class="size">{{ formatBytes(file?.size) }}</p>
                         <app-progress [progress]="file?.progress"></app-progress>
                       </div>
-                      <img src="assets/img/dnd/ic-delete-file.svg" class="delete" width="20px" alt="file"
-                        (click)="deleteFile(i)">
+                      <img src="assets/img/dnd/ic-delete-file.svg" class="delete" width="20px" alt="file" (click)="deleteFile(i)">
                     </div>
                   </div>
                 </div>
@@ -218,6 +222,7 @@
               <div *ngIf="uploadDocumentFlag || uploadDocumentSizeFlag" class="text-danger">
                 Upload Document is required and File size should be under 2MB.
               </div>
+            
             </div>
             <div class="col-sm-6">
               <div class="input-block mb-3">
