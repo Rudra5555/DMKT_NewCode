@@ -333,4 +333,12 @@ upload(file: any): Observable<HttpEvent<any>> {
     
   }
 
+  appAndRejFileList(startDate:any , endDate:any): Observable<HttpEvent<any>> {
+    const req = new HttpRequest('GET', `${this.baseUrl}/doc-request/get-list-req-workflow?startDate=${startDate}&endDate=${endDate}`, {
+      responseType: 'json'
+    });
+  
+    return this.http.request(req);
+  }
+
 }

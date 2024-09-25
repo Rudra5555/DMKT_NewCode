@@ -113,17 +113,10 @@ public requestedFileName: any
 
   //** / pagination variables
   constructor(private data: DataService,private datePipe: DatePipe, _uploadService: FileManagementService, private formBuilder: FormBuilder, private loginService : LoginComponentService) {
-    this.maxDate.setDate(this.maxDate.getDate() + 7);
+ 
+
     this.bsRangeValue = [this.bsValue, this.maxDate];
 
-    // this.subject.subscribe((base64Data: string) => {
-    //  // //console.log("Base64 Stringhgh:", base64Data);
-      
-    // });
-    // this.uploadFileForm = this.formBuilder.group({
-    //   remarks: ["", [Validators.required]],
-     
-    // });
 
   }
 
@@ -141,28 +134,9 @@ public requestedFileName: any
     this.startDate = this.formatDate(this.bsRangeValue[0]);
      this.endDate = this.formatDate(this.bsRangeValue[1]);
 
-    //console.log(this.startDate,this.endDate);
-  
 
-  // //console.log(this.catName);
-
-  this.getFileListDetails()
+     this.getFileListDetails()
   
-    // this.loginService.getFileListforOther(this.catName,this.startDate, this.endDate).subscribe({
-    //   next: (event: any) => {
-    //     if (event instanceof HttpResponse) {
-    //       this.fileList = event.body.data;
-    //       //console.log("fileList data for Others************** ", this.fileList);
-  
-
-    //     }
-    //   },
-    //   error: (err: any) => {
-    //     if (err.error && err.error.message) {
-    //       this['msg'] += " " + err.error.message;
-    //     }
-    //   },
-    // });
     
   }
   
@@ -174,23 +148,8 @@ public requestedFileName: any
 
   ngOnInit(): void {
 
-    // this.loggedUserRole=localStorage.getItem("role")
-
-    // //console.log("userRoles from file manager;;;;;;",this.loggedUserRole);
     
     this.setLast15Days();
-
-    // this.route.queryParams.subscribe(params => {
-    //   this.departmentName = params['DepartmentName'];
-    //   this.subAreaName = params['subAreaName'];
-      
-    //   this.subAreaNameOnHeader = this.capitalizeFirstLetter(params['subAreaName']);
-    //   //console.log("proper naming: ", this.subAreaNameOnHeader);
-      
-    // });
-
-
-
     
 
    this.getRole = localStorage.getItem('role');
@@ -240,10 +199,11 @@ public requestedFileName: any
       next: (event: any) => {
         if (event instanceof HttpResponse) {
           this.respData = event.body.response;
-          //console.log("liiiiiiiii",this.respData);
+
+          let filteredData = this.respData;
+
+          console.log("mnmnmnmnmnmnmnm",filteredData);
           
-          this.contactlist=this.respData;
-          //console.log("fileList for librarian ", this.respData);
           if(this.contactlist.length == 0){
             this.noRecordFlag = true;
           }
@@ -253,19 +213,18 @@ public requestedFileName: any
           const convertToKB = (bytes: number): number => {
             return Math.round(bytes / 1024);
           };
-  
 
-          this.contactlist.map((item: getRecentDocument, index: number) => {
-            const serialNumber = index + 1;
-            if (index >= this.skip && serialNumber <= this.limit) {
-                item.id = serialNumber;
-                // this.fileList.push(item);
-                this.serialNumberArray.push(serialNumber);
-            }
+        filteredData.map((item: getRecentDocument, index: number) => {
+          const serialNumber = index + 1;
+          if (index >= this.skip && serialNumber <= this.limit) {
+            item.id = serialNumber;
+            this.contactlist.push(item);
+            this.serialNumberArray.push(serialNumber);
+          }
         });
-  
+
         this.dataSource = new MatTableDataSource<getRecentDocument>(this.contactlist);
-        this.calculateTotalPages(this.contactlist.length, this.pageSize);
+        this.calculateTotalPages(filteredData.length, this.pageSize);
           
   
   
@@ -278,10 +237,6 @@ public requestedFileName: any
       },
     });
   }
-
-// formatDate(executedOn: string): string {
-//   return this.datePipe.transform(executedOn, 'dd-MM-yyyy')|| '';
-// }
 
 getStatusText(statusCode: string): string {
   switch (statusCode) {
@@ -407,21 +362,12 @@ openModal(fileUrl: string , documentName : string) {
 
   prepareFilesList(files: Array<any>) {
 
-    
-    //console.log("preparation file list:: ",files);
-
-
-    //console.log("preparation file list:: ",files);
     if(files != null ){
       this.uploadDocumentFlag = false;
     }
     for (const item of files) {
       item.progress = 0;
       this.files.push(item);
-
-      //console.log("call files.push ", this.selectedFiles);
-      //console.log("each file size ",item.size);
-      //console.log("files push item:",this.files);
       
 
       this.calculateTotalFileSize(this.files);
@@ -580,9 +526,6 @@ selected1 = 'option1';
 selectFiles(_event: any): void {
   
 }
-
-
-
 
  
 }
