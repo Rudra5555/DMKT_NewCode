@@ -16,6 +16,26 @@ export interface getRecentDocument {
   fileUrl: string;
 }
 
+export interface getApproveAndRejDoc {
+  id: number;
+  workflowDocId: string;
+  fileName: string;
+  generatedBy: number;
+  generatedByName: string;
+  generatedOn: string;
+  fileDir: string;
+  fileUrl: string;
+  assignRole: string;
+  assignRoleType: string;
+  executedBy: string;
+  executedByName: string;
+  executedOn: string;
+  status: string;
+  activeStatus: string;
+  remarks: string;
+  reason: string;
+}
+
 export interface Root {
   message: string
   documentLists: getfileList[]

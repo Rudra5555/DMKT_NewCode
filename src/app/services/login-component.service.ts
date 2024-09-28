@@ -300,9 +300,6 @@ librarianVerifyDoc(userId: any): Observable<HttpEvent<any>> {
   });
   //console.log(req);
   return this.http.request(req);
-
-  
- 
   
 }
 
@@ -328,5 +325,20 @@ upload(file: any): Observable<HttpEvent<any>> {
     return this.http.request(req);
   }
 
+  libUploadDocNotific(): Observable<HttpEvent<any>> {
+    const req = new HttpRequest('GET', `${this.baseUrl}/doc-request/workflow-count`, {
+      responseType: 'json'
+    });
+    return this.http.request(req);
+    
+  }
+
+  appAndRejFileList(startDate:any , endDate:any): Observable<HttpEvent<any>> {
+    const req = new HttpRequest('GET', `${this.baseUrl}/doc-request/get-list-req-workflow?startDate=${startDate}&endDate=${endDate}`, {
+      responseType: 'json'
+    });
+  
+    return this.http.request(req);
+  }
 
 }
