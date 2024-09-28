@@ -891,6 +891,16 @@ export class DataService implements OnInit {
           subMenus: [],
         },
         {
+          menuValue: 'Statutory Document List',
+          route: routes.StatutoryDoc,
+          hasSubRoute: false,
+          showSubRoute: false,
+          icon: 'book-open',
+          base: 'HOD',
+          materialicons: 'person',
+          subMenus: [],
+        },
+        {
           menuValue: 'Document Upload Page',
           route: routes.UserDocumentUpload,
           hasSubRoute: false,
@@ -956,7 +966,16 @@ export class DataService implements OnInit {
       separateRoute: false,
       menu: [
 
-
+        {
+          menuValue: 'Statutory Document List',
+          route: routes.StatutoryDoc,
+          hasSubRoute: false,
+          showSubRoute: false,
+          icon: 'book-open',
+          base: 'HOD',
+          materialicons: 'person',
+          subMenus: [],
+        },
         {
           menuValue: ' Requested Document List',
           route: routes.RequestedDoc,
@@ -966,7 +985,8 @@ export class DataService implements OnInit {
           base: 'HOD',
           materialicons: 'person',
           subMenus: [],
-        },]
+        },
+      ]
 
 
     },

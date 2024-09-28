@@ -24,11 +24,11 @@ import { DatePipe } from '@angular/common';
 
 
 @Component({
-  selector: 'app-requsted-doc',
-  templateUrl: './requested-doc.component.html',
-  styleUrl: './requested-doc.component.scss'
+  selector: 'app-statutory-doc',
+  templateUrl: './statutory-doc.component.html',
+  styleUrl: './statutory-doc.component.scss'
 })
-export class RequestedDocComponent implements OnInit {
+export class StatutoryDocComponent implements OnInit {
   @ViewChild("fileDropRef", { static: false }) fileDropEl!: ElementRef;
   [x: string]: any;
   public searchDataValue = '';
@@ -74,7 +74,8 @@ export class RequestedDocComponent implements OnInit {
   public documentTypeFlag: boolean = false;
   public fileNames: string[] = [];
   files: any[] = [];
-
+  departmentType:any;
+  plantType:any;
   searchQuery: string = '';
   documentList: Array<{ displayText: string, referenceId: number }> = [];
   dataLoaded: boolean = false;
@@ -82,12 +83,12 @@ export class RequestedDocComponent implements OnInit {
   documentId: any;
   departmentId: any;
   plant: any;
-
+  fileList: any[] = [];
   remarks: string = '';
-
+  statutoryDocumentId:any
   startDate: any;
   endDate: any;
-
+ statutoryDocumentName: any;
   resp: any;
   msg: any;
   respData: any;
@@ -114,15 +115,107 @@ export class RequestedDocComponent implements OnInit {
     const endDate = new Date();
     const startDate = new Date();
     startDate.setDate(endDate.getDate() - 6);
+
     this.bsRangeValue = [startDate, endDate];
     this.onDateRangeSelected();
   }
 
   onDateRangeSelected() {
-    this.startDate = this.formatDate(this.bsRangeValue[0]);
-    this.endDate = this.formatDate(this.bsRangeValue[1]);
-    this.approvedDocumentList(localStorage.getItem('loggedInUserId'))
+    const startDate = this.formatDate(this.bsRangeValue[0]);
+    const endDate = this.formatDate(this.bsRangeValue[1]);
+
+   
+    this.loginService.AllAdminFileList(startDate, endDate).subscribe({
+      next: (event: any) => {
+        if (event instanceof HttpResponse) {
+          this.res = event.body;
+          this.res = event.body.response;
+          console.log(this.res);
+          
+
+          this.res = event.body.response.filter((file: any) =>
+            !file.isHodDocument && file.isStatutory && !file.isRestrictedDocument
+          );
+          this.fileList = this.res;
+
+          console.log(this.fileList);
+          
+    // this.fileList.forEach((file: any) => {
+    //   this.printData(file);
+
+    //       }
+
+    //  )
+    };
+    
+      },
+      error: (err: any) => {
+        if (err.error && err.error.message) {
+          this.msg += " " + err.error.message;
+        }
+      },
+    });
+
+
   }
+
+
+
+
+
+
+
+  
+  // printData(file: any) {
+  //   const department = file.department;
+  //   const directory = file.directory;
+  //   const docVersion = file.docVersion;
+  //   const documentType = file.documentType;
+  //   const endIndex = file.endIndex;
+  //   const extension = file.extension;
+  //   const fileName = file.fileName;
+  //   const fileSize = file.fileSize;
+  //   const fileUrl = file.fileUrl;
+  //   const isActive = file.isActive;
+  //   const isHodDocument = file.isHodDocument;
+  //   const isRestrictedDocument = file.isRestrictedDocument;
+  //   const isStatutory = file.isStatutory;
+  //   const mainHead = file.mainHead;
+  //   const plant = file.plant;
+  //   const refernceId = file.refernceId;
+  //   const releaseDate = file.releaseDate;
+  //   const startIndex = file.startIndex;
+  //   const storageLocation = file.storageLocation;
+  //   const subArea = file.subArea;
+  //   const uniqueFileName = file.uniqueFileName;
+  //   console.log({
+  //     department,
+  //     directory,
+  //     docVersion,
+  //     documentType,
+  //     endIndex,
+  //     extension,
+  //     fileName,
+  //     fileSize,
+  //     fileUrl,
+  //     isActive,
+  //     isHodDocument,
+  //     isRestrictedDocument,
+  //     isStatutory,
+  //     mainHead,
+  //     plant,
+  //     refernceId,
+  //     releaseDate,
+  //     startIndex,
+  //     storageLocation,
+  //     subArea,
+  //     uniqueFileName
+  //   });
+  // }
+
+
+
+
 
   formatDate(date: Date): string {
     return this.datePipe.transform(date, 'yyyy-MM-dd')!;
@@ -204,97 +297,112 @@ export class RequestedDocComponent implements OnInit {
   }
 
 
-  openModal(fileUrl: string, documentName: string) {
+  openModal( documentName: string, documentID: string, depatment:string, plant:string) {
 
-    this.approvedDocumentName = documentName;
-    this.doc = fileUrl;
+    this.statutoryDocumentName = documentName;
+    this.statutoryDocumentId = documentID;
+    this.departmentType = depatment;
+    this.plantType =plant;
+console.log(this.statutoryDocumentName);
+console.log(this.statutoryDocumentId);
+console.log(this.departmentType);
+console.log(this.plantType);
+
 
   }
-  onFocus(): void {
-    if (!this.dataLoaded) {
-      this.loadInitialData();
-      this.dataLoaded = true;
-    }
-  }
+  // onFocus(): void {
+  //   if (!this.dataLoaded) {
+  //     this.loadInitialData();
+  //     this.dataLoaded = true;
+  //   }
+  // }
 
 
-  loadInitialData(): void {
-    this.loginService.searchDocuments('').subscribe({
-      next: (event: any) => {
-        if (event instanceof HttpResponse) {
+  // loadInitialData(): void {
+  //   this.loginService.searchDocuments('').subscribe({
+  //     next: (event: any) => {
+  //       if (event instanceof HttpResponse) {
 
-          if (event.body && event.body.data && Array.isArray(event.body.data)) {
-            this.documentList = event.body.data.map((doc: any) => ({
-              displayText: `${doc.uniqueFileName} (${doc.docVersion})`,
-              refernceId: doc.refernceId,
-              department: doc.department,
-              plant: doc.plant,
-              fileName: doc.plant
-            }));
-          } else {
-            console.error('Unexpected response format:', event.body);
-            this.documentList = [];
-          }
-        }
-      },
-      error: (err: any) => {
-        if (err.error && err.error.message) {
-          this['msg'] += " " + err.error.message;
-        }
-      },
-    });
-  }
+  //         if (event.body && event.body.data && Array.isArray(event.body.data)) {
+  //           this.documentList = event.body.data.map((doc: any) => ({
+  //             displayText: `${doc.uniqueFileName} (${doc.docVersion})`,
+  //             refernceId: doc.refernceId,
+  //             department: doc.department,
+  //             plant: doc.plant,
+  //             fileName: doc.plant
+  //           }));
+  //         } else {
+  //           console.error('Unexpected response format:', event.body);
+  //           this.documentList = [];
+  //         }
+  //       }
+  //     },
+  //     error: (err: any) => {
+  //       if (err.error && err.error.message) {
+  //         this['msg'] += " " + err.error.message;
+  //       }
+  //     },
+  //   });
+  // }
 
-  onSearch(): void {
-    this.loginService.searchDocuments(this.searchQuery).subscribe({
-      next: (event: any) => {
-        if (event instanceof HttpResponse) {
-          if (event.body && event.body.data && Array.isArray(event.body.data)) {
-            this.documentList = event.body.data.map((doc: any) => ({
-              displayText: `${doc.uniqueFileName} (${doc.docVersion})`,
-              refernceId: doc.refernceId,
-              department: doc.department,
-              plant: doc.plant,
-              fileName: doc.fileName
-            }));
-          } else {
-            console.error('Unexpected response format:', event.body);
-            this.documentList = [];
-          }
-        }
-      },
-      error: (err: any) => {
-        if (err.error && err.error.message) {
-          this['msg'] += " " + err.error.message;
-        }
-      },
-    });
-  }
-
-
-
-
-  selectDocument(doc: { displayText: string; refernceId: any; department: string; plant: string, fileName: string }): void {
-    if (!doc) return;
-    console.log(doc);
+  // onSearch(): void {
+  //   this.loginService.searchDocuments(this.searchQuery).subscribe({
+  //     next: (event: any) => {
+  //       if (event instanceof HttpResponse) {
+  //         if (event.body && event.body.data && Array.isArray(event.body.data)) {
+  //           this.documentList = event.body.data.map((doc: any) => ({
+  //             displayText: `${doc.uniqueFileName} (${doc.docVersion})`,
+  //             refernceId: doc.refernceId,
+  //             department: doc.department,
+  //             plant: doc.plant,
+  //             fileName: doc.fileName
+              
+  //           }));
+          
+  //         } else {
+  //           console.error('Unexpected response format:', event.body);
+  //           this.documentList = [];
+  //         }
+  //       }
+  //     },
+  //     error: (err: any) => {
+  //       if (err.error && err.error.message) {
+  //         this['msg'] += " " + err.error.message;
+  //       }
+  //     },
+  //   });
     
-    this.documentId = doc.refernceId;
-    this.departmentId = doc.department;
-    this.plant = doc.plant;
-    this.selectedDocument = doc.displayText;
-    this.searchQuery = doc.displayText;
-    this.documentList = [];
+  // }
 
-    if (this.documentId != null) {
-      this.requestFileFlag = false
-    }
 
-  }
+// getAllStatutoryData(doc: { displayText: string; refernceId: any; department: string; plant: string, fileName: string }): void {
+//   this.documentId = doc.refernceId;
+
+//   console.log(doc);
+  
+// }
+
+  // selectDocument(doc: { displayText: string; refernceId: any; department: string; plant: string, fileName: string }): void {
+  //   if (!doc) return;
+  //   this.documentId = doc.refernceId;
+  //   this.departmentId = doc.department;
+  //   this.plant = doc.plant;
+  //   this.selectedDocument = doc.displayText;
+  //   this.searchQuery = doc.displayText;
+  //   this.documentList = [];
+
+  //   if (this.documentId != null) {
+  //     this.requestFileFlag = false
+  //   }
+
+  // }
 
 
 
 
   onSubmit() {
+
+    
     if (this.loggedUserId && !this.loggedSuperUserId) {
       this.generatedBy = this.loggedUserId;
     } if (!this.loggedUserId && this.loggedSuperUserId) {
@@ -311,14 +419,12 @@ export class RequestedDocComponent implements OnInit {
         formData.append("fileName", file);
       }
     }
-    formData.append("documentId", this.documentId);
+    formData.append("documentId",  this.statutoryDocumentId);
     formData.append("generateBy", this.generatedBy);
-    formData.append("departmentName", this.departmentId);
-    formData.append("plantName", this.plant);
+    formData.append("departmentName", this.departmentType);
+    formData.append("plantName", this.plantType);
     formData.append("documentApprovalStatus", "P");
     formData.append("remarks", this.remarks);
-    console.log(formData);
-    
     this.loginService.requestSubmit(formData).subscribe({
       next: (event: any) => {
         if (event instanceof HttpResponse) {

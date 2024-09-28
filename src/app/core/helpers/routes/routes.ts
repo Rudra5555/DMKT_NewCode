@@ -175,6 +175,9 @@ export class routes {
   public static get RequestedDoc(): string {
     return this.baseUrl + '/pages/requested-doc';
   }
+  public static get StatutoryDoc(): string {
+    return this.baseUrl + '/pages/statutory-doc';
+  }
   public static get payroll(): string {
     return this.baseUrl + '/payroll';
   }

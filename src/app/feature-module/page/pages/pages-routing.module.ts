@@ -24,6 +24,7 @@ import { LibRecentUploadedComponent } from './lib-recent-uploaded/lib-recent-upl
 import { UserDocumentUpload } from './user-document-upload/user-document-upload.component';
 import { VerifyUploadedDocumentComponent } from './verify-uploaded-document/verify-uploaded-document.component';
 import { ApprovedRejectDocListComponent } from './approvedReject-doc-list/approvedReject-doc-list.component';
+import { StatutoryDocComponent } from './statutory-doc/statutory-doc.component';
 
 
 
@@ -56,7 +57,8 @@ const routes: Routes = [
       { path: "recent-uploaded-documents", component: LibRecentUploadedComponent },
       { path: "upload-documents", component: UserDocumentUpload },
       { path: "verify-uploaded-document", component: VerifyUploadedDocumentComponent },
-      { path: "approved-reject-document", component: ApprovedRejectDocListComponent }
+      { path: "approved-reject-document", component: ApprovedRejectDocListComponent },
+      { path: "statutory-doc", component: StatutoryDocComponent }
       
       
     ] 
