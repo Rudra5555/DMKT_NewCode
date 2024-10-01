@@ -34,6 +34,7 @@ import { LibRecentUploadedComponent } from './lib-recent-uploaded/lib-recent-upl
 import { UserDocumentUpload } from './user-document-upload/user-document-upload.component';
 import { VerifyUploadedDocumentComponent } from './verify-uploaded-document/verify-uploaded-document.component';
 import { ApprovedRejectDocListComponent } from './approvedReject-doc-list/approvedReject-doc-list.component';
+import { StatutoryDocComponent } from './statutory-doc/statutory-doc.component';
 
 
 
@@ -63,7 +64,8 @@ import { ApprovedRejectDocListComponent } from './approvedReject-doc-list/approv
     LibRecentUploadedComponent,
     UserDocumentUpload,
     VerifyUploadedDocumentComponent,
-    ApprovedRejectDocListComponent
+    ApprovedRejectDocListComponent,
+    StatutoryDocComponent
     
   ],
   imports: [
