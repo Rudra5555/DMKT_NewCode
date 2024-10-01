@@ -246,8 +246,8 @@
   <div class="modal fade" id="restricted" tabindex="-1" aria-labelledby="rejectDocumentModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="rejectDocumentModalLabel">Restricted Document</h5>
+        <div class="modal-header" style="background: linear-gradient(to right, #f2f9fb 0%, #00820e 100%) !important;">
+          <h5 class="modal-title" id="rejectDocumentModalLabel" >Restricted Document</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body text-center">
@@ -256,7 +256,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-          <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#add_contact">Raise Request</button>
+          <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#add_contact">Raise Request</button>
         </div>
       </div>
     </div>
@@ -268,18 +268,18 @@
 
   <!-- Add Contact -->
   <div class="modal custom-modal fade custom-modal-two modal-padding" id="add_contact" role="dialog">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header header-border justify-content-between p-0">
-          <h5 class="modal-title">Doucment Access Form</h5>
-          <button type="button" class="btn-close position-static" data-bs-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">×</span>
+    <div class="modal-dialog modal-dialog-right modal-lg" role="document" >
+      <div class="modal-content" style="padding: 9px;">
+        <div class="modal-header d-flex justify-content-between align-items-center" style="background: linear-gradient(to right, #f2f9fb 0%, #00820e 100%) !important;">
+          <h3 style="margin: 0;  margin-top: -1%;
+      padding-bottom: 4%;">Doucment Access Form</h3>
+          <button type="button" id="closeModalBtn" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
           </button>
-
         </div>
+    
 
-
-        <div class="modal-body p-0">
+        <div class="modal-body p-0" style="margin-top: 2%;">
         
            <div class="col-lg-12">
             <div class="input-block mb-3">
@@ -359,7 +359,7 @@
               <div class="row">
                 <div class="col-lg-12 text-end form-wizard-button">
                   <br>
-                  <button class="btn submit-btn" id="modalButton" data-bs-dismiss="modal" aria-label="Close"
+                  <button class="btn submit-btn btn-success" id="modalButton" data-bs-dismiss="modal" aria-label="Close"
                     [disabled]="disableSubmitBtn" type="submit">Submit</button>
                 </div>
               </div>
@@ -400,7 +400,7 @@
             <span aria-hidden="true">×</span>
           </button>
         </div>
-        <div class="modal-body p-0">
+        <div class="modal-body p-0" >
           <div class="add-details-wizard">
             <ul id="progressbar" class="progress-bar-wizard">
               <li [ngClass]="{

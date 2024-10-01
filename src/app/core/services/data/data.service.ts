@@ -731,7 +731,18 @@ export class DataService implements OnInit {
           base: 'HOD',
           materialicons: 'person',
           subMenus: [],
-        },]
+        },
+        {
+          menuValue: ' Add Department ',
+          route: routes.DepartmentComponent,
+          hasSubRoute: false,
+          showSubRoute: false,
+          icon: 'cube',
+          base: 'page',
+          materialicons: 'person',
+          subMenus: [],
+        },
+      ]
 
     },
 
@@ -880,9 +891,10 @@ export class DataService implements OnInit {
       separateRoute: false,
       menu: [
 
+       
         {
-          menuValue: ' Requested Document List',
-          route: routes.RequestedDoc,
+          menuValue: 'Statutory Document List',
+          route: routes.StatutoryDoc,
           hasSubRoute: false,
           showSubRoute: false,
           icon: 'book-open',
@@ -891,11 +903,11 @@ export class DataService implements OnInit {
           subMenus: [],
         },
         {
-          menuValue: 'Statutory Document List',
-          route: routes.StatutoryDoc,
+          menuValue: ' Requested Document List',
+          route: routes.RequestedDoc,
           hasSubRoute: false,
           showSubRoute: false,
-          icon: 'book-open',
+          icon: 'book',
           base: 'HOD',
           materialicons: 'person',
           subMenus: [],
@@ -981,7 +993,7 @@ export class DataService implements OnInit {
           route: routes.RequestedDoc,
           hasSubRoute: false,
           showSubRoute: false,
-          icon: 'book-open',
+          icon: 'book',
           base: 'HOD',
           materialicons: 'person',
           subMenus: [],

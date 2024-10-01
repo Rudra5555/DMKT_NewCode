@@ -4,10 +4,10 @@
   height: 44px;
 }
 
-#modalButton {
-  background-color: rgb(0, 162, 255);
-  color: white;
-}
+// #modalButton {
+//   background-color: rgba(0, 255, 8, 0.719);
+//   color: white;
+// }
 
 .custom-modal .modal-content .modal-header .btn-close:hover span {
   color: #000;
@@ -553,4 +553,7 @@ div#lodingSpinner {
 #restricted .btn-info:hover {
   background-color: #138496;
   border-color: #117a8b;
+}
+button#closeModalBtn {
+  margin-top: -4%;
 }
