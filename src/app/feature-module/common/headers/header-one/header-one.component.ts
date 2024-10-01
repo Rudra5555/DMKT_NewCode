@@ -148,6 +148,10 @@ export class HeaderOneComponent implements OnInit {
     });
 
     this.loggedUserId = localStorage.getItem('loggedInUserId');
+
+    console.log("logged user::::::::",this.loggedUserId);
+    
+    
     this.userNotificationBell(this.loggedUserId);
     this.uname = localStorage.getItem("loggedUserName");
     this.userRole = localStorage.getItem('role');
@@ -155,7 +159,7 @@ export class HeaderOneComponent implements OnInit {
 
     // Fetch notifications
     if (this.loggedUserId) {
-      console.log();
+      console.log("loggged lib;;;;",this.loggedUserId);
 
       this.loginService.getNotifications(this.loggedUserId).subscribe(
         (response: any) => {
@@ -175,6 +179,8 @@ export class HeaderOneComponent implements OnInit {
               hodName: notification.executerName || 'HOD',
               uploadImg: notification.uploadImg,
             }));
+            console.log("rrrrrrrr;;;",this.notificationData);
+            
             this.notificationCount = this.notificationData.length;
           } else {
           }
@@ -344,6 +350,7 @@ export class HeaderOneComponent implements OnInit {
 
 
     const payload = {
+      executedBy:this.loggedUserId,
       stepId: this.selectedHodItem?.stepId,
       documentId: this.selectedHodItem?.documentId,
       documentApprovalStatus: status,
