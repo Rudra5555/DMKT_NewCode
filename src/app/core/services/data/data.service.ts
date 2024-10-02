@@ -742,6 +742,16 @@ export class DataService implements OnInit {
           materialicons: 'person',
           subMenus: [],
         },
+        {
+          menuValue: ' Add Sub-Area ',
+          route: routes.SubAreaComponent,
+          hasSubRoute: false,
+          showSubRoute: false,
+          icon: 'cube',
+          base: 'page',
+          materialicons: 'person',
+          subMenus: [],
+        },
       ]
 
     },
