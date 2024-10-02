@@ -1,6 +1,3 @@
-// import {Component, ViewChild} from '@angular/core';
-// import {MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
-// import {DataTablesModule} from 'angular-datatables';
 import { routes } from 'src/app/core/helpers/routes/routes';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';

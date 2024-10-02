@@ -154,6 +154,8 @@ export class HeaderOneComponent implements OnInit {
     
     this.userNotificationBell(this.loggedUserId);
     this.uname = localStorage.getItem("loggedUserName");
+    console.log( this.uname);
+    
     this.userRole = localStorage.getItem('role');
     this.roleWiseTotification();
 

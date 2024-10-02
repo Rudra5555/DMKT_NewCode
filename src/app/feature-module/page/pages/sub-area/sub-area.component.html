@@ -1,60 +1,374 @@
-<!-- 
-
 <div class="content container-fluid">
-
-
-    <div class="page-header">
-        <div class="row">
-            <div class="col-sm-12">
-                <h3 class="page-title">Sub-Area</h3>
-               
-            </div>
-        </div>
-    </div>
+  <!-- Page Header -->
+  <div class="page-header">
+    <div class="row align-items-center">
+      <div class="col-md-4">
+        <h3 class="page-title">Add Sub-Area</h3>
+        <!-- <ul class="breadcrumb">
+          <li class="breadcrumb-item">
+            <a >Dashboard</a>
+          </li>
+          <li class="breadcrumb-item active" style="color: black;">Recent Uploaded Document List</li>
+        </ul> -->
+       
+      </div>
+      <div class="col-md-12 modalButtons" >
+        <a href="javascript:void(0);" class="btn add-btn" data-bs-toggle="modal" data-bs-target="#add_subArea"
+          id="modalButton"><i class="la la-plus-circle"></i>Add Sub-Area</a>
+      </div>
     
+  </div>
 
-
-    <div style="margin: auto;">
-        <div class="row" >
-          <div class="col-sm-3" *ngFor="let item of headList; let i = index">
-            <div class="card">
-              <div class="ds-top">
-                <div *ngIf="item.catType=='department'">
-           
-                  <img src="assets/img/areaImage1.JPG" width="500" height="500">
-                </div>
-                <div *ngIf="item.catType=='main-head'">
-                  <img src="assets/img/DSC_5538.JPG" width="500" height="500">
-                </div>
-                <div *ngIf="item.catType=='plants'">
-                  <img src="assets/img/DSC_0070.JPG" width="500" height="500">
-                </div>
-                <div *ngIf="item.catType=='sub-area'">
-                  <img src="assets/img/DSC_5538.JPG" width="500" height="500">
-                </div>
-              </div>
-              <div class="avatar-holder">
+  <hr />
   
-                <img src="assets/img/DSC_5538.JPG" alt="Albert Einstein">
+  <div class="filter-section">
+    <ul>
+      <li>
+        <!-- <div class="filter-section">
+          <div class="col-xl-12">
+            <div class="daterange-picker d-flex centered-div">
+              <div class="form-sort">
+                <i class="las la-calendar"></i>
+                <input type="text" class="form-control date-range bookingrange" #drp="bsDaterangepicker"
+                  bsDaterangepicker [(ngModel)]="bsRangeValue" (ngModelChange)="onDateRangeSelected()" />
               </div>
-              <div class="name">
-                <h5 style="    font-weight: 600;
-        margin-top: -20%;
-        font-size: 14px;">{{ item.name }}</h5>
-                <h3 class="card-title">{{item.fileCount}}</h3>
-                <div >
-                  <p style="font-size: 12px;color: green; cursor: pointer;">
-                    <i class="fa fa-external-link" aria-hidden="true"></i> <span style="margin-left: 2%;">View Files</span>
-                  </p>
-    
-                </div>
-            
+              </div>
+          </div>
+        </div> -->
+
+        <div class="filter-section">
+          <div class="col-xl-12">
+            <div class="daterange-picker d-flex centered-div">
+              <div class="form-sort">
+                <i class="las la-calendar"></i>
+                <input type="text" class="form-control date-range bookingrange" #drp="bsDaterangepicker" bsDaterangepicker
+                  [(ngModel)]="bsRangeValue" (ngModelChange)="onDateRangeSelected()" />
               </div>
             </div>
           </div>
-    
         </div>
-      </div> -->
-      <div class="content container-fluid" id="mainHead">
-     Work In Progress!
+
+      </li>
+
+      <li>
+        <div class="search-set">
+          <div class="search-input">
+            <!-- <a href="javascript:void(0);" class="btn btn-searchset"><i class="las la-search"></i></a> -->
+            <div class="dataTables_filter">
+              <label>
+                <input style="height:43px"  [(ngModel)]="searchDataValue" [ngModelOptions]="{standalone: true}"
+                  [ngModelOptions]="{standalone: true}" (ngModelChange)="searchData(searchDataValue)" type="search"
+                  class="form-control" placeholder="Search..." />
+              </label>
+            </div>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <div class="table_header">
+        <div class="row">
+          <div class="col-sm-12 col-md-6">
+            <div class="dataTables_length">
+              <label class="col-form-label" for="">
+                Show
+                <select [(ngModel)]="pageSize" (ngModelChange)="changePageSize()" class="form-control form-control-sm">
+                  <option value="10">10</option>
+                  <option value="25">25</option>
+                  <option value="50">50</option>
+                  <option value="100">100</option>
+                </select>
+                Entries
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="table-responsive">
+        <table matSort (matSortChange)="sortData($event)"
+        class="table table-striped custom-table datatable contact-table">
+        <thead >
+          <tr >
+            <th>Main Head</th>
+            <th>Plant</th>
+            <th>Department</th>
+            <th>Sub-Area</th>
+           <!--  <th>Storage Location</th>
+            <th>Document Type</th>
+            <th class="text-end">Action</th> -->
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of contactlist; ">
+            <td>
+              <h2 class="table-avatar d-flex">
+                <a class="profile-split d-flex flex-column">{{ item.fileName }}
+                  </a>
+                </h2>
+            </td>
+
+            <td>
+              {{ item.extension }}
+          
+          </td>
+            
+          <td>
+            {{ item.department ? item.department : 'N/A' }}
+          </td>
+           <td>
+              {{ item.subArea? item.subArea : 'N/A' }}
+            </td>
+            <!--  <td>
+              {{ item.storageLocation? item.storageLocation : 'N/A' }}
+            </td>
+            <td>
+              {{ item.documentType }}
+            </td>
+
+            <td class="text-center">
+              <a
+                class="dropdown-item"
+                [href]="item.fileUrl"
+                target="_blank"
+              >
+                <i
+                  class="fa-solid fa-download"
+                  style="color: rgb(0, 117, 234)"
+                ></i>
+              </a>
+            </td> -->
+            <!-- <td class="text-center">
+              
+              <a
+              class="dropdown-item"
+              [href]="item.fileUrl"
+              (click)="openModal(item.fileUrl)"
+              data-bs-toggle="modal"
+              data-bs-target="#viewApprovedFiles"
+            >
+              <i class="fas fa-eye" style="color: rgb(0, 117, 234)"></i>
+            </a>
+            
+            </td> -->
+          </tr>
+          <tr *ngIf="contactlist.length == 0">
+            <td colspan="7" style="text-align: center; color: red">
+              No Records Found!
+            </td>
+          </tr>
+        
+        </tbody>
+      </table>
+      </div>
+      <div class="table_footer" style="height: 200px;" >
+        <div class="col-sm-12 col-md-5">
+          <div class="dataTables_info">
+            Showing {{ serialNumberArray[0] }} to
+            {{ serialNumberArray[serialNumberArray.length - 2] }} of
+            {{ totalData }} entries
+          </div>
+        </div>
+
+        <div class="col-sm-12 col-md-7">
+          <div class="pagination_section">
+            <ul class="pagination">
+              <li class="page-item" [ngClass]="{
+                  disabled: currentPage === 1
+                }">
+                <a (click)="getMoreData('previous')" class="page-link" href="javascript:void(0);" tabindex="-1"><i
+                    class="fa fa-angle-double-left"></i></a>
+              </li>
+
+              @for (item of pageNumberArray; track item; let i = $index) {
+              <li class="page-item" [class.active]="item === currentPage" [ngClass]="
+                    (pageNumberArray[currentPage - 2] > item &&
+                      item !== 1 &&
+                      pageNumberArray.length > 6) ||
+                    (pageNumberArray[currentPage] < item &&
+                      item !== 1 &&
+                      pageNumberArray.length > 6 &&
+                      pageNumberArray.length !== item)
+                      ? 'hide-page-no'
+                      : 'show-page-no'
+                  ">
+                <a (click)="moveToPage(item)" class="page-link" href="javascript:void(0);">
+                  {{ item }}
+                </a>
+              </li>
+              @if (
+              i === 0 && pageNumberArray.length > 6 && currentPage > 2
+              ) {
+              <li class="page-item" [hidden]="currentPage === 1" (click)="moveToPage(currentPage - 2)"
+                (keydown.enter)="moveToPage(currentPage - 2)" tabindex="0">
+                <a class="page-link" href="javascript:void(0);"> ... </a>
+              </li>
+              }
+              @if (
+              i === pageNumberArray.length - 2 &&
+              pageNumberArray.length > 6
+              ) {
+              <li [hidden]="
+                    currentPage >=
+                      pageNumberArray[pageNumberArray.length - 2] ||
+                    totalData < serialNumberArray[serialNumberArray.length - 1]
+                  " class="page-item" (click)="moveToPage(currentPage + 2)"
+                (keydown.enter)="moveToPage(currentPage + 2)" tabindex="0">
+                <a class="page-link" href="javascript:void(0);"> ... </a>
+              </li>
+              }
+              }
+
+              <li class="page-item" [ngClass]="{
+                  disabled:
+                    currentPage ===
+                      pageNumberArray[pageNumberArray.length - 1] ||
+                      contactlist.length === 0
+                }">
+                <a (click)="getMoreData('next')" class="page-link" href="javascript:void(0);"><i
+                    class=" fa fa-angle-double-right"></i>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div
+  id="viewApprovedFiles"
+  #viewApprovedFiles
+  class="modal custom-modal fade"
+  role="dialog"
+>
+  <div class="modal-dialog modal-dialog-centered modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">File-Name:</h5><span style="font-weight: 500; font-size: medium; font-weight: bold;">{{approvedDocumentName}}</span>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="row">
+            
+
+            <ngx-doc-viewer
+              [url]="doc"
+              [viewer]="viewer"
+              style="width: 100%; height: 80vh">
+              <div class="spinner-border" id="lodingSpinner" role="status">
+                <span class="sr-only">Loading...</span>
               </div>
+          </ngx-doc-viewer>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+
+
+
+<div class="modal firstModal custom-modal fade" id="add_subArea" role="dialog">
+  <div class="modal-dialog modal-dialog-right modal-md" role="document">
+    <div class="modal-content">
+      <div class="modal-header d-flex justify-content-between align-items-center" style="background: linear-gradient(to right, #f2f9fb 0%, #00820e 100%) !important;">
+        <h3 style="margin: 0;  margin-top: -4%;
+    padding-bottom: 4%;">Add Sub-Area</h3>
+        <button type="button" id="closeModalBtn" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="uploadFileForm" (ngSubmit)="onSubmit()">
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="input-block mb-3">
+                <label class="col-form-label">Main Head<span class="text-danger">*</span></label>
+                <mat-select formControlName="mainHead" class="custom-mat-select select" placeholder="Select" required>
+                  <mat-option value="">--Select--</mat-option>
+                  <mat-option *ngFor="let item of mainHeadList;"
+                    [value]="item.catName + '~' + item.abbreviation">{{item.catName}}</mat-option>
+                </mat-select>
+                <div
+                  *ngIf="uploadFileForm.get('mainHead')?.invalid && (uploadFileForm.get('mainHead')?.touched || uploadFileForm.get('mainHead')?.dirty)"
+                  class="text-danger">
+                  Main Head is required.
+                </div>
+              </div>
+
+              <div class="input-block mb-3" >
+                <label class="col-form-label">Department <span class="text-danger">*</span></label>
+                <mat-select formControlName="department" class="custom-mat-select select" placeholder="Select">
+                  <mat-option value="">--Select--</mat-option>
+                  <mat-option *ngFor="let element of departmentList"
+                    [value]="element.catName">{{element.catName}}</mat-option>
+                </mat-select>
+
+                <div
+                  *ngIf="uploadFileForm.get('department')?.invalid && (uploadFileForm.get('department')?.touched || uploadFileForm.get('department')?.dirty)"
+                  class="text-danger">
+                  Department name is required.
+                </div>
+
+              </div>
+
+             
+            
+            </div>
+           
+            <div class="col-sm-6">
+              <div class="input-block mb-3" >
+                <label class="col-form-label">Plants <span class="text-danger">*</span></label>
+                <mat-select formControlName="plants" class="custom-mat-select select" placeholder="Select">
+                  <mat-option value="">--Select--</mat-option>
+                  <mat-option *ngFor="let element of plantList"
+                    [value]="element.catName">{{element.catName}}</mat-option>
+                </mat-select>
+
+                <div
+                  *ngIf="uploadFileForm.get('plants')?.invalid && (uploadFileForm.get('plants')?.touched || uploadFileForm.get('plants')?.dirty)"
+                  class="text-danger">
+                  Plant is required.
+                </div>
+
+              </div>
+
+              <div class="input-block mb-3">
+                <label class="col-form-label"  for="">Sub-Area <span class="text-danger">*</span></label>
+                <input class="form-control" formControlName="subArea" type="text">
+  
+                <div
+                    *ngIf="uploadFileForm.get('subArea')?.invalid && (uploadFileForm.get('subArea')?.touched || uploadFileForm.get('subArea')?.dirty)"
+                    class="text-danger">
+                    Sub-Area name is required.
+                  </div>
+              </div>
+
+              
+            </div>
+           
+
+          </div>
+          <div class="submit-section">
+            <button class="btn submit-btn btn-sm" type="submit" data-bs-dismiss="modal" aria-label="Close">Submit</button>
+           
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
