@@ -312,6 +312,7 @@ upload(file: any): Observable<HttpEvent<any>> {
 
     return this.http.request(req);
   }
+  
 
 
 
