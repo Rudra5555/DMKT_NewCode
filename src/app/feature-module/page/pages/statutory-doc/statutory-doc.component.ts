@@ -3,7 +3,7 @@ import { Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { routes } from 'src/app/core/core.index';
 import { DataService } from 'src/app/core/services/data/data.service';
-import { apiResultFormat, getcontactlist } from 'src/app/core/services/interface/models';
+import { apiResultFormat, getStatutoryDoc } from 'src/app/core/services/interface/models';
 import { pageSelection } from 'src/app/feature-module/employee/employees/departments/departments.component';
 
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
@@ -49,8 +49,8 @@ export class StatutoryDocComponent implements OnInit {
   public currentPage = 1;
   public pageNumberArray: Array<number> = [];
   public pageSelection: Array<pageSelection> = [];
-  dataSource!: MatTableDataSource<getcontactlist>;
-  public contactlist: Array<getcontactlist> = [];
+  dataSource!: MatTableDataSource<getStatutoryDoc>;
+  public contactlist: Array<getStatutoryDoc> = [];
   public totalPages = 0;
   public message: any;
   public selectedFiles: any;
@@ -121,97 +121,39 @@ export class StatutoryDocComponent implements OnInit {
   }
 
   onDateRangeSelected() {
-    const startDate = this.formatDate(this.bsRangeValue[0]);
-    const endDate = this.formatDate(this.bsRangeValue[1]);
+    this.startDate = this.formatDate(this.bsRangeValue[0]);
+    this.endDate = this.formatDate(this.bsRangeValue[1]);
+
+    this.getStatutoryFileList()
 
    
-    this.loginService.AllAdminFileList(startDate, endDate).subscribe({
-      next: (event: any) => {
-        if (event instanceof HttpResponse) {
-          this.res = event.body;
-          this.res = event.body.response;
-          console.log(this.res);
+    // this.loginService.AllAdminFileList(startDate, endDate).subscribe({
+    //   next: (event: any) => {
+    //     if (event instanceof HttpResponse) {
+    //       this.res = event.body;
+    //       this.res = event.body.response;
+    //       console.log(this.res);
           
 
-          this.res = event.body.response.filter((file: any) =>
-            !file.isHodDocument && file.isStatutory && !file.isRestrictedDocument
-          );
-          this.fileList = this.res;
+    //       this.res = event.body.response.filter((file: any) =>
+    //         !file.isHodDocument && file.isStatutory && !file.isRestrictedDocument
+    //       );
+    //       this.fileList = this.res;
 
-          console.log(this.fileList);
+    //       console.log(this.fileList);
           
-    // this.fileList.forEach((file: any) => {
-    //   this.printData(file);
-
-    //       }
-
-    //  )
-    };
+    // };
     
-      },
-      error: (err: any) => {
-        if (err.error && err.error.message) {
-          this.msg += " " + err.error.message;
-        }
-      },
-    });
+    //   },
+    //   error: (err: any) => {
+    //     if (err.error && err.error.message) {
+    //       this.msg += " " + err.error.message;
+    //     }
+    //   },
+    // });
 
 
   }
-
-
-
-
-
-
-
-  
-  // printData(file: any) {
-  //   const department = file.department;
-  //   const directory = file.directory;
-  //   const docVersion = file.docVersion;
-  //   const documentType = file.documentType;
-  //   const endIndex = file.endIndex;
-  //   const extension = file.extension;
-  //   const fileName = file.fileName;
-  //   const fileSize = file.fileSize;
-  //   const fileUrl = file.fileUrl;
-  //   const isActive = file.isActive;
-  //   const isHodDocument = file.isHodDocument;
-  //   const isRestrictedDocument = file.isRestrictedDocument;
-  //   const isStatutory = file.isStatutory;
-  //   const mainHead = file.mainHead;
-  //   const plant = file.plant;
-  //   const refernceId = file.refernceId;
-  //   const releaseDate = file.releaseDate;
-  //   const startIndex = file.startIndex;
-  //   const storageLocation = file.storageLocation;
-  //   const subArea = file.subArea;
-  //   const uniqueFileName = file.uniqueFileName;
-  //   console.log({
-  //     department,
-  //     directory,
-  //     docVersion,
-  //     documentType,
-  //     endIndex,
-  //     extension,
-  //     fileName,
-  //     fileSize,
-  //     fileUrl,
-  //     isActive,
-  //     isHodDocument,
-  //     isRestrictedDocument,
-  //     isStatutory,
-  //     mainHead,
-  //     plant,
-  //     refernceId,
-  //     releaseDate,
-  //     startIndex,
-  //     storageLocation,
-  //     subArea,
-  //     uniqueFileName
-  //   });
-  // }
 
 
 
@@ -243,45 +185,87 @@ export class StatutoryDocComponent implements OnInit {
       this.roleFlag = false;
     }
 
-
-
-
     // this.getTableData();
 
   }
 
-  public approvedDocumentList(loggedUserId: any): void {
+  getStatutoryFileList() {
     this.contactlist = [];
     this.serialNumberArray = [];
 
-    this.loginService.approvedDocList(loggedUserId, this.startDate, this.endDate).subscribe({
+    this.loginService.AllAdminFileList(this.startDate, this.endDate).subscribe({
       next: (event: any) => {
         if (event instanceof HttpResponse) {
-          const responseData = event.body.data;
+          this.res = event.body.response;
 
-          const filteredData = responseData.filter((item: getcontactlist) => item.documentApprovalStatus === 'A');
+          this.res = event.body.response.filter((file: any) =>
+            !file.isHodDocument && file.isStatutory && !file.isRestrictedDocument
+          );
+          // this.fileList = this.res;
 
-          this.totalData = filteredData.length;
-          filteredData.map((item: getcontactlist, index: number) => {
-            const serialNumber = index + 1;
-            if (index >= this.skip && serialNumber <= this.limit) {
-              item.id = serialNumber;
-              this.contactlist.push(item);
-              this.serialNumberArray.push(serialNumber);
-            }
-          });
+          let filteredData = this.res;
+          this.totalData=filteredData.length;
 
-          this.dataSource = new MatTableDataSource<getcontactlist>(this.contactlist);
-          this.calculateTotalPages(filteredData.length, this.pageSize);
+        filteredData.map((item: getStatutoryDoc, index: number) => {
+          const serialNumber = index + 1;
+          if (index >= this.skip && serialNumber <= this.limit) {
+            item.id = serialNumber;
+            this.contactlist.push(item);
+            this.serialNumberArray.push(serialNumber);
+          }
+        });
+
+        this.dataSource = new MatTableDataSource<getStatutoryDoc>(this.contactlist);
+        this.calculateTotalPages(filteredData.length, this.pageSize);
+          
+  
+  
         }
       },
       error: (err: any) => {
         if (err.error && err.error.message) {
-          this.msg += " " + err.error.message;
+          this['msg'] += " " + err.error.message;
         }
-      }
+      },
     });
   }
+
+  // *******************************
+
+  // public approvedDocumentList(loggedUserId: any): void {
+  //   this.contactlist = [];
+  //   this.serialNumberArray = [];
+
+  //   this.loginService.approvedDocList(loggedUserId, this.startDate, this.endDate).subscribe({
+  //     next: (event: any) => {
+  //       if (event instanceof HttpResponse) {
+  //         const responseData = event.body.data;
+
+  //         const filteredData = responseData.filter((item: getcontactlist) => item.documentApprovalStatus === 'A');
+
+  //         this.totalData = filteredData.length;
+  //         filteredData.map((item: getcontactlist, index: number) => {
+  //           const serialNumber = index + 1;
+  //           if (index >= this.skip && serialNumber <= this.limit) {
+  //             item.id = serialNumber;
+  //             this.contactlist.push(item);
+  //             this.serialNumberArray.push(serialNumber);
+  //           }
+  //         });
+
+  //         this.dataSource = new MatTableDataSource<getcontactlist>(this.contactlist);
+  //         this.calculateTotalPages(filteredData.length, this.pageSize);
+  //       }
+  //     },
+  //     error: (err: any) => {
+  //       if (err.error && err.error.message) {
+  //         this.msg += " " + err.error.message;
+  //       }
+  //     }
+  //   });
+  // }
+
+  // *****************************************
 
   getStatusText(statusCode: string): string {
     switch (statusCode) {
@@ -605,13 +589,13 @@ console.log(this.plantType);
       this.pageIndex = this.currentPage - 1;
       this.limit += this.pageSize;
       this.skip = this.pageSize * this.pageIndex;
-      this.approvedDocumentList(this.loggedUserId);
+      this.getStatutoryFileList();
     } else if (event === 'previous') {
       this.currentPage--;
       this.pageIndex = this.currentPage - 1;
       this.limit -= this.pageSize;
       this.skip = this.pageSize * this.pageIndex;
-      this.approvedDocumentList(this.loggedUserId);
+      this.getStatutoryFileList();
     }
   }
 
@@ -624,7 +608,7 @@ console.log(this.plantType);
     } else if (pageNumber < this.currentPage) {
       this.pageIndex = pageNumber + 1;
     }
-    this.approvedDocumentList(this.loggedUserId);
+    this.getStatutoryFileList();
   }
   private calculateTotalPages(totalData: number, pageSize: number): void {
     this.pageNumberArray = [];
@@ -644,7 +628,7 @@ console.log(this.plantType);
     this.limit = this.pageSize;
     this.skip = 0;
     this.currentPage = 1;
-    this.approvedDocumentList(this.loggedUserId);
+    this.getStatutoryFileList();
   }
   openFilter() {
     this.filter = !this.filter;

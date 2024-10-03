@@ -16,6 +16,31 @@ export interface getRecentDocument {
   fileUrl: string;
 }
 
+export interface getStatutoryDoc {
+  id: number;
+  department: string
+  directory: string
+  docVersion: string
+  documentType: string
+  endIndex: string
+  extension: string
+  fileName: string
+  fileSize: string
+  fileUrl: string
+  isActive: boolean
+  isHodDocument: boolean
+  isRestrictedDocument: boolean
+  isStatutory: boolean
+  mainHead: string
+  plant: string
+  referenceId: string
+  releaseDate: string
+  startIndex: string
+  storageLocation: string
+  subArea: string
+  uniqueFileName: string
+}
+
 export interface reqUploadDoc {
   id: number;
   workflowDocId: string;
