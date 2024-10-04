@@ -149,7 +149,7 @@ export class HeaderOneComponent implements OnInit {
 
     this.loggedUserId = localStorage.getItem('loggedInUserId');
 
-    console.log("logged user::::::::",this.loggedUserId);
+    console.log("logged user::::::::[]",this.loggedUserId);
     
     
     this.userNotificationBell(this.loggedUserId);
@@ -213,6 +213,8 @@ export class HeaderOneComponent implements OnInit {
         next: (event: any) => {
           if (event instanceof HttpResponse) {
             this.resp = event.body.data
+
+            console.log("ggggggggggg[]",this.resp)
 
             this.respData = this.resp;
 

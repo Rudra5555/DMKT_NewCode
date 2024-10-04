@@ -110,11 +110,11 @@
                 </td>
 
                 <td>
-                  {{ item.department }}
+                  {{item.department? item.department : 'N/A'}}
 
                 </td>
                 <td>
-                  {{ item.subArea }}
+                  {{item.subArea? item.subArea : 'N/A'}}
                 </td>
                 <td>
                   {{ item.storageLocation }}
@@ -124,7 +124,7 @@
                 </td>
                 <td class="text-center">
 
-                  <a class="dropdown-item" [href]="item.fileUrl" (click)="openModal( item.uniqueFileName, item.referenceId, item.department, item.plant )"
+                  <a class="dropdown-item" [href]="item.fileUrl" (click)="openModal( item.uniqueFileName, item.refernceId, item.department, item.plant )"
                     data-bs-toggle="modal" data-bs-target="#restricted">
                     <i class="fas fa-eye" style="color: rgb(0, 117, 234)"></i>
                   </a>
