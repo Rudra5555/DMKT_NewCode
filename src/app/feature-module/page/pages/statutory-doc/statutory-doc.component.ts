@@ -202,6 +202,7 @@ export class StatutoryDocComponent implements OnInit {
             !file.isHodDocument && file.isStatutory && !file.isRestrictedDocument
           );
           // this.fileList = this.res;
+console.log(this.res);
 
           let filteredData = this.res;
           this.totalData=filteredData.length;
@@ -211,6 +212,8 @@ export class StatutoryDocComponent implements OnInit {
           if (index >= this.skip && serialNumber <= this.limit) {
             item.id = serialNumber;
             this.contactlist.push(item);
+            console.log(this.contactlist);
+            
             this.serialNumberArray.push(serialNumber);
           }
         });
