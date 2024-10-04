@@ -33,7 +33,7 @@ export interface getStatutoryDoc {
   isStatutory: boolean
   mainHead: string
   plant: string
-  referenceId: string
+  refernceId: string
   releaseDate: string
   startIndex: string
   storageLocation: string
