@@ -110,11 +110,11 @@
                 </td>
 
                 <td>
-                  {{ item.department }}
+                  {{item.department? item.department : 'N/A'}}
 
                 </td>
                 <td>
-                  {{ item.subArea }}
+                  {{item.subArea? item.subArea : 'N/A'}}
                 </td>
                 <td>
                   {{ item.storageLocation }}
