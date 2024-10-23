@@ -568,8 +568,15 @@ export class RequestedDocComponent implements OnInit {
 
   }
 
+  replaceDotsWithSlashes(name: string): string {
+    return name.replace(/\./g, '/');
+  }
+
 }
 function hideRequestFromButton() {
   throw new Error('Function not implemented.');
 }
+
+
+
 

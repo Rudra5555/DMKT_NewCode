@@ -54,6 +54,7 @@ export class LoginComponentService {
     
       return this.http.request(req);
     }
+    
     allCategoryListHead(): Observable<HttpEvent<any>> {
       const req = new HttpRequest('GET', `${this.baseUrl}/catinfo/getmainhead`, {
         responseType: 'json'
