@@ -97,7 +97,7 @@
               <tr *ngFor="let item of contactlist; ">
                 <td>
                   <h2 class="table-avatar d-flex">
-                    <a class="profile-split d-flex flex-column">{{ item.uniqueDocumentName }}
+                    <a class="profile-split d-flex flex-column">{{ replaceDotsWithSlashes(item.uniqueDocumentName) }}
                     </a>
                   </h2>
                 </td>
