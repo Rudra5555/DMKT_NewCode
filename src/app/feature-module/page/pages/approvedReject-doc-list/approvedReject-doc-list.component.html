@@ -75,7 +75,7 @@
           </div>
         </div>
       </div>
-      <div class="table-responsive" style="height: 120vh;overflow-y: auto;">
+      <div class="table-responsive" style="overflow-y: auto;">
         <table matSort (matSortChange)="sortData($event)"
           class="table table-striped custom-table datatable contact-table">
           <thead>
@@ -129,7 +129,7 @@
             </tr>
 
             <tr *ngIf="contactlist.length==0">
-              <td colspan="6" style="text-align: center; color: red">
+              <td colspan="7" style="text-align: center; color: red">
                 No Records Found!
               </td>
             </tr>
