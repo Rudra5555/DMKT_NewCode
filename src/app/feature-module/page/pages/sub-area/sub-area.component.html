@@ -89,15 +89,15 @@
       </div>
       <div class="table-responsive">
         <table matSort (matSortChange)="sortData($event)"
-        class="table table-striped custom-table datatable contact-table">
+        class="table table-striped custom-table datatable contact-table text-center">
         <thead >
           <tr >
             <th>Main Head</th>
-            <th>Plant</th>
-            <th>Department</th>
-            <th>Sub-Area</th>
-           <!--  <th>Storage Location</th>
-            <th>Document Type</th>
+            <th>Plant Name</th>
+            <th>Department Name</th>
+            <th>Sub-Area Name</th>
+             <th>Sub-Area Abbriviation</th>
+          <!--  <th>Document Type</th>
             <th class="text-end">Action</th> -->
           </tr>
         </thead>
@@ -121,10 +121,10 @@
            <td>
               {{ item.subArea? item.subArea : 'N/A' }}
             </td>
-            <!--  <td>
+             <td>
               {{ item.storageLocation? item.storageLocation : 'N/A' }}
             </td>
-            <td>
+            <!-- <td>
               {{ item.documentType }}
             </td>
 
@@ -332,7 +332,7 @@
            
             <div class="col-sm-6">
               <div class="input-block mb-3" >
-                <label class="col-form-label">Plants <span class="text-danger">*</span></label>
+                <label class="col-form-label">Plant Name <span class="text-danger">*</span></label>
                 <mat-select formControlName="plants" class="custom-mat-select select" placeholder="Select">
                   <mat-option value="">--Select--</mat-option>
                   <mat-option *ngFor="let element of plantList"
@@ -348,7 +348,7 @@
               </div>
 
               <div class="input-block mb-3">
-                <label class="col-form-label"  for="">Sub-Area <span class="text-danger">*</span></label>
+                <label class="col-form-label"  for="">Sub-Area Name<span class="text-danger">*</span></label>
                 <input class="form-control" formControlName="subArea" type="text">
   
                 <div
@@ -357,8 +357,16 @@
                     Sub-Area name is required.
                   </div>
               </div>
+            </div>
+            <div class="input-block mb-3">
+              <label class="col-form-label"  for="">Sub-Area Abbriviation<span class="text-danger">*</span></label>
+              <input class="form-control" formControlName="subAreaAbbr" type="text">
 
-              
+              <div
+                  *ngIf="uploadFileForm.get('subAreaAbbr')?.invalid && (uploadFileForm.get('subAreaAbbr')?.touched || uploadFileForm.get('subAreaAbbr')?.dirty)"
+                  class="text-danger">
+                  Sub-Area Abbriviation is required.
+                </div>
             </div>
            
 

@@ -74,7 +74,59 @@
 		<!-- User/SuperUser bell icon -->
 		<li class="nav-item dropdown" [hidden]="roleFlag">
 			<a href="javascript:void(0);" class="dropdown-toggle nav-link" data-bs-toggle="dropdown">
-				<i class="fa-regular fa-bell me-1" style="color:white"></i> <span
+				<i class="fa-regular fa-bell me-1" style="color:white"></i>
+				 <span class="badge rounded-pill">{{userNotifyCount}}</span>
+			</a>
+			<div class="dropdown-menu notifications">
+				<div class="topnav-dropdown-header">
+					<span class="notification-title">Notifications</span>
+				</div>
+				<div class="noti-content">
+					<ul class="notification-list" *ngFor="let item of this.resp;">
+						<li class="notification-message" (click)="onItemClick(item)">
+							<a data-bs-toggle="modal" data-bs-target="#notificationModal">
+								<div class="chat-block d-flex">
+									<span class="avatar flex-shrink-0">
+										<img src="assets/img/avatar/avatar-27.jpg" alt="">
+									</span>
+									<div class="media-body flex-grow-1">
+
+										<p class="noti-details"><span class="noti-title">{{item.executerName}}</span>
+											<span [ngClass]="{
+												'text-pending': item.documentApprovalStatus === 'P',
+												'text-approved': item.documentApprovalStatus === 'A',
+												'text-rejected': item.documentApprovalStatus === 'R'
+											  }">
+												{{ getApprovalStatus(item.documentApprovalStatus) }}
+											</span>
+											<span class="noti-title">{{item.documentName}}</span>
+										</p>
+
+									</div>
+								</div>
+							</a>
+						</li>
+
+					</ul>
+				</div>
+				<div class="topnav-dropdown-footer">
+
+				</div>
+			</div>
+		</li>
+
+
+
+
+		<li class="nav-item dropdown" [hidden]="roleFlag">
+			<a href="javascript:void(0);" class="dropdown-toggle nav-link" data-bs-toggle="dropdown">
+				<!-- <i class="feather icon-bell me-1" style="color:white"></i> -->
+				<i class="si si-bell me-1" style="color:white"></i>
+
+				<!-- <span class="material-icons" style="font-size: 26px; color: rgb(255, 255, 255);">notifications_active</span>
+			 -->
+
+				 <span
 					class="badge rounded-pill">{{userNotifyCount}}</span>
 			</a>
 			<div class="dropdown-menu notifications">

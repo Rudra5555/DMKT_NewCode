@@ -117,11 +117,10 @@ export class DepartmentComponent implements OnInit{
       this.bsRangeValue = [this.bsValue, this.maxDate];
 
       this.uploadFileForm = this.formBuilder.group({
-        // uploadFile: ["", [Validators.required]],
-        mainHead: ['', Validators.required],
+         mainHead: ['', Validators.required],
         plants: ["", [Validators.required]],
         department: ["", [Validators.required]],
-        // subArea: ["", [Validators.required]],
+        departmentAbbr: ["", [Validators.required]],
        
       });
   

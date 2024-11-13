@@ -12,14 +12,16 @@
           <input  style="margin-left: -37%; position: absolute; margin-top: 76%; width: 23%;" type="text"
             class="searchBar" placeholder="Enter your search key..." 
             />
-            <input (click)="getAllDtaForHide()" style="margin-left: -76%; position: absolute; margin-top: 76%; width: 15%;" type="text"
-            class="searchBar" placeholder="Choose Main Heads..." data-bs-toggle="modal"
-            data-bs-target="#viewMainHeadOptions"  />
+            <button style="margin-left: -76%; position: absolute; margin-top: 76%; width: 15%;"  class="searchBar"
+            class="button button-primary" (click)="getAllDtaForHide()" data-bs-toggle="modal"  data-bs-target="#viewMainHeadOptions" >
+            Choose Main Heads
+          </button>
 
           <button style="margin-top: 76%; position: absolute; margin-left: -5%" id="dashboardModalSearch"
             class="button button-primary" (click)="fileNameSearch">
             Search
           </button>
+          
         </div>
       </form>
       <img src="assets/img/banner-edit.jpg" class="backgroundImage" />
@@ -407,16 +409,23 @@
   <div class="modal-dialog modal-dialog-right modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header" style="background-color: #0cae2f; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);  border-top-left-radius: 10px; 
-  border-top-right-radius: 10px;  width: 109%;">
+  border-top-right-radius: 10px;  width: 133%;">
         <div>
           <h2 style="margin-left: 191px; font-size: 30px; margin-top: -13px;">Choose Main Head</h2>
         </div>
         <button type="button" id="closeModalBtn" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
+          <span aria-hidden="true" class="cross">&times;</span>
         </button>
       </div>
-      <div class="modal-body" style="height: 428px; width: 109%; background-color: #ededed; background-image: url('./assets/img/Power-BG2.jpg'); background-size: 100%; background-position: center;border-bottom-left-radius: 10px; 
-         border-bottom-right-radius: 10px; background-repeat: no-repeat;">
+      <div class="modal-body" style="    height: 524px;
+      width: 133%;
+      background-color: #ededed;
+      background-image: url(./assets/img/Power-BG2.jpg);
+      background-size: 100%;
+      background-position: center;
+      border-bottom-left-radius: 10px;
+      border-bottom-right-radius: 10px;
+      background-repeat: no-repeat;">
         <div class="row">
           <div class="col-sm-3" *ngFor="let item of headList">
             <div class="item-container" [attr.data-name]="item.name">
@@ -444,6 +453,10 @@
                   *ngIf="item.name == 'POWER-LEGAL'">
                   <img src="assets/img/Power-Legal.jpg" />
                 </div>
+                <div (click)="navigateToRoute(item.name, item.catType)" class="clickable-div"
+                *ngIf="item.name == 'PLANNING'">
+                <img src="assets/img/Power-Sale.jpg" />
+              </div>
 
                 <div (click)="navigateToRoute(item.name, item.catType)" class="clickable-div"
                   *ngIf="item.name == 'COAL COMMERCIAL'">
@@ -484,6 +497,7 @@
               <div class="mainHeadNames" *ngIf="item.name == 'PLANT INFRA(OUTSIDE)'">Plant Infra</div>
               <div class="mainHeadNames" *ngIf="item.name == 'COAL COMMERCIAL'">Coal Commercial</div>
               <div class="mainHeadNames" *ngIf="item.name == 'POWER-LEGAL'">Power Legal</div>
+              <div class="mainHeadNames" *ngIf="item.name == 'PLANNING'">Planning</div>
             </div>
           </div>
         </div>
@@ -509,7 +523,7 @@
           <!-- Background image section -->
           <button type="button" class="circular-button" id="backButton" data-bs-toggle="modal"
             data-bs-target="#viewMainHeadOptions"
-            style="position: absolute; top: 10px; left: 10px; width: 30px; height: 30px; border-radius: 50%; background-color:#4b954f; border: 1px solid #000000; display: flex; align-items: center; justify-content: center;">
+            style="position: absolute; top: 10px; left: 10px; width: 30px; height: 30px; border-radius: 50%; background-color:#ffffff; border: 1px solid #000000; display: flex; align-items: center; justify-content: center;">
             &#x2190; <!-- Unicode for left arrow -->
           </button>
         </div>
@@ -518,21 +532,21 @@
           <!-- Written content section -->
           <button type="button" id="closePlantModalBtn" #closebutton class="btn-close circular-button"
             data-bs-dismiss="modal" aria-label="Close"
-            style="position: absolute; top: 10px; right: 10px; width: 20px; height: 20px; border-radius: 50%; background-color: #fd0404; border: 1px solid #000000; display: flex; align-items: center; justify-content: center;">
-            <span aria-hidden="true">&times;</span>
+            style="position: absolute; top: 10px; right: 10px; width: 20px; height: 20px; border-radius: 50%; background-color: #c3c2c2; border: 1px solid #000000; display: flex; align-items: center; justify-content: center;">
+            <span aria-hidden="true" >&times;</span>
           </button>
           <div class="plantContent" style="text-align: center;">
             <h2 style="color: black;">Choose Plant</h2>
             <p>Please choose any one plant from <br />the below options</p>
             <div class="row">
               <div class="" *ngFor="let item of plantsList">
-                <div *ngIf="item.name == 'CPP-2'">
-                  <button class="btn-custom btn-green" (click)="getDetailsByPlantsName(item.name, item.catType)"
-                    (click)="onClick()">CPP-2</button>
+                <div *ngIf="item.name == 'CPP-2 (540MW)'">
+                  <button class="btn-custom btn-green"id='cpp2btn' (click)="getDetailsByPlantsName(item.name, item.catType)"
+                    (click)="onClick()"> CPP-2(540MW) </button>
                 </div>
-                <div *ngIf="item.name == 'CPP-3'">
+                <div *ngIf="item.name == 'CPP-3 (1200MW)'">
                   <button class="btn-custom btn-green" (click)="getDetailsByPlantsName(item.name, item.catType)"
-                    (click)="onClick()">CPP-3</button>
+                    (click)="onClick()">CPP-3(1200MW)</button>
                 </div>
 
               </div>

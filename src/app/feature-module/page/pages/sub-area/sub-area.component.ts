@@ -124,7 +124,7 @@ export class SubAreaComponent implements OnInit{
         plants: ["", [Validators.required]],
         department: ["", [Validators.required]],
         subArea: ["", [Validators.required]],
-       
+        subAreaAbbr: ["", [Validators.required]],
       });
   
     }

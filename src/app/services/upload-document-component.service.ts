@@ -47,7 +47,7 @@ export class UploadDocumentComponentService {
       const req = new HttpRequest('GET', `${this.baseUrl}/category/main-head-dropdown`, {
         responseType: 'json'
       });
-    
+        // console.log("main head list:::",req);
       return this.http.request(req);
     }
 
@@ -55,7 +55,7 @@ export class UploadDocumentComponentService {
       const req = new HttpRequest('GET', `${this.baseUrl}/category/cat-wise-dropdown/${getData}/${mainHead}`, {
         responseType: 'json'
       });
-    
+        // console.log("plant list:::",req);
       return this.http.request(req);
     }
 

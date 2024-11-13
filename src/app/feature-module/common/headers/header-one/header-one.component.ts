@@ -214,7 +214,7 @@ export class HeaderOneComponent implements OnInit {
           if (event instanceof HttpResponse) {
             this.resp = event.body.data
 
-            console.log("ggggggggggg[]",this.resp)
+            // console.log("ggggggggggg[]",this.resp)
 
             this.respData = this.resp;
 
@@ -408,6 +408,12 @@ export class HeaderOneComponent implements OnInit {
       });
     });
   }
+
+
+
+
+
+
 
 
 

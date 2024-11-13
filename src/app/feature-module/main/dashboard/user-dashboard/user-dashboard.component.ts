@@ -247,6 +247,8 @@ export class UserDashboardComponent implements OnInit {
       next: (event: any) => {
         if (event instanceof HttpResponse) {
           this.plantsList = event.body.categoryList.listCategoryInfoDtos;
+          console.log(this.plantsList);
+          
           this.backButtonList.push(this.headList)
         }
       },
@@ -277,7 +279,9 @@ export class UserDashboardComponent implements OnInit {
       next: (event: any) => {
         if (event instanceof HttpResponse) {
           this.plantsList = event.body.categoryList
+          console.log(this.plantsList);
           this.subAreaList = event.body.categoryList
+          console.log(this.subAreaList);
           let subArea = event.body.categoryList
           if (event.body && Array.isArray(event.body.categoryList)) {
             this.data = event.body.categoryList;

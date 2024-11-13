@@ -34,7 +34,7 @@ export class LoginComponentService {
       const req = new HttpRequest('GET', `${this.baseUrl}/category/get-catwise-info/${category}/1`, {
         responseType: 'json'
       });
-      
+  
       return this.http.request(req);
     }
 
@@ -59,7 +59,7 @@ export class LoginComponentService {
       const req = new HttpRequest('GET', `${this.baseUrl}/catinfo/getmainhead`, {
         responseType: 'json'
       });
-    
+   
       return this.http.request(req);
     }
 
@@ -70,7 +70,7 @@ getDetailsByCateName(catName:any , catType:any): Observable<HttpEvent<any>> {
   const req = new HttpRequest('GET', `${this.baseUrl}/catinfo/getcategory/${catName}/${catType}`, {
     responseType: 'json'
   });
-
+    // console.log("plant list:::",req);
   return this.http.request(req);
     }
 

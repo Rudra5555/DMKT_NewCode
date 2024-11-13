@@ -254,7 +254,7 @@ button#closeModalBtn :hover {
   text-align: center;
   position: relative;
   display: flex;
-  margin-left: 20px;
+  margin-left: 40px;
   justify-content: center;
   align-items: center;
   margin-bottom: 18%;
@@ -539,15 +539,15 @@ h5.subAreasName {
 
 button#closeModalBtn {
   margin-bottom: 22px;
-  background: #ff7970;
+  background: rgb(255, 255, 255);
 }
 
 .mainHeadNames {
   color: black;
-  font-size: 17px;
-
+  font-size: 20px;
+  font-weight: 600;
   margin-top: -6px;
-  margin-left: 38px;
+  margin-left: -3px;
   text-align: center;
 
   font-family: sans-serif;
@@ -557,9 +557,13 @@ button#closeModalBtn {
   position: relative;
 }
 
+button#cpp2btn {
+  padding-left: 30.1%;
+  padding-right: 30%;
+}
 
 .item-container:hover .card2 {
-  background-color: #ddd;
+  background-color: #cc0000;
   /* Change to desired hover color */
   transform: scale(1.05);
   /* Optional: Slightly enlarge on hover */
@@ -567,12 +571,15 @@ button#closeModalBtn {
 
 .item-container:hover .mainHeadNames {
   opacity: 1;
-  font-weight: bold;
+  font-weight: 900;
 }
 
 .modal-content {
   border-radius: 15px;
   /* Adjust the radius as needed */
+}
+.custom-modal .modal-content .modal-header .btn-close span {
+  color: #373B3E;
 }
 
 col-md-6.d-flex.flex-column.justify-content-right {

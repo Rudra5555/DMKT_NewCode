@@ -89,14 +89,14 @@
       </div>
       <div class="table-responsive">
         <table matSort (matSortChange)="sortData($event)"
-        class="table table-striped custom-table datatable contact-table">
+        class="table table-striped custom-table datatable contact-table text-center">
         <thead >
           <tr >
             <th>Main Head</th>
-            <th>Plant</th>
-            <th>Department</th>
-            <!-- <th>Sub-Area</th>
-            <th>Storage Location</th>
+            <th>Plant Name</th>
+            <th>Department Name</th>
+          <th>Department Abbriviation</th>
+              <!-- <th>Storage Location</th>
             <th>Document Type</th>
             <th class="text-end">Action</th> -->
           </tr>
@@ -118,10 +118,10 @@
           <td>
             {{ item.department ? item.department : 'N/A' }}
           </td>
-            <!-- <td>
+            <td>
               {{ item.subArea? item.subArea : 'N/A' }}
             </td>
-            <td>
+            <!-- <td>
               {{ item.storageLocation? item.storageLocation : 'N/A' }}
             </td>
             <td>
@@ -315,7 +315,7 @@
            
             <div class="col-sm-6">
               <div class="input-block mb-3" >
-                <label class="col-form-label">Plants <span class="text-danger">*</span></label>
+                <label class="col-form-label">Plant Name <span class="text-danger">*</span></label>
                 <mat-select formControlName="plants" class="custom-mat-select select" placeholder="Select">
                   <mat-option value="">--Select--</mat-option>
                   <mat-option *ngFor="let element of plantList"
@@ -332,8 +332,9 @@
 
               
             </div>
+            <div class="col-sm-6">
             <div class="input-block mb-3">
-              <label class="col-form-label"  for="">Department <span class="text-danger">*</span></label>
+              <label class="col-form-label"  for="">Department Name<span class="text-danger">*</span></label>
               <input class="form-control" formControlName="department" type="text">
 
               <div
@@ -342,7 +343,18 @@
                   Department name is required.
                 </div>
             </div>
-
+            </div>
+            <div class="col-sm-6">
+            <div class="input-block mb-3">
+              <label class="col-form-label"  for="">Department Abbriviation<span class="text-danger">*</span></label>
+              <input class="form-control" formControlName="departmentAbbr" type="text">
+              <div
+                  *ngIf="uploadFileForm.get('departmentAbbr')?.invalid && (uploadFileForm.get('departmentAbbr')?.touched || uploadFileForm.get('departmentAbbr')?.dirty)"
+                  class="text-danger">
+                  Department abbriviation is required.
+                </div>
+            </div>
+</div>
           </div>
           <div class="submit-section">
             <button class="btn submit-btn btn-sm" type="submit" data-bs-dismiss="modal" aria-label="Close">Submit</button>
