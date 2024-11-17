@@ -309,8 +309,6 @@
                   Main Head is required.
                 </div>
               </div>
-             
-            
             </div>
            
             <div class="col-sm-6">
@@ -321,22 +319,18 @@
                   <mat-option *ngFor="let element of plantList"
                     [value]="element.catName">{{element.catName}}</mat-option>
                 </mat-select>
-
                 <div
                   *ngIf="uploadFileForm.get('plants')?.invalid && (uploadFileForm.get('plants')?.touched || uploadFileForm.get('plants')?.dirty)"
                   class="text-danger">
                   Plant is required.
                 </div>
-
               </div>
-
-              
             </div>
+
             <div class="col-sm-6">
             <div class="input-block mb-3">
               <label class="col-form-label"  for="">Department Name<span class="text-danger">*</span></label>
               <input class="form-control" formControlName="department" type="text">
-
               <div
                   *ngIf="uploadFileForm.get('department')?.invalid && (uploadFileForm.get('department')?.touched || uploadFileForm.get('department')?.dirty)"
                   class="text-danger">
@@ -344,6 +338,7 @@
                 </div>
             </div>
             </div>
+
             <div class="col-sm-6">
             <div class="input-block mb-3">
               <label class="col-form-label"  for="">Department Abbriviation<span class="text-danger">*</span></label>
@@ -354,8 +349,9 @@
                   Department abbriviation is required.
                 </div>
             </div>
-</div>
+            </div>
           </div>
+
           <div class="submit-section">
             <button class="btn submit-btn btn-sm" type="submit" data-bs-dismiss="modal" aria-label="Close">Submit</button>
            

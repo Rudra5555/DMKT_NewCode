@@ -116,13 +116,13 @@ export class DepartmentComponent implements OnInit{
   
       this.bsRangeValue = [this.bsValue, this.maxDate];
 
-      this.uploadFileForm = this.formBuilder.group({
-         mainHead: ['', Validators.required],
-        plants: ["", [Validators.required]],
-        department: ["", [Validators.required]],
-        departmentAbbr: ["", [Validators.required]],
+      // this.uploadFileForm = this.formBuilder.group({
+      //    mainHead: ['', Validators.required],
+      //   plants: ["", [Validators.required]],
+      //   department: ["", [Validators.required]],
+      //   departmentAbbr: ["", [Validators.required]],
        
-      });
+      // });
   
     }
   
@@ -154,6 +154,12 @@ export class DepartmentComponent implements OnInit{
 
   ngOnInit() {
 
+    this.uploadFileForm = this.formBuilder.group({
+      mainHead: ['', Validators.required],
+      plants: [''],
+      department: ['', Validators.required],
+      departmentAbbr: ['', Validators.required]
+    });
  
     this.setLast15Days();
     
@@ -209,6 +215,8 @@ console.log(this.selectedCatName,this.selectedCatNameAbbr);
       next: (event: any) => {
         if (event instanceof HttpResponse) {
           this.mainHeadList = event.body?.categoryList || [];
+          console.log("mmmmm",this.mainHeadList);
+          
 
         }
       },
@@ -392,23 +400,52 @@ openModal(fileUrl: string , documentName : string) {
 
 
 
-
-  onSubmit(){
-
-    const selectedPlant = this.uploadFileForm.get('plants')?.value;
-    console.log('Selected Plant:', selectedPlant);
-
-    const departmentName =  this.uploadFileForm.get('department')?.value;
-  console.log(departmentName);
+  onSubmit(): void {
+    if (this.uploadFileForm.invalid) {
+      console.log('Form is invalid');
+      this.uploadFileForm.markAllAsTouched();
+      return;
+    }
   
-    
+    const formData = this.uploadFileForm.value;
+  
+    const selectedMainHead = this.mainHeadList.find(
+      (item) => item.optionVal === formData.mainHead
+    );
+   
+  
+    const selectedPlant = this.plantList.find(
+      (item) => item.catName === formData.plants
+    );  
+  
+    const headId = selectedMainHead?.catId || null;
+  
+    const plantId = selectedPlant?.catId || null;
+  
+    const payload = {
+      departmentName: formData.department,
+      departmentAbbr: formData.departmentAbbr,
+      plantId: plantId,
+      headId: headId,
+    };
+
+    this.uploadDocument.addDept(payload).subscribe({
+      next: (event: any) => {
+        if (event instanceof HttpResponse) {
+          const res = event.body;
+          console.log("huuuuuuuuuu",res);
+          
+        }
+      },
+      error: (err: any) => {
+        console.error(err);
+      }
+    });
+  
+    console.log('Payload:', payload);
   }
-
-
-
-
-
- 
+  
+  
 
 
   public sortData(sort: Sort) {
