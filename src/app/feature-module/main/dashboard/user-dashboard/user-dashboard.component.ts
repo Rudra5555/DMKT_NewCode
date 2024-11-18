@@ -8,12 +8,21 @@ import { HttpResponse } from '@angular/common/http';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { DatePipe } from '@angular/common';
+import { MatTableDataSource } from '@angular/material/table';
 
 
-interface data {
-  id: number, dType: string, totalFiles: string, src: url, name: string, size?: string, docType: string, last_modified?: string;
+interface data{
+  docName: string, docType: string, version: string, docSize: string, download?: string, view?: string;
 }
 
+interface DocumentData {
+  docName: string;
+  docType: string;
+  version: string;
+  docSize: string;
+  download: string;
+  view: string;
+}
 
 @Component({
   selector: 'app-user-dashboard',
@@ -34,25 +43,32 @@ export class UserDashboardComponent implements OnInit {
   public modalFileList: any;
   public myData: any;
   public modalMyData: any;
+  public skip = 0;
+  public pageIndex = 0;
+  public pageSize = 10;
+  public limit: number = this.pageSize;
+
   public fileListTmp!: Array<data>;
   public modalFileListTmp!: Array<data>;
   public cardColorList!: ['card1', 'card2', 'card3'];
   public searchTextVal: any;
   public routes = routes;
+  public currentPage = 1;
   cardHide: boolean = true;
+  documentNameSearch: boolean = true;
   optionArr: any;
   backButtonList: any = []
   categoryList = new Map();
   data: any[] = [];
   msg: string = '';
   allData: any[] = [];
-
+  fileListSearch: any[] = [];
   mainHeadName: any;
   plantType: any;
-
+  dataset = new MatTableDataSource<DocumentData>();
 
   colors = ['#fc0859', '#ff6a00', '#00ff00', '#00ab52', '#0800a7', '#ff00ff', '#dcfe00', '#00c39f'];
-
+  searchKeyData: string = ''; 
   materials: any;
   randomItem!: string;
   searchFilterList: any;
@@ -63,7 +79,7 @@ export class UserDashboardComponent implements OnInit {
   subAreaList: any[] = [];
   subAreaDataList: any[] = [];
   bsRangeValue: Date[] | undefined;
-
+  // public dataset!: Array<data>;
   constructor(private formBuilder: FormBuilder, private router: Router, private loginService: LoginComponentService, private datePipe: DatePipe) {
 
     
@@ -94,11 +110,64 @@ export class UserDashboardComponent implements OnInit {
 
 
     this.getAllFilesForm = this.formBuilder.group({
-      dropDownData: ["", [Validators.required]],
+      searchKeyData: ["", [Validators.required]],
 
 
     });
 
+
+    this.dataset = new MatTableDataSource<DocumentData>([
+      {
+        docName: 'xyz.pdf', docType: 'pdf',version: 'xyz1',  docSize: '10.45kb', download: 'down', view: 'view'
+      },
+      {
+        docName: 'zyz.xlm', docType: 'xlm',version: 'zyz1',  docSize: '10.45kb', download: 'down', view: 'view'
+      },
+      {
+        docName: 'zzz.doc', docType: 'doc',version: 'zzz1',  docSize: '10.45kb', download: 'down', view: 'view'
+      },
+      {
+        docName: 'qqq.pdf', docType: 'pdf',version: 'qqq1',  docSize: '10.45kb', download: 'down', view: 'view'
+      },
+      {
+        docName: 'xyz.pdf', docType: 'pdf',version: 'xyz1',  docSize: '10.45kb', download: 'down', view: 'view'
+      },
+      {
+        docName: 'zyz.xlm', docType: 'xlm',version: 'zyz1',  docSize: '10.45kb', download: 'down', view: 'view'
+      },
+      {
+        docName: 'zzz.doc', docType: 'doc',version: 'zzz1',  docSize: '10.45kb', download: 'down', view: 'view'
+      },
+      {
+        docName: 'qqq.pdf', docType: 'pdf',version: 'qqq1',  docSize: '10.45kb', download: 'down', view: 'view'
+      },
+      {
+        docName: 'ppp.pdf', docType: 'pdf',version: 'xyz1',  docSize: '10.45kb', download: 'down', view: 'view'
+      },
+      {
+        docName: 'lll.xlm', docType: 'xlm',version: 'zyz1',  docSize: '10.45kb', download: 'down', view: 'view'
+      },
+      {
+        docName: 'zzz.doc', docType: 'doc',version: 'zzz1',  docSize: '10.45kb', download: 'down', view: 'view'
+      },
+      {
+        docName: 'kkk.pdf', docType: 'pdf',version: 'qqq1',  docSize: '10.45kb', download: 'down', view: 'view'
+      },
+      {
+        docName: 'nnn.pdf', docType: 'pdf',version: 'xyz1',  docSize: '10.45kb', download: 'down', view: 'view'
+      },
+      {
+        docName: 'lll.xlm', docType: 'xlm',version: 'zyz1',  docSize: '10.45kb', download: 'down', view: 'view'
+      },
+      {
+        docName: 'zllz.doc', docType: 'doc',version: 'zzz1',  docSize: '10.45kb', download: 'down', view: 'view'
+      },
+      {
+        docName: 'qllq.pdf', docType: 'pdf',version: 'qqq1',  docSize: '10.45kb', download: 'down', view: 'view'
+      },
+    ]);
+
+   
 
   }
 
@@ -197,6 +266,8 @@ export class UserDashboardComponent implements OnInit {
       next: (event: any) => {
         if (event instanceof HttpResponse) {
           this.headList = event.body.categoryList.listCategoryInfoDtos
+          console.log("main head::,",this.headList);
+          
         }
       },
       error: (err: any) => {
@@ -211,7 +282,8 @@ export class UserDashboardComponent implements OnInit {
   getAllDtaForHide() {
 
     this.allCategoryListHead();
-    this.cardHide = true
+    this.cardHide = true;
+    this.documentNameSearch = true;
   }
 
   backButton(id: any) {
@@ -239,6 +311,7 @@ export class UserDashboardComponent implements OnInit {
 
     if (catId == "plants") {
       this.cardHide = false;
+      this.documentNameSearch = true;
       this.closePlantModalBtn.nativeElement.click();
     }
 
@@ -273,6 +346,7 @@ export class UserDashboardComponent implements OnInit {
 
     if (catId == "plants") {
       this.cardHide = false;
+      this.documentNameSearch = true;
       this.closePlantModalBtn.nativeElement.click();
     }
     this.loginService.getDetailsByCateName(catName, catId).subscribe({
@@ -346,9 +420,62 @@ export class UserDashboardComponent implements OnInit {
   }
 
 
+  // public getMoreData(event: string): void {
+  //   if (event === 'next') {
+  //     this.currentPage++;
+  //     this.pageIndex = this.currentPage - 1;
+  //     this.limit += this.pageSize;
+  //     this.skip = this.pageSize * this.pageIndex;
+  //     this.getFileListDetails()
+  //   } else if (event === 'previous') {
+  //     this.currentPage--;
+  //     this.pageIndex = this.currentPage - 1;
+  //     this.limit -= this.pageSize;
+  //     this.skip = this.pageSize * this.pageIndex;
+  //     this.getFileListDetails()
+  //   }
+  // }
+  // public moveToPage(pageNumber: number): void {
+  //   this.currentPage = pageNumber;
+  //   this.skip = this.pageSelection[pageNumber - 1].skip;
+  //   this.limit = this.pageSelection[pageNumber - 1].limit;
+  //   if (pageNumber > this.currentPage) {
+  //     this.pageIndex = pageNumber - 1;
+  //   } else if (pageNumber < this.currentPage) {
+  //     this.pageIndex = pageNumber + 1;
+  //   }
+  //   this.getFileListDetails()
+  // }
+  // private calculateTotalPages(totalData: number, pageSize: number): void {
+  //   this.pageNumberArray = [];
+  //   this.totalPages = totalData / pageSize;
+  //   if (this.totalPages % 1 !== 0) {
+  //     this.totalPages = Math.trunc(this.totalPages + 1);
+  //   }
+  //   for (let i = 1; i <= this.totalPages; i++) {
+  //     const limit = pageSize * i;
+  //     const skip = limit - pageSize;
+  //     this.pageNumberArray.push(i);
+  //     this.pageSelection.push({ skip: skip, limit: limit });
+  //   }
+  // }
 
-  fileNameSearch(){
+  // public changePageSize(): void {
+  //   this.pageSelection = [];
+  //   this.limit = this.pageSize;
+  //   this.skip = 0;
+  //   this.currentPage = 1;
+  //   this.getFileListDetails()
+  // }
+
+
+  fileNameSearch(): void{
+    const searchValue = this.getAllFilesForm.get('searchKeyData')?.value;
+    this.documentNameSearch = false;
+    console.log(searchValue);
     
+    this.dataset.filter = searchValue.trim().toLowerCase();
+    this.fileListSearch = this.dataset.filteredData;
   }
 
 }
