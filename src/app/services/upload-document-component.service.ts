@@ -91,6 +91,14 @@ export class UploadDocumentComponentService {
       return this.http.request(req);
     }
 
+    addDept(payload:any): Observable<HttpEvent<any>> {
+      const req = new HttpRequest('POST', `${this.baseUrl}/department/add-new-department`, {
+        responseType: 'json'  
+      });
+    
+      return this.http.request(req);
+    }
+
 
 
 
