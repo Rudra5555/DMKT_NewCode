@@ -172,7 +172,9 @@ button{
   cursor: pointer;
 }
 
-@media screen and (max-width: 1710px) {
+
+
+@media  (min-width:1711px) and (max-width: 1950px) {
   form{
    
     height: 77%;
@@ -210,8 +212,8 @@ button{
         #ff512f,
         #f09819
     );
-    margin-top: 112%;
-  margin-left: 185%;
+    margin-top: 99%;
+    margin-left: 150%;
   }
   button{
     margin-top: 18px;
@@ -309,8 +311,8 @@ button{
         #1845ad,
         #23a2f6
     );
-    margin-top: -18%;
-  margin-left: 70%;
+    margin-top: -15%;
+    margin-left: 64%;
   }
   .shape:last-child{
     background: linear-gradient(
@@ -347,7 +349,7 @@ button{
     );
     // margin-top: -23%;
     // margin-left: 68%;
-    margin-top: -14%;
+    margin-top: -24%;
     margin-left: 75%;
   }
   .shape:last-child{
@@ -363,6 +365,68 @@ button{
   }
 }
  
+@media screen and (max-width: 1711px) {
+  form{
+   
+    height: 77%;
+    width: 31%;
+    margin-left: 28%;
+    background-color: rgba(255, 255, 255, 0.13);
+    position: absolute;
+    transform: translate(-50%, -50%);
+    top: 52%;
+      left: 50%;
+      border-radius: 10px;
+      backdrop-filter: blur(10px);
+      border: 2px solid rgba(255,255,255,0.1);
+      box-shadow: 0 0 40px rgba(8,7,16,0.6);
+      padding: 50px 35px;
+  }
+  .background .shape{
+    height: 170px;
+    width: 170px;
+    position: absolute;
+    border-radius: 50%;
+    box-shadow: 0 0 40px rgba(8,7,16,0.6);
+  }
+  .shape:first-child{
+    background: linear-gradient(
+        #1845ad,
+        #23a2f6
+    );
+    margin-top: -26%;
+    margin-left: 76%;
+  }
+  .shape:last-child{
+    background: linear-gradient(
+        to right,
+        #ff512f,
+        #f09819
+    );
+    margin-top: 115%;
+    margin-left: 188%;
+  }
+  button{
+    margin-top: 18px;
+    width: 100%;
+    background-color: #facb92;
+    color: #080710;
+    padding: 15px 0;
+    font-size: 18px;
+    font-weight: 600;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  label{
+    display: block;
+    margin-top: 20px;
+    font-size: 16px;
+    font-weight: 500;
+  }
+}
+
+
+
 // 1280px
 
 @media screen and (min-width:1246px) and (max-width: 1280px) {
@@ -442,8 +506,8 @@ margin-top: 3%;
         #1845ad,
         #23a2f6
     );
-    margin-top: -15%;
-  margin-left: 64%;
+    margin-top: -16%;
+    margin-left: 61%;
   }
   .shape:last-child{
     background: linear-gradient(
@@ -451,8 +515,9 @@ margin-top: 3%;
         #ff512f,
         #f09819
     );
-    margin-top: 101%;
-  margin-left: 150%;
+    margin-top: 98%;
+    margin-left: 148%;
+
   }
     }
 

@@ -247,8 +247,8 @@ button#closeModalBtn :hover {
 
 
 .card2 {
-  width: 125px;
-  height: 125px;
+  width: 135px;
+  height: 135px;
   border-radius: 50%;
   overflow: hidden;
   text-align: center;
@@ -543,7 +543,7 @@ button#closeModalBtn {
 }
 
 .mainHeadNames {
-  color: black;
+  color: #005fbc;
   font-size: 20px;
   font-weight: 600;
   margin-top: -6px;
@@ -664,6 +664,9 @@ button#dashboardModalSearch {
   padding-left: 35px;
   padding-right: 35px;
   background-color: #03a803;
+  margin-top: 76%;
+  position: absolute;
+  margin-left: -3%;
 }
 
 button#dashboardModalSearch:hover {
@@ -674,9 +677,12 @@ button#dashboardModalSearch:hover {
 /* For large screens (desktops and large tablets) */
 @media (min-width: 1025px) {
   button#dashboardModalSearch {
-    padding-left: 25px;
-    padding-right: 25px;
+    padding-left: 2.5%;
+    padding-right: 2.5%;
     background-color: #03a803;
+    margin-top: 76%;
+    position: absolute;
+    margin-left: -3%;
   }
 }
 
@@ -686,6 +692,9 @@ button#dashboardModalSearch:hover {
     padding-left: 20px;
     padding-right: 20px;
     background-color: #03a803;
+    margin-top: 76%;
+    position: absolute;
+    margin-left: -3%;
   }
 }
 
@@ -695,6 +704,9 @@ button#dashboardModalSearch:hover {
     padding-left: 8px;
     padding-right: 8px;
     background-color: #03a803;
+    margin-top: 76%;
+    position: absolute;
+    margin-left: -3%;
   }
 }
 
@@ -1005,6 +1017,14 @@ img#footerLogo {
   box-shadow: 0 10px 25px 5px rgba(0, 0, 0, 0.2);
 
 }
+
 li:hover {
   cursor: pointer;
+}
+
+button#mainHeadButton {
+  margin-left: -78%;
+            position: absolute;
+            margin-top: 76%;
+            width: 17%;
 }

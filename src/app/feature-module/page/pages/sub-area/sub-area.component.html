@@ -348,24 +348,24 @@
               </div>
 
               <div class="input-block mb-3">
-                <label class="col-form-label"  for="">Sub-Area Name<span class="text-danger">*</span></label>
-                <input class="form-control" formControlName="subArea" type="text">
+                <label class="col-form-label"  for="">Sub-Area Abbriviation<span class="text-danger">*</span></label>
+                <input class="form-control" formControlName="subAreaAbbr" type="text">
   
                 <div
-                    *ngIf="uploadFileForm.get('subArea')?.invalid && (uploadFileForm.get('subArea')?.touched || uploadFileForm.get('subArea')?.dirty)"
+                    *ngIf="uploadFileForm.get('subAreaAbbr')?.invalid && (uploadFileForm.get('subAreaAbbr')?.touched || uploadFileForm.get('subAreaAbbr')?.dirty)"
                     class="text-danger">
-                    Sub-Area name is required.
+                    Sub-Area Abbriviation is required.
                   </div>
               </div>
             </div>
             <div class="input-block mb-3">
-              <label class="col-form-label"  for="">Sub-Area Abbriviation<span class="text-danger">*</span></label>
-              <input class="form-control" formControlName="subAreaAbbr" type="text">
+              <label class="col-form-label"  for="">Sub-Area Name <span class="text-danger">*</span></label>
+              <input class="form-control" formControlName="subArea" type="text">
 
               <div
-                  *ngIf="uploadFileForm.get('subAreaAbbr')?.invalid && (uploadFileForm.get('subAreaAbbr')?.touched || uploadFileForm.get('subAreaAbbr')?.dirty)"
+                  *ngIf="uploadFileForm.get('subArea')?.invalid && (uploadFileForm.get('subArea')?.touched || uploadFileForm.get('subArea')?.dirty)"
                   class="text-danger">
-                  Sub-Area Abbriviation is required.
+                  Sub-Area name is required.
                 </div>
             </div>
            

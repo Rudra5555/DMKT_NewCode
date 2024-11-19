@@ -156,7 +156,7 @@ export class DepartmentComponent implements OnInit{
 
     this.uploadFileForm = this.formBuilder.group({
       mainHead: ['', Validators.required],
-      plants: [''],
+      plants: ['',Validators.required],
       department: ['', Validators.required],
       departmentAbbr: ['', Validators.required]
     });
@@ -412,11 +412,13 @@ openModal(fileUrl: string , documentName : string) {
     const selectedMainHead = this.mainHeadList.find(
       (item) => item.optionVal === formData.mainHead
     );
-   
+    console.log(selectedMainHead);
   
     const selectedPlant = this.plantList.find(
       (item) => item.catName === formData.plants
     );  
+
+  
   
     const headId = selectedMainHead?.catId || null;
   

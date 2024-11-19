@@ -117,6 +117,14 @@ export class UploadDocumentComponentService {
     }
 
 
+    addSubArea(payload:any): Observable<HttpEvent<any>> {
+      const req = new HttpRequest('POST', `${this.baseUrl}/instrument/save-new-subarea`, {
+        responseType: 'json'  
+      });
+    
+      return this.http.request(req);
+    }
+
 
 
 
