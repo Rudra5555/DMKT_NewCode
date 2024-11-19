@@ -434,31 +434,32 @@
                   <div *ngIf="item.name == 'POWER O&M'">
                     <img src="assets/img/Power-O&M.jpg" />
                   </div>
-                </a>
+              
 
-                <div (click)="navigateToRoute(item.name, item.catType)" class="clickable-div"
+                <div class="clickable-div"
                   *ngIf="item.name == 'POWER SALE'">
                   <img src="assets/img/Power-Sale.jpg" />
                 </div>
-
-                <div (click)="navigateToRoute(item.name, item.catType)" class="clickable-div"
+              
+                <div class="clickable-div"
                   *ngIf="item.name == 'ASH-DYKE'">
                   <img src="assets/img/Ash-Dyke.jpg" />
                 </div>
-                <div (click)="navigateToRoute(item.name, item.catType)" class="clickable-div"
+                <div  class="clickable-div"
                   *ngIf="item.name == 'PLANT INFRA(OUTSIDE)'">
                   <img src="assets/img/Plant-Infra.jpg" />
                 </div>
-                <div (click)="navigateToRoute(item.name, item.catType)" class="clickable-div"
+                <div  class="clickable-div"
                   *ngIf="item.name == 'POWER-LEGAL'">
                   <img src="assets/img/Power-Legal.jpg" />
                 </div>
-                <div (click)="navigateToRoute(item.name, item.catType)" class="clickable-div"
+                <div  class="clickable-div"
                 *ngIf="item.name == 'PLANNING'">
                 <img src="assets/img/Power-Sale.jpg" />
               </div>
+            </a>
 
-                <div (click)="navigateToRoute(item.name, item.catType)" class="clickable-div"
+                <div  class="clickable-div"
                   *ngIf="item.name == 'COAL COMMERCIAL'">
                   <img src="assets/img/Coal-Commercial.jpg" />
                 </div>
@@ -547,6 +548,10 @@
                 <div *ngIf="item.name == 'CPP-3 (1200MW)'">
                   <button class="btn-custom btn-green" (click)="getDetailsByPlantsName(item.name, item.catType)"
                     (click)="onClick()">CPP-3(1200MW)</button>
+                </div>
+                <div *ngIf="item.name == 'CPP (1740MW)'">
+                  <button class="btn-custom btn-green" (click)="navigateToRoute(item.name, item.catType)"
+                    (click)="onClick()">CPP(1740MW)</button>
                 </div>
 
               </div>
