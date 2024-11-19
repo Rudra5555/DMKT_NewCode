@@ -496,6 +496,8 @@ return;
         next: (event: any) => {
           if (event instanceof HttpResponse) {
             this.departmentList = event.body?.categoryList || [];
+            console.log(this.departmentList);
+            
           }
         },
         error: (err: any) => {

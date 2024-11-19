@@ -119,8 +119,7 @@ export class SubAreaComponent implements OnInit{
       this.bsRangeValue = [this.bsValue, this.maxDate];
 
       this.uploadFileForm = this.formBuilder.group({
-        // uploadFile: ["", [Validators.required]],
-        mainHead: ['', Validators.required],
+           mainHead: ['', Validators.required],
         plants: ["", [Validators.required]],
         department: ["", [Validators.required]],
         subArea: ["", [Validators.required]],
@@ -442,19 +441,73 @@ openModal(fileUrl: string , documentName : string) {
 
 
 
-  onSubmit(){
+  // onSubmit(){
 
-    const selectedPlant = this.uploadFileForm.get('plants')?.value;
-    console.log('Selected Plant:', selectedPlant);
+  //   const selectedPlant = this.uploadFileForm.get('plants')?.value;
+  //   console.log('Selected Plant:', selectedPlant);
 
-    const departmentName =  this.uploadFileForm.get('department')?.value;
-  console.log(departmentName);
+  //   const departmentName =  this.uploadFileForm.get('department')?.value;
+  // console.log(departmentName);
   
     
+  // }
+
+
+  onSubmit(): void {
+    if (this.uploadFileForm.invalid) {
+      console.log('Form is invalid');
+      this.uploadFileForm.markAllAsTouched();
+      return;
+    }
+  
+    const formData = this.uploadFileForm.value;
+  
+    const selectedMainHead = this.mainHeadList.find(
+      (item) => item.optionVal === formData.mainHead
+    );
+   console.log(selectedMainHead);
+   
+  
+    const selectedPlant = this.plantList.find(
+      (item) => item.catName === formData.plants
+    );  
+  
+
+    const selectedDepartment = this.departmentList.find(
+      (item) => item.catName === formData.department
+    ); 
+
+
+
+    const headId = selectedMainHead?.catId || null;
+  
+    const plantId = selectedPlant?.catId || null;
+
+    const departmentId = selectedDepartment?.catId || null;
+  
+    const payload = {
+      subArea: formData.subArea,
+      subAreaAbbr: formData.subAreaAbbr,
+      plantId: plantId,
+      headId: headId,
+      departmentId: departmentId,
+    };
+
+    this.uploadDocument.addSubArea(payload).subscribe({
+      next: (event: any) => {
+        if (event instanceof HttpResponse) {
+          const res = event.body;
+          console.log("huuuuuuuuuu",res);
+          
+        }
+      },
+      error: (err: any) => {
+        console.error(err);
+      }
+    });
+  
+    console.log('Payload:', payload);
   }
-
-
-
 
 
  
