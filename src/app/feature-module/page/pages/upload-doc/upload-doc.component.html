@@ -109,35 +109,27 @@
 
                       <div class="input-block mb-3">
                         <label class="col-form-label"> Document Type<span class="text-danger">*</span></label>
-                        <mat-select formControlName="documentType" class="custom-mat-select select" placeholder="Select"  required>
+                        <mat-select formControlName="documentType" class="custom-mat-select select" placeholder="Select"  required  (selectionChange)="onDocumentTypeChange($event.value)">
                           <mat-option value="">--Select--</mat-option>
-                          <mat-option value="LETTER">Letter</mat-option>
-                          <mat-option value="DOCUMENT">Document</mat-option>
-                          <mat-option value="BOM">BOM</mat-option>
-                          <mat-option value="DRAWING">Drawing</mat-option>
-                          <mat-option value="BOQ">BOQ</mat-option>
-                          <mat-option value="COMPLIANCE DOCUMENT">Compliance Document</mat-option>
+                          <mat-option *ngFor="let element of docList" [value]="element.id">{{element.documentName}}</mat-option>
                         </mat-select>
                         <div *ngIf="uploadFileForm.get('documentType')?.invalid && (uploadFileForm.get('documentType')?.touched || uploadFileForm.get('documentType')?.dirty)" class="text-danger">
                           Document Type is required.
                         </div>
                       </div>
+                      
 
-                      <!-- <div class="input-block mb-3">
+                      <div class="input-block mb-3">
                         <label class="col-form-label">Sub-Document Type<span class="text-danger">*</span></label>
                         <mat-select formControlName="subDocumentType" class="custom-mat-select select" placeholder="Select"  required>
                           <mat-option value="">--Select--</mat-option>
-                          <mat-option value="LETTER">Letter</mat-option>
-                          <mat-option value="DOCUMENT">Document</mat-option>
-                          <mat-option value="BOM">BOM</mat-option>
-                          <mat-option value="DRAWING">Drawing</mat-option>
-                          <mat-option value="BOQ">BOQ</mat-option>
-                          <mat-option value="COMPLIANCE DOCUMENT">Compliance Document</mat-option>
+                          <mat-option *ngFor="let element of subDocList" [value]="element.id">{{element.documentName}}</mat-option>
+                        
                         </mat-select>
                         <div *ngIf="uploadFileForm.get('subDocumentType')?.invalid && (uploadFileForm.get('subDocumentType')?.touched || uploadFileForm.get('subDocumentType')?.dirty)" class="text-danger">
                           Sub-Document Type is required.
                         </div>
-                      </div> -->
+                      </div>
 
                       <div class="input-block mb-3">
                         <label class="col-form-label">Storage Location<span class="text-danger">*</span></label>

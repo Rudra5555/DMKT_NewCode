@@ -79,13 +79,16 @@ export class HeaderOneComponent implements OnInit {
   public hodNotify!: Array<data>;
   public userNotify!: Array<data>;
   public notificationData!: Array<data>;
+  public notificationDataTwo!: Array<data>;
   public userNotificationData!: Array<data>;
   public userModalData!: Array<modalUserData>;
   public hodModalData!: Array<modalHodData>;
   public notificationCount: any;
+  public notificationCountTwo: any;
   public selectedItem: any = null;
   public selectedHodItem: any;
   public userNotifyCount: any;
+  public userNotifyCountTwo: any;
   public hodModalForm !: FormGroup;
   public loggedHodId: any;
   public loggedUserId: any;
@@ -94,6 +97,7 @@ export class HeaderOneComponent implements OnInit {
   resp: any;
   msg: any;
   respData: any;
+  notificTwo: any;
   selectFileData: any;
   public reason: string = '';
   public loggedSuperUserId: any;
@@ -152,6 +156,26 @@ export class HeaderOneComponent implements OnInit {
     console.log("logged user::::::::[]",this.loggedUserId);
     
     
+    this.loginService.notificTwo(this.loggedUserId).subscribe({
+      next: (event: any) => {
+        if (event instanceof HttpResponse) {
+          this.resp = event.body.data
+          this.notificTwo=this.resp;
+
+          console.log("uuuuuuuuuuuu{}",this.notificTwo);
+           this.userNotifyCountTwo = this.notificTwo.length;
+           console.log("ooooooo",this.userNotifyCountTwo);
+           
+
+        }
+      },
+      error: (err: any) => {
+        if (err.error && err.error.message) {
+          this.msg += " " + err.error.message;
+        }
+      }
+    });
+
     this.userNotificationBell(this.loggedUserId);
     this.uname = localStorage.getItem("loggedUserName");
     console.log( this.uname);
@@ -200,6 +224,36 @@ export class HeaderOneComponent implements OnInit {
       this.notificationCount = this.notificationData.length;
     }
 
+
+    // if (this.loggedUserId) {
+    //   console.log("loggged lib;;;;",this.loggedUserId);
+
+    //   this.loginService.notificTwo(this.loggedUserId).subscribe(
+    //     (response: any) => {
+    //       if (response.body && response.body.status === 200) {
+    //         this.notificationDataTwo = response.body.data.map((notification: any) => ({
+    //           workflowDocId: notification.workflowDocId,
+    //           fileName: notification.fileName,
+    //           generatedByName: notification.generatedByName,
+    //           fileUrl: notification.fileUrl,
+    //           assignRoleType: notification.assignRoleType,
+    //           executedByName: notification.executedByName,
+    //           status: notification.status,
+    //           activeStatus: notification.activeStatus
+    //         }));
+    //         console.log("popopopopop",this.notificationDataTwo);
+            
+    //         this.notificationCountTwo = this.notificationDataTwo.length;
+    //       } else {
+    //       }
+    //     },
+    //     (error) => {
+    //       console.error('Failed to fetch notifications:', error);
+    //     }
+    //   );
+    // } else {
+    // }
+    
   }
 
 

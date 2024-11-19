@@ -74,6 +74,8 @@ export class UploadDocComponent implements OnInit {
   selectedSubAreaCatNameAbbr: any;
   options: Option[] = OPTIONS;
   selectedValue: string | undefined;
+  docList:any;
+  subDocList:any;
 
 
   constructor(
@@ -130,8 +132,25 @@ export class UploadDocComponent implements OnInit {
 
     this.uploadFileForm.get('department')?.valueChanges.subscribe(value => {
       const [deptName, deptAbbr] = value.split('~');
+
+         // Find the corresponding department object from the API response
+    const selectedDept = this.departmentList.find(
+      (dept: any) => dept.optionVal === value
+    );
+
+    if (selectedDept) {
+      // Extract the catId for the selected department
+      const deptId = selectedDept.catId;
+      console.log("ffffffffff",deptId);
+      
+      // Call the method with the extracted deptId
+      this.getDocTypeList(deptId);
+    }
+
       this.getSubAreaList(deptName, "department");
       this.selectedDeptCatName = deptName;
+      console.log("qqqqqqqq",this.selectedDeptCatName);
+      
       this.selectedDeptCatNameAbbr = deptAbbr;
 
     });
@@ -267,6 +286,7 @@ export class UploadDocComponent implements OnInit {
 
     if (this.selectedDeptCatName !== null && this.selectedDeptCatName !== undefined) {
       this.getSubAreaList(this.selectedDeptCatName, "department");
+      
     } else {
       console.log("selectedDeptCatName is null or undefined.");
     }
@@ -496,6 +516,8 @@ return;
         next: (event: any) => {
           if (event instanceof HttpResponse) {
             this.departmentList = event.body?.categoryList || [];
+            console.log("yyyyyyyyyyy",this.departmentList);
+            
           }
         },
         error: (err: any) => {
@@ -519,6 +541,47 @@ return;
       });
     }
   }
+
+  getDocTypeList(deptId: any) {
+    if (deptId != '') {
+      this.uploadDocument.docTypeList(deptId).subscribe({
+        next: (event: any) => {
+          if (event instanceof HttpResponse) {
+             this.docList = event.body;
+            console.log("resulttttttttt",this.docList);
+            
+          }
+        },
+        error: (err: any) => {
+          console.error(err);
+        }
+      });
+    }
+  }
+
+  onDocumentTypeChange(docId: any) {
+    if (docId) {
+      this.getSubDocTypeList(docId);
+    }
+  }
+
+  getSubDocTypeList(docId: any) {
+    if (docId != '') {
+      this.uploadDocument.subDocTypeList(docId).subscribe({
+        next: (event: any) => {
+          if (event instanceof HttpResponse) {
+             this.subDocList = event.body;
+            console.log("subDocccccccc",this.subDocList);
+            
+          }
+        },
+        error: (err: any) => {
+          console.error(err);
+        }
+      });
+    }
+  }
+
 
   successfulSubmitAlert() {
     Swal.fire({
