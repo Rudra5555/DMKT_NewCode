@@ -76,8 +76,6 @@ export class SubAreaComponent implements OnInit{
     public plantList: any[] = [];
     public disableSubmitBtn:boolean= false;
     public selectedCatName: any;
-    //  public uploadDocumentFlag: boolean = false;
-    //  public uploadDocumentSizeFlag: boolean = false;
      public documentTypeFlag: boolean = false;
      public fileNames: string[] = [];
      files: any[] = [];
@@ -85,7 +83,7 @@ export class SubAreaComponent implements OnInit{
      searchQuery: string = '';
      documentList: Array<{ displayText: string, referenceId: number }> = [];
      dataLoaded: boolean = false;
-     selectedDocument: string = ''; // To store the selected document text
+     selectedDocument: string = '';
      documentId:any;
      departmentId:any;
      plant:any;
@@ -104,15 +102,8 @@ export class SubAreaComponent implements OnInit{
      loggedSuperUserId:any;
      generatedBy:any;
      selectedFileUrl:any;
-    //  public requestProof : any
-    // subject = new BehaviorSubject('')
+     allsubArea:any;
   
-  
-    
-  
-  
-  
-    //** / pagination variables
     constructor(private data: DataService,private datePipe: DatePipe,private uploadDocument: UploadDocumentComponentService, _uploadService: FileManagementService, private formBuilder: FormBuilder, private loginService : LoginComponentService) {
    
   
@@ -139,11 +130,27 @@ export class SubAreaComponent implements OnInit{
     }
   
     onDateRangeSelected() {
-      this.startDate = this.formatDate(this.bsRangeValue[0]);
-       this.endDate = this.formatDate(this.bsRangeValue[1]);
+      const startDate = this.formatDate(this.bsRangeValue[0]);
+      const endDate = this.formatDate(this.bsRangeValue[1]);
   
-  
-      //  this.getFileListDetails()
+      console.log("dates",startDate,endDate);
+      
+       this.uploadDocument.getSubArea(startDate, endDate).subscribe({
+        next: (event: any) => {
+          if (event instanceof HttpResponse) {
+            const res = event.body.data;
+            this.allsubArea= res;
+            console.log("ress",this.allsubArea);
+            
+            
+          }
+        },
+        error: (err: any) => {
+          if (err.error && err.error.message) {
+            this.msg += " " + err.error.message;
+          }
+        },
+      });
     
       
     }
@@ -164,18 +171,17 @@ export class SubAreaComponent implements OnInit{
    if(this.getRole == "Admin"){
     this.roleFlag = true;
     
-    //console.log(this.roleFlag)
   }if(this.getRole == "Librarian"){
     this.roleFlag = true;
   }if(this.getRole == "User"){
     this.roleFlag = false;
-    //console.log(this.roleFlag)
+
   }if(this.getRole == "SuperUser"){
     this.roleFlag = false;
-    //console.log(this.roleFlag)
+
   }if(this.getRole == "Hod"){
     this.roleFlag = false;
-    //console.log(this.roleFlag)
+
   }
 
 
@@ -492,7 +498,8 @@ openModal(fileUrl: string , documentName : string) {
       headId: headId,
       departmentId: departmentId,
     };
-
+    console.log("fgfgfgf",payload);
+    
     this.uploadDocument.addSubArea(payload).subscribe({
       next: (event: any) => {
         if (event instanceof HttpResponse) {

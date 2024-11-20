@@ -102,8 +102,7 @@ export class DepartmentComponent implements OnInit{
      loggedSuperUserId:any;
      generatedBy:any;
      selectedFileUrl:any;
-    //  public requestProof : any
-    // subject = new BehaviorSubject('')
+     allDeptList:any;
   
   
     
@@ -137,11 +136,28 @@ export class DepartmentComponent implements OnInit{
     }
   
     onDateRangeSelected() {
-      this.startDate = this.formatDate(this.bsRangeValue[0]);
-       this.endDate = this.formatDate(this.bsRangeValue[1]);
-  
-  
-      //  this.getFileListDetails()
+      const startDate = this.formatDate(this.bsRangeValue[0]);
+      const endDate = this.formatDate(this.bsRangeValue[1]);
+
+      console.log("dept dates",startDate,endDate);
+      
+
+      this.uploadDocument.getDeptList(startDate, endDate).subscribe({
+        next: (event: any) => {
+          if (event instanceof HttpResponse) {
+            const res = event.body.data;
+            this.allDeptList= res;
+            console.log("ress",this.allDeptList);
+            
+            
+          }
+        },
+        error: (err: any) => {
+          if (err.error && err.error.message) {
+            this.msg += " " + err.error.message;
+          }
+        },
+      });
     
       
     }
