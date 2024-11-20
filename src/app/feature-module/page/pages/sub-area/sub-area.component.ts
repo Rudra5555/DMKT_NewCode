@@ -301,6 +301,8 @@ console.log(selectedValue,mainHead);
         next: (event: any) => {
           if (event instanceof HttpResponse) {
             this.subAreaList = event.body?.categoryList || [];
+            
+            
           }
         },
         error: (err: any) => {
@@ -314,7 +316,7 @@ console.log(selectedValue,mainHead);
     this.contactlist = [];
     this.serialNumberArray = [];
 
-    this.loginService.AllAdminFileList(this.startDate, this.endDate).subscribe({
+    this.uploadDocument.getSubArea(this.startDate, this.endDate).subscribe({
       next: (event: any) => {
         if (event instanceof HttpResponse) {
           this.respData = event.body.response;
@@ -492,11 +494,12 @@ openModal(fileUrl: string , documentName : string) {
     const departmentId = selectedDepartment?.catId;
   
     const payload = {
-      subArea: formData.subArea,
-      subAreaAbbr: formData.subAreaAbbr,
-      plantId: plantId,
-      headId: headId,
+      subAreaName: formData.subArea,
+      abbreviation: formData.subAreaAbbr,
       departmentId: departmentId,
+      plantId: plantId,
+      headId: headId
+      
     };
     console.log("fgfgfgf",payload);
     

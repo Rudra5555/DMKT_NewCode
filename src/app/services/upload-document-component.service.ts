@@ -109,7 +109,9 @@ export class UploadDocumentComponentService {
     }
 
     addDept(payload:any): Observable<HttpEvent<any>> {
-      const req = new HttpRequest('POST', `${this.baseUrl}/department/add-new-department`, {
+     
+      
+      const req = new HttpRequest('POST', `${this.baseUrl}/department/add-new-department`, payload,{
         responseType: 'json'  
       });
     
@@ -118,7 +120,9 @@ export class UploadDocumentComponentService {
 
 
     addSubArea(payload:any): Observable<HttpEvent<any>> {
-      const req = new HttpRequest('POST', `${this.baseUrl}/instrument/save-new-subarea`, {
+      console.log(payload);
+      
+      const req = new HttpRequest('POST', `${this.baseUrl}/instrument/save-new-subarea`,payload, {
         responseType: 'json'  
       });
     
