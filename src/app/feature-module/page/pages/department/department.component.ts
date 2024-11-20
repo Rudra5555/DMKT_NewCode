@@ -284,7 +284,7 @@ console.log(selectedValue,mainHead);
     this.contactlist = [];
     this.serialNumberArray = [];
 
-    this.loginService.AllAdminFileList(this.startDate, this.endDate).subscribe({
+    this.uploadDocument.getDeptList(this.startDate, this.endDate).subscribe({
       next: (event: any) => {
         if (event instanceof HttpResponse) {
           this.respData = event.body.response;
