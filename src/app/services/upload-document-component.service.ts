@@ -125,7 +125,21 @@ export class UploadDocumentComponentService {
       return this.http.request(req);
     }
 
+    getSubArea(startDate:any , endDate:any): Observable<HttpEvent<any>> {
+      const req = new HttpRequest('GET', `${this.baseUrl}/instrument/get-all-subarea?startDate=${startDate}&endDate=${endDate}`, {
+        responseType: 'json'
+      });
+    
+      return this.http.request(req);
+        }
 
+    getDeptList(startDate:any , endDate:any): Observable<HttpEvent<any>> {
+      const req = new HttpRequest('GET', `${this.baseUrl}/department/get-new-department?startDate=${startDate}&endDate=${endDate}`, {
+        responseType: 'json'
+      });
+    
+      return this.http.request(req);
+        }
 
 
 
