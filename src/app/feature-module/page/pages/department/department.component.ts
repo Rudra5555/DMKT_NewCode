@@ -436,9 +436,9 @@ openModal(fileUrl: string , documentName : string) {
 
   
   
-    const headId = selectedMainHead?.catId || null;
+    const headId = selectedMainHead?.catId;
   
-    const plantId = selectedPlant?.catId || null;
+    const plantId = selectedPlant?.catId;
   
     const payload = {
       departmentName: formData.department,
@@ -446,6 +446,8 @@ openModal(fileUrl: string , documentName : string) {
       plantId: plantId,
       headId: headId,
     };
+    console.log(payload);
+    
 
     this.uploadDocument.addDept(payload).subscribe({
       next: (event: any) => {

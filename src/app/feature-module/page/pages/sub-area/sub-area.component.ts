@@ -485,11 +485,11 @@ openModal(fileUrl: string , documentName : string) {
 
 
 
-    const headId = selectedMainHead?.catId || null;
+    const headId = selectedMainHead?.catId;
   
-    const plantId = selectedPlant?.catId || null;
+    const plantId = selectedPlant?.catId;
 
-    const departmentId = selectedDepartment?.catId || null;
+    const departmentId = selectedDepartment?.catId;
   
     const payload = {
       subArea: formData.subArea,
