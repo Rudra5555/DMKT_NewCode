@@ -141,6 +141,12 @@
                 <th style="color: rgb(22, 32, 138)" mat-sort-header="type">
                   Document Type
                 </th>
+                <th style="color: rgb(22, 32, 138)" mat-sort-header="type">
+                  Sub-Document Type
+                </th>
+                <th style="color: rgb(22, 32, 138)" mat-sort-header="type">
+                  Storage Location
+                </th>
                 <th style="color: rgb(22, 32, 138)" mat-sort-header="ver">
                   Versions
                 </th>
@@ -206,7 +212,7 @@
                 </td>
               </tr>
               <tr *ngIf="fileList.length == 0">
-                <td colspan="6" style="text-align: center; color: red">
+                <td colspan="8" style="text-align: center; color: red">
                   No Records Found!
                 </td>
               </tr>
