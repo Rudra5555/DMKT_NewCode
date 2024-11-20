@@ -112,7 +112,6 @@ export class UserDashboardComponent implements OnInit {
     this.getAllFilesForm = this.formBuilder.group({
       searchKeyData: ["", [Validators.required]],
 
-
     });
 
 
@@ -470,13 +469,62 @@ export class UserDashboardComponent implements OnInit {
   // }
 
 
-  fileNameSearch(): void{
-    const searchValue = this.getAllFilesForm.get('searchKeyData')?.value;
-    this.documentNameSearch = false;
-    console.log(searchValue);
+  fileNameSearch(): void {
+    const searchValue = this.getAllFilesForm.get('searchKeyData')?.value?.trim() || '';
     
-    this.dataset.filter = searchValue.trim().toLowerCase();
-    this.fileListSearch = this.dataset.filteredData;
+    if (searchValue) {
+      this.documentNameSearch = false;
+      console.log(searchValue);
+  
+      // this.dataset.filter = searchValue.toLowerCase();
+      // this.fileListSearch = this.dataset.filteredData;
+
+      this.loginService.allSearch(searchValue).subscribe({
+        next: (event: any) => {
+          if (event instanceof HttpResponse) {
+            const res = event.body.documentLists;
+            this.fileListSearch=res;
+            console.log("serach result:::::",res);
+            
+            
+          }
+        },
+        error: (err: any) => {
+          if (err.error && err.error.message) {
+            this.msg += " " + err.error.message;
+          }
+        },
+      });
+
+
+    } else {
+      console.log("Enter a value");
+    }
+  }
+  
+
+
+  getLatestVersion(versions: any[]): any {
+    return versions.reduce((latest, version) => {
+      return new Date(version.versionReleaseDate) > new Date(latest.versionReleaseDate) ? version : latest;
+    });
+  }
+  
+  
+  onVersionChange(item: any, selectedVersion: any) {
+  
+    item.selectedVersion = selectedVersion;
+  
+    if (item.selectedVersion) {
+      item.newUniqueFileName = item.selectedVersion.newUniqueFileName; 
+      // this.doc = item.selectedVersion.fileUrl; 
+      // console.log(`Version changed to: ${item.selectedVersion.versionName}, File Name: ${item.newUniqueFileName}`);
+    }
+  }
+  
+  
+  convertBytesToKB(bytes: number): string {
+    return (bytes / 1024).toFixed(2) + ' KB';
   }
 
 }

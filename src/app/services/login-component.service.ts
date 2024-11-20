@@ -351,4 +351,12 @@ upload(file: any): Observable<HttpEvent<any>> {
     return this.http.request(req);
   }
 
+  allSearch(searchValue:any ): Observable<HttpEvent<any>> {
+    const req = new HttpRequest('GET', `${this.baseUrl}/document/doc-search?sSearch=${searchValue}`, {
+      responseType: 'json'
+    });
+  
+    return this.http.request(req);
+  }
+
 }

@@ -603,12 +603,10 @@
       class="table-responsive"
       style="text-align: center; justify-content: center"
     >
-      <table
+        <table
         matSort
-        
         class="table table-striped custom-table datatable doc-table"
-      >  
-       <!-- (matSortChange)="sortData($event)" -->
+      >
         <thead>
           <tr>
             <th style="color: rgb(22, 32, 138)" mat-sort-header="name">
@@ -617,11 +615,11 @@
             <th style="color: rgb(22, 32, 138)" mat-sort-header="type">
               Document Type
             </th>
-            <th style="color: rgb(22, 32, 138)" mat-sort-header="type">
+            <th style="color: rgb(22, 32, 138)" mat-sort-header="subType">
               Sub-Document Type
             </th>
-            <th style="color: rgb(22, 32, 138)" mat-sort-header="type">
-              DStorage Location
+            <th style="color: rgb(22, 32, 138)" mat-sort-header="loc">
+              Storage Location
             </th>
             <th style="color: rgb(22, 32, 138)" mat-sort-header="ver">
               Versions
@@ -642,15 +640,15 @@
                 <!-- {{ item.listOfDocumentVersoinDtos[0].newUniqueFileName}} -->
                   
               </h2>
-              {{item.docName}}
+              {{item.fileName}}
             </td>
             <td>
               <!-- {{ item.documentType }} -->
-              {{item.docType}}
+              {{item.documentType}}
            </td>
 
             <td>
-              <!-- <mat-select
+              <mat-select
                 class="custom-mat-select select"
                 id="versionSelect"
                 placeholder="Select Version"
@@ -663,14 +661,13 @@
                 >
                   {{ version.versionName }} - {{ version.versionReleaseDate }}
                 </mat-option>
-              </mat-select> -->
-               {{item.version}}
+              </mat-select>
             </td>
             
             
             <td>
-              <!-- {{ item.listOfDocumentVersoinDtos[0].fileSize }} KB -->
-              {{item.docSize}}
+              {{ item.listOfDocumentVersoinDtos[0].fileSize }} KB
+            
             </td>
             <td class="text-center">
               <!-- <a
