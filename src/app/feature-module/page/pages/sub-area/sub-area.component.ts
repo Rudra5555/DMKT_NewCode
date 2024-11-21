@@ -4,7 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { LoginComponentService } from 'src/app/services/login-component.service';
 import { HttpResponse } from '@angular/common/http';
-import { DataService, getRecentDocument } from 'src/app/core/core.index';
+import { DataService, getSubAreas } from 'src/app/core/core.index';
 import { DatePipe } from '@angular/common';
 import { FileManagementService } from 'src/app/services/file-management.service';
 import { MatTableDataSource } from '@angular/material/table';
@@ -45,8 +45,8 @@ export class SubAreaComponent implements OnInit{
     public currentPage = 1;
     public pageNumberArray: Array<number> = [];
     public pageSelection: Array<pageSelection> = [];
-    dataSource!: MatTableDataSource<getRecentDocument>;
-    public contactlist: Array<getRecentDocument> = [];
+    dataSource!: MatTableDataSource<getSubAreas>;
+    public contactlist: Array<getSubAreas> = [];
     public totalPages = 0;
     public message: any;
     public selectedFiles: any;
@@ -132,26 +132,8 @@ export class SubAreaComponent implements OnInit{
     onDateRangeSelected() {
       const startDate = this.formatDate(this.bsRangeValue[0]);
       const endDate = this.formatDate(this.bsRangeValue[1]);
-  
-      console.log("dates",startDate,endDate);
-      
-       this.uploadDocument.getSubArea(startDate, endDate).subscribe({
-        next: (event: any) => {
-          if (event instanceof HttpResponse) {
-            const res = event.body.data;
-            this.allsubArea= res;
-            console.log("ress",this.allsubArea);
-            
-            
-          }
-        },
-        error: (err: any) => {
-          if (err.error && err.error.message) {
-            this.msg += " " + err.error.message;
-          }
-        },
-      });
     
+      this.allSubAreaList(startDate,endDate)
       
     }
     
@@ -185,11 +167,6 @@ export class SubAreaComponent implements OnInit{
   }
 
 
-
-    
-    // this.getTableData();
-    // this.getFileListDetails()
-  
 
     this.uploadFileForm.get('mainHead')?.valueChanges.subscribe(value => {
       const [catName, abbreviation] = value.split('~');
@@ -312,48 +289,37 @@ console.log(selectedValue,mainHead);
     }
   }
 
-  getFileListDetails() {
+  allSubAreaList(startDate:any,endDate:any) {
+    
     this.contactlist = [];
     this.serialNumberArray = [];
 
-    this.uploadDocument.getSubArea(this.startDate, this.endDate).subscribe({
+    this.uploadDocument.getSubArea(startDate, endDate).subscribe({
       next: (event: any) => {
         if (event instanceof HttpResponse) {
-          this.respData = event.body.response;
+          const res = event.body.data;
+          // console.log("gyyyyyyyyyyyygggggggggyyy:::",res);
 
-          let filteredData = this.respData;
+          this.totalData = res.length;
 
-          console.log("mnmnmnmnmnmnmnm",filteredData);
+          res.map((item: getSubAreas, index: number) => {
+            const serialNumber = index + 1;
+            if (index >= this.skip && serialNumber <= this.limit) {
+              item.id = serialNumber;
+              this.contactlist.push(item);
+              this.serialNumberArray.push(serialNumber);
+            }
+          });
+
+          this.dataSource = new MatTableDataSource<getSubAreas>(this.contactlist);
+          this.calculateTotalPages(res.length, this.pageSize);
           
-          if(this.contactlist.length == 0){
-            this.noRecordFlag = true;
-          }
-  
-          this.totalData = this.respData.length;
-
-          const convertToKB = (bytes: number): number => {
-            return Math.round(bytes / 1024);
-          };
-
-        filteredData.map((item: getRecentDocument, index: number) => {
-          const serialNumber = index + 1;
-          if (index >= this.skip && serialNumber <= this.limit) {
-            item.id = serialNumber;
-            this.contactlist.push(item);
-            this.serialNumberArray.push(serialNumber);
-          }
-        });
-
-        this.dataSource = new MatTableDataSource<getRecentDocument>(this.contactlist);
-        this.calculateTotalPages(filteredData.length, this.pageSize);
           
-  
-  
         }
       },
       error: (err: any) => {
         if (err.error && err.error.message) {
-          this['msg'] += " " + err.error.message;
+          this.msg += " " + err.error.message;
         }
       },
     });
@@ -419,7 +385,6 @@ openModal(fileUrl: string , documentName : string) {
     this.loginService.searchDocuments(this.searchQuery).subscribe({
       next: (event: any) => {
         if (event instanceof HttpResponse) {
-          //console.log('API Response:', event.body); 
   
           if (event.body && event.body.data && Array.isArray(event.body.data)) {
             this.documentList = event.body.data.map((doc: any) => ({
@@ -443,23 +408,6 @@ openModal(fileUrl: string , documentName : string) {
     });
   }
   
-
-
-
-
-
-
-  // onSubmit(){
-
-  //   const selectedPlant = this.uploadFileForm.get('plants')?.value;
-  //   console.log('Selected Plant:', selectedPlant);
-
-  //   const departmentName =  this.uploadFileForm.get('department')?.value;
-  // console.log(departmentName);
-  
-    
-  // }
-
 
   onSubmit(): void {
     if (this.uploadFileForm.invalid) {
@@ -486,7 +434,6 @@ openModal(fileUrl: string , documentName : string) {
     ); 
 
 
-
     const headId = selectedMainHead?.catId;
   
     const plantId = selectedPlant?.catId;
@@ -501,14 +448,13 @@ openModal(fileUrl: string , documentName : string) {
       headId: headId
       
     };
-    console.log("fgfgfgf",payload);
+    // console.log("fgfgfgf",payload);
     
     this.uploadDocument.addSubArea(payload).subscribe({
       next: (event: any) => {
         if (event instanceof HttpResponse) {
           const res = event.body;
-          console.log("huuuuuuuuuu",res);
-          
+          // console.log("huuuuuuuuuu",res);
         }
       },
       error: (err: any) => {
@@ -525,8 +471,6 @@ openModal(fileUrl: string , documentName : string) {
 
   public sortData(sort: Sort) {
     const data = this.contactlist.slice();
-
-    /* eslint-disable @typescript-eslint/no-explicit-any */
     if (!sort.active || sort.direction === '') {
       this.contactlist = data;
     } else {
@@ -549,13 +493,13 @@ openModal(fileUrl: string , documentName : string) {
       this.pageIndex = this.currentPage - 1;
       this.limit += this.pageSize;
       this.skip = this.pageSize * this.pageIndex;
-      this.getFileListDetails()
+      this.allSubAreaList(this.startDate,this.endDate);
     } else if (event === 'previous') {
       this.currentPage--;
       this.pageIndex = this.currentPage - 1;
       this.limit -= this.pageSize;
       this.skip = this.pageSize * this.pageIndex;
-      this.getFileListDetails()
+      this.allSubAreaList(this.startDate,this.endDate);
     }
   }
 
@@ -568,7 +512,7 @@ openModal(fileUrl: string , documentName : string) {
     } else if (pageNumber < this.currentPage) {
       this.pageIndex = pageNumber + 1;
     }
-    this.getFileListDetails()
+    this.allSubAreaList(this.startDate,this.endDate);
   }
   private calculateTotalPages(totalData: number, pageSize: number): void {
     this.pageNumberArray = [];
@@ -588,7 +532,7 @@ openModal(fileUrl: string , documentName : string) {
     this.limit = this.pageSize;
     this.skip = 0;
     this.currentPage = 1;
-    this.getFileListDetails()
+    this.allSubAreaList(this.startDate,this.endDate);
   }
   openFilter() {
     this.filter = !this.filter;
@@ -597,7 +541,7 @@ openModal(fileUrl: string , documentName : string) {
     this.isFilterDropdownOpen = !this.isFilterDropdownOpen;
   }
   fullscreen() {
-    if(!document.fullscreenElement) {
+    if (!document.fullscreenElement) {
       this.elem.requestFullscreen();
     }
     else {
@@ -612,10 +556,10 @@ openModal(fileUrl: string , documentName : string) {
   addOnBlur = true;
   readonly separatorKeysCodes = [ENTER, COMMA] as const;
 
-selected1 = 'option1';
+  selected1 = 'option1';
 
-selectFiles(_event: any): void {
-  
-}
+  selectFiles(_event: any): void {
+
+  }
 
 }

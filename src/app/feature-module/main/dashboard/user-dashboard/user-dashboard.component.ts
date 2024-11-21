@@ -11,6 +11,13 @@ import { DatePipe } from '@angular/common';
 import { MatTableDataSource } from '@angular/material/table';
 
 
+import { ViewerType } from 'ngx-doc-viewer';
+import { COMMA, ENTER } from '@angular/cdk/keycodes';
+import { Sort } from '@angular/material/sort';
+
+declare let $: any;
+
+
 interface data{
   docName: string, docType: string, version: string, docSize: string, download?: string, view?: string;
 }
@@ -113,59 +120,6 @@ export class UserDashboardComponent implements OnInit {
       searchKeyData: ["", [Validators.required]],
 
     });
-
-
-    this.dataset = new MatTableDataSource<DocumentData>([
-      {
-        docName: 'xyz.pdf', docType: 'pdf',version: 'xyz1',  docSize: '10.45kb', download: 'down', view: 'view'
-      },
-      {
-        docName: 'zyz.xlm', docType: 'xlm',version: 'zyz1',  docSize: '10.45kb', download: 'down', view: 'view'
-      },
-      {
-        docName: 'zzz.doc', docType: 'doc',version: 'zzz1',  docSize: '10.45kb', download: 'down', view: 'view'
-      },
-      {
-        docName: 'qqq.pdf', docType: 'pdf',version: 'qqq1',  docSize: '10.45kb', download: 'down', view: 'view'
-      },
-      {
-        docName: 'xyz.pdf', docType: 'pdf',version: 'xyz1',  docSize: '10.45kb', download: 'down', view: 'view'
-      },
-      {
-        docName: 'zyz.xlm', docType: 'xlm',version: 'zyz1',  docSize: '10.45kb', download: 'down', view: 'view'
-      },
-      {
-        docName: 'zzz.doc', docType: 'doc',version: 'zzz1',  docSize: '10.45kb', download: 'down', view: 'view'
-      },
-      {
-        docName: 'qqq.pdf', docType: 'pdf',version: 'qqq1',  docSize: '10.45kb', download: 'down', view: 'view'
-      },
-      {
-        docName: 'ppp.pdf', docType: 'pdf',version: 'xyz1',  docSize: '10.45kb', download: 'down', view: 'view'
-      },
-      {
-        docName: 'lll.xlm', docType: 'xlm',version: 'zyz1',  docSize: '10.45kb', download: 'down', view: 'view'
-      },
-      {
-        docName: 'zzz.doc', docType: 'doc',version: 'zzz1',  docSize: '10.45kb', download: 'down', view: 'view'
-      },
-      {
-        docName: 'kkk.pdf', docType: 'pdf',version: 'qqq1',  docSize: '10.45kb', download: 'down', view: 'view'
-      },
-      {
-        docName: 'nnn.pdf', docType: 'pdf',version: 'xyz1',  docSize: '10.45kb', download: 'down', view: 'view'
-      },
-      {
-        docName: 'lll.xlm', docType: 'xlm',version: 'zyz1',  docSize: '10.45kb', download: 'down', view: 'view'
-      },
-      {
-        docName: 'zllz.doc', docType: 'doc',version: 'zzz1',  docSize: '10.45kb', download: 'down', view: 'view'
-      },
-      {
-        docName: 'qllq.pdf', docType: 'pdf',version: 'qqq1',  docSize: '10.45kb', download: 'down', view: 'view'
-      },
-    ]);
-
    
 
   }
@@ -420,21 +374,41 @@ export class UserDashboardComponent implements OnInit {
 
   
 
+ 
+  // public sortData(sort: Sort) {
+  //   const data = this.contactlist.slice();
+  //   if (!sort.active || sort.direction === '') {
+  //     this.contactlist = data;
+  //   } else {
+  //     this.contactlist = data.sort((a: any, b: any) => {
+  //       const aValue = (a as any)[sort.active];
+  //       const bValue = (b as any)[sort.active];
+  //       return (aValue < bValue ? -1 : 1) * (sort.direction === 'asc' ? 1 : -1);
+  //     });
+  //   }
+  // }
+
+  // public searchData(value: string): void {
+  //   this.dataSource.filter = value.trim().toLowerCase();
+  //   this.contactlist = this.dataSource.filteredData;
+  // }
+
   // public getMoreData(event: string): void {
   //   if (event === 'next') {
   //     this.currentPage++;
   //     this.pageIndex = this.currentPage - 1;
   //     this.limit += this.pageSize;
   //     this.skip = this.pageSize * this.pageIndex;
-  //     this.getFileListDetails()
+  //     this.allSubAreaList();
   //   } else if (event === 'previous') {
   //     this.currentPage--;
   //     this.pageIndex = this.currentPage - 1;
   //     this.limit -= this.pageSize;
   //     this.skip = this.pageSize * this.pageIndex;
-  //     this.getFileListDetails()
+  //     this.allSubAreaList();
   //   }
   // }
+
   // public moveToPage(pageNumber: number): void {
   //   this.currentPage = pageNumber;
   //   this.skip = this.pageSelection[pageNumber - 1].skip;
@@ -444,7 +418,7 @@ export class UserDashboardComponent implements OnInit {
   //   } else if (pageNumber < this.currentPage) {
   //     this.pageIndex = pageNumber + 1;
   //   }
-  //   this.getFileListDetails()
+  //   this.allSubAreaList();
   // }
   // private calculateTotalPages(totalData: number, pageSize: number): void {
   //   this.pageNumberArray = [];
@@ -459,14 +433,42 @@ export class UserDashboardComponent implements OnInit {
   //     this.pageSelection.push({ skip: skip, limit: limit });
   //   }
   // }
-
   // public changePageSize(): void {
   //   this.pageSelection = [];
   //   this.limit = this.pageSize;
   //   this.skip = 0;
   //   this.currentPage = 1;
-  //   this.getFileListDetails()
+  //   this.allSubAreaList();
   // }
+  // openFilter() {
+  //   this.filter = !this.filter;
+  // }
+  // toggleFilterDropdown() {
+  //   this.isFilterDropdownOpen = !this.isFilterDropdownOpen;
+  // }
+  // fullscreen() {
+  //   if (!document.fullscreenElement) {
+  //     this.elem.requestFullscreen();
+  //   }
+  //   else {
+  //     document.exitFullscreen();
+  //   }
+  // }
+  // public selectedFieldSet = [0];
+  // currentStep = 0;
+  // nextStep() {
+  //   this.currentStep++;
+  // }
+  // addOnBlur = true;
+  // readonly separatorKeysCodes = [ENTER, COMMA] as const;
+
+  // selected1 = 'option1';
+
+  // selectFiles(_event: any): void {
+
+  // }
+
+
 
 
   fileNameSearch(): void {

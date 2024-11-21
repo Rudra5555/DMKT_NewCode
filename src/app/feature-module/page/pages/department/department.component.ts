@@ -4,7 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { LoginComponentService } from 'src/app/services/login-component.service';
 import { HttpResponse } from '@angular/common/http';
-import { DataService, getRecentDocument } from 'src/app/core/core.index';
+import { DataService, getDeptList } from 'src/app/core/core.index';
 import { DatePipe } from '@angular/common';
 import { FileManagementService } from 'src/app/services/file-management.service';
 import { MatTableDataSource } from '@angular/material/table';
@@ -45,8 +45,8 @@ export class DepartmentComponent implements OnInit{
     public currentPage = 1;
     public pageNumberArray: Array<number> = [];
     public pageSelection: Array<pageSelection> = [];
-    dataSource!: MatTableDataSource<getRecentDocument>;
-    public contactlist: Array<getRecentDocument> = [];
+    dataSource!: MatTableDataSource<getDeptList>;
+    public contactlist: Array<getDeptList> = [];
     public totalPages = 0;
     public message: any;
     public selectedFiles: any;
@@ -115,13 +115,13 @@ export class DepartmentComponent implements OnInit{
   
       this.bsRangeValue = [this.bsValue, this.maxDate];
 
-      // this.uploadFileForm = this.formBuilder.group({
-      //    mainHead: ['', Validators.required],
-      //   plants: ["", [Validators.required]],
-      //   department: ["", [Validators.required]],
-      //   departmentAbbr: ["", [Validators.required]],
+      this.uploadFileForm = this.formBuilder.group({
+         mainHead: ['', Validators.required],
+        plants: ["", [Validators.required]],
+        department: ["", [Validators.required]],
+        departmentAbbr: ["", [Validators.required]],
        
-      // });
+      });
   
     }
   
@@ -139,25 +139,7 @@ export class DepartmentComponent implements OnInit{
       const startDate = this.formatDate(this.bsRangeValue[0]);
       const endDate = this.formatDate(this.bsRangeValue[1]);
 
-      console.log("dept dates",startDate,endDate);
-      
-
-      this.uploadDocument.getDeptList(startDate, endDate).subscribe({
-        next: (event: any) => {
-          if (event instanceof HttpResponse) {
-            const res = event.body.data;
-            this.allDeptList= res;
-            console.log("ress",this.allDeptList);
-            
-            
-          }
-        },
-        error: (err: any) => {
-          if (err.error && err.error.message) {
-            this.msg += " " + err.error.message;
-          }
-        },
-      });
+      this.getDeptFileList(startDate,endDate)
     
       
     }
@@ -170,12 +152,12 @@ export class DepartmentComponent implements OnInit{
 
   ngOnInit() {
 
-    this.uploadFileForm = this.formBuilder.group({
-      mainHead: ['', Validators.required],
-      plants: ['',Validators.required],
-      department: ['', Validators.required],
-      departmentAbbr: ['', Validators.required]
-    });
+    // this.uploadFileForm = this.formBuilder.group({
+    //   mainHead: ['', Validators.required],
+    //   plants: ['',Validators.required],
+    //   department: ['', Validators.required],
+    //   departmentAbbr: ['', Validators.required]
+    // });
  
     this.setLast15Days();
     
@@ -198,11 +180,6 @@ export class DepartmentComponent implements OnInit{
     //console.log(this.roleFlag)
   }
 
-
-
-    
-    // this.getTableData();
-    // this.getFileListDetails()
   
 
     this.uploadFileForm.get('mainHead')?.valueChanges.subscribe(value => {
@@ -280,30 +257,22 @@ console.log(selectedValue,mainHead);
   // }
 
 
-  getFileListDetails() {
+  getDeptFileList(startDate:any,endDate:any) {
+    
     this.contactlist = [];
     this.serialNumberArray = [];
 
-    this.uploadDocument.getDeptList(this.startDate, this.endDate).subscribe({
+    this.uploadDocument.getDeptList(startDate, endDate).subscribe({
       next: (event: any) => {
         if (event instanceof HttpResponse) {
-          this.respData = event.body.response;
+          const respData = event.body.data;
 
-          let filteredData = this.respData;
-
-          console.log("mnmnmnmnmnmnmnm",filteredData);
+          console.log("mrmrmrmrmrmr",respData);
           
-          if(this.contactlist.length == 0){
-            this.noRecordFlag = true;
-          }
   
-          this.totalData = this.respData.length;
+          this.totalData = respData.length;
 
-          const convertToKB = (bytes: number): number => {
-            return Math.round(bytes / 1024);
-          };
-
-        filteredData.map((item: getRecentDocument, index: number) => {
+          respData.map((item: getDeptList, index: number) => {
           const serialNumber = index + 1;
           if (index >= this.skip && serialNumber <= this.limit) {
             item.id = serialNumber;
@@ -312,8 +281,8 @@ console.log(selectedValue,mainHead);
           }
         });
 
-        this.dataSource = new MatTableDataSource<getRecentDocument>(this.contactlist);
-        this.calculateTotalPages(filteredData.length, this.pageSize);
+        this.dataSource = new MatTableDataSource<getDeptList>(this.contactlist);
+        this.calculateTotalPages(respData.length, this.pageSize);
           
   
   
@@ -494,13 +463,13 @@ openModal(fileUrl: string , documentName : string) {
       this.pageIndex = this.currentPage - 1;
       this.limit += this.pageSize;
       this.skip = this.pageSize * this.pageIndex;
-      this.getFileListDetails()
+      this.getDeptFileList(this.startDate, this.endDate)
     } else if (event === 'previous') {
       this.currentPage--;
       this.pageIndex = this.currentPage - 1;
       this.limit -= this.pageSize;
       this.skip = this.pageSize * this.pageIndex;
-      this.getFileListDetails()
+      this.getDeptFileList(this.startDate, this.endDate)
     }
   }
 
@@ -513,7 +482,7 @@ openModal(fileUrl: string , documentName : string) {
     } else if (pageNumber < this.currentPage) {
       this.pageIndex = pageNumber + 1;
     }
-    this.getFileListDetails()
+    this.getDeptFileList(this.startDate, this.endDate)
   }
   private calculateTotalPages(totalData: number, pageSize: number): void {
     this.pageNumberArray = [];
@@ -533,7 +502,7 @@ openModal(fileUrl: string , documentName : string) {
     this.limit = this.pageSize;
     this.skip = 0;
     this.currentPage = 1;
-    this.getFileListDetails()
+    this.getDeptFileList(this.startDate, this.endDate)
   }
   openFilter() {
     this.filter = !this.filter;

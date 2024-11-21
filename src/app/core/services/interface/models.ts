@@ -16,6 +16,26 @@ export interface getRecentDocument {
   fileUrl: string;
 }
 
+export interface getDeptList {
+  id: number;
+  departmentId: string;
+  departmentName: string;
+  abbreviation: string;
+  plant: string;
+  headName: string;
+}
+
+
+export interface getSubAreas {
+  id: number;
+  subAreaId: string;
+  subAreaName: string;
+  abbreviation: string;
+  departmentId: string;
+  plantId: string;
+  headId: string;
+}
+
 export interface getStatutoryDoc {
   id: number;
   department: string
@@ -94,6 +114,28 @@ export interface getfileList {
   documentType: string
   listOfDocumentVersoinDtos: ListOfDocumentVersoinDto[]
   selectedVersion?: ListOfDocumentVersoinDto;
+}
+
+
+export interface Root {
+  fileName: string
+  extension: string
+  documentType: string
+  listOfDocumentVersoinDtos: ListOfDocumentVersoinDto[]
+}
+
+export interface ListOfDocumentVersoinDto {
+  versionId: number
+  versionName: string
+  fileSize: string
+  versionReleaseDate: string
+  fileName: string
+  newUniqueFileName: string
+  hodDocument: boolean
+  statutoryDocument: boolean
+  restrictedDocument: boolean
+  fileUrl: string
+  uniqueFileName: string
 }
 
 export interface ListOfDocumentVersoinDto {
