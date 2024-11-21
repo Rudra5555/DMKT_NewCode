@@ -583,16 +583,16 @@
           <div class="dataTables_length">
             <label class="col-form-label" for="">
               Show
-              <!-- <select
+              <select
                 [(ngModel)]="pageSize"
-                (ngModelChange)="changePageSize()"
+        
                 class="form-control form-control-sm" id="changePageDataNumber"
               >
                 <option value="10">10</option>
                 <option value="25">25</option>
                 <option value="50">50</option>
                 <option value="100">100</option>
-              </select> -->
+              </select>
               Entries
             </label>
           </div>
@@ -710,14 +710,14 @@
     </div>
     <div class="table_footer">
       <div class="col-sm-12 col-md-5">
-        <!-- <div class="dataTables_info">
+        <div class="dataTables_info">
           Showing {{ serialNumberArray[0] }} to
           {{ serialNumberArray[serialNumberArray.length - 2] }} of
           {{ totalData }} entries
-        </div> -->
+        </div>
       </div>
 
-      <!-- <div class="col-sm-12 col-md-7">
+      <div class="col-sm-12 col-md-7">
         <div class="pagination_section">
           <ul class="pagination">
             <li class="page-item" [ngClass]="{
@@ -778,7 +778,7 @@
             </li>
           </ul>
         </div>
-      </div> -->
+      </div>
     </div>
   </div>
 </div>

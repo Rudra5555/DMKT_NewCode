@@ -138,19 +138,19 @@ export interface ListOfDocumentVersoinDto {
   uniqueFileName: string
 }
 
-export interface ListOfDocumentVersoinDto {
-  versionId: number
-  versionName: string
-  fileSize: string
-  versionReleaseDate: string
-  fileName: string
-  newUniqueFileName: string
-  hodDocument: boolean
-  statutoryDocument: boolean
-  restrictedDocument: boolean
-  fileUrl: string
-  uniqueFileName: string
-}
+// export interface ListOfDocumentVersoinDto {
+//   versionId: number
+//   versionName: string
+//   fileSize: string
+//   versionReleaseDate: string
+//   fileName: string
+//   newUniqueFileName: string
+//   hodDocument: boolean
+//   statutoryDocument: boolean
+//   restrictedDocument: boolean
+//   fileUrl: string
+//   uniqueFileName: string
+// }
 
 export interface SideBarMenu {
   showMyTab?: boolean;

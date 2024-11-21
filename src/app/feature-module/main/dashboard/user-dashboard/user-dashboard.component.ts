@@ -4,6 +4,8 @@ import { routes, url } from 'src/app/core/core.index';
 import { Router } from '@angular/router';
 import { LoginComponentService } from 'src/app/services/login-component.service';
 import { HttpResponse } from '@angular/common/http';
+import { apiResultFormat, getfileList } from 'src/app/core/services/interface/models';
+import { pageSelection } from 'src/app/feature-module/employee/employees/departments/departments.component';
 
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { bootstrapApplication } from '@angular/platform-browser';
@@ -86,6 +88,56 @@ export class UserDashboardComponent implements OnInit {
   subAreaList: any[] = [];
   subAreaDataList: any[] = [];
   bsRangeValue: Date[] | undefined;
+
+// ****************************************
+
+  [x: string]: any;
+  public searchDataValue = '';
+  public filter = false;
+  elem=document.documentElement
+  isFilterDropdownOpen: boolean = false;
+  bsValue = new Date();
+  maxDate = new Date();
+  // pagination variables
+  public lastIndex = 0;
+  public totalData = 0;
+  public serialNumberArray: Array<number> = [];
+  public pageNumberArray: Array<number> = [];
+  public pageSelection: Array<pageSelection> = [];
+
+
+  dataSource!: MatTableDataSource<getfileList>;
+  public contactlist: Array<getfileList> = [];
+  public totalPages = 0;
+  public message: any;
+  public selectedFiles: any;
+  public uploadFileForm!: FormGroup ;
+    public editClientForm!: FormGroup ;
+   public multipleFiles: File[] = [];
+   public getRole:any;
+  //  public fileList:any;
+   public bigId:any;
+   public roleFlag: boolean = false;
+
+   departmentName:any;
+   subAreaName: any;
+   subAreaNameOnHeader:any;
+   mainHead:any;
+   plants:any;
+
+   doc: string = '';
+   viewer: ViewerType = 'google';
+   selectedType = 'xlsx';
+
+   startDate:any;
+   endDate:any;
+
+   loggedUserRole:any;
+
+   respData:any;
+
+
+
   // public dataset!: Array<data>;
   constructor(private formBuilder: FormBuilder, private router: Router, private loginService: LoginComponentService, private datePipe: DatePipe) {
 
@@ -326,37 +378,37 @@ export class UserDashboardComponent implements OnInit {
   }
 
 
-  getDetailsByPlantsDataName(departmentName: string, subAreaName: string) {
-    let endDate = new Date();
-    let startDate = new Date();
-    startDate.setDate(endDate.getDate() - 15);
+  // getDetailsByPlantsDataName(departmentName: string, subAreaName: string) {
+  //   let endDate = new Date();
+  //   let startDate = new Date();
+  //   startDate.setDate(endDate.getDate() - 15);
 
-    this.bsRangeValue = [startDate, endDate];
-    const startDt = this.formatDate(this.bsRangeValue[0]);
-    const endDt = this.formatDate(this.bsRangeValue[1]);
-    this.getFileListDetails(departmentName, subAreaName, this.categoryList, startDt, endDt)
-  }
+  //   this.bsRangeValue = [startDate, endDate];
+  //   const startDt = this.formatDate(this.bsRangeValue[0]);
+  //   const endDt = this.formatDate(this.bsRangeValue[1]);
+  //   this.getFileListDetails(departmentName, subAreaName, this.categoryList, startDt, endDt)
+  // }
 
-  getFileListDetails(departmentName: string, subAreaName: string, categoryList: Map<any, any>, startDate: any, endDate: any) {
-    const mainHead = categoryList.get('main-head');
-    const plants = categoryList.get('plants');
+  // getFileListDetails(departmentName: string, subAreaName: string, categoryList: Map<any, any>, startDate: any, endDate: any) {
+  //   const mainHead = categoryList.get('main-head');
+  //   const plants = categoryList.get('plants');
     
 
-    this.loginService.getFileList(categoryList, departmentName, subAreaName, startDate, endDate).subscribe({
-      next: (event: any) => {
-        if (event instanceof HttpResponse) {
-          this.fileList = event.body.documentLists;
-          const encodedFileList = encodeURIComponent(JSON.stringify(this.fileList));
-          this.router.navigate([routes.filemanager], { queryParams: { fileList: encodedFileList, DepartmentName: departmentName, subAreaName: subAreaName, mainHead: mainHead, plants: plants } });
-        }
-      },
-      error: (err: any) => {
-        if (err.error && err.error.message) {
-          this.msg += " " + err.error.message;
-        }
-      },
-    });
-  }
+  //   this.loginService.getFileList(categoryList, departmentName, subAreaName, startDate, endDate).subscribe({
+  //     next: (event: any) => {
+  //       if (event instanceof HttpResponse) {
+  //         this.fileList = event.body.documentLists;
+  //         const encodedFileList = encodeURIComponent(JSON.stringify(this.fileList));
+  //         this.router.navigate([routes.filemanager], { queryParams: { fileList: encodedFileList, DepartmentName: departmentName, subAreaName: subAreaName, mainHead: mainHead, plants: plants } });
+  //       }
+  //     },
+  //     error: (err: any) => {
+  //       if (err.error && err.error.message) {
+  //         this.msg += " " + err.error.message;
+  //       }
+  //     },
+  //   });
+  // }
 
   formatDate(date: Date): string {
     return this.datePipe.transform(date, 'yyyy-MM-dd')!;
@@ -375,98 +427,98 @@ export class UserDashboardComponent implements OnInit {
   
 
  
-  // public sortData(sort: Sort) {
-  //   const data = this.contactlist.slice();
-  //   if (!sort.active || sort.direction === '') {
-  //     this.contactlist = data;
-  //   } else {
-  //     this.contactlist = data.sort((a: any, b: any) => {
-  //       const aValue = (a as any)[sort.active];
-  //       const bValue = (b as any)[sort.active];
-  //       return (aValue < bValue ? -1 : 1) * (sort.direction === 'asc' ? 1 : -1);
-  //     });
-  //   }
-  // }
+  public sortData(sort: Sort) {
+    const data = this.contactlist.slice();
+    if (!sort.active || sort.direction === '') {
+      this.contactlist = data;
+    } else {
+      this.contactlist = data.sort((a: any, b: any) => {
+        const aValue = (a as any)[sort.active];
+        const bValue = (b as any)[sort.active];
+        return (aValue < bValue ? -1 : 1) * (sort.direction === 'asc' ? 1 : -1);
+      });
+    }
+  }
 
-  // public searchData(value: string): void {
-  //   this.dataSource.filter = value.trim().toLowerCase();
-  //   this.contactlist = this.dataSource.filteredData;
-  // }
+  public searchData(value: string): void {
+    this.dataSource.filter = value.trim().toLowerCase();
+    this.contactlist = this.dataSource.filteredData;
+  }
 
-  // public getMoreData(event: string): void {
-  //   if (event === 'next') {
-  //     this.currentPage++;
-  //     this.pageIndex = this.currentPage - 1;
-  //     this.limit += this.pageSize;
-  //     this.skip = this.pageSize * this.pageIndex;
-  //     this.allSubAreaList();
-  //   } else if (event === 'previous') {
-  //     this.currentPage--;
-  //     this.pageIndex = this.currentPage - 1;
-  //     this.limit -= this.pageSize;
-  //     this.skip = this.pageSize * this.pageIndex;
-  //     this.allSubAreaList();
-  //   }
-  // }
+  public getMoreData(event: string): void {
+    if (event === 'next') {
+      this.currentPage++;
+      this.pageIndex = this.currentPage - 1;
+      this.limit += this.pageSize;
+      this.skip = this.pageSize * this.pageIndex;
+      // this.allSubAreaList();
+    } else if (event === 'previous') {
+      this.currentPage--;
+      this.pageIndex = this.currentPage - 1;
+      this.limit -= this.pageSize;
+      this.skip = this.pageSize * this.pageIndex;
+      // this.allSubAreaList();
+    }
+  }
 
-  // public moveToPage(pageNumber: number): void {
-  //   this.currentPage = pageNumber;
-  //   this.skip = this.pageSelection[pageNumber - 1].skip;
-  //   this.limit = this.pageSelection[pageNumber - 1].limit;
-  //   if (pageNumber > this.currentPage) {
-  //     this.pageIndex = pageNumber - 1;
-  //   } else if (pageNumber < this.currentPage) {
-  //     this.pageIndex = pageNumber + 1;
-  //   }
-  //   this.allSubAreaList();
-  // }
-  // private calculateTotalPages(totalData: number, pageSize: number): void {
-  //   this.pageNumberArray = [];
-  //   this.totalPages = totalData / pageSize;
-  //   if (this.totalPages % 1 !== 0) {
-  //     this.totalPages = Math.trunc(this.totalPages + 1);
-  //   }
-  //   for (let i = 1; i <= this.totalPages; i++) {
-  //     const limit = pageSize * i;
-  //     const skip = limit - pageSize;
-  //     this.pageNumberArray.push(i);
-  //     this.pageSelection.push({ skip: skip, limit: limit });
-  //   }
-  // }
-  // public changePageSize(): void {
-  //   this.pageSelection = [];
-  //   this.limit = this.pageSize;
-  //   this.skip = 0;
-  //   this.currentPage = 1;
-  //   this.allSubAreaList();
-  // }
-  // openFilter() {
-  //   this.filter = !this.filter;
-  // }
-  // toggleFilterDropdown() {
-  //   this.isFilterDropdownOpen = !this.isFilterDropdownOpen;
-  // }
-  // fullscreen() {
-  //   if (!document.fullscreenElement) {
-  //     this.elem.requestFullscreen();
-  //   }
-  //   else {
-  //     document.exitFullscreen();
-  //   }
-  // }
-  // public selectedFieldSet = [0];
-  // currentStep = 0;
-  // nextStep() {
-  //   this.currentStep++;
-  // }
-  // addOnBlur = true;
-  // readonly separatorKeysCodes = [ENTER, COMMA] as const;
+  public moveToPage(pageNumber: number): void {
+    this.currentPage = pageNumber;
+    this.skip = this.pageSelection[pageNumber - 1].skip;
+    this.limit = this.pageSelection[pageNumber - 1].limit;
+    if (pageNumber > this.currentPage) {
+      this.pageIndex = pageNumber - 1;
+    } else if (pageNumber < this.currentPage) {
+      this.pageIndex = pageNumber + 1;
+    }
+    // this.allSubAreaList();
+  }
+  private calculateTotalPages(totalData: number, pageSize: number): void {
+    this.pageNumberArray = [];
+    this.totalPages = totalData / pageSize;
+    if (this.totalPages % 1 !== 0) {
+      this.totalPages = Math.trunc(this.totalPages + 1);
+    }
+    for (let i = 1; i <= this.totalPages; i++) {
+      const limit = pageSize * i;
+      const skip = limit - pageSize;
+      this.pageNumberArray.push(i);
+      this.pageSelection.push({ skip: skip, limit: limit });
+    }
+  }
+  public changePageSize(): void {
+    this.pageSelection = [];
+    this.limit = this.pageSize;
+    this.skip = 0;
+    this.currentPage = 1;
+    // this.allSubAreaList();
+  }
+  openFilter() {
+    this.filter = !this.filter;
+  }
+  toggleFilterDropdown() {
+    this.isFilterDropdownOpen = !this.isFilterDropdownOpen;
+  }
+  fullscreen() {
+    if (!document.fullscreenElement) {
+      this.elem.requestFullscreen();
+    }
+    else {
+      document.exitFullscreen();
+    }
+  }
+  public selectedFieldSet = [0];
+  currentStep = 0;
+  nextStep() {
+    this.currentStep++;
+  }
+  addOnBlur = true;
+  readonly separatorKeysCodes = [ENTER, COMMA] as const;
 
-  // selected1 = 'option1';
+  selected1 = 'option1';
 
-  // selectFiles(_event: any): void {
+  selectFiles(_event: any): void {
 
-  // }
+  }
 
 
 
