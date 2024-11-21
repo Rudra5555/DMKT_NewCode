@@ -659,10 +659,10 @@
                 placeholder="Select Version"
                 (selectionChange)="onVersionChange(item, $event.value)"
                 [value]="item.selectedVersion"
-              >
+              > 
                 <mat-option
                   *ngFor="let version of item.listOfDocumentVersoinDtos"
-                  [value]="version"
+                  [value]="version" style="color: #000000;"
                 >
                   {{ version.versionName }} - {{ version.versionReleaseDate }}
                 </mat-option>
