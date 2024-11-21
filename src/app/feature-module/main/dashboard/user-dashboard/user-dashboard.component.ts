@@ -378,37 +378,37 @@ export class UserDashboardComponent implements OnInit {
   }
 
 
-  // getDetailsByPlantsDataName(departmentName: string, subAreaName: string) {
-  //   let endDate = new Date();
-  //   let startDate = new Date();
-  //   startDate.setDate(endDate.getDate() - 15);
+  getDetailsByPlantsDataName(departmentName: string, subAreaName: string) {
+    let endDate = new Date();
+    let startDate = new Date();
+    startDate.setDate(endDate.getDate() - 15);
 
-  //   this.bsRangeValue = [startDate, endDate];
-  //   const startDt = this.formatDate(this.bsRangeValue[0]);
-  //   const endDt = this.formatDate(this.bsRangeValue[1]);
-  //   this.getFileListDetails(departmentName, subAreaName, this.categoryList, startDt, endDt)
-  // }
+    this.bsRangeValue = [startDate, endDate];
+    const startDt = this.formatDate(this.bsRangeValue[0]);
+    const endDt = this.formatDate(this.bsRangeValue[1]);
+    this.getFileListDetails(departmentName, subAreaName, this.categoryList, startDt, endDt)
+  }
 
-  // getFileListDetails(departmentName: string, subAreaName: string, categoryList: Map<any, any>, startDate: any, endDate: any) {
-  //   const mainHead = categoryList.get('main-head');
-  //   const plants = categoryList.get('plants');
+  getFileListDetails(departmentName: string, subAreaName: string, categoryList: Map<any, any>, startDate: any, endDate: any) {
+    const mainHead = categoryList.get('main-head');
+    const plants = categoryList.get('plants');
     
 
-  //   this.loginService.getFileList(categoryList, departmentName, subAreaName, startDate, endDate).subscribe({
-  //     next: (event: any) => {
-  //       if (event instanceof HttpResponse) {
-  //         this.fileList = event.body.documentLists;
-  //         const encodedFileList = encodeURIComponent(JSON.stringify(this.fileList));
-  //         this.router.navigate([routes.filemanager], { queryParams: { fileList: encodedFileList, DepartmentName: departmentName, subAreaName: subAreaName, mainHead: mainHead, plants: plants } });
-  //       }
-  //     },
-  //     error: (err: any) => {
-  //       if (err.error && err.error.message) {
-  //         this.msg += " " + err.error.message;
-  //       }
-  //     },
-  //   });
-  // }
+    this.loginService.getFileList(categoryList, departmentName, subAreaName, startDate, endDate).subscribe({
+      next: (event: any) => {
+        if (event instanceof HttpResponse) {
+          this.fileList = event.body.documentLists;
+          const encodedFileList = encodeURIComponent(JSON.stringify(this.fileList));
+          this.router.navigate([routes.filemanager], { queryParams: { fileList: encodedFileList, DepartmentName: departmentName, subAreaName: subAreaName, mainHead: mainHead, plants: plants } });
+        }
+      },
+      error: (err: any) => {
+        if (err.error && err.error.message) {
+          this.msg += " " + err.error.message;
+        }
+      },
+    });
+  }
 
   formatDate(date: Date): string {
     return this.datePipe.transform(date, 'yyyy-MM-dd')!;

@@ -109,7 +109,7 @@
               <ol>
 
                 <li>
-                  <h5 class="subAreasName" (click)="getDetailsByPlantsDataName(item.departmentName,it.subAreaName)">
+                  <h5 class="subAreasName" (click)="getDetailsByPlantsDataName(item.departmentName,item.subAreaName)">
                     &#11166; {{ it.subAreaName }}</h5>
                 </li>
               </ol>
@@ -710,14 +710,14 @@
     </div>
     <div class="table_footer">
       <div class="col-sm-12 col-md-5">
-        <div class="dataTables_info">
+        <!-- <div class="dataTables_info">
           Showing {{ serialNumberArray[0] }} to
           {{ serialNumberArray[serialNumberArray.length - 2] }} of
           {{ totalData }} entries
-        </div>
+        </div> -->
       </div>
 
-      <div class="col-sm-12 col-md-7">
+      <!-- <div class="col-sm-12 col-md-7">
         <div class="pagination_section">
           <ul class="pagination">
             <li class="page-item" [ngClass]="{
@@ -778,7 +778,7 @@
             </li>
           </ul>
         </div>
-      </div>
+      </div> -->
     </div>
   </div>
 </div>
