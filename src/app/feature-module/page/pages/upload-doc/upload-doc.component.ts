@@ -76,7 +76,14 @@ export class UploadDocComponent implements OnInit {
   selectedValue: string | undefined;
   docList:any;
   subDocList:any;
-
+  subDocumentTypeOption: any;
+  docTypeId: any;
+  docTypeName: any;
+  subDocListSize: any;
+docMap = new Map<number, string>();
+  
+ 
+  
 
   constructor(
     private uploadService: FileManagementService,
@@ -91,7 +98,7 @@ export class UploadDocComponent implements OnInit {
       department: ["", [Validators.required]],
       subArea: ["", [Validators.required]],
       documentType: ["", [Validators.required]],
-      // subDocumentType: ["", [Validators.required]],
+      subDocumentType: ["", [Validators.required]],
       storageLocation: ["", [Validators.required]],
       isStatutoryDocument: ["", [Validators.required]],
       isRestrictedDocument: ["", [Validators.required]],
@@ -102,7 +109,9 @@ export class UploadDocComponent implements OnInit {
 
   ngOnInit(): void {
 
-
+    // this.subDocumentTypeOption = this.uploadFileForm.value;
+    // console.log("subtype::::",this.subDocumentTypeOption);
+    
 
     this.uploadFileForm.get('mainHead')?.valueChanges.subscribe(value => {
       const [catName, abbreviation] = value.split('~');
@@ -117,6 +126,8 @@ export class UploadDocComponent implements OnInit {
       this.getMainHeadList(catName, "main-head");
 
     });
+
+   
 
 
     this.uploadFileForm.get('plants')?.valueChanges.subscribe(value => {
@@ -332,6 +343,12 @@ export class UploadDocComponent implements OnInit {
     if (this.uploadFileForm.controls['documentType']) {
       this.documentTypeOption = this.uploadFileForm.value.documentType;
     }
+    if (this.uploadFileForm.controls['subDocumentType']) {
+      this.subDocumentTypeOption = this.uploadFileForm.value.subDocumentType;
+      
+    }
+    // console.log("subDoct",this.subDocumentTypeOption);
+    
     if (this.uploadFileForm.controls['storageLocation']) {
       this.storageLocationOption = this.uploadFileForm.value.storageLocation;
     }
@@ -350,24 +367,52 @@ export class UploadDocComponent implements OnInit {
 
       formData.append("file", file);
     }
+    console.log(this.plantOption);
+    console.log(this.selectedDeptCatName);
+    console.log(this.selectedDeptCatNameAbbr);
+    console.log(this.selectedSubAreaCatName);
+    console.log(this.selectedSubAreaCatNameAbbr);
+    console.log("subType::",this.subDocumentTypeOption);
+ 
 
-    if (this.plantOption != null && this.selectedDeptCatName != null && this.selectedDeptCatNameAbbr != null && this.selectedSubAreaCatName != null && this.selectedSubAreaCatNameAbbr != null  && this.files.length > 0) {
+    if (this.plantOption != null && this.selectedDeptCatName != null && this.selectedDeptCatNameAbbr != null && this.selectedSubAreaCatName != null && this.selectedSubAreaCatNameAbbr != null   &&  this.files.length > 0) {
      
       const modalData = {
-        "mainHead": this.selectedCatName,
-        "mainHeadAbbr": this.selectedCatNameAbbr,
-        "plants": this.plantOption,
-        "department": this.selectedDeptCatName,
-        "departAbbr": this.selectedDeptCatNameAbbr,
-        "subArea": this.selectedSubAreaCatName,
-        "subAreaAbbr": this.selectedSubAreaCatNameAbbr,
-        "documentType": this.documentTypeOption,
-        "storageLocation": this.storageLocationOption,
-        "isStatutory": isStatutoryDocument,
-        "isRestrictedDocument": isRestrictedDocument,
-        "hodRestricted": ishodRestricted
+     
+        
+          "department": this.selectedDeptCatName,
+          "departAbbr": this.selectedDeptCatNameAbbr,
+          "subArea": this.selectedSubAreaCatName,
+          "subAreaAbbr": this.selectedSubAreaCatNameAbbr,
+          "plants": this.plantOption,
+          "mainHead": this.selectedCatName,
+          "mainHeadAbbr": this.selectedCatNameAbbr,
+          "storageLocation": this.storageLocationOption,
+          "documentType": this.docMap.get( this.documentTypeOption),
+          "documentSubType": this.subDocumentTypeOption,
+          "isStatutory": isStatutoryDocument,
+          "hodRestricted": isRestrictedDocument,
+          "isRestrictedDocument": ishodRestricted
+
+
+          
+            // "department": "OPERATION",
+            // "departAbbr": "EMD",
+            // "subArea": "BOILER",
+            // "subAreaAbbr": "TRB",
+            // "plants": "CPP-2 (540MW)",
+            // "mainHead": "POWER O&M",
+            // "mainHeadAbbr": "O&M",
+            // "storageLocation": "Soft Copy",
+            // "documentType": "Bills",
+            // "documentSubType": "Layout",
+            // "isStatutory": false,
+            // "hodRestricted": true,
+            // "isRestrictedDocument": true
+        
+      
       };
-      console.log(modalData);
+      console.log("payloaddddd:: ",modalData);
       formData.append("requestbody", JSON.stringify(modalData));
      
 
@@ -381,6 +426,7 @@ export class UploadDocComponent implements OnInit {
             this.uploadFileForm.get('department')?.reset('');
             this.uploadFileForm.get('subArea')?.reset('');
             this.uploadFileForm.get('documentType')?.reset('');
+            this.uploadFileForm.get('subDocumentType')?.reset('');
             this.uploadFileForm.get('storageLocation')?.reset('');
             this.uploadFileForm.controls['isStatutoryDocument'].reset();
             this.uploadFileForm.controls['isRestrictedDocument'].reset();
@@ -394,8 +440,9 @@ export class UploadDocComponent implements OnInit {
         }
       });
       return;
-    }if(this.plantOption == null && this.selectedDeptCatName == null && this.selectedSubAreaCatName == null && this.documentTypeOption != '' && this.storageLocationOption != '')
+    }if(this.plantOption == null && this.selectedDeptCatName == null && this.selectedSubAreaCatName == null && this.documentTypeOption != '' )
        {
+       
       const modalData = {
         "mainHead": this.selectedCatName,
         "mainHeadAbbr": this.selectedCatNameAbbr,
@@ -404,14 +451,15 @@ export class UploadDocComponent implements OnInit {
         "departAbbr": null,
         "subArea": null,
         "subAreaAbbr": null,
-        "documentType": this.documentTypeOption,
+        "documentType": this.docMap.get( this.documentTypeOption),
+        "documentSubType": this.subDocumentTypeOption,
         "storageLocation": this.storageLocationOption,
         "isStatutory": isStatutoryDocument,
         "isRestrictedDocument": isRestrictedDocument,
         "hodRestricted": ishodRestricted
 
       };
-      console.log(modalData);
+      console.log("hhhhhhhmmmmoodjdjshjsg1",modalData);
       
 
       formData.append("requestbody", JSON.stringify(modalData));
@@ -425,6 +473,7 @@ export class UploadDocComponent implements OnInit {
             this.uploadFileForm.get('department')?.reset('');
             this.uploadFileForm.get('subArea')?.reset('');
             this.uploadFileForm.get('documentType')?.reset('');
+            this.uploadFileForm.get('subDocumentType')?.reset('');
             this.uploadFileForm.get('storageLocation')?.reset('');
             this.uploadFileForm.controls['isStatutoryDocument'].reset();
             this.uploadFileForm.controls['isRestrictedDocument'].reset();
@@ -440,6 +489,7 @@ export class UploadDocComponent implements OnInit {
             this.uploadFileForm.get('department')?.reset('');
             this.uploadFileForm.get('subArea')?.reset('');
             this.uploadFileForm.get('documentType')?.reset('');
+            this.uploadFileForm.get('subDocumentType')?.reset('');
             this.uploadFileForm.get('storageLocation')?.reset('');
             this.uploadFileForm.controls['isStatutoryDocument'].reset();
             this.uploadFileForm.controls['isRestrictedDocument'].reset();
@@ -458,6 +508,7 @@ return;
       this.uploadFileForm.get('department')?.reset('');
       this.uploadFileForm.get('subArea')?.reset('');
       this.uploadFileForm.get('documentType')?.reset('');
+      this.uploadFileForm.get('subDocumentType')?.reset('');
       this.uploadFileForm.get('storageLocation')?.reset('');
       this.uploadFileForm.controls['isStatutoryDocument'].reset();
       this.uploadFileForm.controls['isRestrictedDocument'].reset();
@@ -549,7 +600,11 @@ return;
           if (event instanceof HttpResponse) {
              this.docList = event.body;
             console.log("resulttttttttt",this.docList);
-            
+            this.docList.forEach((item: any) => {
+              console.log("doc type Map", item.id, item.documentName);
+              this.docMap.set(item.id, item.documentName);
+           
+            });
           }
         },
         error: (err: any) => {
@@ -560,6 +615,7 @@ return;
   }
 
   onDocumentTypeChange(docId: any) {
+ 
     if (docId) {
       this.getSubDocTypeList(docId);
     }
@@ -571,7 +627,11 @@ return;
         next: (event: any) => {
           if (event instanceof HttpResponse) {
              this.subDocList = event.body;
+             this.subDocListSize = this.subDocList.length
             console.log("subDocccccccc",this.subDocList);
+           
+            // let subType = this.subDocList.id
+            // console.log(subType);
             
           }
         },
