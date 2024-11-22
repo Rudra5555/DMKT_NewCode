@@ -6,6 +6,7 @@ export interface apiResultFormat {
 }
 
 export interface getRecentDocument {
+  // documentSubType(arg0: string, documentSubType: any): unknown;
   id: number;
   fileName: string;
   extension: string;
@@ -13,6 +14,7 @@ export interface getRecentDocument {
   subArea: string;
   storageLocation: string;
   documentType: string;
+  documentSubType:string;
   fileUrl: string;
 }
 
@@ -37,11 +39,13 @@ export interface getSubAreas {
 }
 
 export interface getStatutoryDoc {
+
   id: number;
   department: string
   directory: string
   docVersion: string
   documentType: string
+  documentSubType: string
   endIndex: string
   extension: string
   fileName: string
