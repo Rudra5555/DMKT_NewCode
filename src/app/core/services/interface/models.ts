@@ -102,55 +102,65 @@ export interface getApproveAndRejDoc {
 }
 
 export interface Root {
-  message: string
-  documentLists: getfileList[]
-  status: number
+  message: string;
+  documentLists: getfileList[];
+  status: number;
 }
 
 export interface getfileList {
   id:number;
-  fileName: string
-  extension: string
-  documentType: string
+  fileName: string;
+  extension: string;
+  documentType: string;
   listOfDocumentVersoinDtos: ListOfDocumentVersoinDto[]
   selectedVersion?: ListOfDocumentVersoinDto;
 }
 
+export interface ListOfDocumentVersoinDto {
+  versionId: number;
+  versionName: string;
+  fileSize: string;
+  versionReleaseDate: string;
+  fileName: string;
+  newUniqueFileName: string;
+  hodDocument: boolean;
+  statutoryDocument: boolean;
+  restrictedDocument: boolean;
+  fileUrl: string;
+  uniqueFileName: string;
+}
+
+// ***************************************
 
 export interface Root {
-  fileName: string
-  extension: string
-  documentType: string
+  message: string;
+  documentLists: getfileList[];
+  status: number;
+}
+
+export interface getSearchfileList {
+  id:number;
+  fileName: string;
+  extension: string;
+  documentType: string;
+  documentSubType:string;
+  storageLocation:string;
   listOfDocumentVersoinDtos: ListOfDocumentVersoinDto[]
+  selectedVersion?: ListOfDocumentVersoinDto;
 }
-
 export interface ListOfDocumentVersoinDto {
-  versionId: number
-  versionName: string
-  fileSize: string
-  versionReleaseDate: string
-  fileName: string
-  newUniqueFileName: string
-  hodDocument: boolean
-  statutoryDocument: boolean
-  restrictedDocument: boolean
-  fileUrl: string
-  uniqueFileName: string
+  versionId: number;
+  versionName: string;
+  fileSize: string;
+  versionReleaseDate: string;
+  fileName: string;
+  newUniqueFileName: string;
+  hodDocument: boolean;
+  statutoryDocument: boolean;
+  restrictedDocument: boolean;
+  fileUrl: string;
+  uniqueFileName: string;
 }
-
-// export interface ListOfDocumentVersoinDto {
-//   versionId: number
-//   versionName: string
-//   fileSize: string
-//   versionReleaseDate: string
-//   fileName: string
-//   newUniqueFileName: string
-//   hodDocument: boolean
-//   statutoryDocument: boolean
-//   restrictedDocument: boolean
-//   fileUrl: string
-//   uniqueFileName: string
-// }
 
 export interface SideBarMenu {
   showMyTab?: boolean;
