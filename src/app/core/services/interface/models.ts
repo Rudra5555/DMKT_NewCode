@@ -116,6 +116,8 @@ export interface getfileList {
   fileName: string
   extension: string
   documentType: string
+  documentSubType:string
+  storageLocation:string
   listOfDocumentVersoinDtos: ListOfDocumentVersoinDto[]
   selectedVersion?: ListOfDocumentVersoinDto;
 }

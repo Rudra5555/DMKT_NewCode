@@ -379,6 +379,7 @@ export class UserDashboardComponent implements OnInit {
 
 
   getDetailsByPlantsDataName(departmentName: string, subAreaName: string) {
+    
     let endDate = new Date();
     let startDate = new Date();
     startDate.setDate(endDate.getDate() - 15);
