@@ -137,10 +137,10 @@ export class DepartmentComponent implements OnInit{
     }
   
     onDateRangeSelected() {
-      const startDate = this.formatDate(this.bsRangeValue[0]);
-      const endDate = this.formatDate(this.bsRangeValue[1]);
+      this.startDate = this.formatDate(this.bsRangeValue[0]);
+      this.endDate = this.formatDate(this.bsRangeValue[1]);
 
-      this.getDeptFileList(startDate,endDate)
+      this.getDeptFileList()
     
       
     }
@@ -258,12 +258,12 @@ console.log(selectedValue,mainHead);
   // }
 
 
-  getDeptFileList(startDate:any,endDate:any) {
+  getDeptFileList() {
     
     this.contactlist = [];
     this.serialNumberArray = [];
 
-    this.uploadDocument.getDeptList(startDate, endDate).subscribe({
+    this.uploadDocument.getDeptList(this.startDate, this.endDate).subscribe({
       next: (event: any) => {
         if (event instanceof HttpResponse) {
           const respData = event.body.data;
@@ -469,13 +469,13 @@ openModal(fileUrl: string , documentName : string) {
       this.pageIndex = this.currentPage - 1;
       this.limit += this.pageSize;
       this.skip = this.pageSize * this.pageIndex;
-      this.getDeptFileList(this.startDate, this.endDate)
+      this.getDeptFileList()
     } else if (event === 'previous') {
       this.currentPage--;
       this.pageIndex = this.currentPage - 1;
       this.limit -= this.pageSize;
       this.skip = this.pageSize * this.pageIndex;
-      this.getDeptFileList(this.startDate, this.endDate)
+      this.getDeptFileList()
     }
   }
 
@@ -488,7 +488,7 @@ openModal(fileUrl: string , documentName : string) {
     } else if (pageNumber < this.currentPage) {
       this.pageIndex = pageNumber + 1;
     }
-    this.getDeptFileList(this.startDate, this.endDate)
+    this.getDeptFileList()
   }
   private calculateTotalPages(totalData: number, pageSize: number): void {
     this.pageNumberArray = [];
@@ -508,7 +508,7 @@ openModal(fileUrl: string , documentName : string) {
     this.limit = this.pageSize;
     this.skip = 0;
     this.currentPage = 1;
-    this.getDeptFileList(this.startDate, this.endDate)
+    this.getDeptFileList()
   }
   openFilter() {
     this.filter = !this.filter;
