@@ -15,6 +15,7 @@ import { Sort } from '@angular/material/sort';
 import { Observable } from 'rxjs';
 import { pageSelection } from '../../subscriptions/subscribed-companies/subscribed-companies.component';
 import { UploadDocumentComponentService } from 'src/app/services/upload-document-component.service';
+import Swal from 'sweetalert2';
 declare let $: any;
 
 @Component({
@@ -455,10 +456,19 @@ openModal(fileUrl: string , documentName : string) {
         if (event instanceof HttpResponse) {
           const res = event.body;
           // console.log("huuuuuuuuuu",res);
+          console.log("huuuuuuuuuu",res);
+          this.uploadFileForm.get('mainHead')?.reset('');
+          this.uploadFileForm.get('plants')?.reset('');
+          this.uploadFileForm.get('department')?.reset('');
+          this.uploadFileForm.get('subAreaAbbr')?.reset('');
+          this.uploadFileForm.get('subArea')?.reset('');
+          
+            this.successfulSubmitAlert();
         }
       },
       error: (err: any) => {
         console.error(err);
+        this.unsuccessfulSubmitAlert();
       }
     });
   
@@ -561,5 +571,37 @@ openModal(fileUrl: string , documentName : string) {
   selectFiles(_event: any): void {
 
   }
+
+
+  
+successfulSubmitAlert() {
+  Swal.fire({
+    position: "center",
+    icon: "success",
+    title: "New Department is added",
+    showConfirmButton: false,
+    timer: 1500
+  }).then(() => {
+
+    window.location.reload();
+
+  });
+}
+
+unsuccessfulSubmitAlert() {
+  Swal.fire({
+    icon: "error",
+    title: "Oops...",
+    text: "Something went wrong!",
+  });
+}
+
+
+
+
+
+
+
+
 
 }
