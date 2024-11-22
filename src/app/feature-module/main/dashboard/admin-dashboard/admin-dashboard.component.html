@@ -153,7 +153,9 @@
               </tr>
             </thead>
             <tbody>
-
+              <!-- <div *ngIf="isLoading" class="spinner-border" style="align-items: center;margin-left: 400%;">
+               
+              </div> -->
               <tr *ngFor="let item of fileList">
                 <td><a [routerLink]="">{{item.fileName}}</a></td>
                 <td>
@@ -165,6 +167,9 @@
                 <td>{{item.subArea? item.subArea : 'N/A'}}</td>
                 <td>Hard Copy</td>
                 <td>{{item.documentType}}</td>
+                <td>
+                  {{item.documentSubType? item.documentSubType : 'N/A'}}
+                </td>
                 <td class="text-center">
                   <a class="dropdown-item" [href]="item.fileUrl" target="_blank">
                     <i class="fa-solid fa-download" style="color: rgb(0, 117, 234)"></i>
@@ -172,7 +177,7 @@
                 </td>
               </tr>
 
-              <tr *ngIf="fileList.length == 0">
+              <tr *ngIf=" fileList.length == 0">
                 <td colspan="7" style="text-align: center; color: red">
                   No Records Found!
                 </td>

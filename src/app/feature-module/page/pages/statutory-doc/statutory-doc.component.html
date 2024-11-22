@@ -91,13 +91,15 @@
                 <th>Sub-Area</th>
                 <th>Storage Location</th>
                 <th>Document Type</th>
+                <th>Sub-Document Type</th>
                 <th class="text-end">Action</th>
               </tr>
             </thead>
 
             <tbody>
-              <div *ngIf="isLoading" class="loader">
-                <p>Loading...</p>
+              <div *ngIf="isLoading" class="spinner-border" style="align-items: center;margin-left: 350%;">
+                <!-- <p>Loading...</p>  -->
+                <!-- <i class="fas fa-spinner fa-spin text-info align-items-center me-1"></i> -->
               </div>
               <tr *ngFor="let item of contactlist; ">
                 <td>
@@ -125,6 +127,11 @@
                 <td>
                   {{ item.documentType }}
                 </td>
+                <td>
+                  {{item.documentSubType? item.documentSubType : 'N/A'}}
+
+                </td>
+                
                 <td class="text-center">
 
                   <a class="dropdown-item" [href]="item.fileUrl" (click)="openModal( item.uniqueFileName, item.refernceId, item.department, item.plant )"
@@ -135,7 +142,7 @@
               </tr>
 
               <tr *ngIf="!isLoading && contactlist.length === 0">
-                <td colspan="7" style="text-align: center; color: red">
+                <td colspan="8" style="text-align: center; color: red">
                   No Records Found!
                 </td>
               </tr>

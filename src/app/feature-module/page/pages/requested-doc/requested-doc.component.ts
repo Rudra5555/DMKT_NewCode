@@ -47,6 +47,7 @@ export class RequestedDocComponent implements OnInit {
   public pageIndex = 0;
   public serialNumberArray: Array<number> = [];
   public currentPage = 1;
+  isLoading: boolean = false; 
   public pageNumberArray: Array<number> = [];
   public pageSelection: Array<pageSelection> = [];
   dataSource!: MatTableDataSource<getcontactlist>;
@@ -159,6 +160,7 @@ export class RequestedDocComponent implements OnInit {
 
   public approvedDocumentList(loggedUserId: any): void {
     this.contactlist = [];
+    this.isLoading = true; // Start loader
     this.serialNumberArray = [];
 
     this.loginService.approvedDocList(loggedUserId, this.startDate, this.endDate).subscribe({
@@ -180,12 +182,14 @@ export class RequestedDocComponent implements OnInit {
 
           this.dataSource = new MatTableDataSource<getcontactlist>(this.contactlist);
           this.calculateTotalPages(filteredData.length, this.pageSize);
+          this.isLoading = false; 
         }
       },
       error: (err: any) => {
         if (err.error && err.error.message) {
           this.msg += " " + err.error.message;
         }
+        this.isLoading = false; 
       }
     });
   }

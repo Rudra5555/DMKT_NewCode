@@ -34,6 +34,7 @@ export class DepartmentComponent implements OnInit{
     bsValue = new Date();
     bsRangeValue: Date[] = [];
     maxDate = new Date();
+    isLoading: boolean = false; 
     // pagination variables
     public noRecordFlag: boolean = false;
     public lastIndex = 0;
@@ -259,7 +260,7 @@ console.log(selectedValue,mainHead);
 
 
   getDeptFileList() {
-    
+    this.isLoading = true; // Start loader
     this.contactlist = [];
     this.serialNumberArray = [];
 
@@ -285,7 +286,7 @@ console.log(selectedValue,mainHead);
         this.dataSource = new MatTableDataSource<getDeptList>(this.contactlist);
         this.calculateTotalPages(respData.length, this.pageSize);
           
-  
+        this.isLoading = false; 
   
         }
       },
@@ -293,6 +294,7 @@ console.log(selectedValue,mainHead);
         if (err.error && err.error.message) {
           this['msg'] += " " + err.error.message;
         }
+        this.isLoading = false; 
       },
     });
   }
