@@ -131,10 +131,10 @@ export class SubAreaComponent implements OnInit{
     }
   
     onDateRangeSelected() {
-      const startDate = this.formatDate(this.bsRangeValue[0]);
-      const endDate = this.formatDate(this.bsRangeValue[1]);
+      this.startDate = this.formatDate(this.bsRangeValue[0]);
+      this.endDate = this.formatDate(this.bsRangeValue[1]);
     
-      this.allSubAreaList(startDate,endDate)
+      this.allSubAreaList()
       
     }
     
@@ -290,12 +290,12 @@ console.log(selectedValue,mainHead);
     }
   }
 
-  allSubAreaList(startDate:any,endDate:any) {
+  allSubAreaList() {
     
     this.contactlist = [];
     this.serialNumberArray = [];
 
-    this.uploadDocument.getSubArea(startDate, endDate).subscribe({
+    this.uploadDocument.getSubArea(this.startDate, this.endDate).subscribe({
       next: (event: any) => {
         if (event instanceof HttpResponse) {
           const res = event.body.data;
@@ -503,13 +503,13 @@ openModal(fileUrl: string , documentName : string) {
       this.pageIndex = this.currentPage - 1;
       this.limit += this.pageSize;
       this.skip = this.pageSize * this.pageIndex;
-      this.allSubAreaList(this.startDate,this.endDate);
+      this.allSubAreaList();
     } else if (event === 'previous') {
       this.currentPage--;
       this.pageIndex = this.currentPage - 1;
       this.limit -= this.pageSize;
       this.skip = this.pageSize * this.pageIndex;
-      this.allSubAreaList(this.startDate,this.endDate);
+      this.allSubAreaList();
     }
   }
 
@@ -522,7 +522,7 @@ openModal(fileUrl: string , documentName : string) {
     } else if (pageNumber < this.currentPage) {
       this.pageIndex = pageNumber + 1;
     }
-    this.allSubAreaList(this.startDate,this.endDate);
+    this.allSubAreaList();
   }
   private calculateTotalPages(totalData: number, pageSize: number): void {
     this.pageNumberArray = [];
@@ -542,7 +542,7 @@ openModal(fileUrl: string , documentName : string) {
     this.limit = this.pageSize;
     this.skip = 0;
     this.currentPage = 1;
-    this.allSubAreaList(this.startDate,this.endDate);
+    this.allSubAreaList();
   }
   openFilter() {
     this.filter = !this.filter;
