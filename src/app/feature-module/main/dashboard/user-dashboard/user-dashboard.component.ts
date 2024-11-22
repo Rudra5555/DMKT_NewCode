@@ -527,6 +527,7 @@ export class UserDashboardComponent implements OnInit {
     const searchValue = this.getAllFilesForm.get('searchKeyData')?.value?.trim() || '';
     
     if (searchValue) {
+      this.cardHide = true;
       this.documentNameSearch = false;
       console.log(searchValue);
   

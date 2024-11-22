@@ -10,7 +10,7 @@
       <form [formGroup]="getAllFilesForm" class="file-search" id="totalGrp">
         <div class="search-bar">
           <input  style="margin-left: -37%; position: absolute; margin-top: 76%; width: 23%;" type="text"
-            class="searchBar" placeholder="Enter your search key..."    formControlName="searchKeyData"
+            class="searchBar" placeholder="Enter your search key..."    formControlName="searchKeyData"    (keydown.enter)="$event.preventDefault()"
             />
             <button   class="searchBar" id="mainHeadButton"
             class="button button-primary" (click)="getAllDtaForHide()" data-bs-toggle="modal"  data-bs-target="#viewMainHeadOptions" >
@@ -627,8 +627,8 @@
             <th style="color: rgb(22, 32, 138)" mat-sort-header="size">
               Document Size
             </th>
-            <th style="color: rgb(22, 32, 138)">Download</th>
-            <th style="color: rgb(22, 32, 138)">View</th>
+            <!-- <th style="color: rgb(22, 32, 138)">Download</th>
+            <th style="color: rgb(22, 32, 138)">View</th> -->
           </tr>
         </thead>
 
@@ -646,23 +646,23 @@
                 {{item.documentType}}
             </td>
             <td>
-              {{item.documentType}}
+              {{item.documentSubType? item.documentSubType : 'N/A'}}
             </td>
             <td>
-                {{item.documentType}}
+              {{item.storageLocation? item.storageLocation : 'N/A'}}
             </td>
 
             <td>
               <mat-select
                 class="custom-mat-select select"
-                id="versionSelect"
+              
                 placeholder="Select Version"
                 (selectionChange)="onVersionChange(item, $event.value)"
-                [value]="item.selectedVersion"
+                [value]="item.selectedVersion" 
               > 
                 <mat-option
                   *ngFor="let version of item.listOfDocumentVersoinDtos"
-                  [value]="version" style="color: #000000;"
+                  [value]="version" 
                 >
                   {{ version.versionName }} - {{ version.versionReleaseDate }}
                 </mat-option>
@@ -674,7 +674,7 @@
               {{ item.listOfDocumentVersoinDtos[0].fileSize }} KB
             
             </td>
-            <td class="text-center">
+            <!-- <td class="text-center"> -->
               <!-- <a
                 class="dropdown-item"
                 [href]="item.listOfDocumentVersoinDtos[0].fileUrl"
@@ -685,9 +685,9 @@
                   style="color: rgb(0, 117, 234)"
                 ></i>
               </a> -->
-              {{item.download}}
-            </td>
-            <td class="text-center">
+              <!-- {{item.download}}
+            </td> -->
+            <!-- <td class="text-center"> -->
               <!-- <a
                 class="dropdown-item"
                 [href]="item.listOfDocumentVersoinDtos[0].fileUrl"
@@ -697,8 +697,8 @@
               >
                 <i class="fas fa-eye" style="color: rgb(0, 117, 234)"></i>
               </a> -->
-              {{item.view}}
-            </td>
+              <!-- {{item.view}}
+            </td> -->
           </tr>
           <!-- <tr *ngIf="fileList.length == 0">
             <td colspan="6" style="text-align: center; color: red">

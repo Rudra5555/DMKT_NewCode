@@ -329,26 +329,32 @@ card2.h2 {
 }
 
 
-::ng-deep mat-select.custom-mat-select .mat-mdc-select-trigger {
-  border: none !important;
-  border-radius: none !important;
-  color: transparent !important;
+// ::ng-deep mat-select.custom-mat-select .mat-mdc-select-trigger {
+//   border: none !important;
+//   border-radius: none !important;
+//   color: transparent !important;
 
-  background-color: transparent !important;
-}
+//   background-color: transparent !important;
+// }
 
 ::ng-deep mat-select .mat-mdc-select-arrow-wrapper svg {
   left: -52% !important;
 }
 
-::ng-deep span.mat-mdc-select-placeholder {
-  color: white !important;
-}
+// ::ng-deep span.mat-mdc-select-placeholder {
+//   color: white !important;
+// }
 
-::ng-deep .mat-mdc-select-arrow-wrapper .mat-mdc-select-arrow {
-  color: white;
-}
-
+// ::ng-deep .mat-mdc-select-arrow-wrapper .mat-mdc-select-arrow {
+//   color: white;
+// }
+// .mat-mdc-select-arrow svg {
+//   fill: rgb(13 13 13);
+//   position: absolute;
+//   top: 50%;
+//   left: 50%;
+//   transform: translate(-50%, -50%);
+// }
 
 
 .card {
@@ -1037,4 +1043,10 @@ button#mainHeadButton {
   background-color:  #81ed81;
   background: linear-gradient(to top, #f2f9fb 0%,  #81ed81 100%) !important;
   color: #3636b1;
+}
+mat-select {
+  color: black;
+}
+mat-lable {
+  color: black;
 }
