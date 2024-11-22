@@ -517,6 +517,7 @@ export class UserDashboardComponent implements OnInit {
 
   selected1 = 'option1';
 
+  
   selectFiles(_event: any): void {
 
   }
