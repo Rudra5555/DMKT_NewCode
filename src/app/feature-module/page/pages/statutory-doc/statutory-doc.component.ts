@@ -99,7 +99,7 @@ export class StatutoryDocComponent implements OnInit {
   selectedFileUrl: any;
   subject = new BehaviorSubject('')
 
-
+  isLoading: boolean = false; 
 
 
 
@@ -189,23 +189,24 @@ export class StatutoryDocComponent implements OnInit {
 
   }
 
-  getStatutoryFileList() {
-    this.contactlist = [];
-    this.serialNumberArray = [];
+getStatutoryFileList() {
+  this.isLoading = true; // Start loader
+  this.contactlist = [];
+  this.serialNumberArray = [];
 
-    this.loginService.AllAdminFileList(this.startDate, this.endDate).subscribe({
-      next: (event: any) => {
-        if (event instanceof HttpResponse) {
-          this.res = event.body.response;
+  this.loginService.AllAdminFileList(this.startDate, this.endDate).subscribe({
+    next: (event: any) => {
+      if (event instanceof HttpResponse) {
+        this.res = event.body.response;
 
-          this.res = event.body.response.filter((file: any) =>
-            !file.isHodDocument && file.isStatutory && !file.isRestrictedDocument
-          );
-          // this.fileList = this.res;
-console.log(this.res);
+        this.res = event.body.response.filter((file: any) =>
+          !file.isHodDocument && file.isStatutory && !file.isRestrictedDocument
+        );
 
-          let filteredData = this.res;
-          this.totalData=filteredData.length;
+        console.log(this.res);
+
+        let filteredData = this.res;
+        this.totalData = filteredData.length;
 
         filteredData.map((item: getStatutoryDoc, index: number) => {
           const serialNumber = index + 1;
@@ -213,25 +214,25 @@ console.log(this.res);
             item.id = serialNumber;
             this.contactlist.push(item);
             console.log(this.contactlist);
-            
+
             this.serialNumberArray.push(serialNumber);
           }
         });
 
         this.dataSource = new MatTableDataSource<getStatutoryDoc>(this.contactlist);
         this.calculateTotalPages(filteredData.length, this.pageSize);
-          
-  
-  
-        }
-      },
-      error: (err: any) => {
-        if (err.error && err.error.message) {
-          this['msg'] += " " + err.error.message;
-        }
-      },
-    });
-  }
+
+        this.isLoading = false; 
+      }
+    },
+    error: (err: any) => {
+      if (err.error && err.error.message) {
+        this['msg'] += " " + err.error.message;
+      }
+      this.isLoading = false; // Stop loader on error
+    },
+  });
+}
 
   // *******************************
 

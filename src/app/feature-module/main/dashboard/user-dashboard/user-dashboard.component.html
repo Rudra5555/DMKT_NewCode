@@ -60,8 +60,13 @@
             </div>
             <div *ngIf="item.departmentName == 'AHP'">
               <img src="assets/img/DSC_5538.JPG" width="500" height="500" />
+              </div>
+              <div *ngIf="!['OPERATION', 'MECHANICAL', 'ELECTRICAL', 'C&I', 'CIVIL', 'CHP', 'AHP'].includes(item.departmentName)">
+                <img src="assets/img/DSC_5538.JPG" width="500" height="500" />
             </div>
           </div>
+          
+
           <div class="avatar-holder">
 
             <div *ngIf="item.departmentName == 'OPERATION'">
@@ -99,6 +104,11 @@
             <div *ngIf="item.departmentName == 'ELECTRICAL'">
               <img src="assets/img/Ash-Dyke.jpg" class="avtarImage" />
             </div>
+
+            <div *ngIf="!['OPERATION', 'MECHANICAL', 'ELECTRICAL', 'C&I', 'CIVIL', 'CHP', 'AHP', 'ASH-DYKE'].includes(item.departmentName)">
+              <img src="assets/img/Power-Sale.jpg" width="500" height="500" />
+          </div>
+
           </div>
           <div class="name">
             <h5 style="font-weight: 600; margin-top: -20%; font-size: 14px">
@@ -434,7 +444,6 @@
                   <div *ngIf="item.name == 'POWER O&M'">
                     <img src="assets/img/Power-O&M.jpg" />
                   </div>
-              
 
                 <div class="clickable-div"
                   *ngIf="item.name == 'POWER SALE'">

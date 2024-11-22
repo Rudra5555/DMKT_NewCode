@@ -96,6 +96,9 @@
             </thead>
 
             <tbody>
+              <div *ngIf="isLoading" class="loader">
+                <p>Loading...</p>
+              </div>
               <tr *ngFor="let item of contactlist; ">
                 <td>
                   <h2 class="table-avatar d-flex">
@@ -131,7 +134,7 @@
                 </td>
               </tr>
 
-              <tr *ngIf="contactlist.length==0">
+              <tr *ngIf="!isLoading && contactlist.length === 0">
                 <td colspan="7" style="text-align: center; color: red">
                   No Records Found!
                 </td>
