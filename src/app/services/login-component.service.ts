@@ -79,7 +79,7 @@ getFileList(categoryList: Map<any, any>,departmentName:any,subAreaName:any,sDate
   const mainHead = categoryList.get('main-head');
   const plants = categoryList.get('plants');
 
-  const url = `${this.baseUrl}/document/get-all-document-by-name/${mainHead}/${plants}/${departmentName}/${subAreaName}?startDate=${sDate}&endDate=${eDate}`;
+  const url = `${this.baseUrl}/document/get-all-document-by-name/${mainHead}/${plants}/${departmentName}/${subAreaName}?startDate=${sDate}&endDate=${eDate}&sFilter=DOCUMENT`;
   
   const req = new HttpRequest('GET', url, {
     responseType: 'json'
@@ -247,9 +247,9 @@ AllAdminFileList(startDate:any , endDate:any): Observable<HttpEvent<any>> {
 
 
 
-getFileLists(mainHead:any,plants:any,departmentName:any,subAreaName:any,sDate:any,eDate:any): Observable<HttpEvent<any>> {
+getFileLists(mainHead:any,plants:any,departmentName:any,subAreaName:any,sDate:any,eDate:any,docTypeFilter:any): Observable<HttpEvent<any>> {
 
-  const url = `${this.baseUrl}/document/get-all-document-by-name/${mainHead}/${plants}/${departmentName}/${subAreaName}?startDate=${sDate}&endDate=${eDate}`;
+  const url = `${this.baseUrl}/document/get-all-document-by-name/${mainHead}/${plants}/${departmentName}/${subAreaName}?startDate=${sDate}&endDate=${eDate}/sFilter=${docTypeFilter}`;
   
   const req = new HttpRequest('GET', url, {
     responseType: 'json'
@@ -294,6 +294,13 @@ userUpload(file: FormData): Observable<HttpEvent<any>> {
   return this.http.request(req);
 }
 
+getDocumentType(): Observable<HttpEvent<any>> {
+  const req = new HttpRequest('GET', `${this.baseUrl}/documentType/getDocumentTypesAndSubTypes`, {
+    responseType: 'json'  
+  });
+
+  return this.http.request(req);
+}
 
 librarianVerifyDoc(userId: any): Observable<HttpEvent<any>> {
   const req = new HttpRequest('GET', `${this.baseUrl}/doc-request/view-request/${userId}`, {

@@ -115,12 +115,12 @@
               {{ item.departmentName }}
             </h5>
             <h3 class="card-title">{{ item.fileCount }}</h3>
-            <div *ngFor="let it of item.listOfSubAreaDtos">
+            <div *ngFor="let sub of item.listOfSubAreaDtos">
               <ol>
 
                 <li>
-                  <h5 class="subAreasName" (click)="getDetailsByPlantsDataName(item.departmentName,item.subAreaName)">
-                    &#11166; {{ it.subAreaName }}</h5>
+                  <h5 class="subAreasName" (click)="getDetailsByPlantsDataName(item.departmentName,sub.subAreaName)">
+                    &#11166; {{ sub.subAreaName }}</h5>
                 </li>
               </ol>
             </div>

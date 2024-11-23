@@ -37,9 +37,9 @@
             class="select leads"
             placeholder="Select Filter" 
           >
-            <mat-option value="all">Document Type</mat-option>
-            <mat-option value="web">Hard Copy</mat-option>
-            <mat-option value="web">Soft Copy</mat-option>
+          <div *ngFor="let item of documentTypeDataList">
+            <mat-option value="item.documentName">{{item.documentName}}</mat-option>
+          </div>
           </mat-select>
           </div>
         </li>
@@ -90,13 +90,13 @@
                 <th style="color: rgb(22, 32, 138)" mat-sort-header="name">
                   Document Name
                 </th>
-                <th style="color: rgb(22, 32, 138)" mat-sort-header="type">
+                <th style="color: rgb(22, 32, 138)" mat-sort-header="docType">
                   Document Type
                 </th>
-                <th style="color: rgb(22, 32, 138)" mat-sort-header="type">
+                <th style="color: rgb(22, 32, 138)" mat-sort-header="subDocumentType">
                   Sub-Document Type
                 </th>
-                <th style="color: rgb(22, 32, 138)" mat-sort-header="type">
+                <th style="color: rgb(22, 32, 138)" mat-sort-header="storage">
                   Storage Location
                 </th>
                 <th style="color: rgb(22, 32, 138)" mat-sort-header="ver">

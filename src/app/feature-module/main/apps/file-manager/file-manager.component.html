@@ -48,11 +48,12 @@
             <i class="las la-filter"></i>
             <mat-select
             class="select leads"
-            placeholder="Select Filter" 
+            placeholder="Select Filter"  (selectionChange)="onDocumentTypeChange($event.value)"
           >
-            <mat-option value="all">Document Type</mat-option>
-            <mat-option value="web">Hard Copy</mat-option>
-            <mat-option value="web">Soft Copy</mat-option>
+          <div>
+            <mat-option *ngFor="let item of documentTypeDataList" [value]="item.documentName">{{item.documentName}}</mat-option>
+            
+          </div>
           </mat-select>
           </div>
         </li>
@@ -138,13 +139,13 @@
                 <th style="color: rgb(22, 32, 138)" mat-sort-header="name">
                   Document Name
                 </th>
-                <th style="color: rgb(22, 32, 138)" mat-sort-header="type">
+                <th style="color: rgb(22, 32, 138)" mat-sort-header="docType">
                   Document Type
                 </th>
-                <th style="color: rgb(22, 32, 138)" mat-sort-header="type">
+                <th style="color: rgb(22, 32, 138)" mat-sort-header="subDocument">
                   Sub-Document Type
                 </th>
-                <th style="color: rgb(22, 32, 138)" mat-sort-header="type">
+                <th style="color: rgb(22, 32, 138)" mat-sort-header="storage">
                   Storage Location
                 </th>
                 <th style="color: rgb(22, 32, 138)" mat-sort-header="ver">
@@ -166,8 +167,14 @@
                     {{ item.listOfDocumentVersoinDtos[0].newUniqueFileName}}
                   </h2>
                 </td>
-                <td>{{ item.documentType }}</td>
-
+                <td>{{ item.documentType? item.documentType : 'N/A' }}</td>
+                <td>
+                  {{item.documentSubType? item.documentSubType : 'N/A'}}
+                </td>
+                <td>
+                  {{item.storageLocation}}
+                </td>
+               
                 <td>
                   <mat-select
                     class="custom-mat-select select"
