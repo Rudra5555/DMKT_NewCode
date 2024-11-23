@@ -4,16 +4,17 @@ import { routes, url } from 'src/app/core/core.index';
 import { Router } from '@angular/router';
 import { LoginComponentService } from 'src/app/services/login-component.service';
 import { HttpResponse } from '@angular/common/http';
-import { apiResultFormat, getfileList } from 'src/app/core/services/interface/models';
+import { apiResultFormat, getSearchfileList } from 'src/app/core/services/interface/models';
 import { pageSelection } from 'src/app/feature-module/employee/employees/departments/departments.component';
 
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { DatePipe } from '@angular/common';
 import { MatTableDataSource } from '@angular/material/table';
+import { NgxDocViewerModule, ViewerType } from 'ngx-doc-viewer';
 
 
-import { ViewerType } from 'ngx-doc-viewer';
+// import { ViewerType } from 'ngx-doc-viewer';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { Sort } from '@angular/material/sort';
 
@@ -71,7 +72,7 @@ export class UserDashboardComponent implements OnInit {
   data: any[] = [];
   msg: string = '';
   allData: any[] = [];
-  fileListSearch: any[] = [];
+  // fileListSearch: any[] = [];
   mainHeadName: any;
   plantType: any;
   dataset = new MatTableDataSource<DocumentData>();
@@ -104,10 +105,10 @@ export class UserDashboardComponent implements OnInit {
   public serialNumberArray: Array<number> = [];
   public pageNumberArray: Array<number> = [];
   public pageSelection: Array<pageSelection> = [];
+  res:any;
 
-
-  dataSource!: MatTableDataSource<getfileList>;
-  public contactlist: Array<getfileList> = [];
+  dataSource!: MatTableDataSource<getSearchfileList>;
+  public fileListSearch: Array<getSearchfileList> = [];
   public totalPages = 0;
   public message: any;
   public selectedFiles: any;
@@ -429,11 +430,11 @@ export class UserDashboardComponent implements OnInit {
 
  
   public sortData(sort: Sort) {
-    const data = this.contactlist.slice();
+    const data = this.fileListSearch.slice();
     if (!sort.active || sort.direction === '') {
-      this.contactlist = data;
+      this.fileListSearch = data;
     } else {
-      this.contactlist = data.sort((a: any, b: any) => {
+      this.fileListSearch = data.sort((a: any, b: any) => {
         const aValue = (a as any)[sort.active];
         const bValue = (b as any)[sort.active];
         return (aValue < bValue ? -1 : 1) * (sort.direction === 'asc' ? 1 : -1);
@@ -443,7 +444,7 @@ export class UserDashboardComponent implements OnInit {
 
   public searchData(value: string): void {
     this.dataSource.filter = value.trim().toLowerCase();
-    this.contactlist = this.dataSource.filteredData;
+    this.fileListSearch = this.dataSource.filteredData;
   }
 
   public getMoreData(event: string): void {
@@ -531,16 +532,45 @@ export class UserDashboardComponent implements OnInit {
       this.cardHide = true;
       this.documentNameSearch = false;
       console.log(searchValue);
-  
-      // this.dataset.filter = searchValue.toLowerCase();
-      // this.fileListSearch = this.dataset.filteredData;
+
+      this.fileListSearch = [];
+      this.serialNumberArray = [];
 
       this.loginService.allSearch(searchValue).subscribe({
         next: (event: any) => {
           if (event instanceof HttpResponse) {
-            const res = event.body.documentLists;
-            this.fileListSearch=res;
-            console.log("serach result:::::",res);
+            this.res = event.body.documentLists;
+            this.fileListSearch=this.res;
+
+            this.totalData = this.fileListSearch.length;
+  
+            const convertToKB = (bytes: number): string => {
+              return (bytes / 1024).toFixed(2);
+            };
+
+            this.fileListSearch.map((item: getSearchfileList, index: number) => {
+              const serialNumber = index + 1;
+              if (index >= this.skip && serialNumber <= this.limit) {
+                item.id = serialNumber;
+                this.serialNumberArray.push(serialNumber);
+              }
+            });
+    
+            this.dataSource = new MatTableDataSource<getSearchfileList>(this.fileListSearch);
+            this.calculateTotalPages(this.fileListSearch.length, this.pageSize);
+    
+            // fileListSearch.forEach((item: any) => {
+            //   item.selectedVersion = this.getLatestVersion(item.listOfDocumentVersoinDtos);
+            //   item.listOfDocumentVersoinDtos.forEach((version: any) => {
+            //     version.fileSizeKB = convertToKB(parseInt(version.fileSize, 10));
+            //   });
+            // });
+    
+            // if (fileListSearch.length > 0 && fileListSearch[0].selectedVersion) {
+            //   this.doc = fileListSearch[0].selectedVersion.fileUrl;
+            // }
+          console.log("ffffffffff",this.fileListSearch);
+
             
             
           }
@@ -573,8 +603,8 @@ export class UserDashboardComponent implements OnInit {
   
     if (item.selectedVersion) {
       item.newUniqueFileName = item.selectedVersion.newUniqueFileName; 
-      // this.doc = item.selectedVersion.fileUrl; 
-      // console.log(`Version changed to: ${item.selectedVersion.versionName}, File Name: ${item.newUniqueFileName}`);
+      this.doc = item.selectedVersion.fileUrl; 
+      console.log(`Version changed to: ${item.selectedVersion.versionName}, File Name: ${item.newUniqueFileName}`);
     }
   }
   

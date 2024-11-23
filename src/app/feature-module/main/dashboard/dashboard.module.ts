@@ -17,6 +17,7 @@ import { FormsModule } from '@angular/forms';
 import { NgChartsModule } from 'ng2-charts';
 import { DashboardModalComponent } from './dashboard-modal/dashboard-modal.component'
 import { FooterComponent } from '../../common/footer/footer/footer.component';
+import { NgxDocViewerModule } from 'ngx-doc-viewer';
 
 
 
@@ -43,7 +44,7 @@ import { FooterComponent } from '../../common/footer/footer/footer.component';
     CanvasJSAngularChartsModule,
     IgxDataChartScatterModule,
 
-    NgChartsModule
+    NgChartsModule,
 
 
   ],
@@ -68,6 +69,7 @@ export class AppModule { }
     NgApexchartsModule,
 
     SharedModule,
+    NgxDocViewerModule,
   ],
 })
 export class DashboardModule { }
