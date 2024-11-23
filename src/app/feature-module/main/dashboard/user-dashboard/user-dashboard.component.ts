@@ -377,6 +377,7 @@ export class UserDashboardComponent implements OnInit {
     });
   }
 
+  
 
   getDetailsByPlantsDataName(departmentName: string, subAreaName: string) {
     
@@ -410,7 +411,7 @@ export class UserDashboardComponent implements OnInit {
       },
     });
   }
-  
+
 
   formatDate(date: Date): string {
     return this.datePipe.transform(date, 'yyyy-MM-dd')!;
