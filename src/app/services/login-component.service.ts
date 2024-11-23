@@ -247,9 +247,9 @@ AllAdminFileList(startDate:any , endDate:any): Observable<HttpEvent<any>> {
 
 
 
-getFileLists(mainHead:any,plants:any,departmentName:any,subAreaName:any,sDate:any,eDate:any,docTypeFilter:any): Observable<HttpEvent<any>> {
+getFileLists(mainHead:any,plants:any,departmentName:any,subAreaName:any,sDate:any,eDate:any): Observable<HttpEvent<any>> {
 
-  const url = `${this.baseUrl}/document/get-all-document-by-name/${mainHead}/${plants}/${departmentName}/${subAreaName}?startDate=${sDate}&endDate=${eDate}/sFilter=${docTypeFilter}`;
+  const url = `${this.baseUrl}/document/get-all-document-by-name/${mainHead}/${plants}/${departmentName}/${subAreaName}?startDate=${sDate}&endDate=${eDate}`;
   
   const req = new HttpRequest('GET', url, {
     responseType: 'json'
@@ -260,6 +260,18 @@ getFileLists(mainHead:any,plants:any,departmentName:any,subAreaName:any,sDate:an
   
 }
 
+getFileListsByFilter(mainHead:any,plants:any,departmentName:any,subAreaName:any,sDate:any,eDate:any,docTypeFilter:any): Observable<HttpEvent<any>> {
+
+  const url = `${this.baseUrl}/document/get-all-document-by-name/${mainHead}/${plants}/${departmentName}/${subAreaName}?startDate=${sDate}&endDate=${eDate}`;
+  
+  const req = new HttpRequest('GET', url, {
+    responseType: 'json'
+  });
+//console.log(req);
+
+  return this.http.request(req);
+  
+}
 
 getFileListforOther(mainHead:any,sDate:any,eDate:any): Observable<HttpEvent<any>> {
   

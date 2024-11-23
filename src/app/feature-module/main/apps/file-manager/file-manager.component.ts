@@ -207,6 +207,7 @@ export class FileManagerComponent implements OnInit , OnDestroy {
   }
 
     this.getFileListDetails()
+    // this.fileManagerTableData();
     this.uploadFileForm = this.formBuilder.group({
   
       uploadFile: ["", [Validators.required]],
@@ -217,8 +218,6 @@ export class FileManagerComponent implements OnInit , OnDestroy {
     });
 
 
-
-
   }
 
  
@@ -227,7 +226,7 @@ export class FileManagerComponent implements OnInit , OnDestroy {
     this.fileList = [];
     this.serialNumberArray = [];
   
-    this.loginService.getFileLists(this.mainHead, this.plants, this.departmentName, this.subAreaName, this.startDate, this.endDate,this.selectedDocType ).subscribe({
+    this.loginService.getFileLists(this.mainHead, this.plants, this.departmentName, this.subAreaName, this.startDate, this.endDate).subscribe({
       next: (event: any) => {
         if (event instanceof HttpResponse) {
           this.respData = event.body.documentLists;
@@ -285,7 +284,67 @@ export class FileManagerComponent implements OnInit , OnDestroy {
     });
   }
   
-
+  getFileListDetailsByFilter() {
+    this.fileList = [];
+    this.serialNumberArray = [];
+  
+    this.loginService.getFileListsByFilter(this.mainHead, this.plants, this.departmentName, this.subAreaName, this.startDate, this.endDate,this.selectedDocType).subscribe({
+      next: (event: any) => {
+        if (event instanceof HttpResponse) {
+          this.respData = event.body.documentLists;
+          console.log("response:", this.respData);
+          
+  
+          const convertToKB = (bytes: number): string => {
+            return (bytes / 1024).toFixed(2);
+          };
+  
+          this.fileList = this.respData.filter((item: any) => {
+            return item.listOfDocumentVersoinDtos.some((version: any) => {
+              if (this.loggedUserRole === 'User') {
+                return !version.hodDocument && !version.statutoryDocument && !version.restrictedDocument;
+              } else if (this.loggedUserRole === 'SuperUser') {
+                return (!version.hodDocument && !version.statutoryDocument && !version.restrictedDocument) || version.statutoryDocument;
+              } else if (this.loggedUserRole === 'HOD') {
+                return (!version.hodDocument && !version.statutoryDocument && !version.restrictedDocument) || version.hodDocument;
+              }
+              return false;
+            });
+          });
+  
+          this.totalData = this.fileList.length;
+  
+          this.fileList.map((item: getfileList, index: number) => {
+            const serialNumber = index + 1;
+            if (index >= this.skip && serialNumber <= this.limit) {
+              item.id = serialNumber;
+              this.serialNumberArray.push(serialNumber);
+            }
+          });
+  
+          this.dataSource = new MatTableDataSource<getfileList>(this.fileList);
+          this.calculateTotalPages(this.fileList.length, this.pageSize);
+  
+          this.fileList.forEach((item: any) => {
+            item.selectedVersion = this.getLatestVersion(item.listOfDocumentVersoinDtos);
+            item.listOfDocumentVersoinDtos.forEach((version: any) => {
+              version.fileSizeKB = convertToKB(parseInt(version.fileSize, 10));
+            });
+          });
+  
+          if (this.fileList.length > 0 && this.fileList[0].selectedVersion) {
+            this.doc = this.fileList[0].selectedVersion.fileUrl;
+          }
+  
+        }
+      },
+      error: (err: any) => {
+        if (err.error && err.error.message) {
+          this['msg'] += " " + err.error.message;
+        }
+      },
+    });
+  }
  
   capitalizeFirstLetter(string: string): string {
     if (!string) return '';
@@ -394,9 +453,21 @@ selectFiles(_event: any): void {
 onDocumentTypeChange(docType:any){
   console.log("Selected Doctye DATA::",docType);
   this.selectedDocType = docType;
-  
-
+  this.fileManagerTableData(this.selectedDocType);
 }
+
+
+fileManagerTableData(filterData:any){
+ 
+  if(filterData == null || filterData == ''){
+    this.getFileListDetails();
+  }else{
+    alert("else part")
+    this.getFileListDetailsByFilter();
+  }
+}
+
+
 
 getDocumentTypeList() {
   // alert("hi")
