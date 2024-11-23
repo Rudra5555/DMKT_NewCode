@@ -80,8 +80,13 @@ export class FileManagerComponent implements OnInit , OnDestroy {
    loggedUserRole:any;
    documentTypeDataList : any
    respData:any;
+   documentTypeList:any;
 
   private unsubscribe$ = new Subject<void>();
+
+  documentTypeSet = new Set<string>();
+  
+  transformedMap: Map<string, any> = new Map();
 
 
   //** / pagination variables
@@ -206,7 +211,7 @@ export class FileManagerComponent implements OnInit , OnDestroy {
   
   }
 
-    this.getFileListDetails()
+    // this.getFileListDetails()
     // this.fileManagerTableData();
     this.uploadFileForm = this.formBuilder.group({
   
@@ -249,7 +254,14 @@ export class FileManagerComponent implements OnInit , OnDestroy {
               return false;
             });
           });
-  
+
+          // console.log("vvvvvvvvvv",this.fileList);
+          
+          this.transformedMap = this.transformApiResponseToMap(this.fileList);
+
+          console.log("fffffff",this.transformedMap);
+          
+
           this.totalData = this.fileList.length;
   
           this.fileList.map((item: getfileList, index: number) => {
@@ -259,7 +271,18 @@ export class FileManagerComponent implements OnInit , OnDestroy {
               this.serialNumberArray.push(serialNumber);
             }
           });
+
+          this.respData.forEach((item: any) => {
+            if (item.documentType) {
+              this.documentTypeSet.add(item.documentType);
+            }
+          });
+          
+          this.documentTypeList = Array.from(this.documentTypeSet);
+          
+          console.log('Distinct Document Types::::::::::;', this.documentTypeList);
   
+
           this.dataSource = new MatTableDataSource<getfileList>(this.fileList);
           this.calculateTotalPages(this.fileList.length, this.pageSize);
   
@@ -267,12 +290,17 @@ export class FileManagerComponent implements OnInit , OnDestroy {
             item.selectedVersion = this.getLatestVersion(item.listOfDocumentVersoinDtos);
             item.listOfDocumentVersoinDtos.forEach((version: any) => {
               version.fileSizeKB = convertToKB(parseInt(version.fileSize, 10));
+
+              // item.listOfDocumentVersoinDtos = item.listOfDocumentVersoinDtos.slice().reverse();
+
             });
+
+            this.fileList.forEach(item => {
+              item.listOfDocumentVersoinDtos = item.listOfDocumentVersoinDtos.slice().reverse();
+            });
+
           });
   
-          if (this.fileList.length > 0 && this.fileList[0].selectedVersion) {
-            this.doc = this.fileList[0].selectedVersion.fileUrl;
-          }
   
         }
       },
@@ -284,67 +312,116 @@ export class FileManagerComponent implements OnInit , OnDestroy {
     });
   }
   
-  getFileListDetailsByFilter() {
-    this.fileList = [];
-    this.serialNumberArray = [];
+
+
+  transformApiResponseToMap(apiResponse: any[]): Map<string, any> {
+    const resultMap = new Map<string, any>();
+
+    apiResponse.forEach((item) => {
+      const fileName = item.fileName;
+    
+    
+      //let listOfDocumentVersoinDtosObj = item.listOfDocumentVersoinDtos;
+      let revObj = item.listOfDocumentVersoinDtos.slice().reverse();
+      // console.log("bbbbbbbbb:::::::",JSON.stringify(revObj[0]));
+      const showFileName=revObj[0].uniqueFileName;
+      const fileSize =revObj[0].fileSize || null;
+      
+      const versionArray = item.listOfDocumentVersoinDtos.slice().reverse().map((version:any) => ({
+        fileName:item.fileName,
+        versionId: version.versionId,
+        versionName: version.versionName,
+        versionReleaseDate: version.versionReleaseDate,
+        fileUrl: version.fileUrl,
+        uniqueFileName: version.uniqueFileName,
+      }));
+      const documentType = item.documentType;
+      const documentSubType = item.documentSubType;
+      const storageLocation = item.storageLocation;
+      const fileUrl = item.listOfDocumentVersoinDtos[0]?.fileUrl || null;
+      let versionName = revObj[0].versionName
+      let versionReleaseDate = revObj[0].versionReleaseDate
+      const selectedVersion= versionName.concat("-",versionReleaseDate);
+
+      const valueObject = {
+        showFileName,
+        fileName,
+        fileSize,
+        versionArray,
+        documentType,
+        documentSubType,
+        storageLocation,
+        fileUrl,
+        selectedVersion
+      };
+
+      resultMap.set(fileName, valueObject);
+    });
+
+    return resultMap;
+  }
+
+  // getFileListDetailsByFilter() {
+  //   this.fileList = [];
+  //   this.serialNumberArray = [];
   
-    this.loginService.getFileListsByFilter(this.mainHead, this.plants, this.departmentName, this.subAreaName, this.startDate, this.endDate,this.selectedDocType).subscribe({
-      next: (event: any) => {
-        if (event instanceof HttpResponse) {
-          this.respData = event.body.documentLists;
-          console.log("response:", this.respData);
+  //   this.loginService.getFileListsByFilter(this.mainHead, this.plants, this.departmentName, this.subAreaName, this.startDate, this.endDate,this.selectedDocType).subscribe({
+  //     next: (event: any) => {
+  //       if (event instanceof HttpResponse) {
+  //         this.respData = event.body.documentLists;
+  //         console.log("response:", this.respData);
           
   
-          const convertToKB = (bytes: number): string => {
-            return (bytes / 1024).toFixed(2);
-          };
+  //         const convertToKB = (bytes: number): string => {
+  //           return (bytes / 1024).toFixed(2);
+  //         };
   
-          this.fileList = this.respData.filter((item: any) => {
-            return item.listOfDocumentVersoinDtos.some((version: any) => {
-              if (this.loggedUserRole === 'User') {
-                return !version.hodDocument && !version.statutoryDocument && !version.restrictedDocument;
-              } else if (this.loggedUserRole === 'SuperUser') {
-                return (!version.hodDocument && !version.statutoryDocument && !version.restrictedDocument) || version.statutoryDocument;
-              } else if (this.loggedUserRole === 'HOD') {
-                return (!version.hodDocument && !version.statutoryDocument && !version.restrictedDocument) || version.hodDocument;
-              }
-              return false;
-            });
-          });
+  //         this.fileList = this.respData.filter((item: any) => {
+  //           return item.listOfDocumentVersoinDtos.some((version: any) => {
+  //             if (this.loggedUserRole === 'User') {
+  //               return !version.hodDocument && !version.statutoryDocument && !version.restrictedDocument;
+  //             } else if (this.loggedUserRole === 'SuperUser') {
+  //               return (!version.hodDocument && !version.statutoryDocument && !version.restrictedDocument) || version.statutoryDocument;
+  //             } else if (this.loggedUserRole === 'HOD') {
+  //               return (!version.hodDocument && !version.statutoryDocument && !version.restrictedDocument) || version.hodDocument;
+  //             }
+  //             return false;
+  //           });
+  //         });
   
-          this.totalData = this.fileList.length;
+  //         this.totalData = this.fileList.length;
   
-          this.fileList.map((item: getfileList, index: number) => {
-            const serialNumber = index + 1;
-            if (index >= this.skip && serialNumber <= this.limit) {
-              item.id = serialNumber;
-              this.serialNumberArray.push(serialNumber);
-            }
-          });
+  //         this.fileList.map((item: getfileList, index: number) => {
+  //           const serialNumber = index + 1;
+  //           if (index >= this.skip && serialNumber <= this.limit) {
+  //             item.id = serialNumber;
+  //             this.serialNumberArray.push(serialNumber);
+  //           }
+  //         });
   
-          this.dataSource = new MatTableDataSource<getfileList>(this.fileList);
-          this.calculateTotalPages(this.fileList.length, this.pageSize);
+  //         this.dataSource = new MatTableDataSource<getfileList>(this.fileList);
+  //         this.calculateTotalPages(this.fileList.length, this.pageSize);
   
-          this.fileList.forEach((item: any) => {
-            item.selectedVersion = this.getLatestVersion(item.listOfDocumentVersoinDtos);
-            item.listOfDocumentVersoinDtos.forEach((version: any) => {
-              version.fileSizeKB = convertToKB(parseInt(version.fileSize, 10));
-            });
-          });
+  //         this.fileList.forEach((item: any) => {
+  //           item.selectedVersion = this.getLatestVersion(item.listOfDocumentVersoinDtos);
+  //           item.listOfDocumentVersoinDtos.forEach((version: any) => {
+  //             version.fileSizeKB = convertToKB(parseInt(version.fileSize, 10));
+  //           });
+  //         });
   
-          if (this.fileList.length > 0 && this.fileList[0].selectedVersion) {
-            this.doc = this.fileList[0].selectedVersion.fileUrl;
-          }
+  //         if (this.fileList.length > 0 && this.fileList[0].selectedVersion) {
+  //           this.doc = this.fileList[0].selectedVersion.fileUrl;
+  //         }
   
-        }
-      },
-      error: (err: any) => {
-        if (err.error && err.error.message) {
-          this['msg'] += " " + err.error.message;
-        }
-      },
-    });
-  }
+  //       }
+  //     },
+  //     error: (err: any) => {
+  //       if (err.error && err.error.message) {
+  //         this['msg'] += " " + err.error.message;
+  //       }
+  //     },
+  //   });
+  // }
  
   capitalizeFirstLetter(string: string): string {
     if (!string) return '';
@@ -450,10 +527,17 @@ selectFiles(_event: any): void {
   
 }
 
-onDocumentTypeChange(docType:any){
-  console.log("Selected Doctye DATA::",docType);
-  this.selectedDocType = docType;
-  this.fileManagerTableData(this.selectedDocType);
+// onDocumentTypeChange(docType:any){
+//   console.log("Selected Doctye DATA::",docType);
+
+// }
+
+onDocumentTypeChange(docType: any) {
+  const filteredData = this.respData.filter((item: any) => item.documentType === docType);
+
+  console.log("Selected Document Type Data:", filteredData);
+
+  this.fileList = filteredData;
 }
 
 
@@ -463,7 +547,7 @@ fileManagerTableData(filterData:any){
     this.getFileListDetails();
   }else{
     alert("else part")
-    this.getFileListDetailsByFilter();
+    // this.getFileListDetailsByFilter();
   }
 }
 
@@ -582,21 +666,122 @@ ngOnDestroy() {
 getLatestVersion(versions: any[]): any {
   return versions.reduce((latest, version) => {
     return new Date(version.versionReleaseDate) > new Date(latest.versionReleaseDate) ? version : latest;
+    // return latest.localeCompare(version) > 0? version : latest;
   });
 }
 
 
-onVersionChange(item: any, selectedVersion: any) {
+onVersionChange(item: any, fileNameAsMapKey: any,selectedVersion: any ) {
+  // alert("lllll"+JSON.stringify(selectedVersion));/
+  let selectedVerion = selectedVersion.versionName;
+   alert("lllll"+JSON.stringify(selectedVersion.versionName));
+  console.log("hh",JSON.stringify(item));
+  console.log("9999999999999=",item.fileSize);
+  console.log("before::",JSON.stringify(this.transformedMap.get(fileNameAsMapKey)))
+  let selectedVal = this.transformedMap.get(fileNameAsMapKey);
+  let selectVersionObj = this.transformedMap.get(fileNameAsMapKey);
 
-  item.selectedVersion = selectedVersion;
+  selectVersionObj.versionArray.forEach((elem: any) => {
+                console.log("hhhhhhhh>",elem.versionName)
+                if(selectedVerion==elem.versionName)
+                {
+                  console.log("gggggg==>",elem.uniqueFileName);
 
+                  const fileName = fileNameAsMapKey;
+    
+    
+                  //let listOfDocumentVersoinDtosObj = item.listOfDocumentVersoinDtos;
+                  // let revObj = item.listOfDocumentVersoinDtos.slice().reverse();
+                  // console.log("bbbbbbbbb:::::::",JSON.stringify(revObj[0]));
+                  const showFileName=elem.uniqueFileName;
+                  const fileSize =selectedVal.fileSize;
+                  
+                 /* const versionArray = item.listOfDocumentVersoinDtos.slice().reverse().map((version:any) => ({
+                    fileName:item.fileName,
+                    versionId: version.versionId,
+                    versionName: version.versionName,
+                    versionReleaseDate: version.versionReleaseDate,
+                    fileUrl: version.fileUrl,
+                    uniqueFileName: version.uniqueFileName,
+                  }));*/
+                  const versionArray = selectVersionObj.versionArray;
+                  const documentType = selectVersionObj.documentType;
+                  const documentSubType = selectVersionObj.documentSubType;
+                  const storageLocation = selectVersionObj.storageLocation;
+                  const fileUrl = elem.fileUrl || null;
+                  //  let versionName = revObj[0].versionName
+                  // let versionReleaseDate = revObj[0].versionReleaseDate
+                  // const selectedVersion= versionName.concat("-",versionReleaseDate);
+            
+                  const valueObject = {
+                    showFileName,
+                    fileName,
+                    fileSize,
+                    versionArray,
+                    documentType,
+                    documentSubType,
+                    storageLocation,
+                    fileUrl,
+                    selectedVersion
+                  };
+            
+                  this.transformedMap.set(fileNameAsMapKey, valueObject);
+
+                  console.log("After::", JSON.stringify(this.transformedMap.get(fileNameAsMapKey)))
+                  
+                }
+               });
+
+
+  //console.log("map data",JSON.stringify(this.transformedMap.get(fileName)));
+
+ 
+  
+
+ // item.selectedVersion = selectedVersion;
+let oldFileName=item.newUniqueFileName;
   if (item.selectedVersion) {
+   
     item.newUniqueFileName = item.selectedVersion.newUniqueFileName; 
+  //  alert(item.newUniqueFileName)
     this.doc = item.selectedVersion.fileUrl; 
     // console.log(`Version changed to: ${item.selectedVersion.versionName}, File Name: ${item.newUniqueFileName}`);
+
+    this.fileList.forEach((item: any) => {
+      // item.selectedVersion = this.getLatestVersion(item.listOfDocumentVersoinDtos);
+
+      if(item.newUniqueFileName==oldFileName){
+              // alert("present")
+      }
+
+      // item.listOfDocumentVersoinDtos.forEach((version: any) => {
+      //   version.fileSizeKB = convertToKB(parseInt(version.fileSize, 10));
+      // });
+
+    });
+   
+    
+
+    if (this.fileList.length > 0 && this.fileList[0].selectedVersion) {
+      this.doc = this.fileList[0].selectedVersion.fileUrl;
+    }
+
+    this.doc="ghhhhhhhhhhhhhhhhhhhhhh";
   }
 }
 
+setFileUrl(fileUrl:any){
+// alert("jiiii")
+console.log(fileUrl);
+
+  this.doc=fileUrl;
+  
+
+}
+
+buttonClose(){
+  this.doc=''
+}
 
 convertBytesToKB(bytes: number): string {
   return (bytes / 1024).toFixed(2) + ' KB';
