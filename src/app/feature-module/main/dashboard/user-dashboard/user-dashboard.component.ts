@@ -4,11 +4,20 @@ import { routes, url } from 'src/app/core/core.index';
 import { Router } from '@angular/router';
 import { LoginComponentService } from 'src/app/services/login-component.service';
 import { HttpResponse } from '@angular/common/http';
+import { apiResultFormat, getfileList } from 'src/app/core/services/interface/models';
+import { pageSelection } from 'src/app/feature-module/employee/employees/departments/departments.component';
 
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { DatePipe } from '@angular/common';
 import { MatTableDataSource } from '@angular/material/table';
+
+
+import { ViewerType } from 'ngx-doc-viewer';
+import { COMMA, ENTER } from '@angular/cdk/keycodes';
+import { Sort } from '@angular/material/sort';
+
+declare let $: any;
 
 
 interface data{
@@ -79,6 +88,56 @@ export class UserDashboardComponent implements OnInit {
   subAreaList: any[] = [];
   subAreaDataList: any[] = [];
   bsRangeValue: Date[] | undefined;
+
+// ****************************************
+
+  [x: string]: any;
+  public searchDataValue = '';
+  public filter = false;
+  elem=document.documentElement
+  isFilterDropdownOpen: boolean = false;
+  bsValue = new Date();
+  maxDate = new Date();
+  // pagination variables
+  public lastIndex = 0;
+  public totalData = 0;
+  public serialNumberArray: Array<number> = [];
+  public pageNumberArray: Array<number> = [];
+  public pageSelection: Array<pageSelection> = [];
+
+
+  dataSource!: MatTableDataSource<getfileList>;
+  public contactlist: Array<getfileList> = [];
+  public totalPages = 0;
+  public message: any;
+  public selectedFiles: any;
+  public uploadFileForm!: FormGroup ;
+    public editClientForm!: FormGroup ;
+   public multipleFiles: File[] = [];
+   public getRole:any;
+  //  public fileList:any;
+   public bigId:any;
+   public roleFlag: boolean = false;
+
+   departmentName:any;
+   subAreaName: any;
+   subAreaNameOnHeader:any;
+   mainHead:any;
+   plants:any;
+
+   doc: string = '';
+   viewer: ViewerType = 'google';
+   selectedType = 'xlsx';
+
+   startDate:any;
+   endDate:any;
+
+   loggedUserRole:any;
+
+   respData:any;
+
+
+
   // public dataset!: Array<data>;
   constructor(private formBuilder: FormBuilder, private router: Router, private loginService: LoginComponentService, private datePipe: DatePipe) {
 
@@ -113,59 +172,6 @@ export class UserDashboardComponent implements OnInit {
       searchKeyData: ["", [Validators.required]],
 
     });
-
-
-    this.dataset = new MatTableDataSource<DocumentData>([
-      {
-        docName: 'xyz.pdf', docType: 'pdf',version: 'xyz1',  docSize: '10.45kb', download: 'down', view: 'view'
-      },
-      {
-        docName: 'zyz.xlm', docType: 'xlm',version: 'zyz1',  docSize: '10.45kb', download: 'down', view: 'view'
-      },
-      {
-        docName: 'zzz.doc', docType: 'doc',version: 'zzz1',  docSize: '10.45kb', download: 'down', view: 'view'
-      },
-      {
-        docName: 'qqq.pdf', docType: 'pdf',version: 'qqq1',  docSize: '10.45kb', download: 'down', view: 'view'
-      },
-      {
-        docName: 'xyz.pdf', docType: 'pdf',version: 'xyz1',  docSize: '10.45kb', download: 'down', view: 'view'
-      },
-      {
-        docName: 'zyz.xlm', docType: 'xlm',version: 'zyz1',  docSize: '10.45kb', download: 'down', view: 'view'
-      },
-      {
-        docName: 'zzz.doc', docType: 'doc',version: 'zzz1',  docSize: '10.45kb', download: 'down', view: 'view'
-      },
-      {
-        docName: 'qqq.pdf', docType: 'pdf',version: 'qqq1',  docSize: '10.45kb', download: 'down', view: 'view'
-      },
-      {
-        docName: 'ppp.pdf', docType: 'pdf',version: 'xyz1',  docSize: '10.45kb', download: 'down', view: 'view'
-      },
-      {
-        docName: 'lll.xlm', docType: 'xlm',version: 'zyz1',  docSize: '10.45kb', download: 'down', view: 'view'
-      },
-      {
-        docName: 'zzz.doc', docType: 'doc',version: 'zzz1',  docSize: '10.45kb', download: 'down', view: 'view'
-      },
-      {
-        docName: 'kkk.pdf', docType: 'pdf',version: 'qqq1',  docSize: '10.45kb', download: 'down', view: 'view'
-      },
-      {
-        docName: 'nnn.pdf', docType: 'pdf',version: 'xyz1',  docSize: '10.45kb', download: 'down', view: 'view'
-      },
-      {
-        docName: 'lll.xlm', docType: 'xlm',version: 'zyz1',  docSize: '10.45kb', download: 'down', view: 'view'
-      },
-      {
-        docName: 'zllz.doc', docType: 'doc',version: 'zzz1',  docSize: '10.45kb', download: 'down', view: 'view'
-      },
-      {
-        docName: 'qllq.pdf', docType: 'pdf',version: 'qqq1',  docSize: '10.45kb', download: 'down', view: 'view'
-      },
-    ]);
-
    
 
   }
@@ -371,8 +377,10 @@ export class UserDashboardComponent implements OnInit {
     });
   }
 
+  
 
   getDetailsByPlantsDataName(departmentName: string, subAreaName: string) {
+    
     let endDate = new Date();
     let startDate = new Date();
     startDate.setDate(endDate.getDate() - 15);
@@ -404,6 +412,7 @@ export class UserDashboardComponent implements OnInit {
     });
   }
 
+
   formatDate(date: Date): string {
     return this.datePipe.transform(date, 'yyyy-MM-dd')!;
   }
@@ -420,59 +429,109 @@ export class UserDashboardComponent implements OnInit {
 
   
 
-  // public getMoreData(event: string): void {
-  //   if (event === 'next') {
-  //     this.currentPage++;
-  //     this.pageIndex = this.currentPage - 1;
-  //     this.limit += this.pageSize;
-  //     this.skip = this.pageSize * this.pageIndex;
-  //     this.getFileListDetails()
-  //   } else if (event === 'previous') {
-  //     this.currentPage--;
-  //     this.pageIndex = this.currentPage - 1;
-  //     this.limit -= this.pageSize;
-  //     this.skip = this.pageSize * this.pageIndex;
-  //     this.getFileListDetails()
-  //   }
-  // }
-  // public moveToPage(pageNumber: number): void {
-  //   this.currentPage = pageNumber;
-  //   this.skip = this.pageSelection[pageNumber - 1].skip;
-  //   this.limit = this.pageSelection[pageNumber - 1].limit;
-  //   if (pageNumber > this.currentPage) {
-  //     this.pageIndex = pageNumber - 1;
-  //   } else if (pageNumber < this.currentPage) {
-  //     this.pageIndex = pageNumber + 1;
-  //   }
-  //   this.getFileListDetails()
-  // }
-  // private calculateTotalPages(totalData: number, pageSize: number): void {
-  //   this.pageNumberArray = [];
-  //   this.totalPages = totalData / pageSize;
-  //   if (this.totalPages % 1 !== 0) {
-  //     this.totalPages = Math.trunc(this.totalPages + 1);
-  //   }
-  //   for (let i = 1; i <= this.totalPages; i++) {
-  //     const limit = pageSize * i;
-  //     const skip = limit - pageSize;
-  //     this.pageNumberArray.push(i);
-  //     this.pageSelection.push({ skip: skip, limit: limit });
-  //   }
-  // }
+ 
+  public sortData(sort: Sort) {
+    const data = this.contactlist.slice();
+    if (!sort.active || sort.direction === '') {
+      this.contactlist = data;
+    } else {
+      this.contactlist = data.sort((a: any, b: any) => {
+        const aValue = (a as any)[sort.active];
+        const bValue = (b as any)[sort.active];
+        return (aValue < bValue ? -1 : 1) * (sort.direction === 'asc' ? 1 : -1);
+      });
+    }
+  }
 
-  // public changePageSize(): void {
-  //   this.pageSelection = [];
-  //   this.limit = this.pageSize;
-  //   this.skip = 0;
-  //   this.currentPage = 1;
-  //   this.getFileListDetails()
-  // }
+  public searchData(value: string): void {
+    this.dataSource.filter = value.trim().toLowerCase();
+    this.contactlist = this.dataSource.filteredData;
+  }
+
+  public getMoreData(event: string): void {
+    if (event === 'next') {
+      this.currentPage++;
+      this.pageIndex = this.currentPage - 1;
+      this.limit += this.pageSize;
+      this.skip = this.pageSize * this.pageIndex;
+      // this.allSubAreaList();
+    } else if (event === 'previous') {
+      this.currentPage--;
+      this.pageIndex = this.currentPage - 1;
+      this.limit -= this.pageSize;
+      this.skip = this.pageSize * this.pageIndex;
+      // this.allSubAreaList();
+    }
+  }
+
+  public moveToPage(pageNumber: number): void {
+    this.currentPage = pageNumber;
+    this.skip = this.pageSelection[pageNumber - 1].skip;
+    this.limit = this.pageSelection[pageNumber - 1].limit;
+    if (pageNumber > this.currentPage) {
+      this.pageIndex = pageNumber - 1;
+    } else if (pageNumber < this.currentPage) {
+      this.pageIndex = pageNumber + 1;
+    }
+    // this.allSubAreaList();
+  }
+  private calculateTotalPages(totalData: number, pageSize: number): void {
+    this.pageNumberArray = [];
+    this.totalPages = totalData / pageSize;
+    if (this.totalPages % 1 !== 0) {
+      this.totalPages = Math.trunc(this.totalPages + 1);
+    }
+    for (let i = 1; i <= this.totalPages; i++) {
+      const limit = pageSize * i;
+      const skip = limit - pageSize;
+      this.pageNumberArray.push(i);
+      this.pageSelection.push({ skip: skip, limit: limit });
+    }
+  }
+  public changePageSize(): void {
+    this.pageSelection = [];
+    this.limit = this.pageSize;
+    this.skip = 0;
+    this.currentPage = 1;
+    // this.allSubAreaList();
+  }
+  openFilter() {
+    this.filter = !this.filter;
+  }
+  toggleFilterDropdown() {
+    this.isFilterDropdownOpen = !this.isFilterDropdownOpen;
+  }
+  fullscreen() {
+    if (!document.fullscreenElement) {
+      this.elem.requestFullscreen();
+    }
+    else {
+      document.exitFullscreen();
+    }
+  }
+  public selectedFieldSet = [0];
+  currentStep = 0;
+  nextStep() {
+    this.currentStep++;
+  }
+  addOnBlur = true;
+  readonly separatorKeysCodes = [ENTER, COMMA] as const;
+
+  selected1 = 'option1';
+
+  
+  selectFiles(_event: any): void {
+
+  }
+
+
 
 
   fileNameSearch(): void {
     const searchValue = this.getAllFilesForm.get('searchKeyData')?.value?.trim() || '';
     
     if (searchValue) {
+      this.cardHide = true;
       this.documentNameSearch = false;
       console.log(searchValue);
   

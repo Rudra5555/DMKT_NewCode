@@ -10,7 +10,7 @@
       <form [formGroup]="getAllFilesForm" class="file-search" id="totalGrp">
         <div class="search-bar">
           <input  style="margin-left: -37%; position: absolute; margin-top: 76%; width: 23%;" type="text"
-            class="searchBar" placeholder="Enter your search key..."    formControlName="searchKeyData"
+            class="searchBar" placeholder="Enter your search key..."    formControlName="searchKeyData"    (keydown.enter)="$event.preventDefault()"
             />
             <button   class="searchBar" id="mainHeadButton"
             class="button button-primary" (click)="getAllDtaForHide()" data-bs-toggle="modal"  data-bs-target="#viewMainHeadOptions" >
@@ -60,8 +60,13 @@
             </div>
             <div *ngIf="item.departmentName == 'AHP'">
               <img src="assets/img/DSC_5538.JPG" width="500" height="500" />
+              </div>
+              <div *ngIf="!['OPERATION', 'MECHANICAL', 'ELECTRICAL', 'C&I', 'CIVIL', 'CHP', 'AHP'].includes(item.departmentName)">
+                <img src="assets/img/DSC_5538.JPG" width="500" height="500" />
             </div>
           </div>
+          
+
           <div class="avatar-holder">
 
             <div *ngIf="item.departmentName == 'OPERATION'">
@@ -99,18 +104,23 @@
             <div *ngIf="item.departmentName == 'ELECTRICAL'">
               <img src="assets/img/Ash-Dyke.jpg" class="avtarImage" />
             </div>
+
+            <div *ngIf="!['OPERATION', 'MECHANICAL', 'ELECTRICAL', 'C&I', 'CIVIL', 'CHP', 'AHP', 'ASH-DYKE'].includes(item.departmentName)">
+              <img src="assets/img/Power-Sale.jpg" width="500" height="500" />
+          </div>
+
           </div>
           <div class="name">
             <h5 style="font-weight: 600; margin-top: -20%; font-size: 14px">
               {{ item.departmentName }}
             </h5>
             <h3 class="card-title">{{ item.fileCount }}</h3>
-            <div *ngFor="let it of item.listOfSubAreaDtos">
+            <div *ngFor="let sub of item.listOfSubAreaDtos">
               <ol>
 
                 <li>
-                  <h5 class="subAreasName" (click)="getDetailsByPlantsDataName(item.departmentName,it.subAreaName)">
-                    &#11166; {{ it.subAreaName }}</h5>
+                  <h5 class="subAreasName" (click)="getDetailsByPlantsDataName(item.departmentName,sub.subAreaName)">
+                    &#11166; {{ sub.subAreaName }}</h5>
                 </li>
               </ol>
             </div>
@@ -434,7 +444,6 @@
                   <div *ngIf="item.name == 'POWER O&M'">
                     <img src="assets/img/Power-O&M.jpg" />
                   </div>
-              
 
                 <div class="clickable-div"
                   *ngIf="item.name == 'POWER SALE'">
@@ -583,16 +592,16 @@
           <div class="dataTables_length">
             <label class="col-form-label" for="">
               Show
-              <!-- <select
+              <select
                 [(ngModel)]="pageSize"
-                (ngModelChange)="changePageSize()"
+        
                 class="form-control form-control-sm" id="changePageDataNumber"
               >
                 <option value="10">10</option>
                 <option value="25">25</option>
                 <option value="50">50</option>
                 <option value="100">100</option>
-              </select> -->
+              </select>
               Entries
             </label>
           </div>
@@ -637,27 +646,32 @@
             
             <td>
               <h2 class="table-avatar d-flex">
-                <!-- {{ item.listOfDocumentVersoinDtos[0].newUniqueFileName}} -->
+                <!-- {{ item.fileName}} -->
                   
               </h2>
               {{item.fileName}}
             </td>
             <td>
-              <!-- {{ item.documentType }} -->
-              {{item.documentType}}
-           </td>
+                {{item.documentType}}
+            </td>
+            <td>
+              {{item.documentSubType? item.documentSubType : 'N/A'}}
+            </td>
+            <td>
+              {{item.storageLocation? item.storageLocation : 'N/A'}}
+            </td>
 
             <td>
               <mat-select
                 class="custom-mat-select select"
-                id="versionSelect"
+              
                 placeholder="Select Version"
                 (selectionChange)="onVersionChange(item, $event.value)"
-                [value]="item.selectedVersion"
-              >
+                [value]="item.selectedVersion" 
+              > 
                 <mat-option
                   *ngFor="let version of item.listOfDocumentVersoinDtos"
-                  [value]="version"
+                  [value]="version" 
                 >
                   {{ version.versionName }} - {{ version.versionReleaseDate }}
                 </mat-option>
@@ -670,7 +684,7 @@
             
             </td>
             <td class="text-center">
-              <!-- <a
+              <a
                 class="dropdown-item"
                 [href]="item.listOfDocumentVersoinDtos[0].fileUrl"
                 target="_blank"
@@ -679,11 +693,10 @@
                   class="fa-solid fa-download"
                   style="color: rgb(0, 117, 234)"
                 ></i>
-              </a> -->
-              {{item.download}}
+              </a>
             </td>
             <td class="text-center">
-              <!-- <a
+              <a
                 class="dropdown-item"
                 [href]="item.listOfDocumentVersoinDtos[0].fileUrl"
                 target="_blank"
@@ -691,8 +704,7 @@
                 data-bs-target="#view_files"
               >
                 <i class="fas fa-eye" style="color: rgb(0, 117, 234)"></i>
-              </a> -->
-              {{item.view}}
+              </a>
             </td>
           </tr>
           <!-- <tr *ngIf="fileList.length == 0">
@@ -776,6 +788,69 @@
       </div> -->
     </div>
   </div>
+
+  <div
+  id="view_files"
+  #view_files
+  class="modal custom-modal fade"
+  role="dialog"
+>
+  <div class="modal-dialog modal-dialog-centered modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">File-Name</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="row">
+            <!-- <iframe src="http://localhost:8080/document/show-pdf/Scope of Work_Digital Library0a1ee6ec-b60f-41da-ac55-31003c08c239"
+                  width="800" height="600"> </iframe> -->
+            <!-- <iframe src="D:\Client project\pdf documents for demo/scope"
+                  width="800" height="600"> </iframe> -->
+            <!-- <iframe src="http://103.168.18.28:8080/document/show-file/POWER O&M.C&I.TURBINE.CPP-2.318.C72-EN.pdf"
+                  width="800" target="_blank" height="600"> </iframe> -->
+
+            <!-- <iframe
+            src="http://103.168.18.28:8080/document/show-file/POWER O&M.C&I.TURBINE.CPP-2.32.Copy of Estimated_Time.xlsx"
+            width="800" 
+            height="600"
+            frameborder="0"
+          >
+            ...This is an embedded file...
+          </iframe> -->
+
+            <!-- <ngx-doc-viewer [url]="doc" [viewer]="viewer" style="width:100%;height:80vh;"></ngx-doc-viewer> -->
+
+             <ngx-doc-viewer
+              [url]="doc"
+              [viewer]="viewer"
+              style="width: 100%; height: 80vh"
+            ></ngx-doc-viewer>
+
+<!-- <iframe src="https://sharecad.org/cadframe/load?url=http://www.cadsofttools.com/dwgviewer/floorplan.dwg" scrolling="yes"></iframe>
+             -->
+
+
+             <!-- <iframe src="http://localhost:4200/assets/files/anteen.dwg" scrolling="yes"></iframe> -->
+            
+             <!-- <iframe src="https://sharecad.org/cadframe/load?url=http://www.cadsofttools.com/dwgviewer/floorplan.dwg" scrolling="yes" width="100%" height="600"></iframe> -->
+
+
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
 </div>
 
 

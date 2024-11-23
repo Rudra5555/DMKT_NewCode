@@ -58,7 +58,7 @@ export class FileManagerMainheadComponent implements OnInit, OnDestroy {
   public getRole: any;
   public bigId: any;
   public roleFlag: boolean = false;
-
+  documentTypeDataList : any
   departmentName: any;
   subAreaName: any;
   subAreaNameOnHeader: any;
@@ -124,7 +124,7 @@ export class FileManagerMainheadComponent implements OnInit, OnDestroy {
 
 
   ngOnInit(): void {
-
+    this.getDocumentTypeList();
 
     this.loggedUserRole = localStorage.getItem("role")
     this.setLast15Days();
@@ -365,6 +365,20 @@ export class FileManagerMainheadComponent implements OnInit, OnDestroy {
     }
   }
 
+
+  getDocumentTypeList() {
+    this.loginService.getDocumentType().subscribe({
+      next: (event: any) => {
+        if (event instanceof HttpResponse) {
+          this.documentTypeDataList = event.body || [];
+        console.log("DOCUMENT TYPE:: ",this.documentTypeDataList);
+        }
+      },
+      error: (err: any) => {
+        console.error(err);
+      }
+    });
+  }
 
 
 

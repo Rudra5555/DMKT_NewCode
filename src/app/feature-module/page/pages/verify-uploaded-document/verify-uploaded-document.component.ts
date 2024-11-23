@@ -118,6 +118,11 @@ export class VerifyUploadedDocumentComponent implements OnInit {
   elem = document.documentElement;
   isFilterDropdownOpen: boolean = false;
   public searchDataValue = '';
+  subDocListSize: any;
+  subDocList: any;
+  docList: any;
+  docMap = new Map<number, string>();
+  subDocumentTypeOption: any;
   // ***************
 
   constructor(
@@ -134,6 +139,7 @@ export class VerifyUploadedDocumentComponent implements OnInit {
       department: ["", [Validators.required]],
       subArea: ["", [Validators.required]],
       documentType: ["", [Validators.required]],
+      subDocumentType: ["", [Validators.required]],
       storageLocation: ["", [Validators.required]],
       isStatutoryDocument: ["", [Validators.required]],
       isRestrictedDocument: ["", [Validators.required]],
@@ -192,11 +198,29 @@ export class VerifyUploadedDocumentComponent implements OnInit {
 
     this.uploadFileForm.get('department')?.valueChanges.subscribe(value => {
       const [deptName, deptAbbr] = value.split('~');
+
+         // Find the corresponding department object from the API response
+    const selectedDept = this.departmentList.find(
+      (dept: any) => dept.optionVal === value
+    );
+
+    if (selectedDept) {
+      // Extract the catId for the selected department
+      const deptId = selectedDept.catId;
+      console.log("ffffffffff",deptId);
+      
+      // Call the method with the extracted deptId
+      this.getDocTypeList(deptId);
+    }
+
       this.getSubAreaList(deptName, "department");
       this.selectedDeptCatName = deptName;
+      console.log("qqqqqqqq",this.selectedDeptCatName);
+      
       this.selectedDeptCatNameAbbr = deptAbbr;
 
     });
+  
 
     this.uploadFileForm.get('subArea')?.valueChanges.subscribe(value => {
       const [subAreaName, subAreaAbbr] = value.split('~');
@@ -394,6 +418,8 @@ export class VerifyUploadedDocumentComponent implements OnInit {
 
   }
 
+ 
+
   selectedDepartment(event: any) {
     const [catName, abbreviation] = event.value.split('~');
     this.selectedDeptCatName = catName;
@@ -408,6 +434,8 @@ export class VerifyUploadedDocumentComponent implements OnInit {
       console.log("selectedDeptCatName is null or undefined.");
     }
   }
+  
+  
 
   selectedSubArea(event: any) {
     const [catName, abbreviation] = event.value.split('~');
@@ -456,6 +484,10 @@ export class VerifyUploadedDocumentComponent implements OnInit {
     if (this.uploadFileForm.controls['documentType']) {
       this.documentTypeOption = this.uploadFileForm.value.documentType;
     }
+    if (this.uploadFileForm.controls['subDocumentType']) {
+      this.subDocumentTypeOption = this.uploadFileForm.value.subDocumentType;
+      
+    }
     if (this.uploadFileForm.controls['storageLocation']) {
       this.storageLocationOption = this.uploadFileForm.value.storageLocation;
     }
@@ -485,7 +517,8 @@ export class VerifyUploadedDocumentComponent implements OnInit {
         "departAbbr": this.selectedDeptCatNameAbbr,
         "subArea": this.selectedSubAreaCatName,
         "subAreaAbbr": this.selectedSubAreaCatNameAbbr,
-        "documentType": this.documentTypeOption,
+        "documentType": this.docMap.get( this.documentTypeOption),
+        "documentSubType": this.subDocumentTypeOption,
         "storageLocation": this.storageLocationOption,
         "isStatutory": isStatutoryDocument,
         "isRestrictedDocument": isRestrictedDocument,
@@ -504,6 +537,7 @@ export class VerifyUploadedDocumentComponent implements OnInit {
             this.uploadFileForm.get('department')?.reset('');
             this.uploadFileForm.get('subArea')?.reset('');
             this.uploadFileForm.get('documentType')?.reset('');
+            this.uploadFileForm.get('subDocumentType')?.reset('');
             this.uploadFileForm.get('storageLocation')?.reset('');
             this.uploadFileForm.controls['isStatutoryDocument'].reset();
             this.uploadFileForm.controls['isRestrictedDocument'].reset();
@@ -567,7 +601,8 @@ export class VerifyUploadedDocumentComponent implements OnInit {
         "departAbbr": null,
         "subArea": null,
         "subAreaAbbr": null,
-        "documentType": this.documentTypeOption,
+        "documentType": this.docMap.get( this.documentTypeOption),
+        "documentSubType": this.subDocumentTypeOption,
         "storageLocation": this.storageLocationOption,
         "isStatutory": isStatutoryDocument,
         "isRestrictedDocument": isRestrictedDocument,
@@ -588,6 +623,7 @@ export class VerifyUploadedDocumentComponent implements OnInit {
             this.uploadFileForm.get('department')?.reset('');
             this.uploadFileForm.get('subArea')?.reset('');
             this.uploadFileForm.get('documentType')?.reset('');
+            this.uploadFileForm.get('subDocumentType')?.reset('');
             this.uploadFileForm.get('storageLocation')?.reset('');
             this.uploadFileForm.controls['isStatutoryDocument'].reset();
             this.uploadFileForm.controls['isRestrictedDocument'].reset();
@@ -727,6 +763,56 @@ export class VerifyUploadedDocumentComponent implements OnInit {
         next: (event: any) => {
           if (event instanceof HttpResponse) {
             this.subAreaList = event.body?.categoryList || [];
+          }
+        },
+        error: (err: any) => {
+          console.error(err);
+        }
+      });
+    }
+  }
+  getDocTypeList(deptId: any) {
+    console.log(deptId);
+    
+    if (deptId != '') {
+      this.uploadDocument.docTypeList(deptId).subscribe({
+        next: (event: any) => {
+          if (event instanceof HttpResponse) {
+             this.docList = event.body;
+            console.log("resulttttttttt",this.docList);
+            this.docList.forEach((item: any) => {
+              console.log("doc type Map", item.id, item.documentName);
+              this.docMap.set(item.id, item.documentName);
+           
+            });
+          }
+        },
+        error: (err: any) => {
+          console.error(err);
+        }
+      });
+    }
+  }
+
+  onDocumentTypeChange(docId: any) {
+ 
+    if (docId) {
+      this.getSubDocTypeList(docId);
+    }
+  }
+
+  getSubDocTypeList(docId: any) {
+    if (docId != '') {
+      this.uploadDocument.subDocTypeList(docId).subscribe({
+        next: (event: any) => {
+          if (event instanceof HttpResponse) {
+             this.subDocList = event.body;
+             this.subDocListSize = this.subDocList.length
+            console.log("subDocccccccc",this.subDocList);
+           
+            // let subType = this.subDocList.id
+            // console.log(subType);
+            
           }
         },
         error: (err: any) => {

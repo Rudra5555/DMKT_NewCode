@@ -19,7 +19,6 @@ import { param } from 'jquery';
 import { DatePipe } from '@angular/common';
 import { LoginComponentService } from 'src/app/services/login-component.service';
 
-
 @Component({
   selector: 'app-file-manager',
   templateUrl: './file-manager.component.html',
@@ -35,6 +34,8 @@ export class FileManagerComponent implements OnInit , OnDestroy {
   bsValue = new Date();
   bsRangeValue: Date[] = [];
   maxDate = new Date();
+  selectedDocType :any;
+
   // pagination variables
   public lastIndex = 0;
   public pageSize = 10;
@@ -77,7 +78,7 @@ export class FileManagerComponent implements OnInit , OnDestroy {
    endDate:any;
 
    loggedUserRole:any;
-
+   documentTypeDataList : any
    respData:any;
 
   private unsubscribe$ = new Subject<void>();
@@ -126,7 +127,7 @@ export class FileManagerComponent implements OnInit , OnDestroy {
  
   ngOnInit(): void {
     
-
+    this.getDocumentTypeList();
     this.loggedUserRole=localStorage.getItem("role")
 
     
@@ -226,10 +227,12 @@ export class FileManagerComponent implements OnInit , OnDestroy {
     this.fileList = [];
     this.serialNumberArray = [];
   
-    this.loginService.getFileLists(this.mainHead, this.plants, this.departmentName, this.subAreaName, this.startDate, this.endDate).subscribe({
+    this.loginService.getFileLists(this.mainHead, this.plants, this.departmentName, this.subAreaName, this.startDate, this.endDate,this.selectedDocType ).subscribe({
       next: (event: any) => {
         if (event instanceof HttpResponse) {
           this.respData = event.body.documentLists;
+          console.log("response:", this.respData);
+          
   
           const convertToKB = (bytes: number): string => {
             return (bytes / 1024).toFixed(2);
@@ -388,8 +391,28 @@ selectFiles(_event: any): void {
   
 }
 
+onDocumentTypeChange(docType:any){
+  console.log("Selected Doctye DATA::",docType);
+  this.selectedDocType = docType;
+  
 
+}
 
+getDocumentTypeList() {
+  // alert("hi")
+  this.loginService.getDocumentType().subscribe({
+    next: (event: any) => {
+      if (event instanceof HttpResponse) {
+        this.documentTypeDataList = event.body || [];
+        console.log("DOCUMENT TYPE:: ",this.documentTypeDataList);
+
+      }
+    },
+    error: (err: any) => {
+      console.error(err);
+    }
+  });
+}
 
 
 onMultipleSelect(event: { addedFiles: File[] }) {

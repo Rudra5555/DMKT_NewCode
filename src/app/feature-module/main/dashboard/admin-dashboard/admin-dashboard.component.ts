@@ -22,7 +22,7 @@ export class AdminDashboardComponent implements OnInit {
   totalDepartment: number = 0;
   previousFileCount: number | null = null;
   isIncrease: boolean | null = null;
-
+  isLoading: boolean = false; 
   public uName: any;
   bsValue = new Date();
   bsRangeValue: Date[];
@@ -72,6 +72,7 @@ export class AdminDashboardComponent implements OnInit {
   }
 
   onDateRangeSelected() {
+    
     const startDate = this.formatDate(this.bsRangeValue[0]);
     const endDate = this.formatDate(this.bsRangeValue[1]);
 
@@ -116,6 +117,7 @@ export class AdminDashboardComponent implements OnInit {
 
 
           // }
+          
 
         }
       },
@@ -123,6 +125,7 @@ export class AdminDashboardComponent implements OnInit {
         if (err.error && err.error.message) {
           this.msg += " " + err.error.message;
         }
+       
       },
     });
 

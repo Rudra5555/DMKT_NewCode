@@ -67,7 +67,7 @@
     </ul>
   </div>
 
-  <div class="row">
+  <div class="row" >
     <div class="col-md-12">
       <div class="table_header">
         <div class="row">
@@ -87,7 +87,7 @@
           </div>
         </div>
       </div>
-      <div class="table-responsive">
+      <div class="table-responsive" >
         <table matSort (matSortChange)="sortData($event)"
         class="table table-striped custom-table datatable contact-table text-center">
         <thead >
@@ -102,7 +102,11 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let item of allDeptList; ">
+          <div *ngIf="isLoading" class="spinner-border" style="align-items: center;margin-left: 260%;">
+            <!-- <p>Loading...</p>  -->
+            <!-- <i class="fas fa-spinner fa-spin text-info align-items-center me-1"></i> -->
+          </div>
+          <tr *ngFor="let item of contactlist; ">
             <td>
               <h2 class="table-avatar d-flex">
                 <a class="profile-split d-flex flex-column">{{ item.headName }}
@@ -121,40 +125,10 @@
             <td>
               {{ item.abbreviation}}
             </td>
-            <!-- <td>
-              {{ item.storageLocation? item.storageLocation : 'N/A' }}
-            </td>
-            <td>
-              {{ item.documentType }}
-            </td>
-
-            <td class="text-center">
-              <a
-                class="dropdown-item"
-                [href]="item.fileUrl"
-                target="_blank"
-              >
-                <i
-                  class="fa-solid fa-download"
-                  style="color: rgb(0, 117, 234)"
-                ></i>
-              </a>
-            </td> -->
-            <!-- <td class="text-center">
-              
-              <a
-              class="dropdown-item"
-              [href]="item.fileUrl"
-              (click)="openModal(item.fileUrl)"
-              data-bs-toggle="modal"
-              data-bs-target="#viewApprovedFiles"
-            >
-              <i class="fas fa-eye" style="color: rgb(0, 117, 234)"></i>
-            </a>
-            
-            </td> -->
+  
           </tr>
-          <tr *ngIf="allDeptList.length == 0">
+
+          <tr *ngIf="!isLoading && contactlist.length == 0" >
             <td colspan="7" style="text-align: center; color: red">
               No Records Found!
             </td>
@@ -163,7 +137,7 @@
         </tbody>
       </table>
       </div>
-      <div class="table_footer" style="height: 200px;" >
+      <div class="table_footer"  >
         <div class="col-sm-12 col-md-5">
           <div class="dataTables_info">
             Showing {{ serialNumberArray[0] }} to
@@ -353,7 +327,7 @@
           </div>
 
           <div class="submit-section">
-            <button class="btn submit-btn btn-sm" type="submit" data-bs-dismiss="modal" aria-label="Close">Submit</button>
+            <button class="btn submit-btn btn-sm" type="submit" data-bs-dismiss="modal" >Submit</button>
            
           </div>
         </form>

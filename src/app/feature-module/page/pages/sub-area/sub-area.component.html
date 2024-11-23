@@ -97,12 +97,14 @@
             <th>Department Name</th>
             <th>Sub-Area Name</th>
              <th>Sub-Area Abbriviation</th>
-          <!--  <th>Document Type</th>
-            <th class="text-end">Action</th> -->
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let item of allsubArea; ">
+          <div *ngIf="isLoading" class="spinner-border" style="align-items: center;margin-left: 300%;">
+            <!-- <p>Loading...</p>  -->
+            <!-- <i class="fas fa-spinner fa-spin text-info align-items-center me-1"></i> -->
+          </div>
+          <tr *ngFor="let item of contactlist; ">
             <td>
               <h2 class="table-avatar d-flex">
                 <a class="profile-split d-flex flex-column">{{ item.headId }}
@@ -124,37 +126,8 @@
              <td>
               {{ item.abbreviation}}
             </td>
-            <!-- <td>
-              {{ item.documentType }}
-            </td>
-
-            <td class="text-center">
-              <a
-                class="dropdown-item"
-                [href]="item.fileUrl"
-                target="_blank"
-              >
-                <i
-                  class="fa-solid fa-download"
-                  style="color: rgb(0, 117, 234)"
-                ></i>
-              </a>
-            </td> -->
-            <!-- <td class="text-center">
-              
-              <a
-              class="dropdown-item"
-              [href]="item.fileUrl"
-              (click)="openModal(item.fileUrl)"
-              data-bs-toggle="modal"
-              data-bs-target="#viewApprovedFiles"
-            >
-              <i class="fas fa-eye" style="color: rgb(0, 117, 234)"></i>
-            </a>
-            
-            </td> -->
           </tr>
-          <tr *ngIf="allsubArea.length == 0">
+          <tr *ngIf="!isLoading && contactlist.length == 0">
             <td colspan="7" style="text-align: center; color: red">
               No Records Found!
             </td>
@@ -163,7 +136,7 @@
         </tbody>
       </table>
       </div>
-      <div class="table_footer" style="height: 200px;" >
+      <div class="table_footer">
         <div class="col-sm-12 col-md-5">
           <div class="dataTables_info">
             Showing {{ serialNumberArray[0] }} to
@@ -176,24 +149,24 @@
           <div class="pagination_section">
             <ul class="pagination">
               <li class="page-item" [ngClass]="{
-                  disabled: currentPage === 1
-                }">
+                disabled: currentPage === 1
+              }">
                 <a (click)="getMoreData('previous')" class="page-link" href="javascript:void(0);" tabindex="-1"><i
                     class="fa fa-angle-double-left"></i></a>
               </li>
 
               @for (item of pageNumberArray; track item; let i = $index) {
               <li class="page-item" [class.active]="item === currentPage" [ngClass]="
-                    (pageNumberArray[currentPage - 2] > item &&
-                      item !== 1 &&
-                      pageNumberArray.length > 6) ||
-                    (pageNumberArray[currentPage] < item &&
-                      item !== 1 &&
-                      pageNumberArray.length > 6 &&
-                      pageNumberArray.length !== item)
-                      ? 'hide-page-no'
-                      : 'show-page-no'
-                  ">
+                  (pageNumberArray[currentPage - 2] > item &&
+                    item !== 1 &&
+                    pageNumberArray.length > 6) ||
+                  (pageNumberArray[currentPage] < item &&
+                    item !== 1 &&
+                    pageNumberArray.length > 6 &&
+                    pageNumberArray.length !== item)
+                    ? 'hide-page-no'
+                    : 'show-page-no'
+                ">
                 <a (click)="moveToPage(item)" class="page-link" href="javascript:void(0);">
                   {{ item }}
                 </a>
@@ -211,10 +184,10 @@
               pageNumberArray.length > 6
               ) {
               <li [hidden]="
-                    currentPage >=
-                      pageNumberArray[pageNumberArray.length - 2] ||
-                    totalData < serialNumberArray[serialNumberArray.length - 1]
-                  " class="page-item" (click)="moveToPage(currentPage + 2)"
+                  currentPage >=
+                    pageNumberArray[pageNumberArray.length - 2] ||
+                  totalData < serialNumberArray[serialNumberArray.length - 1]
+                " class="page-item" (click)="moveToPage(currentPage + 2)"
                 (keydown.enter)="moveToPage(currentPage + 2)" tabindex="0">
                 <a class="page-link" href="javascript:void(0);"> ... </a>
               </li>
@@ -222,11 +195,11 @@
               }
 
               <li class="page-item" [ngClass]="{
-                  disabled:
-                    currentPage ===
-                      pageNumberArray[pageNumberArray.length - 1] ||
-                      contactlist.length === 0
-                }">
+                disabled:
+                  currentPage ===
+                    pageNumberArray[pageNumberArray.length - 1] ||
+                    contactlist.length === 0
+              }">
                 <a (click)="getMoreData('next')" class="page-link" href="javascript:void(0);"><i
                     class=" fa fa-angle-double-right"></i>
                 </a>

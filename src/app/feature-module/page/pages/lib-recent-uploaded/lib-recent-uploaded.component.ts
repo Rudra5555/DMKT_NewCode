@@ -74,6 +74,7 @@ export class LibRecentUploadedComponent implements OnInit {
   selectedType = 'xlsx';
 public requestedFileName: any
   res: any;
+  isLoading: boolean = false; 
   public disableSubmitBtn:boolean= false;
 
   //  public uploadDocumentFlag: boolean = false;
@@ -192,6 +193,7 @@ public requestedFileName: any
   }
 
   getFileListDetails() {
+    this.isLoading = true; // Start loader
     this.contactlist = [];
     this.serialNumberArray = [];
 
@@ -218,6 +220,8 @@ public requestedFileName: any
           const serialNumber = index + 1;
           if (index >= this.skip && serialNumber <= this.limit) {
             item.id = serialNumber;
+            console.log("id_item",item.documentSubType);
+            
             this.contactlist.push(item);
             this.serialNumberArray.push(serialNumber);
           }
@@ -226,7 +230,7 @@ public requestedFileName: any
         this.dataSource = new MatTableDataSource<getRecentDocument>(this.contactlist);
         this.calculateTotalPages(filteredData.length, this.pageSize);
           
-  
+        this.isLoading = false; 
   
         }
       },
@@ -234,6 +238,7 @@ public requestedFileName: any
         if (err.error && err.error.message) {
           this['msg'] += " " + err.error.message;
         }
+        this.isLoading = false; // Stop loader on error
       },
     });
   }

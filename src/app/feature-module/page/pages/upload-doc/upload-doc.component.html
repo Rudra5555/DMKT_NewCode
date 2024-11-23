@@ -111,7 +111,7 @@
                         <label class="col-form-label"> Document Type<span class="text-danger">*</span></label>
                         <mat-select formControlName="documentType" class="custom-mat-select select" placeholder="Select"  required  (selectionChange)="onDocumentTypeChange($event.value)">
                           <mat-option value="">--Select--</mat-option>
-                          <mat-option *ngFor="let element of docList" [value]="element.id">{{element.documentName}}</mat-option>
+                          <mat-option *ngFor="let element of docList" [value]="element.id" >{{element.documentName}}</mat-option>
                         </mat-select>
                         <div *ngIf="uploadFileForm.get('documentType')?.invalid && (uploadFileForm.get('documentType')?.touched || uploadFileForm.get('documentType')?.dirty)" class="text-danger">
                           Document Type is required.
@@ -119,11 +119,11 @@
                       </div>
                       
 
-                      <div class="input-block mb-3">
+                      <div class="input-block mb-3" *ngIf="subDocListSize > 0">
                         <label class="col-form-label">Sub-Document Type<span class="text-danger">*</span></label>
                         <mat-select formControlName="subDocumentType" class="custom-mat-select select" placeholder="Select"  required>
                           <mat-option value="">--Select--</mat-option>
-                          <mat-option *ngFor="let element of subDocList" [value]="element.id">{{element.documentName}}</mat-option>
+                          <mat-option *ngFor="let element of subDocList" [value]="element.documentName">{{element.documentName}}</mat-option>
                         
                         </mat-select>
                         <div *ngIf="uploadFileForm.get('subDocumentType')?.invalid && (uploadFileForm.get('subDocumentType')?.touched || uploadFileForm.get('subDocumentType')?.dirty)" class="text-danger">
@@ -135,8 +135,8 @@
                         <label class="col-form-label">Storage Location<span class="text-danger">*</span></label>
                         <mat-select formControlName="storageLocation" class="custom-mat-select select" placeholder="Select"   required>
                           <mat-option value="">--Select--</mat-option>
-                          <mat-option value="SOFTCOPY">Soft Copy</mat-option>
-                          <mat-option value="HARDCOPY">Hard Copy</mat-option>
+                          <mat-option value="Soft Copy">Soft Copy</mat-option>
+                          <mat-option value="Hard Copy">Hard Copy</mat-option>
                         </mat-select>
                         <div *ngIf="uploadFileForm.get('storageLocation')?.invalid && (uploadFileForm.get('storageLocation')?.touched || uploadFileForm.get('storageLocation')?.dirty)" class="text-danger">
                           Storage Location is required.
