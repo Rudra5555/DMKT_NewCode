@@ -113,9 +113,7 @@ export interface Root {
 
 export interface getfileList {
   id:number;
-  fileName: string
-  extension: string
-  documentType: string
+  
   documentSubType:string
   storageLocation:string
   fileName: string;
