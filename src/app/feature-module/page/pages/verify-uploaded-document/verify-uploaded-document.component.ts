@@ -123,6 +123,7 @@ export class VerifyUploadedDocumentComponent implements OnInit {
   docList: any;
   docMap = new Map<number, string>();
   subDocumentTypeOption: any;
+  public newPlant: boolean= false;
   // ***************
 
   constructor(
@@ -189,6 +190,13 @@ export class VerifyUploadedDocumentComponent implements OnInit {
       if (value != null) {
         this.getAllPlantList(value, "plants");
         this.plantOption = value;
+        console.log(this.plantOption);
+         
+        if(this.plantOption == "CPP (1740MW)"){
+          this.newPlant = true;
+        }else{
+          this.newPlant = false;
+        }
       } else {
         console.log("No plant selected or value is null.");
 

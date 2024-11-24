@@ -262,7 +262,7 @@
 
               <!-- (selectionChange)="selectedPlant($event)" -->
 
-              <div class="input-block mb-3" *ngIf="departmentList.length != 0">
+              <div class="input-block mb-3" *ngIf="departmentList.length != 0 && !newPlant">
                 <label class="col-form-label">Department <span class="text-danger">*</span></label>
                 <mat-select formControlName="department" class="custom-mat-select select" placeholder="Select">
                   <mat-option value="">--Select--</mat-option>
