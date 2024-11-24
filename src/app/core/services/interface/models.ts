@@ -113,7 +113,6 @@ export interface Root {
 
 export interface getfileList {
   id:number;
-  
   documentSubType:string
   storageLocation:string
   fileName: string;
@@ -121,6 +120,16 @@ export interface getfileList {
   documentType: string;
   listOfDocumentVersoinDtos: ListOfDocumentVersoinDto[]
   selectedVersion?: ListOfDocumentVersoinDto;
+  versionName: string;
+  fileSize: string;
+  versionReleaseDate: string;
+  newUniqueFileName: string;
+  hodDocument: boolean;
+  statutoryDocument: boolean;
+  restrictedDocument: boolean;
+  fileUrl: string;
+  uniqueFileName: string;
+
 }
 
 export interface ListOfDocumentVersoinDto {

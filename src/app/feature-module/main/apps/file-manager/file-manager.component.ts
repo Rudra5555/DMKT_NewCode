@@ -80,14 +80,21 @@ export class FileManagerComponent implements OnInit , OnDestroy {
    loggedUserRole:any;
    documentTypeDataList : any
    respData:any;
-   documentTypeList:any;
 
   private unsubscribe$ = new Subject<void>();
-
-  documentTypeSet = new Set<string>();
-  
   transformedMap: Map<string, any> = new Map();
 
+  documentTypeSet = new Set<string>();
+  documentTypeList:any;
+
+  resultMap:any;
+
+  valueObject:any;
+  finalList:any;
+
+  fileListOne:any;
+
+  copyDataList:any;
 
   //** / pagination variables
   constructor(private data: DataService, _uploadService: FileManagementService, private formBuilder: FormBuilder,private route: ActivatedRoute, private router: Router,private datePipe: DatePipe,private loginService : LoginComponentService) {
@@ -211,7 +218,7 @@ export class FileManagerComponent implements OnInit , OnDestroy {
   
   }
 
-    // this.getFileListDetails()
+    this.getFileListDetails()
     // this.fileManagerTableData();
     this.uploadFileForm = this.formBuilder.group({
   
@@ -242,7 +249,7 @@ export class FileManagerComponent implements OnInit , OnDestroy {
             return (bytes / 1024).toFixed(2);
           };
   
-          this.fileList = this.respData.filter((item: any) => {
+          this.fileListOne = this.respData.filter((item: any) => {
             return item.listOfDocumentVersoinDtos.some((version: any) => {
               if (this.loggedUserRole === 'User') {
                 return !version.hodDocument && !version.statutoryDocument && !version.restrictedDocument;
@@ -250,27 +257,25 @@ export class FileManagerComponent implements OnInit , OnDestroy {
                 return (!version.hodDocument && !version.statutoryDocument && !version.restrictedDocument) || version.statutoryDocument;
               } else if (this.loggedUserRole === 'HOD') {
                 return (!version.hodDocument && !version.statutoryDocument && !version.restrictedDocument) || version.hodDocument;
+              }else if (this.loggedUserRole === 'Librarian'||'Admin') {
+                return (version.hodDocument && version.statutoryDocument && version.restrictedDocument);
               }
               return false;
             });
           });
 
-          // console.log("vvvvvvvvvv",this.fileList);
-          
-          this.transformedMap = this.transformApiResponseToMap(this.fileList);
+          this.transformedMap = this.transformApiResponseToMap(this.fileListOne);
 
-          console.log("fffffff",this.transformedMap);
-          
+          this.fileList = Array.from(this.transformedMap.values());
+          //copy data
+          this.copyDataList = Array.from(this.transformedMap.values());
 
-          this.totalData = this.fileList.length;
+          console.log("vgyvgscgshadfgavsdcha:^^^^",this.finalList);
+          
   
-          this.fileList.map((item: getfileList, index: number) => {
-            const serialNumber = index + 1;
-            if (index >= this.skip && serialNumber <= this.limit) {
-              item.id = serialNumber;
-              this.serialNumberArray.push(serialNumber);
-            }
-          });
+          console.log("response..............",this.transformedMap);
+          
+          this.totalData = this.fileList.length;
 
           this.respData.forEach((item: any) => {
             if (item.documentType) {
@@ -279,10 +284,15 @@ export class FileManagerComponent implements OnInit , OnDestroy {
           });
           
           this.documentTypeList = Array.from(this.documentTypeSet);
-          
-          console.log('Distinct Document Types::::::::::;', this.documentTypeList);
   
-
+          this.fileList.map((item: getfileList, index: number) => {
+            const serialNumber = index + 1;
+            if (index >= this.skip && serialNumber <= this.limit) {
+              item.id = serialNumber;
+              this.serialNumberArray.push(serialNumber);
+            }
+          });
+  
           this.dataSource = new MatTableDataSource<getfileList>(this.fileList);
           this.calculateTotalPages(this.fileList.length, this.pageSize);
   
@@ -290,17 +300,8 @@ export class FileManagerComponent implements OnInit , OnDestroy {
             item.selectedVersion = this.getLatestVersion(item.listOfDocumentVersoinDtos);
             item.listOfDocumentVersoinDtos.forEach((version: any) => {
               version.fileSizeKB = convertToKB(parseInt(version.fileSize, 10));
-
-              // item.listOfDocumentVersoinDtos = item.listOfDocumentVersoinDtos.slice().reverse();
-
             });
-
-            this.fileList.forEach(item => {
-              item.listOfDocumentVersoinDtos = item.listOfDocumentVersoinDtos.slice().reverse();
-            });
-
           });
-  
   
         }
       },
@@ -311,56 +312,112 @@ export class FileManagerComponent implements OnInit , OnDestroy {
       },
     });
   }
-  
+
+
+  // transformApiResponseToMap(apiResponse: any[]): Map<string, any> {
+  //   const resultMap = new Map<string, any>();
+
+  //   apiResponse.forEach((item) => {
+  //     const fileName = item.fileName;
+    
+    
+  //     //let listOfDocumentVersoinDtosObj = item.listOfDocumentVersoinDtos;
+  //     let revObj = item.listOfDocumentVersoinDtos.slice().reverse();
+  //     // console.log("bbbbbbbbb:::::::",JSON.stringify(revObj[0]));
+  //     const newUniqueFileName=revObj[0].uniqueFileName;
+  //     const fileSize =revObj[0].fileSize || null;
+      
+  //     // const listOfDocumentVersoinDtos = item.listOfDocumentVersoinDtos.slice().reverse().map((version:any) => ({
+  //     //   fileName:item.fileName,
+  //     //   versionId: version.versionId,
+  //     //   versionName: version.versionName,
+  //     //   versionReleaseDate: version.versionReleaseDate,
+  //     //   fileUrl: version.fileUrl,
+  //     //   uniqueFileName: version.uniqueFileName,
+  //     //   fileSize: version.fileSize,
+  //     //   hodDocument: version.hodDocument,
+  //     //   statutoryDocument: version.statutoryDocument,
+  //     //   restrictedDocument: version.restrictedDocument,
+  //     // }));
+
+  //     const listOfDocumentVersoinDtos = item.listOfDocumentVersoinDtos
+
+  //     const documentType = item.documentType;
+  //     const documentSubType = item.documentSubType;
+  //     const storageLocation = item.storageLocation;
+  //     const fileUrl = item.listOfDocumentVersoinDtos[0]?.fileUrl || null;
+  //     let versionName = revObj[0].versionName
+  //     let versionReleaseDate = revObj[0].versionReleaseDate
+  //     const selectedVersion= versionName.concat("-",versionReleaseDate);
+
+  //     const valueObject = {
+  //       newUniqueFileName,
+  //       fileName,
+  //       fileSize,
+  //       listOfDocumentVersoinDtos,
+  //       documentType,
+  //       documentSubType,
+  //       storageLocation,
+  //       fileUrl,
+  //       selectedVersion
+  //     };
+
+  //     resultMap.set(fileName, valueObject);
+  //   });
+
+  //   console.log("dddddd",JSON.stringify(this.transformedMap));
+    
+
+  //   return resultMap;
+  // }
 
 
   transformApiResponseToMap(apiResponse: any[]): Map<string, any> {
     const resultMap = new Map<string, any>();
-
+  
     apiResponse.forEach((item) => {
+
+      // let revObj = item.listOfDocumentVersoinDtos.slice().reverse();
+
       const fileName = item.fileName;
-    
-    
-      //let listOfDocumentVersoinDtosObj = item.listOfDocumentVersoinDtos;
-      let revObj = item.listOfDocumentVersoinDtos.slice().reverse();
-      // console.log("bbbbbbbbb:::::::",JSON.stringify(revObj[0]));
-      const showFileName=revObj[0].uniqueFileName;
-      const fileSize =revObj[0].fileSize || null;
-      
-      const versionArray = item.listOfDocumentVersoinDtos.slice().reverse().map((version:any) => ({
-        fileName:item.fileName,
-        versionId: version.versionId,
-        versionName: version.versionName,
-        versionReleaseDate: version.versionReleaseDate,
-        fileUrl: version.fileUrl,
-        uniqueFileName: version.uniqueFileName,
-      }));
       const documentType = item.documentType;
       const documentSubType = item.documentSubType;
       const storageLocation = item.storageLocation;
-      const fileUrl = item.listOfDocumentVersoinDtos[0]?.fileUrl || null;
-      let versionName = revObj[0].versionName
-      let versionReleaseDate = revObj[0].versionReleaseDate
-      const selectedVersion= versionName.concat("-",versionReleaseDate);
-
+  
+      const listOfDocumentVersoinDtos = item.listOfDocumentVersoinDtos.slice().reverse() || [];
+      if (listOfDocumentVersoinDtos.length === 0) {
+        console.warn(`No versions found for file: ${fileName}`);
+        return;
+      }
+  
+      const firstVersion = listOfDocumentVersoinDtos[0];
+  
+      const newUniqueFileName = firstVersion.newUniqueFileName;
+      const fileUrl = firstVersion.fileUrl || null;
+      const fileSize = firstVersion.fileSize ;
+      const versionName=firstVersion.versionName
+      const versionReleaseDate=firstVersion.versionReleaseDate
+  
       const valueObject = {
-        showFileName,
+        newUniqueFileName,
         fileName,
         fileSize,
-        versionArray,
+        listOfDocumentVersoinDtos,
         documentType,
         documentSubType,
         storageLocation,
         fileUrl,
-        selectedVersion
+        versionName,
+        versionReleaseDate
       };
-
+  
       resultMap.set(fileName, valueObject);
     });
-
+  
     return resultMap;
   }
-
+  
+  
   // getFileListDetailsByFilter() {
   //   this.fileList = [];
   //   this.serialNumberArray = [];
@@ -529,27 +586,20 @@ selectFiles(_event: any): void {
 
 // onDocumentTypeChange(docType:any){
 //   console.log("Selected Doctye DATA::",docType);
-
+//   this.selectedDocType = docType;
+//   this.fileManagerTableData(this.selectedDocType);
 // }
 
-onDocumentTypeChange(docType: any) {
-  const filteredData = this.respData.filter((item: any) => item.documentType === docType);
 
-  console.log("Selected Document Type Data:", filteredData);
-
-  this.fileList = filteredData;
-}
-
-
-fileManagerTableData(filterData:any){
+// fileManagerTableData(filterData:any){
  
-  if(filterData == null || filterData == ''){
-    this.getFileListDetails();
-  }else{
-    alert("else part")
-    // this.getFileListDetailsByFilter();
-  }
-}
+//   if(filterData == null || filterData == ''){
+//     this.getFileListDetails();
+//   }else{
+//     alert("else part")
+//     this.getFileListDetailsByFilter();
+//   }
+// }
 
 
 
@@ -666,126 +716,98 @@ ngOnDestroy() {
 getLatestVersion(versions: any[]): any {
   return versions.reduce((latest, version) => {
     return new Date(version.versionReleaseDate) > new Date(latest.versionReleaseDate) ? version : latest;
-    // return latest.localeCompare(version) > 0? version : latest;
   });
 }
 
 
-onVersionChange(item: any, fileNameAsMapKey: any,selectedVersion: any ) {
-  // alert("lllll"+JSON.stringify(selectedVersion));/
-  let selectedVerion = selectedVersion.versionName;
-   alert("lllll"+JSON.stringify(selectedVersion.versionName));
-  console.log("hh",JSON.stringify(item));
-  console.log("9999999999999=",item.fileSize);
-  console.log("before::",JSON.stringify(this.transformedMap.get(fileNameAsMapKey)))
-  let selectedVal = this.transformedMap.get(fileNameAsMapKey);
-  let selectVersionObj = this.transformedMap.get(fileNameAsMapKey);
+onVersionChange(item: any,fileNameAsKey:any, selectedVersion: any) {
 
-  selectVersionObj.versionArray.forEach((elem: any) => {
-                console.log("hhhhhhhh>",elem.versionName)
-                if(selectedVerion==elem.versionName)
+  let selectedVersionDetails = selectedVersion;
+  let version=selectedVersion.versionName;
+  // alert(fileName +JSON.stringify(selectedVersion))
+  // alert(fileName +version)/
+  // alert(JSON.stringify(selectedVersionDetails))
+
+  console.log("nhhhhhhnhnhnhmdhf:::",item);
+  
+
+      const fileName=item.fileName;
+      const extension=item.extension;
+      const documentType = item.documentType;
+      const documentSubType = item.documentSubType;
+      const storageLocation = item.storageLocation;
+      const listOfDocumentVersoinDtos= item.listOfDocumentVersoinDtos;
+
+      item.listOfDocumentVersoinDtos.forEach((elem: any) => {
+
+                if(elem.versionName==version)
                 {
-                  console.log("gggggg==>",elem.uniqueFileName);
+                  const newUniqueFileName=elem.uniqueFileName;
+                  const fileSize =elem.fileSize;
+                  const fileUrl = elem.fileUrl ;
+                  const versionName=elem.versionName
+                  const versionReleaseDate=elem.versionReleaseDate
 
-                  const fileName = fileNameAsMapKey;
-    
-    
-                  //let listOfDocumentVersoinDtosObj = item.listOfDocumentVersoinDtos;
-                  // let revObj = item.listOfDocumentVersoinDtos.slice().reverse();
-                  // console.log("bbbbbbbbb:::::::",JSON.stringify(revObj[0]));
-                  const showFileName=elem.uniqueFileName;
-                  const fileSize =selectedVal.fileSize;
-                  
-                 /* const versionArray = item.listOfDocumentVersoinDtos.slice().reverse().map((version:any) => ({
-                    fileName:item.fileName,
-                    versionId: version.versionId,
-                    versionName: version.versionName,
-                    versionReleaseDate: version.versionReleaseDate,
-                    fileUrl: version.fileUrl,
-                    uniqueFileName: version.uniqueFileName,
-                  }));*/
-                  const versionArray = selectVersionObj.versionArray;
-                  const documentType = selectVersionObj.documentType;
-                  const documentSubType = selectVersionObj.documentSubType;
-                  const storageLocation = selectVersionObj.storageLocation;
-                  const fileUrl = elem.fileUrl || null;
-                  //  let versionName = revObj[0].versionName
-                  // let versionReleaseDate = revObj[0].versionReleaseDate
-                  // const selectedVersion= versionName.concat("-",versionReleaseDate);
-            
-                  const valueObject = {
-                    showFileName,
+                  this.valueObject = {
+                    newUniqueFileName,
                     fileName,
                     fileSize,
-                    versionArray,
+                    listOfDocumentVersoinDtos,
                     documentType,
                     documentSubType,
                     storageLocation,
                     fileUrl,
-                    selectedVersion
+                    versionName,
+                    versionReleaseDate
                   };
-            
-                  this.transformedMap.set(fileNameAsMapKey, valueObject);
-
-                  console.log("After::", JSON.stringify(this.transformedMap.get(fileNameAsMapKey)))
                   
                 }
-               });
+           
+            });
 
-
-  //console.log("map data",JSON.stringify(this.transformedMap.get(fileName)));
-
- 
-  
-
- // item.selectedVersion = selectedVersion;
-let oldFileName=item.newUniqueFileName;
-  if (item.selectedVersion) {
    
-    item.newUniqueFileName = item.selectedVersion.newUniqueFileName; 
-  //  alert(item.newUniqueFileName)
-    this.doc = item.selectedVersion.fileUrl; 
-    // console.log(`Version changed to: ${item.selectedVersion.versionName}, File Name: ${item.newUniqueFileName}`);
+     
 
-    this.fileList.forEach((item: any) => {
-      // item.selectedVersion = this.getLatestVersion(item.listOfDocumentVersoinDtos);
+      console.log("value object uuuuuuuuuuuNNNNNNNNN",this.valueObject);
+      
+      this.transformedMap.set(fileNameAsKey, this.valueObject);
 
-      if(item.newUniqueFileName==oldFileName){
-              // alert("present")
-      }
+      this.fileList = Array.from(this.transformedMap.values());
 
-      // item.listOfDocumentVersoinDtos.forEach((version: any) => {
-      //   version.fileSizeKB = convertToKB(parseInt(version.fileSize, 10));
-      // });
+      // console.log("After::", JSON.stringify(this.transformedMap.get(fileNameAsMapKey)))
+      
 
-    });
-   
-    
-
-    if (this.fileList.length > 0 && this.fileList[0].selectedVersion) {
-      this.doc = this.fileList[0].selectedVersion.fileUrl;
-    }
-
-    this.doc="ghhhhhhhhhhhhhhhhhhhhhh";
-  }
 }
 
 setFileUrl(fileUrl:any){
-// alert("jiiii")
-console.log(fileUrl);
-
-  this.doc=fileUrl;
+  // alert("jiiii")
+  console.log(fileUrl);
   
-
-}
-
-buttonClose(){
-  this.doc=''
-}
-
+    this.doc=fileUrl;
+    
+  
+  }
+  
+  buttonClose(){
+    this.doc=''
+  }
 convertBytesToKB(bytes: number): string {
   return (bytes / 1024).toFixed(2) + ' KB';
 }
+
+onDocumentTypeChange(docType: any) {
+  
+  const filteredData = this.copyDataList.filter((item: any) => item.documentType === docType);
+
+  if(filteredData!='' ){
+    this.fileList = this.copyDataList.filter((item: any) => item.documentType === docType);
+  }
+  else{
+    this.fileList = this.copyDataList;
+  }
+  }
+
+  
  
 }
 
