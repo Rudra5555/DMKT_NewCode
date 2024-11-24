@@ -645,11 +645,9 @@
           <tr *ngFor="let item of fileListSearch">
             
             <td>
-              <h2 class="table-avatar d-flex">
-                <!-- {{ item.fileName}} -->
-                  
-              </h2>
-              {{item.fileName}}
+              <div class="truncate-hover">
+                {{ item.fileName }}
+              </div>
             </td>
             <td>
                 {{item.documentType}}
