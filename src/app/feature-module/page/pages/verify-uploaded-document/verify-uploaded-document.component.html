@@ -262,7 +262,7 @@
 
               <!-- (selectionChange)="selectedPlant($event)" -->
 
-              <div class="input-block mb-3" *ngIf="departmentList.length != 0">
+              <div class="input-block mb-3" *ngIf="departmentList.length != 0 && !newPlant">
                 <label class="col-form-label">Department <span class="text-danger">*</span></label>
                 <mat-select formControlName="department" class="custom-mat-select select" placeholder="Select">
                   <mat-option value="">--Select--</mat-option>
@@ -404,7 +404,7 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-            <button type="submit" class="btn btn-info" [disabled]="rejectForm.invalid">Submit</button>
+            <button type="submit" class="btn btn-info" data-bs-dismiss="modal" [disabled]="rejectForm.invalid">Submit</button>
           </div>
         </form>
       </div>

@@ -196,6 +196,8 @@ onSubmit(): void {
                   this.uploadFileForm.reset();
                   this.clearFileInput();
                   this.successfulSubmitAlert();
+  this.remarkFlag = false;
+
               }
           },
           error: (err: any) => {
@@ -207,6 +209,7 @@ onSubmit(): void {
           }
       });
   }
+  this.remarkFlag = false;
 }
 
 
@@ -222,7 +225,8 @@ successfulSubmitAlert() {
     timer: 1500
   }).then(() => {
 
-    // window.location.reload();
+    window.location.reload();
+    this.remarkFlag = false;
 
   });
 }

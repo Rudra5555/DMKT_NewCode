@@ -81,7 +81,7 @@ export class UploadDocComponent implements OnInit {
   docTypeName: any;
   subDocListSize: any;
 docMap = new Map<number, string>();
-  
+public newPlant: boolean = false;
  
   
 
@@ -134,6 +134,14 @@ docMap = new Map<number, string>();
       if (value != null) {
         this.getAllPlantList(value, "plants");
         this.plantOption = value;
+        console.log(this.plantOption);
+         
+        if(this.plantOption == "CPP (1740MW)"){
+          this.newPlant = true;
+        }else{
+          this.newPlant = false;
+        }
+        
       } else {
         console.log("No plant selected or value is null.");
 
@@ -551,6 +559,8 @@ return;
         next: (event: any) => {
           if (event instanceof HttpResponse) {
             this.plantList = event.body?.categoryList || [];
+            console.log(this.plantList);
+            
           }
         },
         error: (err: any) => {
