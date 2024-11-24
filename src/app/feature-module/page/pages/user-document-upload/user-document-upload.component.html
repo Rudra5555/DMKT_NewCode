@@ -59,11 +59,12 @@
                     <textarea formControlName="remarks" class="form-control" rows="3"></textarea>
                   </div>
                 </div>
-                <div *ngIf="uploadFileForm.get('remarks')?.invalid && 
-                            (uploadFileForm.get('remarks')?.touched || uploadFileForm.get('remarks')?.dirty) || 
-                            remarkFlag" class="text-danger">
-                  Please give your remarks.
-                </div>
+                <div *ngIf="(uploadFileForm.get('remarks')?.invalid && 
+                (uploadFileForm.get('remarks')?.touched || uploadFileForm.get('remarks')?.dirty)) || 
+                (remarkFlag && uploadFileForm.get('remarks')?.invalid)" class="text-danger">
+     Please give your remarks.
+   </div>
+   
               </div>
 
               <!-- Submit Button -->
