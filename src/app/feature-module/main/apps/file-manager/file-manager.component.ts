@@ -73,7 +73,7 @@ export class FileManagerComponent implements OnInit , OnDestroy {
    doc: string = '';
    viewer: ViewerType = 'google';
    selectedType = 'xlsx';
-
+   isLoading: boolean = false; 
    startDate:any;
    endDate:any;
 
@@ -141,6 +141,8 @@ export class FileManagerComponent implements OnInit , OnDestroy {
     
     this.getDocumentTypeList();
     this.loggedUserRole=localStorage.getItem("role")
+    console.log("rolleee loginr=ed: ",this.loggedUserRole);
+    
 
     
     this.setLast15Days();
@@ -235,6 +237,7 @@ export class FileManagerComponent implements OnInit , OnDestroy {
  
 
   getFileListDetails() {
+    this.isLoading = true; 
     this.fileList = [];
     this.serialNumberArray = [];
   
@@ -257,10 +260,9 @@ export class FileManagerComponent implements OnInit , OnDestroy {
                 return (!version.hodDocument && !version.statutoryDocument && !version.restrictedDocument) || version.statutoryDocument;
               } else if (this.loggedUserRole === 'HOD') {
                 return (!version.hodDocument && !version.statutoryDocument && !version.restrictedDocument) || version.hodDocument;
-              }else if (this.loggedUserRole === 'Librarian'||'Admin') {
-                return (version.hodDocument && version.statutoryDocument && version.restrictedDocument);
+              }else if (this.loggedUserRole === 'Librarian' || this.loggedUserRole === 'Admin') {
+                return true; 
               }
-              return false;
             });
           });
 
@@ -302,13 +304,14 @@ export class FileManagerComponent implements OnInit , OnDestroy {
               version.fileSizeKB = convertToKB(parseInt(version.fileSize, 10));
             });
           });
-  
+          this.isLoading = false;
         }
       },
       error: (err: any) => {
         if (err.error && err.error.message) {
           this['msg'] += " " + err.error.message;
         }
+        this.isLoading = false;
       },
     });
   }

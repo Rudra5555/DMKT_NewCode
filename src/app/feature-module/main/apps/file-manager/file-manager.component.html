@@ -162,11 +162,15 @@
             </thead>
 
             <tbody>
+              <div *ngIf="isLoading" class="spinner-border" style="align-items: center;margin-left: 340%;">
+                <!-- <p>Loading...</p>  -->
+                <!-- <i class="fas fa-spinner fa-spin text-info align-items-center me-1"></i> -->
+              </div>
               <tr *ngFor="let item of fileList">
                 
                 <td>
                   <h2 class="table-avatar d-flex">
-                    {{ item.newUniqueFileName }}-[{{ item.versionName }}-{{ item.versionReleaseDate}}]
+                    {{ item.newUniqueFileName }}-<span style="color: blue;">[{{ item.versionName }}-{{ item.versionReleaseDate }}]</span>
                   </h2>
                 </td>
                 <td>{{ item.documentType? item.documentType : 'N/A' }}</td>
@@ -221,7 +225,7 @@
                   </a>
                 </td>
               </tr>
-              <tr *ngIf="fileList.length == 0">
+              <tr *ngIf="!isLoading && fileList.length == 0">
                 <td colspan="8" style="text-align: center; color: red">
                   No Records Found!
                 </td>
