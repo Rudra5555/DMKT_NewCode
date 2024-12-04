@@ -4,7 +4,7 @@ import { routes, url } from 'src/app/core/core.index';
 import { Router } from '@angular/router';
 import { LoginComponentService } from 'src/app/services/login-component.service';
 import { HttpResponse } from '@angular/common/http';
-import { apiResultFormat, getfileList } from 'src/app/core/services/interface/models';
+import { apiResultFormat, getSearchfileList } from 'src/app/core/services/interface/models';
 import { pageSelection } from 'src/app/feature-module/employee/employees/departments/departments.component';
 
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -71,7 +71,7 @@ export class UserDashboardComponent implements OnInit {
   data: any[] = [];
   msg: string = '';
   allData: any[] = [];
-  fileListSearch: any[] = [];
+  // fileListSearch: any[] = [];
   mainHeadName: any;
   plantType: any;
   dataset = new MatTableDataSource<DocumentData>();
@@ -106,8 +106,8 @@ export class UserDashboardComponent implements OnInit {
   public pageSelection: Array<pageSelection> = [];
 
 
-  dataSource!: MatTableDataSource<getfileList>;
-  public contactlist: Array<getfileList> = [];
+  dataSource!: MatTableDataSource<getSearchfileList>;
+  public fileListSearch: Array<getSearchfileList> = [];
   public totalPages = 0;
   public message: any;
   public selectedFiles: any;
@@ -135,6 +135,22 @@ export class UserDashboardComponent implements OnInit {
    loggedUserRole:any;
 
    respData:any;
+
+  //  ****************************
+  transformedMap: Map<string, any> = new Map();
+
+  documentTypeSet = new Set<string>();
+  documentTypeList:any;
+
+  resultMap:any;
+
+  valueObject:any;
+  finalList:any;
+
+  fileListOne:any;
+
+  copyDataList:any;
+  fileListRes:any;
 
 
 
@@ -431,11 +447,11 @@ export class UserDashboardComponent implements OnInit {
 
  
   public sortData(sort: Sort) {
-    const data = this.contactlist.slice();
+    const data = this.fileListSearch.slice();
     if (!sort.active || sort.direction === '') {
-      this.contactlist = data;
+      this.fileListSearch = data;
     } else {
-      this.contactlist = data.sort((a: any, b: any) => {
+      this.fileListSearch = data.sort((a: any, b: any) => {
         const aValue = (a as any)[sort.active];
         const bValue = (b as any)[sort.active];
         return (aValue < bValue ? -1 : 1) * (sort.direction === 'asc' ? 1 : -1);
@@ -445,7 +461,7 @@ export class UserDashboardComponent implements OnInit {
 
   public searchData(value: string): void {
     this.dataSource.filter = value.trim().toLowerCase();
-    this.contactlist = this.dataSource.filteredData;
+    this.fileListSearch = this.dataSource.filteredData;
   }
 
   public getMoreData(event: string): void {
@@ -542,8 +558,14 @@ export class UserDashboardComponent implements OnInit {
         next: (event: any) => {
           if (event instanceof HttpResponse) {
             const res = event.body.documentLists;
-            this.fileListSearch=res;
-            console.log("serach result:::::",res);
+            this.fileListRes=res;
+
+            this.transformedMap = this.transformApiResponseToMap(this.fileListRes);
+
+            this.fileListSearch = Array.from(this.transformedMap.values());
+
+            this.dataSource = new MatTableDataSource<getSearchfileList>(this.fileListSearch);
+
             
             
           }
@@ -563,6 +585,52 @@ export class UserDashboardComponent implements OnInit {
   
 
 
+  transformApiResponseToMap(apiResponse: any[]): Map<string, any> {
+    const resultMap = new Map<string, any>();
+  
+    apiResponse.forEach((item) => {
+
+      // let revObj = item.listOfDocumentVersoinDtos.slice().reverse();
+
+      const fileName = item.fileName;
+      const documentType = item.documentType;
+      const documentSubType = item.documentSubType;
+      const storageLocation = item.storageLocation;
+  
+      const listOfDocumentVersoinDtos = item.listOfDocumentVersoinDtos.slice().reverse() || [];
+      if (listOfDocumentVersoinDtos.length === 0) {
+        console.warn(`No versions found for file: ${fileName}`);
+        return;
+      }
+  
+      const firstVersion = listOfDocumentVersoinDtos[0];
+  
+      const newUniqueFileName = firstVersion.newUniqueFileName;
+      const fileUrl = firstVersion.fileUrl || null;
+      const fileSize = firstVersion.fileSize ;
+      const versionName=firstVersion.versionName
+      const versionReleaseDate=firstVersion.versionReleaseDate
+  
+      const valueObject = {
+        newUniqueFileName,
+        fileName,
+        fileSize,
+        listOfDocumentVersoinDtos,
+        documentType,
+        documentSubType,
+        storageLocation,
+        fileUrl,
+        versionName,
+        versionReleaseDate
+      };
+  
+      resultMap.set(fileName, valueObject);
+    });
+  
+    return resultMap;
+  }
+
+
   getLatestVersion(versions: any[]): any {
     return versions.reduce((latest, version) => {
       return new Date(version.versionReleaseDate) > new Date(latest.versionReleaseDate) ? version : latest;
@@ -570,16 +638,77 @@ export class UserDashboardComponent implements OnInit {
   }
   
   
-  onVersionChange(item: any, selectedVersion: any) {
+  onVersionChange(item: any,fileNameAsKey:any, selectedVersion: any) {
+
+    let selectedVersionDetails = selectedVersion;
+    let version=selectedVersion.versionName;
+    // alert(fileName +JSON.stringify(selectedVersion))
+    // alert(fileName +version)/
+    // alert(JSON.stringify(selectedVersionDetails))
   
-    item.selectedVersion = selectedVersion;
+    console.log("nhhhhhhnhnhnhmdhf:::",item);
+    
   
-    if (item.selectedVersion) {
-      item.newUniqueFileName = item.selectedVersion.newUniqueFileName; 
-      // this.doc = item.selectedVersion.fileUrl; 
-      // console.log(`Version changed to: ${item.selectedVersion.versionName}, File Name: ${item.newUniqueFileName}`);
-    }
+        const fileName=item.fileName;
+        const extension=item.extension;
+        const documentType = item.documentType;
+        const documentSubType = item.documentSubType;
+        const storageLocation = item.storageLocation;
+        const listOfDocumentVersoinDtos= item.listOfDocumentVersoinDtos;
+  
+        item.listOfDocumentVersoinDtos.forEach((elem: any) => {
+  
+                  if(elem.versionName==version)
+                  {
+                    const newUniqueFileName=elem.uniqueFileName;
+                    const fileSize =elem.fileSize;
+                    const fileUrl = elem.fileUrl ;
+                    const versionName=elem.versionName
+                    const versionReleaseDate=elem.versionReleaseDate
+  
+                    this.valueObject = {
+                      newUniqueFileName,
+                      fileName,
+                      fileSize,
+                      listOfDocumentVersoinDtos,
+                      documentType,
+                      documentSubType,
+                      storageLocation,
+                      fileUrl,
+                      versionName,
+                      versionReleaseDate
+                    };
+                    
+                  }
+             
+              });
+  
+     
+       
+  
+        console.log("value object uuuuuuuuuuuNNNNNNNNN",this.valueObject);
+        
+        this.transformedMap.set(fileNameAsKey, this.valueObject);
+  
+        this.fileListSearch = Array.from(this.transformedMap.values());
+  
+        // console.log("After::", JSON.stringify(this.transformedMap.get(fileNameAsMapKey)))
+        
+  
   }
+
+  setFileUrl(fileUrl:any){
+    // alert("jiiii")
+    console.log(fileUrl);
+    
+      this.doc=fileUrl;
+      
+    
+    }
+    
+    buttonClose(){
+      this.doc=''
+    }
   
   
   convertBytesToKB(bytes: number): string {

@@ -614,106 +614,109 @@
       class="table-responsive"
       style="text-align: center; justify-content: center"
     >
-        <table
-        matSort
-        class="table table-striped custom-table datatable doc-table"
-      >
-        <thead>
-          <tr>
-            <th style="color: rgb(22, 32, 138)" mat-sort-header="name">
-              Document Name
-            </th>
-            <th style="color: rgb(22, 32, 138)" mat-sort-header="type">
-              Document Type
-            </th>
-            <th style="color: rgb(22, 32, 138)" mat-sort-header="subType">
-              Sub-Document Type
-            </th>
-            <th style="color: rgb(22, 32, 138)" mat-sort-header="loc">
-              Storage Location
-            </th>
-            <th style="color: rgb(22, 32, 138)" mat-sort-header="ver">
-              Versions
-            </th>
-            <th style="color: rgb(22, 32, 138)" mat-sort-header="size">
-              Document Size
-            </th>
-            <th style="color: rgb(22, 32, 138)">Download</th>
-            <!-- <th style="color: rgb(22, 32, 138)">View</th> -->
-          </tr>
-        </thead>
+    <table
+    matSort
+    (matSortChange)="sortData($event)"
+    class="table table-striped custom-table datatable doc-table"
+  >
+    <thead>
+      <tr>
+        <th style="color: rgb(22, 32, 138)" mat-sort-header="name">
+          Document Name
+        </th>
+        <th style="color: rgb(22, 32, 138)" mat-sort-header="docType">
+          Document Type
+        </th>
+        <th style="color: rgb(22, 32, 138)" mat-sort-header="subDocument">
+          Sub-Document Type
+        </th>
+        <th style="color: rgb(22, 32, 138)" mat-sort-header="storage">
+          Storage Location
+        </th>
+        <th style="color: rgb(22, 32, 138)" mat-sort-header="ver">
+          Versions
+        </th>
+        <th style="color: rgb(22, 32, 138)" mat-sort-header="size">
+          Document Size
+        </th>
+        <th style="color: rgb(22, 32, 138)">Download</th>
+        <th style="color: rgb(22, 32, 138)">View</th>
+      </tr>
+    </thead>
 
-        <tbody>
-          <tr *ngFor="let item of fileListSearch">
-            
-            <td>
-              <div class="truncate-hover">
-                {{ item.fileName }}
-              </div>
-            </td>
-            <td>
-                {{item.documentType}}
-            </td>
-            <td>
-              {{item.documentSubType? item.documentSubType : 'N/A'}}
-            </td>
-            <td>
-              {{item.storageLocation? item.storageLocation : 'N/A'}}
-            </td>
-
-            <td>
-              <mat-select
-                class="custom-mat-select select"
-              
-                placeholder="Select Version"
-                (selectionChange)="onVersionChange(item, $event.value)"
-                [value]="item.selectedVersion" 
-              > 
-                <mat-option
-                  *ngFor="let version of item.listOfDocumentVersoinDtos"
-                  [value]="version" 
-                >
-                  {{ version.versionName }} - {{ version.versionReleaseDate }}
-                </mat-option>
-              </mat-select>
-            </td>
-            
-            
-            <td>
-              {{ item.listOfDocumentVersoinDtos[0].fileSize }} KB
-            
-            </td>
-            <td class="text-center">
-              <a
-                class="dropdown-item"
-                [href]="item.listOfDocumentVersoinDtos[0].fileUrl"
-                target="_blank"
-              >
-                <i
-                  class="fa-solid fa-download"
-                  style="color: rgb(0, 117, 234)"
-                ></i>
-              </a>
-            </td>
-            <!-- <td class="text-center">
-              <a
-                class="dropdown-item"
-                [href]="item.listOfDocumentVersoinDtos[0].fileUrl"
-                target="_blank"
-                data-bs-toggle="modal"
-                data-bs-target="#view_files"
-              >
-                <i class="fas fa-eye" style="color: rgb(0, 117, 234)"></i>
-              </a>
-            </td> -->
-          </tr>
-          <!-- <tr *ngIf="fileList.length == 0">
-            <td colspan="6" style="text-align: center; color: red">
-              No Records Found!
-            </td>
-          </tr> -->
-        </tbody>
-      </table>
+    <tbody>
+      <div>
+        <!-- <p>Loading...</p>  -->
+        <!-- <i class="fas fa-spinner fa-spin text-info align-items-center me-1"></i> -->
+      </div>
+      <tr *ngFor="let item of fileListSearch">
+        
+        <td>
+          <h2 class="table-avatar d-flex">
+         <span style="color: rgb(1, 1, 11);"> {{ item.newUniqueFileName }}</span>-<span style="color: blue;">[{{ item.versionName }}-{{ item.versionReleaseDate }}]</span>
+          </h2>
+        </td>
+        <td>{{ item.documentType? item.documentType : 'N/A' }}</td>
+        <td>
+          {{item.documentSubType? item.documentSubType : 'N/A'}}
+        </td>
+        <td>
+          {{item.storageLocation}}
+        </td>
+       
+        <td>
+          <mat-select
+            class="custom-mat-select select"
+            id="versionSelect"
+            placeholder="Select Version"
+            (selectionChange)="onVersionChange(item, item.fileName, $event.value)"
+           
+          >
+            <mat-option
+              *ngFor="let version of item.listOfDocumentVersoinDtos"
+              [value]="version"
+            >
+              {{ version.versionName }} - {{ version.versionReleaseDate }}
+            </mat-option>
+          </mat-select>
+        </td>
+        
+        
+        <td>{{ item.fileSize }} KB</td>
+        <td class="text-center">
+          <a
+            class="dropdown-item"
+            [href]="item.fileUrl"
+            target="_blank"
+          >
+            <i
+              class="fa-solid fa-download"
+              style="color: rgb(0, 117, 234)"
+            ></i>
+          </a>
+          <!-- {{item.fileUrl}} -->
+        </td>
+        <td class="text-center">
+          <a
+            class="dropdown-item"
+            [href]="item.fileUrl"
+            target="_blank"
+            data-bs-toggle="modal"
+            data-bs-target="#view_files"
+            (click)="setFileUrl(item.fileUrl)"
+          >
+            <i class="fas fa-eye" style="color: rgb(0, 117, 234)"></i>
+          </a>
+          <!-- {{item.fileUrl}} -->
+        </td>
+      </tr>
+      <tr *ngIf=" fileListSearch.length == 0">
+        <td colspan="8" style="text-align: center; color: red">
+          No Records Found!
+        </td>
+      </tr>
+    </tbody>
+  </table>
     </div>
     <div class="table_footer">
       <div class="col-sm-12 col-md-5">
@@ -804,6 +807,7 @@
           class="btn-close"
           data-bs-dismiss="modal"
           aria-label="Close"
+          (click)="buttonClose()"
         >
           <span aria-hidden="true">&times;</span>
         </button>
