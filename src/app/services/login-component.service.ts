@@ -255,7 +255,6 @@ getFileLists(mainHead:any,plants:any,departmentName:any,subAreaName:any,sDate:an
     responseType: 'json'
   });
 //console.log(req);
-
   return this.http.request(req);
   
 }
