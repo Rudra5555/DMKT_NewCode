@@ -150,19 +150,28 @@ export interface ListOfDocumentVersoinDto {
 
 export interface Root {
   message: string;
-  documentLists: getfileList[];
+  documentLists: getSearchfileList[];
   status: number;
 }
 
 export interface getSearchfileList {
   id:number;
+  documentSubType:string
+  storageLocation:string
   fileName: string;
   extension: string;
   documentType: string;
-  documentSubType:string;
-  storageLocation:string;
   listOfDocumentVersoinDtos: ListOfDocumentVersoinDto[]
   selectedVersion?: ListOfDocumentVersoinDto;
+  versionName: string;
+  fileSize: string;
+  versionReleaseDate: string;
+  newUniqueFileName: string;
+  hodDocument: boolean;
+  statutoryDocument: boolean;
+  restrictedDocument: boolean;
+  fileUrl: string;
+  uniqueFileName: string;
 }
 export interface ListOfDocumentVersoinDto {
   versionId: number;
