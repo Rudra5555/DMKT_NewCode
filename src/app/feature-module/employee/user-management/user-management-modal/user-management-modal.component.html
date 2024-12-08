@@ -70,7 +70,7 @@
               </div>
             </div>
 
-            <div class="col-md-6">
+            <!-- <div class="col-md-6">
               <div class="input-block mb-3">
                 <label class="col-form-label">Role <span class="text-danger">*</span></label>
                 <mat-select class="custom-mat-select select" placeholder="Select">
@@ -84,7 +84,7 @@
                   <mat-option value="material">Won2</mat-option>
                 </mat-select>
               </div>
-            </div>
+            </div> -->
 
             <!-- <ng-multiselect-dropdown
             [placeholder]="'custom placeholder'"
@@ -98,18 +98,60 @@
 
           </div>
           <div class="table-responsive m-t-15">
-            <table class=" table-striped custom-table">
+            <table class="table table-striped custom-table">
               <thead>
                 <tr>
-                  <th>IsActive</th>
+                  <th>Role Permission</th>
+                  <th class="text-center">Admin</th>
+                  <th class="text-center">User</th>
+                  <th class="text-center">SuperUser</th>
+                  <th class="text-center">HOD</th>
+                  <th class="text-center">Librarian</th>
+                  <th class="text-center">IsActive</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Roles</td>
                   <td class="text-center">
                     <label class="custom_check">
-                      <input type="checkbox" name="rememberme" class="rememberme" checked>
+                      <input type="checkbox" checked>
+                      <span class="checkmark"></span>
+                    </label>
+                  </td>
+                  <td class="text-center">
+                    <label class="custom_check">
+                      <input type="checkbox" checked>
+                      <span class="checkmark"></span>
+                    </label>
+                  </td>
+                  <td class="text-center">
+                    <label class="custom_check">
+                      <input type="checkbox" checked>
+                      <span class="checkmark"></span>
+                    </label>
+                  </td>
+                  <td class="text-center">
+                    <label class="custom_check">
+                      <input type="checkbox" checked>
+                      <span class="checkmark"></span>
+                    </label>
+                  </td>
+                  <td class="text-center">
+                    <label class="custom_check">
+                      <input type="checkbox" checked>
+                      <span class="checkmark"></span>
+                    </label>
+                  </td>
+                  <td class="text-center">
+                    <label class="custom_check">
+                      <input type="checkbox" checked>
                       <span class="checkmark"></span>
                     </label>
                   </td>
                 </tr>
-              </thead>
+             
+              </tbody>
             </table>
           </div>
           <div class="col-lg-12 text-end form-wizard-button">
