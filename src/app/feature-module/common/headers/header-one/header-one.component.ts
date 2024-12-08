@@ -94,6 +94,8 @@ export class HeaderOneComponent implements OnInit {
   public loggedUserId: any;
   public dataArray: DocumentData[] = [];
   public reasonFlag: boolean = false;
+  roles: string[] = ['Admin', 'User', 'Librarian']; // List of roles
+  selectedRole: string = '';
   resp: any;
   msg: any;
   respData: any;
@@ -317,7 +319,12 @@ export class HeaderOneComponent implements OnInit {
     }
   }
 
-
+  onRoleChange() {
+    console.log('Selected Role:', this.selectedRole);
+    localStorage.setItem('role', this.selectedRole);
+ 
+   location.href = location.href; //page reload code
+  }
 
 
 

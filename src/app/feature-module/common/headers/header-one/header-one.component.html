@@ -43,7 +43,7 @@
 			</a>
 			<div class="dropdown-menu notifications">
 				<div class="topnav-dropdown-header">
-					<span class="notification-title">Notifications</span>
+					<span class="notification-title ">Statutory Document Status</span>
 
 				</div>
 				<div class="noti-content">
@@ -70,6 +70,25 @@
 				</div>
 			</div>
 		</li>
+		<!-- <li class="nav-item dropdown has-arrow flag-nav">
+			<a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="javascript:void(0);" role="button">
+				<img src="assets/img/flags/us.png" alt="" height="20"> <span>English</span>
+			</a>
+			<div class="dropdown-menu dropdown-menu-right">
+				<a href="javascript:void(0);" class="dropdown-item">
+					<img src="assets/img/flags/us.png" alt="" height="16"> English
+				</a>
+				<a href="javascript:void(0);" class="dropdown-item">
+					<img src="assets/img/flags/fr.png" alt="" height="16"> French
+				</a>
+				<a href="javascript:void(0);" class="dropdown-item">
+					<img src="assets/img/flags/es.png" alt="" height="16"> Spanish
+				</a>
+				<a href="javascript:void(0);" class="dropdown-item">
+					<img src="assets/img/flags/de.png" alt="" height="16"> German
+				</a>
+			</div>
+		</li> -->
 
 		<!-- User/SuperUser bell icon -->
 		<li class="nav-item dropdown" [hidden]="roleFlag">
@@ -79,7 +98,7 @@
 			</a>
 			<div class="dropdown-menu notifications">
 				<div class="topnav-dropdown-header">
-					<span class="notification-title">Notifications</span>
+					<span class="notification-title">Statutory Document Notification's</span>
 				</div>
 				<div class="noti-content">
 					<ul class="notification-list" *ngFor="let item of respData;">
@@ -121,17 +140,16 @@
 		<li class="nav-item dropdown" [hidden]="roleFlag">
 			<a href="javascript:void(0);" class="dropdown-toggle nav-link" data-bs-toggle="dropdown">
 				<!-- <i class="feather icon-bell me-1" style="color:white"></i> -->
-				<i class="si si-bell me-1" style="color:white"></i>
-
-				<!-- <span class="material-icons" style="font-size: 26px; color: rgb(255, 255, 255);">notifications_active</span>
-			 -->
+				<i class="fa-regular fa-file me-1" style="color:white"></i>
+				<!-- <i class="fa-regular fa-file me-2" style="font-size: 1.5rem; color: #ffffff; animation: pulse 1.5s infinite;"></i> -->
+				
 
 				 <span
 					class="badge rounded-pill">{{userNotifyCountTwo}}</span>
 			</a>
 			<div class="dropdown-menu notifications">
 				<div class="topnav-dropdown-header">
-					<span class="notification-title">File Upload Notificationss</span>
+					<span class="notification-title">File Upload Notification's</span>
 				</div>
 				<div class="noti-content">
 					<ul class="notification-list" *ngFor="let item of notificTwo;">
@@ -219,7 +237,7 @@
 	</a>
 	<div class="dropdown-menu notifications">
 		<div class="topnav-dropdown-header">
-			<span class="notification-title">Notifications</span>
+			<span class="notification-title">Statutory Document Status</span>
 
 		</div>
 		<div class="noti-content">
@@ -263,6 +281,12 @@
 				<a class="dropdown-item" style="color: black;" [routerLink]="routes.employeeProfile">My Profile</a>
 
 				<a class="dropdown-item" style="color: black;" (click)="logout()">Logout</a>
+			</div>
+			<div >
+				<label for="roleSelect">Select Role:</label>
+				<select id="roleSelect" [(ngModel)]="selectedRole" (change)="onRoleChange()">
+				  <option *ngFor="let role of roles" [value]="role">{{ role }}</option>
+				</select>
 			</div>
 		</li>
 	</ul>

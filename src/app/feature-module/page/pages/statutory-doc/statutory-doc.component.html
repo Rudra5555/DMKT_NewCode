@@ -283,7 +283,7 @@
       <div class="modal-content" style="padding: 0px;">
         <div class="modal-header d-flex justify-content-between align-items-center" style="background: linear-gradient(to right, #f2f9fb 0%, #00820e 100%) !important;">
           <h3 style="margin: 0;  margin-top: -1%;
-      padding-bottom: 4%;">Doucment Access Form</h3>
+      padding-bottom: 4%;">Document Access Form</h3>
           <button type="button" id="closeModalBtn" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -294,7 +294,7 @@
         
            <div class="col-lg-12" id="modalMargin">
             <div class="input-block mb-3">
-              <label class="col-form-label">Statutory Document
+              <label class="col-form-label">Statutory Document <span class="text-danger">*</span>
               </label>
               <!-- <textarea [(ngModel)]="remarks" class="form-control" rows="3"></textarea> -->
               <input  type="text"  id="statutoryDocument" class="form-control" [(ngModel)]="statutoryDocumentName" readonly>       
@@ -321,7 +321,7 @@
             <div class="row">
               <div class="col-lg-12" id="modalMargin">
                 <div class="input-block mb-3">
-                  <label class="col-form-label">Remarks
+                  <label class="col-form-label">Remarks <span class="text-danger">*</span>
                   </label>
                   <textarea [(ngModel)]="remarks" class="form-control" rows="3"></textarea>
                 </div>
@@ -335,7 +335,7 @@
 
                 <div class="card">
                   <div class="card-header">
-                    <h5 class="card-title">Multiple File Upload</h5>
+                    <h5 class="card-title">Multiple File Upload <span class="text-danger">*</span></h5>
                   </div>
                   <div class="container" appDnd (fileDropped)="onFileDropped($event)" >
                     <input type="file" #fileDropRef id="fileDropRef"  multiple (change)="fileBrowseHandler($event)" />

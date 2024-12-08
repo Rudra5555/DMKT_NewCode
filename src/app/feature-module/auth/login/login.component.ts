@@ -43,12 +43,13 @@ export class LoginComponent implements OnInit {
   errorFlg:boolean=false
   errorMsg:any;
   toaster: any;
+  timestamp: string ='';
 
   constructor(private router: Router,private loginService : LoginComponentService,private dataService : DataService ,private formBuilder: FormBuilder) {}
 
 
   ngOnInit(): void {
-
+    this.timestamp = Date.now().toString();
 
 // ***********encryption part**********
 let payload = {
@@ -174,8 +175,13 @@ if(loginData){
           const userId = this.data.response.userId;
           // //console.log("userID",userId)
           const userName = this.data.response.userName; 
-     
-          this.router.navigate([routes.adminDashboard], { queryParams: { userId: userId } });
+          //this.router.navigate([routes.adminDashboard], { queryParams: { userId: userId } });
+
+          const secretKey = this.timestamp;
+          const encryptedParam = CryptoJS.AES.encrypt(JSON.stringify(this.data.response.userId), secretKey).toString();
+          console.log("encrypted::",encryptedParam);
+          this.router.navigate([routes.employee],{queryParams : { param: encryptedParam }})
+          
         
           localStorage.setItem("loggedUserName", userName);
           
@@ -191,7 +197,12 @@ if(loginData){
 
           localStorage.setItem("loggedInUserId",userId);
         
-          this.router.navigate([routes.employee],{queryParams : this.data.value})
+          //  this.router.navigate([routes.employee],{queryParams : this.data.value})
+          const secretKey = this.timestamp;
+          const encryptedParam = CryptoJS.AES.encrypt(JSON.stringify(this.data.value), secretKey).toString();
+          console.log("encrypted::",encryptedParam);
+          this.router.navigate([routes.employee],{queryParams : { param: encryptedParam }})
+
           localStorage.setItem("loggedUserName",this.data.response.userName);
 
           
@@ -202,6 +213,7 @@ if(loginData){
           // localStorage.setItem("loggedUserId",userId);
 
           localStorage.setItem("loggedInUserId",userId)
+          
 
           const navigationExtras:NavigationExtras = {
             state:{
@@ -209,10 +221,20 @@ if(loginData){
             }
           }
          localStorage.setItem("loggedUserName",this.data.response.userName);
-          this.router.navigate([routes.employee],{queryParams : this.data.response})
+         const secretKey = this.timestamp;
+         const encryptedParam = CryptoJS.AES.encrypt(JSON.stringify(this.data.response), secretKey).toString();
+         console.log("encrypted::",encryptedParam);
+         
+
+          this.router.navigate([routes.employee],{queryParams : { param: encryptedParam }})
+
+          // this.router.navigate([routes.employee],{queryParams : this.data.response})
         }
         if(this.getRoleData == "SuperUser"){
-          this.router.navigate([routes.employee],{queryParams : this.data.response})
+          const secretKey = this.timestamp;
+          const encryptedParam = CryptoJS.AES.encrypt(JSON.stringify(this.data.response), secretKey).toString();
+          console.log("encrypted::",encryptedParam);
+          
           localStorage.setItem("loggedUserName",this.data.response.userName);
           const userId = this.data.response.userId;
           localStorage.setItem("loggedSuperUserId",userId);
@@ -231,7 +253,12 @@ if(loginData){
             }
           }
          localStorage.setItem("loggedUserName",this.data.response.userName);
-          this.router.navigate([routes.employee],{queryParams : this.data.response})
+         const secretKey =  this.timestamp;
+         const encryptedParam = CryptoJS.AES.encrypt(JSON.stringify(this.data.response), secretKey).toString();
+         console.log("encrypted::",encryptedParam);
+         
+
+          this.router.navigate([routes.employee],{queryParams : { param: encryptedParam }})
         }
 
        
