@@ -373,6 +373,14 @@ upload(file: any): Observable<HttpEvent<any>> {
     const req = new HttpRequest('GET', `${this.baseUrl}/document/doc-search?sSearch=${searchValue}`, {
       responseType: 'json'
     });
+
+    return this.http.request(req);
+  }
+
+  accessRole(loggedUserId:any ): Observable<HttpEvent<any>> {
+    const req = new HttpRequest('GET', `${this.baseUrl}/user/get-access-roles/${loggedUserId}`, {
+      responseType: 'json'
+    });
   
     return this.http.request(req);
   }

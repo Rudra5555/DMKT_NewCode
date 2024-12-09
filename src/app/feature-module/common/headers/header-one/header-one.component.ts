@@ -94,7 +94,8 @@ export class HeaderOneComponent implements OnInit {
   public loggedUserId: any;
   public dataArray: DocumentData[] = [];
   public reasonFlag: boolean = false;
-  roles: string[] = ['Admin', 'User', 'Librarian']; // List of roles
+  // roles: string[] = ['Admin', 'User', 'Librarian']; 
+  roles:any;
   selectedRole: string = '';
   resp: any;
   msg: any;
@@ -155,7 +156,26 @@ export class HeaderOneComponent implements OnInit {
 
     this.loggedUserId = localStorage.getItem('loggedInUserId');
 
-    console.log("logged user::::::::[]",this.loggedUserId);
+    console.log("logged userId::::::::[]",this.loggedUserId);
+
+
+    this.loginService.accessRole(this.loggedUserId).subscribe({
+      next: (event: any) => {
+        if (event instanceof HttpResponse) {
+          this.resp = event.body.response
+          this.roles=this.resp;
+
+          console.log("Access rolles::::",this.roles);
+           
+
+        }
+      },
+      error: (err: any) => {
+        if (err.error && err.error.message) {
+          this.msg += " " + err.error.message;
+        }
+      }
+    });
     
     
     this.loginService.notificTwo(this.loggedUserId).subscribe({
