@@ -329,3 +329,33 @@ footer[_ngcontent-ng-c3500279900] {
 div#filterDoc {
   margin-right: 20%;
 }
+
+
+
+.tooltip-container {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.tooltip-container .tooltip-text {
+  visibility: hidden; 
+  width: max-content; 
+  background-color: #333; 
+  color: #fff; 
+  text-align: center;
+  border-radius: 4px; 
+  padding: 5px; 
+  position: absolute; 
+  z-index: 1; 
+  bottom: 150%; 
+  left: 60%; 
+  transform: translateX(-30%); 
+  opacity: 0; 
+  transition: opacity 0.3s ease-in-out; 
+}
+
+.tooltip-container:hover .tooltip-text {
+  visibility: visible; 
+  opacity: 1; 
+}

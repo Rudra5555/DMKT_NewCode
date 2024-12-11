@@ -255,7 +255,6 @@ getFileLists(mainHead:any,plants:any,departmentName:any,subAreaName:any,sDate:an
     responseType: 'json'
   });
 //console.log(req);
-
   return this.http.request(req);
   
 }
@@ -372,6 +371,14 @@ upload(file: any): Observable<HttpEvent<any>> {
 
   allSearch(searchValue:any ): Observable<HttpEvent<any>> {
     const req = new HttpRequest('GET', `${this.baseUrl}/document/doc-search?sSearch=${searchValue}`, {
+      responseType: 'json'
+    });
+
+    return this.http.request(req);
+  }
+
+  accessRole(loggedUserId:any ): Observable<HttpEvent<any>> {
+    const req = new HttpRequest('GET', `${this.baseUrl}/user/get-access-roles/${loggedUserId}`, {
       responseType: 'json'
     });
   
