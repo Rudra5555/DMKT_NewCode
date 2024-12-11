@@ -9,7 +9,7 @@
         </button>
       </div>
       <div class="modal-body">
-        <form [formGroup]="addClientForm">
+        <form [formGroup]="addUserForm">
           <div class="card">
             <div class="card-header">
               <h5 class="card-title">Image Upload</h5>
@@ -40,11 +40,11 @@
               <div class="input-block mb-3">
                 <label class="col-form-label" for="">User ID <span class="text-danger">*</span></label>
                 <input class="form-control" type="text"
-                  [class.invalid]="addClientForm.get('clientName')?.invalid && addClientForm.get('clientName')?.touched"
-                  formControlName="clientName">
-                @if (addClientForm.get('clientName')?.invalid && addClientForm.get('clientName')?.touched) {
+                  [class.invalid]="addUserForm.get('clientName')?.invalid && addUserForm.get('clientName')?.touched"
+                  formControlName="userName">
+                @if (addUserForm.get('clientName')?.invalid && addUserForm.get('clientName')?.touched) {
                 <div>
-                  @if (addClientForm.get('clientName')?.invalid && addClientForm.get('clientName')?.touched) {
+                  @if (addUserForm.get('clientName')?.invalid && addUserForm.get('clientName')?.touched) {
                   <small class="text-danger"> *ID is required</small>
                   }
                 </div>
@@ -62,11 +62,11 @@
               <div class="input-block mb-3">
                 <label class="col-form-label" for="">Email ID<span class="text-danger">*</span></label>
                 <input class="form-control" type="text"
-                  [class.invalid]="addClientForm.get('clientEmail')?.invalid && addClientForm.get('clientEmail')?.touched"
-                  formControlName="clientEmail">
-                @if (addClientForm.get('clientEmail')?.invalid && addClientForm.get('clientEmail')?.touched) {
+                  [class.invalid]="addUserForm.get('clientEmail')?.invalid && addUserForm.get('clientEmail')?.touched"
+                  formControlName="userEmail">
+                @if (addUserForm.get('clientEmail')?.invalid && addUserForm.get('clientEmail')?.touched) {
                 <div>
-                  @if (addClientForm.get('clientEmail')?.invalid && addClientForm.get('clientEmail')?.touched) {
+                  @if (addUserForm.get('clientEmail')?.invalid && addUserForm.get('clientEmail')?.touched) {
                   <small class="text-danger"> *Email is required</small>
                   }
                 </div>
@@ -77,11 +77,11 @@
               <div class="input-block mb-3">
                 <label class="col-form-label" for="">Phone <span class="text-danger">*</span></label>
                 <input class="form-control" type="number"
-                  [class.invalid]="addClientForm.get('clientPhone')?.invalid && addClientForm.get('clientPhone')?.touched"
-                  formControlName="clientPhone">
-                @if (addClientForm.get('clientPhone')?.invalid && addClientForm.get('clientPhone')?.touched) {
+                  [class.invalid]="addUserForm.get('clientPhone')?.invalid && addUserForm.get('clientPhone')?.touched"
+                  formControlName="userPhone">
+                @if (addUserForm.get('clientPhone')?.invalid && addUserForm.get('clientPhone')?.touched) {
                 <div>
-                  @if (addClientForm.get('clientPhone')?.invalid && addClientForm.get('clientPhone')?.touched) {
+                  @if (addUserForm.get('clientPhone')?.invalid && addUserForm.get('clientPhone')?.touched) {
                   <small class="text-danger"> *Phone is required</small>
                   }
                 </div>
@@ -91,41 +91,23 @@
             <div class="col-md-6">
               <div class="input-block mb-3">
                 <label class="col-form-label" for="">Password</label>
-                <input class="form-control" value="barrycuda" type="password">
+                <input class="form-control" formControlName="password" value="barrycuda" type="password">
+              </div>
+              <div *ngIf="form.get('password')?.invalid && form.get('password')?.touched" class="text-danger">
+                Password is required and must be at least 6 characters long.
               </div>
             </div>
             <div class="col-md-6">
               <div class="input-block mb-3">
                 <label class="col-form-label" for="">Confirm Password</label>
-                <input class="form-control" value="barrycuda" type="password">
+                <input class="form-control"  formControlName="confirmPassword" value="barrycuda" type="password">
+              </div>
+              <div *ngIf="form.errors?.passwordMismatch && form.touched" class="text-danger">
+                Passwords do not match.
               </div>
             </div>
 
-            <!-- <div class="col-md-6">
-              <div class="input-block mb-3">
-                <label class="col-form-label">Role <span class="text-danger">*</span></label>
-                <mat-select class="custom-mat-select select" placeholder="Select">
-                  <mat-option value="select">Select</mat-option>
-                  <mat-option value="hardware">Open</mat-option>
-                  <mat-option value="material">Lost</mat-option>
-                  <mat-option value="material">Won</mat-option>
-                  <mat-option value="material">Lost1</mat-option>
-                  <mat-option value="material">Won1</mat-option>
-                  <mat-option value="material">Lost2</mat-option>
-                  <mat-option value="material">Won2</mat-option>
-                </mat-select>
-              </div>
-            </div> -->
 
-            <!-- <ng-multiselect-dropdown
-            [placeholder]="'custom placeholder'"
-            [settings]="dropdownSettings"
-            [data]="dropdownList"
-            [(ngModel)]="selectedItems"
-            (onSelect)="onItemSelect($event)"
-            (onSelectAll)="onSelectAll($event)"
-          >
-</ng-multiselect-dropdown> -->
 
           </div>
           <div class="table-responsive m-t-15">
@@ -203,24 +185,24 @@
             <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
               <div class="modal-content">
                 <div class="modal-header">
-                  <h5 class="modal-title">Add User</h5>
+                  <h5 class="modal-title">Edit User</h5>
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                   </button>
                 </div>
                 <div class="modal-body">
-                  <form [formGroup]="editClientForm">
+                  <form [formGroup]="editUserForm">
                     <div class="row">
                       <div class="col-md-6">
                         <div class="input-block mb-3">
                           <label class="col-form-label" for="">First Name <span class="text-danger">*</span></label>
                           <input class="form-control" type="text"
-                            [class.invalid]="editClientForm.get('editClientName')?.invalid && editClientForm.get('editClientName')?.touched"
+                            [class.invalid]="editUserForm.get('editClientName')?.invalid && editUserForm.get('editClientName')?.touched"
                             formControlName="editClientName">
-                            @if (editClientForm.get('editClientName')?.invalid && editClientForm.get('editClientName')?.touched) {
+                            @if (editUserForm.get('editClientName')?.invalid && editUserForm.get('editClientName')?.touched) {
                               <div
                                 >
-                                @if (editClientForm.get('editClientName')?.invalid && editClientForm.get('editClientName')?.touched) {
+                                @if (editUserForm.get('editClientName')?.invalid && editUserForm.get('editClientName')?.touched) {
                                   <small
                                   class="text-danger"> *Name is required</small>
                                 }
@@ -244,12 +226,12 @@
                           <div class="input-block mb-3">
                             <label class="col-form-label" for="">Email <span class="text-danger">*</span></label>
                             <input class="form-control" type="text"
-                              [class.invalid]="editClientForm.get('editClientEmail')?.invalid && editClientForm.get('editClientEmail')?.touched"
+                              [class.invalid]="editUserForm.get('editClientEmail')?.invalid && editUserForm.get('editClientEmail')?.touched"
                               formControlName="editClientEmail">
-                              @if (editClientForm.get('editClientEmail')?.invalid && editClientForm.get('editClientEmail')?.touched) {
+                              @if (editUserForm.get('editClientEmail')?.invalid && editUserForm.get('editClientEmail')?.touched) {
                                 <div
                                   >
-                                  @if (editClientForm.get('editClientEmail')?.invalid && editClientForm.get('editClientEmail')?.touched) {
+                                  @if (editUserForm.get('editClientEmail')?.invalid && editUserForm.get('editClientEmail')?.touched) {
                                     <small
                                     class="text-danger"> *Email is required</small>
                                   }
@@ -273,12 +255,12 @@
                             <div class="input-block mb-3">
                               <label class="col-form-label" for="">Client ID <span class="text-danger">*</span></label>
                               <input class="form-control" type="text"
-                                [class.invalid]="editClientForm.get('editClientId')?.invalid && editClientForm.get('editClientId')?.touched"
+                                [class.invalid]="editUserForm.get('editClientId')?.invalid && editUserForm.get('editClientId')?.touched"
                                 formControlName="editClientId">
-                                @if (editClientForm.get('editClientId')?.invalid && editClientForm.get('editClientId')?.touched) {
+                                @if (editUserForm.get('editClientId')?.invalid && editUserForm.get('editClientId')?.touched) {
                                   <div
                                     >
-                                    @if (editClientForm.get('editClientId')?.invalid && editClientForm.get('editClientId')?.touched) {
+                                    @if (editUserForm.get('editClientId')?.invalid && editUserForm.get('editClientId')?.touched) {
                                       <small
                                       class="text-danger"> *Id is required</small>
                                     }
@@ -290,12 +272,12 @@
                               <div class="input-block mb-3">
                                 <label class="col-form-label" for="">Phone <span class="text-danger">*</span> </label>
                                 <input class="form-control" type="text"
-                                  [class.invalid]="editClientForm.get('editClientPhone')?.invalid && editClientForm.get('editClientPhone')?.touched"
+                                  [class.invalid]="editUserForm.get('editClientPhone')?.invalid && editUserForm.get('editClientPhone')?.touched"
                                   formControlName="editClientPhone">
-                                  @if (editClientForm.get('editClientPhone')?.invalid && editClientForm.get('editClientPhone')?.touched) {
+                                  @if (editUserForm.get('editClientPhone')?.invalid && editUserForm.get('editClientPhone')?.touched) {
                                     <div
                                       >
-                                      @if (editClientForm.get('editClientPhone')?.invalid && editClientForm.get('editClientPhone')?.touched) {
+                                      @if (editUserForm.get('editClientPhone')?.invalid && editUserForm.get('editClientPhone')?.touched) {
                                         <small
                                         class="text-danger"> *Phone is required</small>
                                       }
@@ -307,12 +289,12 @@
                                 <div class="input-block mb-3">
                                   <label class="col-form-label" for="">Company Name <span class="text-danger">*</span></label>
                                   <input class="form-control" type="text"
-                                    [class.invalid]="editClientForm.get('editClientCompany')?.invalid && editClientForm.get('editClientCompany')?.touched"
+                                    [class.invalid]="editUserForm.get('editClientCompany')?.invalid && editUserForm.get('editClientCompany')?.touched"
                                     formControlName="editClientCompany">
-                                    @if (editClientForm.get('editClientCompany')?.invalid && editClientForm.get('editClientCompany')?.touched) {
+                                    @if (editUserForm.get('editClientCompany')?.invalid && editUserForm.get('editClientCompany')?.touched) {
                                       <div
                                         >
-                                        @if (editClientForm.get('editClientCompany')?.invalid && editClientForm.get('editClientCompany')?.touched) {
+                                        @if (editUserForm.get('editClientCompany')?.invalid && editUserForm.get('editClientCompany')?.touched) {
                                           <small
                                           class="text-danger"> *Company is required</small>
                                         }

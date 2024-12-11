@@ -11,8 +11,8 @@ import { IDropdownSettings } from 'ng-multiselect-dropdown';
 })
 export class UserManagementModalComponent implements OnInit {
   @ViewChild("fileDropRef", { static: false }) fileDropEl!: ElementRef;
-  public addClientForm!: FormGroup ;
-  public editClientForm!: FormGroup ;
+  public addUserForm!: FormGroup ;
+  public editUserForm!: FormGroup ;
   public dropdownList:any;
   public selectedItems :any;
   public uploadDocumentSizeFlag: boolean = false;
@@ -48,17 +48,18 @@ export class UserManagementModalComponent implements OnInit {
 
     
     //Add clients form
-    this.addClientForm = this.formBuilder.group({
-      clientName: ["", [Validators.required]],
-      clientPhone: ["", [Validators.required]],
-      clientEmail: ["", [Validators.required]],
-      clientCompany: ["", [Validators.required]],
-      clientRole: ["", [Validators.required]],
-      clientId: ["", [Validators.required]],
-    });
+    this.addUserForm = this.formBuilder.group({
+      userName: ["", [Validators.required]],
+      userPhone: ["", [Validators.required]],
+      userEmail: ["", [Validators.required]],
+      password: ["barrycuda", [Validators.required, Validators.minLength(6)]],
+      confirmPassword: ["barrycuda", [Validators.required]],
+      
+    },
+  );
 
     //Edit UserManagement Form
-    this.editClientForm = this.formBuilder.group({
+    this.editUserForm = this.formBuilder.group({
       editClientName: ["", [Validators.required]],
       editClientPhone: ["", [Validators.required]],
       editClientEmail: ["", [Validators.required]],
