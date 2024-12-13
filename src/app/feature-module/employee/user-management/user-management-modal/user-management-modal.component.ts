@@ -45,6 +45,7 @@ export class UserManagementModalComponent implements OnInit {
       allowSearchFilter: true
     };
   
+    
 
     
     //Add clients form
