@@ -345,6 +345,7 @@ export class HeaderOneComponent implements OnInit {
  
    location.href = location.href; //page reload code
    
+
   }
 
 
