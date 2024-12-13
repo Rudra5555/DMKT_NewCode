@@ -11,7 +11,8 @@ import { MatSortModule } from '@angular/material/sort';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
-import { ProgressComponent } from '../../page/pages/upload-doc/progress/progress.component';
+import { ProgressComponent } from './user-management-modal/progress/progress.component';
+// import { ProgressComponent } from '../../page/pages/upload-doc/progress/progress.component';
 
 
 
