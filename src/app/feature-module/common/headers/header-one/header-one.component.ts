@@ -344,6 +344,7 @@ export class HeaderOneComponent implements OnInit {
     localStorage.setItem('role', this.selectedRole);
  
    location.href = location.href; //page reload code
+   
   }
 
 
