@@ -45,7 +45,7 @@ export class UserManagementModalComponent implements OnInit {
       allowSearchFilter: true
     };
   
-    
+
 
     
     //Add clients form
@@ -57,6 +57,7 @@ export class UserManagementModalComponent implements OnInit {
       confirmPassword: ["barrycuda", [Validators.required]],
       
     },
+    
   );
 
     //Edit UserManagement Form
