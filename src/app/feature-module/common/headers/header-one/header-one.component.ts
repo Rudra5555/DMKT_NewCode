@@ -107,6 +107,7 @@ export class HeaderOneComponent implements OnInit {
   approverStatus: any;
   public userReasonFlag: boolean = true;
   public disableSubmitBtn: boolean = false;
+  selectedUserRole: any;
   constructor(
     private sideBar: SideBarService,
     private router: Router, private fb: FormBuilder, private loginService: LoginComponentService, private snackBar: MatSnackBar
@@ -153,6 +154,8 @@ export class HeaderOneComponent implements OnInit {
       status: ['', Validators.required],
       reason: ['', Validators.required]
     });
+
+    this.selectedUserRole = localStorage.getItem('role');
 
     this.loggedUserId = localStorage.getItem('loggedInUserId');
 
@@ -339,10 +342,12 @@ export class HeaderOneComponent implements OnInit {
     }
   }
 
-  onRoleChange() {
+  onRoleChange(role:any) {
+    this.selectedRole = role;
+    this.selectedUserRole = role;
     console.log('Selected Role:', this.selectedRole);
     localStorage.setItem('role', this.selectedRole);
- 
+    localStorage.getItem('role');
    location.href = location.href; //page reload code
    
 
@@ -508,7 +513,8 @@ export class HeaderOneComponent implements OnInit {
       showConfirmButton: false,
       timer: 1500
     }).then(() => {
-      window.location.reload();
+      // window.location.reload();
+      location.href = location.href;
     });
   }
 

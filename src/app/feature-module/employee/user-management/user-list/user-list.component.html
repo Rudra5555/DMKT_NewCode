@@ -25,7 +25,7 @@
     <div class="col-sm-6 col-md-3">
       <div class="input-block mb-3 form-focus inputs">
         <mat-form-field class="example-full-width">
-          <mat-label>Client ID</mat-label>
+          <mat-label>Employee ID</mat-label>
           <input class="form-control floating datetimepicker" type="text" matInput />
         </mat-form-field>
       </div>
@@ -33,20 +33,20 @@
     <div class="col-sm-6 col-md-3">
       <div class="input-block mb-3 form-focus inputs">
         <mat-form-field class="example-full-width">
-          <mat-label>Client Name</mat-label>
+          <mat-label>Employee Name</mat-label>
           <input class="form-control floating datetimepicker" type="text" matInput />
         </mat-form-field>
       </div>
     </div>
     <div class="col-sm-6 col-md-3">
       <div class="input-block mb-3 form-focus select-focus select">
-        <mat-select class="custom-mat-select floating-mat-select" placeholder="Select Company">
-          <mat-option selected>Select Company</mat-option>
-          <mat-option value="option1">Global Technologies</mat-option>
-          <mat-option value="option2">Delta Infotech</mat-option>
-          <mat-option value="option3">Cream Inc</mat-option>
+        <mat-select class="custom-mat-select floating-mat-select" placeholder="Select Department">
+          <mat-option selected>Select Department</mat-option>
+          <mat-option value="option1">Operation</mat-option>
+          <mat-option value="option2">Mechanical</mat-option>
+          <mat-option value="option3">Civil</mat-option>
         </mat-select>
-        <label class="focus-label">Company</label>
+        <label class="focus-label">Department</label>
       </div>
     </div>
     <div class="col-sm-6 col-md-3">
@@ -79,12 +79,13 @@
         <table matSort (matSortChange)="sortData($event)" class="table table-striped custom-table datatable">
           <thead>
             <tr>
-              <th mat-sort-header="name">Name</th>
+              <th mat-sort-header="name">Employee Name</th>
               <th mat-sort-header="clientId">Employee ID</th>
-              <th mat-sort-header="company">Immediate Manager</th>
-              <th mat-sort-header="email">Email</th>
+              
+              <th mat-sort-header="email">Email ID</th>
               <th mat-sort-header="phone">Mobile</th>
-              <th mat-sort-header="role">User Role</th>
+              <th mat-sort-header="role">Employee Role</th>
+              <th mat-sort-header="Department">Department</th>
               <th mat-sort-header="status">Status</th>
               <th class="text-end">Action</th>
             </tr>
@@ -101,9 +102,10 @@
                 </h2>
               </td>
               <td>{{ client.clientId }}</td>
-              <td>{{ client.company }}</td>
+              <!-- <td>{{ client.company }}</td> -->
               <td>{{ client.email }}</td>
               <td>{{ client.phone }}</td>
+              <td>{{ client.role }}</td>
               <td>{{ client.role }}</td>
               <td>
                 <div class="dropdown action-label">

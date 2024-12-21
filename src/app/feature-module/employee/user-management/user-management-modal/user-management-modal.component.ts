@@ -19,6 +19,7 @@ export class UserManagementModalComponent implements OnInit {
   public uploadDocumentFlag: boolean = false;
   // public  dropdownSettings :any;
   files: any[] = [];
+  base64Image: string | null = null;
   public dropdownSettings !:IDropdownSettings;
   constructor( private formBuilder: FormBuilder) { }
 
@@ -55,7 +56,7 @@ export class UserManagementModalComponent implements OnInit {
       userEmail: ["", [Validators.required]],
       password: ["barrycuda", [Validators.required, Validators.minLength(6)]],
       confirmPassword: ["barrycuda", [Validators.required]],
-      
+      department:["", [Validators.required]],
     },
     
   );
@@ -109,13 +110,36 @@ export class UserManagementModalComponent implements OnInit {
     for (const item of files) {
       item.progress = 0;
       this.files.push(item);
-
+      this.convertToBase64(item);
       this.calculateTotalFileSize(this.files);
     }
     this.uploadFilesSimulator(0);
    // this.uploadFileForm.get('uploadFile')?.setValue(this.files);
 
   }
+
+  convertToBase64(file: any): void {
+    const reader = new FileReader();
+  
+    reader.onload = () => {
+      const base64String = reader.result as string;
+  
+      // Print the Base64 string to the console
+      console.log('Base64 String:', base64String);
+  
+      // You can store the base64String in the file object or use it as needed
+      file.base64 = base64String;  // Storing base64 in the file object (optional)
+  
+      // Optionally, handle the Base64 string further here (e.g., send it to an API)
+    };
+  
+    reader.onerror = (error) => {
+      console.error('Error reading file:', error);
+    };
+  
+    reader.readAsDataURL(file);  // Convert the file to Base64 string
+  }
+
   calculateTotalFileSize(files: Array<any>) {
     const fiftyMB = 2 * 1024 * 1024;
     let totalSize = 0;
@@ -140,6 +164,9 @@ fileBrowseHandler(files: any) {
   // console.log("upload agaiannn");
   this.prepareFilesList(files.target.files);
 }
+
+
+
 deleteFile(index: number) {
   if (this.files[index].progress < 100) {
     return;

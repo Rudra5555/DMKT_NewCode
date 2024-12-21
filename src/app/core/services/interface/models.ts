@@ -978,6 +978,7 @@ export interface getGoalList {
 export interface getClient {
   name: string;
   role: string;
+  department: string;
   company: string;
   image: string;
   clientId: string;
@@ -995,6 +996,7 @@ export interface companiesList {
 export interface clientsDatas {
   name: string;
   role: string;
+  department: string;
   company: string;
   image: string;
   clientId: string;

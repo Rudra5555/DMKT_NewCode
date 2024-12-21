@@ -53,7 +53,9 @@
     transition: all 0.3s ease-in-out;
     overflow: auto; /* Handles content overflow */
     box-sizing: border-box; /* Ensures padding is included in height */
-  
+  .submit{
+    background-color: #215df3;
+  }
   
     .single-file {
       display: flex;

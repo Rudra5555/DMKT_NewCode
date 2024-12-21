@@ -1,4 +1,4 @@
-import { Component, ElementRef, model, OnInit, viewChild, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, model, OnInit, viewChild, ViewChild } from '@angular/core';
 import { OwlOptions } from 'ngx-owl-carousel-o';
 import { routes, url } from 'src/app/core/core.index';
 import { Router } from '@angular/router';
@@ -74,7 +74,7 @@ export class UserDashboardComponent implements OnInit {
   // fileListSearch: any[] = [];
   mainHeadName: any;
   plantType: any;
-  dataset = new MatTableDataSource<DocumentData>();
+  dataset = new MatTableDataSource<any>();
 
   colors = ['#fc0859', '#ff6a00', '#00ff00', '#00ab52', '#0800a7', '#ff00ff', '#dcfe00', '#00c39f'];
   searchKeyData: string = ''; 
@@ -155,7 +155,7 @@ export class UserDashboardComponent implements OnInit {
 
 
   // public dataset!: Array<data>;
-  constructor(private formBuilder: FormBuilder, private router: Router, private loginService: LoginComponentService, private datePipe: DatePipe) {
+  constructor(private formBuilder: FormBuilder, private router: Router, private loginService: LoginComponentService, private datePipe: DatePipe,private cdr: ChangeDetectorRef) {
 
     
 
@@ -444,6 +444,7 @@ export class UserDashboardComponent implements OnInit {
   }
 
   
+ 
 
  
   public sortData(sort: Sort) {
@@ -459,10 +460,10 @@ export class UserDashboardComponent implements OnInit {
     }
   }
 
-  public searchData(value: string): void {
-    this.dataSource.filter = value.trim().toLowerCase();
-    this.fileListSearch = this.dataSource.filteredData;
-  }
+  // public searchData(value: string): void {
+  //   this.dataSource.filter = value.trim().toLowerCase();
+  //   this.fileListSearch = this.dataSource.filteredData;
+  // }
 
   public getMoreData(event: string): void {
     if (event === 'next') {
@@ -541,33 +542,100 @@ export class UserDashboardComponent implements OnInit {
   }
 
 
-
-
-  fileNameSearch(): void {
-    const searchValue = this.getAllFilesForm.get('searchKeyData')?.value?.trim() || '';
+  // public searchData(value: string): void {
+  //   this.dataSource.filter = value.trim().toLowerCase();
+  //   this.fileListSearch = this.dataSource.filteredData;
+  //   console.log("get all file by filter",this.fileList);
     
+  // }
+
+  // fileNameSearch(): void {
+  //   const searchValue = this.getAllFilesForm.get('searchKeyData')?.value?.trim() || '';
+    
+  //   if (searchValue) {
+  //     this.cardHide = true;
+  //     this.documentNameSearch = false;
+  //     console.log(searchValue);
+  
+  //     // this.dataset.filter = searchValue.toLowerCase();
+  //     // this.fileListSearch = this.dataset.filteredData;
+
+  //     this.loginService.allSearch(searchValue).subscribe({
+  //       next: (event: any) => {
+  //         if (event instanceof HttpResponse) {
+  //           const res = event.body.documentLists;
+  //           this.fileListRes=res;
+
+  //           this.transformedMap = this.transformApiResponseToMap(this.fileListRes);
+
+  //           this.fileListSearch = Array.from(this.transformedMap.values());
+
+  //           this.dataSource = new MatTableDataSource<getSearchfileList>(this.fileListSearch);
+
+            
+            
+  //         }
+  //       },
+  //       error: (err: any) => {
+  //         if (err.error && err.error.message) {
+  //           this.msg += " " + err.error.message;
+  //         }
+  //       },
+  //     });
+
+
+  //   } else {
+  //     console.log("Enter a value");
+  //   }
+  // }
+  
+  public performSearch(): void {
+    const searchValue = this.searchDataValue?.trim().toLowerCase() || ''; // Convert search value to lowercase
+  
     if (searchValue) {
+      if (this.dataSource) {
+        // Define a filter predicate to match the word in `newUniqueFileName`
+        this.dataSource.filterPredicate = (data: any, filter: string): boolean => {
+          const fileName = data.newUniqueFileName?.toLowerCase() || ''; // Convert `newUniqueFileName` to lowercase
+          return fileName.includes(filter); // Check if the file name contains the search word
+        };
+  
+        // Apply the filter
+        this.dataSource.filter = searchValue; // Triggers the filterPredicate
+        this.fileListSearch = this.dataSource.filteredData; // Get filtered data
+  
+        console.log("Filtered local data:", this.fileListSearch);
+        // this.cdr.detectChanges();
+      } else {
+        console.warn('dataSource is undefined. Proceeding with server search.');
+      }
+  
+      // Server-side search
       this.cardHide = true;
       this.documentNameSearch = false;
-      console.log(searchValue);
   
-      // this.dataset.filter = searchValue.toLowerCase();
-      // this.fileListSearch = this.dataset.filteredData;
-
       this.loginService.allSearch(searchValue).subscribe({
         next: (event: any) => {
           if (event instanceof HttpResponse) {
             const res = event.body.documentLists;
-            this.fileListRes=res;
-
+            this.fileListRes = res;
+  
             this.transformedMap = this.transformApiResponseToMap(this.fileListRes);
-
             this.fileListSearch = Array.from(this.transformedMap.values());
-
+  
+            // Update the dataSource with server response
             this.dataSource = new MatTableDataSource<getSearchfileList>(this.fileListSearch);
-
-            
-            
+  
+            // Reapply the filter predicate for server response
+            this.dataSource.filterPredicate = (data: any, filter: string): boolean => {
+              const fileName = data.newUniqueFileName?.toLowerCase() || '';
+              return fileName.includes(filter); // Match the search word in the file name
+            };
+  
+            // Apply the filter again
+            this.dataSource.filter = searchValue;
+  
+            console.log("Updated data source with server response:", this.fileListSearch);
           }
         },
         error: (err: any) => {
@@ -576,12 +644,17 @@ export class UserDashboardComponent implements OnInit {
           }
         },
       });
-
-
-    } else {
+    } 
+    
+    
+    
+    else {
       console.log("Enter a value");
     }
   }
+  
+  
+  
   
 
 

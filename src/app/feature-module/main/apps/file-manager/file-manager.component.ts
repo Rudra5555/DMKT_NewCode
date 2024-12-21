@@ -296,6 +296,8 @@ export class FileManagerComponent implements OnInit , OnDestroy {
           });
   
           this.dataSource = new MatTableDataSource<getfileList>(this.fileList);
+          console.log("all get file",this.dataSource);
+          
           this.calculateTotalPages(this.fileList.length, this.pageSize);
   
           this.fileList.forEach((item: any) => {
@@ -509,6 +511,8 @@ export class FileManagerComponent implements OnInit , OnDestroy {
   public searchData(value: string): void {
     this.dataSource.filter = value.trim().toLowerCase();
     this.fileList = this.dataSource.filteredData;
+    console.log("get all file by filter",this.fileList);
+    
   }
 
   public getMoreData(event: string): void {

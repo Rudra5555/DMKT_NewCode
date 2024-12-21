@@ -9,18 +9,52 @@
     <div>
       <form [formGroup]="getAllFilesForm" class="file-search" id="totalGrp">
         <div class="search-bar">
-          <input  style="margin-left: -37%; position: absolute; margin-top: 76%; width: 23%;" type="text"
-            class="searchBar" placeholder="Enter your search key..."    formControlName="searchKeyData"    (keydown.enter)="$event.preventDefault()"
-            />
+          <!-- <input  style="margin-left: -37%; position: absolute; margin-top: 76%; width: 23%;" type="text"
+            class="searchBar" placeholder="Enter your search key..."    formControlName="searchKeyData"   (keydown.enter)="$event.preventDefault()"
+            /> -->
+            <!-- <input
+            style="margin-left: -37%; position: absolute; margin-top: 76%; width: 23%;"
+                    id="value"
+                    (keydown.enter)="$event.preventDefault()"
+                    [(ngModel)]="searchDataValue"
+                    formControlName="searchKeyData"
+                    
+                    (ngModelChange)="searchData(searchKeyData)"
+                    type="search"
+                    class="form-control"
+                    placeholder="Search..."
+                  /> -->
+                  <input
+  style="margin-left: -37%; position: absolute; margin-top: 76%; width: 23%;"
+  id="value"
+  [(ngModel)]="searchDataValue"
+  formControlName="searchKeyData"
+  (keydown.enter)="$event.preventDefault()"
+  (ngModelChange)="performSearch()" 
+  type="search"
+  class="form-control searchBar"
+  placeholder="Enter your search key..."
+/>
+
+<!-- <button
+  id="dashboardModalSearch"
+  class="button button-primary"
+  (click)="performSearch()">
+  Search
+</button> -->
+
+                
+
+
             <button   class="searchBar" id="mainHeadButton"
             class="button button-primary" (click)="getAllDtaForHide()" data-bs-toggle="modal"  data-bs-target="#viewMainHeadOptions" >
             Choose Main Heads
           </button>
 
-          <button  id="dashboardModalSearch"
+          <!-- <button  id="dashboardModalSearch"
             class="button button-primary" (click)="fileNameSearch()">
             Search
-          </button>
+          </button> -->
           
         </div>
       </form>

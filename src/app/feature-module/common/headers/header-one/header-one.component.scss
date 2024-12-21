@@ -118,3 +118,11 @@ button.btn.btn-outline-primary.dropdown-toggle.show {
   background-color: green;
   border-color: #ffffff;
 }
+.header .user-menu.nav > li.flag-nav a.dropdown-toggle::before {
+  content: "";
+  width: 2px;
+  height: 19px;
+  background: #ffffff;
+  position: absolute;
+  right: -15px;
+}
