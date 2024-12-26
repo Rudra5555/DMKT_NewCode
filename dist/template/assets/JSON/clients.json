@@ -3,6 +3,7 @@
         {
           "name": "Barry Cuda",
           "role": "CEO",
+          "department":"Operation",
           "img" : "assets/img/profiles/avatar-06.jpg",
           "company": "Global Technologies",
           "image": "avatar-06",
@@ -16,6 +17,7 @@
         {
           "name": "Tressa Wexler",
           "role": "Manager",
+          "department":"Mechanical",
           "img" : "assets/img/profiles/avatar-14.jpg",
           "company": "Delta Infotech",
           "image": "avatar-29",
@@ -28,6 +30,7 @@
         {
           "name": "Ruby Bartlett ",
           "role": "CEO",
+          "department":"Electrical",
           "img" : "assets/img/profiles/avatar-28.jpg",
           "company": "Cream Inc",
           "image": "avatar-07",
@@ -40,6 +43,7 @@
         {
           "name": "Misty Tison",
           "role": "CEO",
+          "department":"C&I",
           "img" : "assets/img/profiles/avatar-18.jpg",
           "company": "Wellware company",
           "image": "avatar-06",
@@ -52,6 +56,7 @@
         {
           "name": "Daniel Deacon",
           "role": "CEO",
+          "department":"Civil",
           "img" : "assets/img/profiles/avatar-19.jpg",
           "company": "Mustang Technologies",
           "image": "avatar-14",
@@ -64,6 +69,7 @@
         {
           "name": "Walter  Weaver",
           "role": "CEO",
+          "department":"CHP",
           "img" : "assets/img/profiles/avatar-29.jpg",
           "company": "International Software",
           "image": "avatar-18",
@@ -76,6 +82,7 @@
         {
           "name": "Amanda Warren",
           "role": "CEO",
+          "department":"AHP",
           "img" : "assets/img/profiles/avatar-07.jpg",
           "company": "Mercury Software Inc",
           "image": "avatar-28",
@@ -88,6 +95,7 @@
         {
           "name": "Bretty Carlson",
           "role": "CEO",
+          "department":"Mechanical",
           "img" : "assets/img/profiles/avatar-22.jpg",
           "company": "Carlson Technologies",
           "image": "avatar-13",
