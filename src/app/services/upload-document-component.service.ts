@@ -10,7 +10,7 @@ export class UploadDocumentComponentService {
   // private serverBaseUrl = 'http://10.101.71.204:9090';
 
  private baseUrl = 'http://103.168.18.28:8080';//dev server
-//  private baseUrl = 'http://10.101.71.204:9090'; //prod server
+// private baseUrl = 'http://10.101.71.204:8282'; //prod server
 
   constructor(private http: HttpClient) { }
 

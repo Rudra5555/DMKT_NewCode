@@ -13,6 +13,7 @@ import { EmailPagecontentComponent } from './emails/email-pagecontent/email-page
 import { EmailComposeComponent } from './emails/email-compose/email-compose.component';
 import { EmailEmailviewComponent } from './emails/email-emailview/email-emailview.component';
 import { FileManagerMainheadComponent } from './file-manager-mainHead/file-manager-mainhead.component';
+import { AuthGuard } from '../dashboard/AuthGuard';
 
 const routes: Routes = [
   { 
@@ -20,10 +21,10 @@ const routes: Routes = [
     component: AppsComponent,
     children: [
       // { path: "chats", component: ChatsComponent },
-      { path: "contacts", component: ContactsComponent },
+      { path: "contacts", component: ContactsComponent,canActivate: [AuthGuard]  },
       // { path: "calendar", component: CalendarComponent },
-      { path: "file-manager", component: FileManagerComponent },
-      { path: "file-manager-mainhead", component: FileManagerMainheadComponent },
+      { path: "file-manager", component: FileManagerComponent,canActivate: [AuthGuard] },
+      { path: "file-manager-mainhead", component: FileManagerMainheadComponent,canActivate: [AuthGuard] },
       // { path: "voice-call", component: VoiceCallComponent },
       // { path: "video-call", component: VideoCallComponent },
       // { path: "outgoing-call", component: OutgoingCallComponent },

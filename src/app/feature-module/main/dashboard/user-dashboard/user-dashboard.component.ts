@@ -16,6 +16,8 @@ import { MatTableDataSource } from '@angular/material/table';
 import { ViewerType } from 'ngx-doc-viewer';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { Sort } from '@angular/material/sort';
+import { AES } from 'crypto-ts';
+import * as CryptoJS from 'crypto-js';
 
 declare let $: any;
 
@@ -88,7 +90,7 @@ export class UserDashboardComponent implements OnInit {
   subAreaList: any[] = [];
   subAreaDataList: any[] = [];
   bsRangeValue: Date[] | undefined;
-
+  timestamp: string ='';
 // ****************************************
 
   [x: string]: any;
@@ -188,7 +190,8 @@ export class UserDashboardComponent implements OnInit {
       searchKeyData: ["", [Validators.required]],
 
     });
-   
+    
+
 
   }
 
@@ -415,10 +418,39 @@ export class UserDashboardComponent implements OnInit {
     this.loginService.getFileList(categoryList, departmentName, subAreaName, startDate, endDate).subscribe({
       next: (event: any) => {
         if (event instanceof HttpResponse) {
-          this.fileList = event.body.documentLists;
-          const encodedFileList = encodeURIComponent(JSON.stringify(this.fileList));
-          this.router.navigate([routes.filemanager], { queryParams: { fileList: encodedFileList, DepartmentName: departmentName, subAreaName: subAreaName, mainHead: mainHead, plants: plants } });
+          try {
+            if (event.body?.documentLists) {
+              this.fileList = event.body.documentLists;
+        
+              // Use the timestamp as the secret key
+              const secretKey = this.timestamp;
+        
+              // Encrypt the fileList using AES encryption
+              const encryptedParam = CryptoJS.AES.encrypt(
+                JSON.stringify(this.fileList),
+                secretKey
+              ).toString();
+        
+              console.log("Encrypted fileList:", encryptedParam);
+        
+              // Navigate to the route with the encrypted query parameter
+              this.router.navigate([routes.filemanager], {
+                queryParams: {
+                  param: encryptedParam,
+                  DepartmentName: departmentName,
+                  subAreaName: subAreaName,
+                  mainHead: mainHead,
+                  plants: plants,
+                },
+              });
+            } else {
+              console.error("documentLists not found in the response body.");
+            }
+          } catch (error) {
+            console.error("Error processing the response: ", error);
+          }
         }
+        
       },
       error: (err: any) => {
         if (err.error && err.error.message) {
@@ -433,16 +465,38 @@ export class UserDashboardComponent implements OnInit {
     return this.datePipe.transform(date, 'yyyy-MM-dd')!;
   }
 
+  // navigateToRoute(catMainHeadName: any, catMainHeadId: any) {
+  //   const url = this.router.serializeUrl(
+  //     this.router.createUrlTree([routes.filemanagermainhead], {
+  //       queryParams: { catName: catMainHeadName, catId: catMainHeadId }
+  //     })
+  //   );
+  //   window.location.href = url;
+
+  // }
   navigateToRoute(catMainHeadName: any, catMainHeadId: any) {
-    const url = this.router.serializeUrl(
-      this.router.createUrlTree([routes.filemanagermainhead], {
-        queryParams: { catName: catMainHeadName, catId: catMainHeadId }
-      })
-    );
-    window.location.href = url;
-
+    try {
+      // Define the secret key (e.g., a timestamp or other secure key)
+      const secretKey = this.timestamp; // Ensure this is defined and valid
+  
+      // Encrypt the parameters
+      const encryptedCatName = CryptoJS.AES.encrypt(catMainHeadName, secretKey).toString();
+      const encryptedCatId = CryptoJS.AES.encrypt(catMainHeadId, secretKey).toString();
+  
+      // Create the URL with encrypted query parameters
+      const url = this.router.serializeUrl(
+        this.router.createUrlTree([routes.filemanagermainhead], {
+          queryParams: { catName: encryptedCatName, catId: encryptedCatId }
+        })
+      );
+  
+      // Navigate to the URL
+      window.location.href = url;
+    } catch (error) {
+      console.error("Error processing navigation with encryption:", error);
+    }
   }
-
+  
   
  
 
