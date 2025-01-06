@@ -73,9 +73,17 @@ export class UploadDocumentComponentService {
       const req = new HttpRequest('GET', `${this.baseUrl}/documentType/getDocumentTypesBy/${deptId}`, {
         responseType: 'json'
       });
-    
       return this.http.request(req);
     }
+
+    docTypeListData(): Observable<HttpEvent<any>> {
+      const req = new HttpRequest('GET', `${this.baseUrl}/documentType/getDocumentTypesAndSubTypes`, {
+        responseType: 'json'
+      });
+      return this.http.request(req);
+    }
+
+
 
     subDocTypeList(docId: any): Observable<HttpEvent<any>> {
       const req = new HttpRequest('GET', `${this.baseUrl}/documentType/getDocumentSubTypesBy/${docId}`, {

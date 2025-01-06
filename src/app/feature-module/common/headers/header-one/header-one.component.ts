@@ -349,8 +349,7 @@ export class HeaderOneComponent implements OnInit {
     localStorage.setItem('role', this.selectedRole);
     localStorage.getItem('role');
    location.href = location.href; //page reload code
-   
-
+   this.router.navigate([this.routes.userDashboard]);
   }
 
 
