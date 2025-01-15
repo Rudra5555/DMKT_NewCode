@@ -94,8 +94,7 @@ export class HeaderOneComponent implements OnInit {
   public loggedUserId: any;
   public dataArray: DocumentData[] = [];
   public reasonFlag: boolean = false;
-  // roles: string[] = ['Admin', 'User', 'Librarian']; 
-  roles:any;
+  roles: any;
   selectedRole: string = '';
   resp: any;
   msg: any;
@@ -108,6 +107,7 @@ export class HeaderOneComponent implements OnInit {
   public userReasonFlag: boolean = true;
   public disableSubmitBtn: boolean = false;
   selectedUserRole: any;
+ 
   constructor(
     private sideBar: SideBarService,
     private router: Router, private fb: FormBuilder, private loginService: LoginComponentService, private snackBar: MatSnackBar
@@ -149,28 +149,21 @@ export class HeaderOneComponent implements OnInit {
 
   }
   ngOnInit(): void {
-
     this.hodModalForm = this.fb.group({
       status: ['', Validators.required],
+      
+      expDate: ['', Validators.required],
       reason: ['', Validators.required]
     });
 
     this.selectedUserRole = localStorage.getItem('role');
-
     this.loggedUserId = localStorage.getItem('loggedInUserId');
-
-    console.log("logged userId::::::::[]",this.loggedUserId);
-
 
     this.loginService.accessRole(this.loggedUserId).subscribe({
       next: (event: any) => {
         if (event instanceof HttpResponse) {
           this.resp = event.body.response
-          this.roles=this.resp;
-
-          console.log("Access rolles::::",this.roles);
-           
-
+          this.roles = this.resp;
         }
       },
       error: (err: any) => {
@@ -179,19 +172,14 @@ export class HeaderOneComponent implements OnInit {
         }
       }
     });
-    
-    
+
+
     this.loginService.notificTwo(this.loggedUserId).subscribe({
       next: (event: any) => {
         if (event instanceof HttpResponse) {
           this.resp = event.body.data
-          this.notificTwo=this.resp;
-
-          console.log("uuuuuuuuuuuu{}",this.notificTwo);
-           this.userNotifyCountTwo = this.notificTwo.length;
-           console.log("ooooooo",this.userNotifyCountTwo);
-           
-
+          this.notificTwo = this.resp;
+          this.userNotifyCountTwo = this.notificTwo.length;
         }
       },
       error: (err: any) => {
@@ -203,14 +191,14 @@ export class HeaderOneComponent implements OnInit {
 
     this.userNotificationBell(this.loggedUserId);
     this.uname = localStorage.getItem("loggedUserName");
-    console.log( this.uname);
-    
+    console.log(this.uname);
+
     this.userRole = localStorage.getItem('role');
     this.roleWiseTotification();
 
     // Fetch notifications
     if (this.loggedUserId) {
-      console.log("loggged lib;;;;",this.loggedUserId);
+      console.log("loggged lib;;;;", this.loggedUserId);
 
       this.loginService.getNotifications(this.loggedUserId).subscribe(
         (response: any) => {
@@ -230,8 +218,8 @@ export class HeaderOneComponent implements OnInit {
               hodName: notification.executerName || 'HOD',
               uploadImg: notification.uploadImg,
             }));
-            console.log("rrrrrrrr;;;",this.notificationData);
-            
+            console.log("rrrrrrrr;;;", this.notificationData);
+
             this.notificationCount = this.notificationData.length;
           } else {
           }
@@ -250,35 +238,6 @@ export class HeaderOneComponent implements OnInit {
     }
 
 
-    // if (this.loggedUserId) {
-    //   console.log("loggged lib;;;;",this.loggedUserId);
-
-    //   this.loginService.notificTwo(this.loggedUserId).subscribe(
-    //     (response: any) => {
-    //       if (response.body && response.body.status === 200) {
-    //         this.notificationDataTwo = response.body.data.map((notification: any) => ({
-    //           workflowDocId: notification.workflowDocId,
-    //           fileName: notification.fileName,
-    //           generatedByName: notification.generatedByName,
-    //           fileUrl: notification.fileUrl,
-    //           assignRoleType: notification.assignRoleType,
-    //           executedByName: notification.executedByName,
-    //           status: notification.status,
-    //           activeStatus: notification.activeStatus
-    //         }));
-    //         console.log("popopopopop",this.notificationDataTwo);
-            
-    //         this.notificationCountTwo = this.notificationDataTwo.length;
-    //       } else {
-    //       }
-    //     },
-    //     (error) => {
-    //       console.error('Failed to fetch notifications:', error);
-    //     }
-    //   );
-    // } else {
-    // }
-    
   }
 
 
@@ -292,9 +251,6 @@ export class HeaderOneComponent implements OnInit {
         next: (event: any) => {
           if (event instanceof HttpResponse) {
             this.resp = event.body.data
-
-            // console.log("ggggggggggg[]",this.resp)
-
             this.respData = this.resp;
 
             this.userNotificationData = this.respData;
@@ -342,14 +298,17 @@ export class HeaderOneComponent implements OnInit {
     }
   }
 
-  onRoleChange(role:any) {
+  onRoleChange(role: any) {
     this.selectedRole = role;
     this.selectedUserRole = role;
     console.log('Selected Role:', this.selectedRole);
     localStorage.setItem('role', this.selectedRole);
     localStorage.getItem('role');
-   location.href = location.href; //page reload code
-   this.router.navigate([this.routes.userDashboard]);
+    // this.router.navigate([routes.employee]);
+    // location.href = location.href;            //page reload code
+    this.router.navigate([routes.employee]).then(() => {
+      location.href = location.href; // Reloads the page after navigation
+    });
   }
 
 
@@ -430,7 +389,9 @@ export class HeaderOneComponent implements OnInit {
     // Retrieve form values
     const status = this.hodModalForm.get('status')?.value;
     const reason = this.hodModalForm.get('reason')?.value;
-
+    const expDate = this.hodModalForm.get('expDate')?.value;
+ 
+    console.log('Form  END:',   expDate);
     // Validation checks
     if (!status) {
       console.error('No status selected');
@@ -441,7 +402,7 @@ export class HeaderOneComponent implements OnInit {
 
 
     const payload = {
-      executedBy:this.loggedUserId,
+      executedBy: this.loggedUserId,
       stepId: this.selectedHodItem?.stepId,
       documentId: this.selectedHodItem?.documentId,
       documentApprovalStatus: status,
@@ -465,7 +426,6 @@ export class HeaderOneComponent implements OnInit {
           this.notificationData = this.notificationData.filter(item => item.documentId !== this.selectedHodItem?.documentId);
           // Update the notification count
           this.notificationCount = this.notificationData.length;
-
           this.selectedHodItem = null;
         } else {
           // Handle the error message from the backend
@@ -498,12 +458,6 @@ export class HeaderOneComponent implements OnInit {
 
 
 
-
-
-
-
-
-
   successfulSubmitAlert() {
     Swal.fire({
       position: "center",
@@ -512,8 +466,8 @@ export class HeaderOneComponent implements OnInit {
       showConfirmButton: false,
       timer: 1500
     }).then(() => {
-      // window.location.reload();
-      location.href = location.href;
+      // // window.location.reload();
+      // location.href = location.href;
     });
   }
 
@@ -533,6 +487,8 @@ export class HeaderOneComponent implements OnInit {
     // Find the item based on requestorName or other unique identifiers
     const selectedItem = this.notificationData.find(item => item.requestorName === requestorName);
     if (selectedItem) {
+      console.log('Selected item:', selectedItem);
+      
       this.selectedHodItem = selectedItem;
     } else {
       console.error('Item not found for:', requestorName);
@@ -542,6 +498,8 @@ export class HeaderOneComponent implements OnInit {
 
   onItemClick(item: any): void {
     this.selectFileData = item;
+    console.log('Selected item:', this.selectFileData);
+    
     if (this.selectFileData.reason == null) {
       this.userReasonFlag = true;
     } else {
@@ -569,7 +527,7 @@ export class HeaderOneComponent implements OnInit {
       this.roleFlagHod = false;
       this.roleLibFlag = true;
     }
-    if(this.userRole == "Librarian"){
+    if (this.userRole == "Librarian") {
       this.roleLibFlag = false;
       this.roleFlag = true;
       this.roleFlagHod = true;
