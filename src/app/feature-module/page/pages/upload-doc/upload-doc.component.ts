@@ -343,12 +343,23 @@ public newPlant: boolean = false;
 
       formData.append("file", file);
     }
-    console.log(this.plantOption);
-    console.log(this.selectedDeptCatName);
-    console.log(this.selectedDeptCatNameAbbr);
-    console.log(this.selectedSubAreaCatName);
-    console.log(this.selectedSubAreaCatNameAbbr);
-    console.log("subType::",this.subDocumentTypeOption);
+
+    // console.log(this.plantOption);
+    // console.log(this.selectedDeptCatName);
+    // console.log(this.selectedDeptCatNameAbbr);
+    // console.log(this.selectedSubAreaCatName);
+    // console.log(this.selectedSubAreaCatNameAbbr);
+    // console.log("subType::",this.subDocumentTypeOption);
+    if(this.selectedDeptCatName == null){
+      this.selectedDeptCatName = '';
+    }if(this.selectedDeptCatNameAbbr == null){
+      this.selectedDeptCatNameAbbr = '';
+    }if(this.selectedSubAreaCatName == null){
+      this.selectedSubAreaCatName = '';
+    }if(this.selectedSubAreaCatNameAbbr == null){
+      this.selectedSubAreaCatNameAbbr = '';
+    }
+
  
 
     if (this.plantOption != null && this.selectedDeptCatName != null && this.selectedDeptCatNameAbbr != null && this.selectedSubAreaCatName != null && this.selectedSubAreaCatNameAbbr != null   &&  this.files.length > 0) {
