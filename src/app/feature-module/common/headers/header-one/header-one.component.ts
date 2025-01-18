@@ -107,6 +107,10 @@ export class HeaderOneComponent implements OnInit {
   public userReasonFlag: boolean = true;
   public disableSubmitBtn: boolean = false;
   selectedUserRole: any;
+  dateFlag: boolean = false;
+  formattedDate: any;
+  validUpto: any;
+  validUptoFormated: any;
  
   constructor(
     private sideBar: SideBarService,
@@ -149,12 +153,23 @@ export class HeaderOneComponent implements OnInit {
 
   }
   ngOnInit(): void {
+
+    
     this.hodModalForm = this.fb.group({
       status: ['', Validators.required],
-      
       expDate: ['', Validators.required],
       reason: ['', Validators.required]
     });
+    // let expDate = this.hodModalForm.get('expDate')?.value;
+    // if (expDate) {
+    //   const date = new Date(expDate);
+    //   const day = String(date.getDate()).padStart(2, '0'); // Ensures two digits for the day
+    //   const month = String(date.getMonth() + 1).padStart(2, '0'); // Month is 0-indexed
+    //   const year = date.getFullYear();
+    //   const formattedDate = `${day} ${month} ${year}`;
+    //   console.log(formattedDate); // Output: 17 01 2025
+    // }
+    // this.dateFlag = true;
 
     this.selectedUserRole = localStorage.getItem('role');
     this.loggedUserId = localStorage.getItem('loggedInUserId');
@@ -390,7 +405,43 @@ export class HeaderOneComponent implements OnInit {
     const status = this.hodModalForm.get('status')?.value;
     const reason = this.hodModalForm.get('reason')?.value;
     const expDate = this.hodModalForm.get('expDate')?.value;
- 
+    if (expDate) {
+      const date = new Date(expDate);
+      const day = String(date.getDate()).padStart(2, '0'); // Ensures two digits for the day
+      const month = String(date.getMonth() + 1).padStart(2, '0'); // Month is 0-indexed
+      const year = date.getFullYear();
+      this.formattedDate = `${day}-${month}-${year}`;
+      console.log(this.formattedDate); // Output: 17 01 2025
+    }
+    // if (expDate) {
+    //   const date = new Date(expDate);
+    //   const currentDate = new Date();
+    //   date.setHours(0, 0, 0, 0);
+    //   currentDate.setHours(0, 0, 0, 0);
+    
+    //   if (date > currentDate) {
+    //     console.log('The selected date is in the future.');
+    //   } else {
+    //     console.log('The selected date is today or in the past.');
+    //   }
+    // }
+    if (expDate) {
+      const selectedDate = new Date(expDate);
+      const currentDate = new Date();
+    
+      // Set time for both dates to 00:00:00 to compare only the date part
+      selectedDate.setHours(0, 0, 0, 0);
+      currentDate.setHours(0, 0, 0, 0);
+    
+      if (selectedDate <= currentDate) {
+        this.dateFlag = true;
+        console.error('The selected date must be greater than the current date.');
+        // Optionally, set an error in the form control or display an error message
+        this.hodModalForm.get('expDate')?.setErrors({ invalidDate: true });
+      } else {
+        console.log('The selected date is valid.');
+      }
+    }
     console.log('Form  END:',   expDate);
     // Validation checks
     if (!status) {
@@ -406,8 +457,11 @@ export class HeaderOneComponent implements OnInit {
       stepId: this.selectedHodItem?.stepId,
       documentId: this.selectedHodItem?.documentId,
       documentApprovalStatus: status,
+      expDate: this.formattedDate,
       reason: reason
     };
+    console.log('Payload:', payload);
+    
 
 
     this.loginService.updateDocumentStatus(payload).subscribe((response: Object | null) => {
@@ -499,7 +553,13 @@ export class HeaderOneComponent implements OnInit {
   onItemClick(item: any): void {
     this.selectFileData = item;
     console.log('Selected item:', this.selectFileData);
-    
+    this.validUpto = this.selectFileData.validUpto;
+    // console.log('Valid Upto:', validUpto);
+    if (this.validUpto) {
+      const dateObj = new Date(this.validUpto); // Convert string to Date object
+      this.validUptoFormated = dateObj.toLocaleDateString('en-GB'); // Format date to DD-MM-YYYY
+      console.log('Valid Upto (Formatted):', this.validUptoFormated);
+    }
     if (this.selectFileData.reason == null) {
       this.userReasonFlag = true;
     } else {
