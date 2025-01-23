@@ -80,6 +80,26 @@ export class UserManagementModalComponent implements OnInit {
     });
   }
 
+  submitAddUserForm() {
+    if (this.addUserForm.valid) {
+      const payload = {
+        userName: this.addUserForm.value.userName,
+        phoneNumber: this.addUserForm.value.userPhone,
+        emailId: this.addUserForm.value.userEmail,
+        password: this.addUserForm.value.password,
+        department: this.addUserForm.value.department,
+        isActive: true,
+        files: this.files.map(file => file.base64),
+      };
+  
+      console.log('Payload:::::::', payload);
+     
+    } else {
+      console.error('Form is invalid');
+    }
+  }
+
+
   onItemSelect(item: any) {
     //console.log(item);
   }
