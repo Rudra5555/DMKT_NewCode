@@ -18,6 +18,7 @@ import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { param } from 'jquery';
 import { DatePipe } from '@angular/common';
 import { LoginComponentService } from 'src/app/services/login-component.service';
+import * as CryptoJS from 'crypto-js';
 
 
 @Component({
@@ -62,15 +63,17 @@ export class FileManagerMainheadComponent implements OnInit, OnDestroy {
   departmentName: any;
   subAreaName: any;
   subAreaNameOnHeader: any;
-
+  decryptedPlantName: any;
+  decryptedMainHeadName: any;
   categoryList = new Map();
   mainHead: any;
   plants: any;
-
+  encryptedPlantName: any;
+  decryptedMainHead:any;
   doc: string = '';
   viewer: ViewerType = 'google';
   selectedType = 'xlsx';
-
+  timestamp: string ='';
   startDate: any;
   endDate: any;
   catName: any;
@@ -96,6 +99,7 @@ export class FileManagerMainheadComponent implements OnInit, OnDestroy {
       this.plants = params['plants'];
       this.subAreaNameOnHeader = this.capitalizeFirstLetter(params['subAreaName']);
     });
+console.log("mainHead:: ",this.mainHead);
 
 
   }
@@ -129,14 +133,38 @@ export class FileManagerMainheadComponent implements OnInit, OnDestroy {
     this.loggedUserRole = localStorage.getItem("role")
     this.setLast15Days();
 
-    this.route.queryParams.subscribe(params => {
-      this.departmentName = params['DepartmentName'];
-      this.subAreaName = params['subAreaName'];
+    // this.route.queryParams.subscribe(params => {
+    //   this.departmentName = params['DepartmentName'];
+    //   this.subAreaName = params['subAreaName'];
 
-      this.subAreaNameOnHeader = this.capitalizeFirstLetter(params['subAreaName']);
+    //   this.subAreaNameOnHeader = this.capitalizeFirstLetter(params['subAreaName']);
 
+    // });
+
+
+    this.route.queryParams.subscribe((params) => {
+      try {
+        // Retrieve encrypted query parameters
+        const encryptedMainHeadName = params['mainHeadName'];
+        const encryptedPlantName = params['plantName'];
+      
+  
+        // Define the same secret key used for encryption
+        const secretKey = this.timestamp; // Ensure this matches the sender's key
+  
+        // Decrypt the parameters
+//this.decryptedMainHead = CryptoJS.AES.decrypt(encryptedMainHead, secretKey).toString(CryptoJS.enc.Utf8);
+        this.decryptedMainHeadName = CryptoJS.AES.decrypt(encryptedMainHeadName, secretKey).toString(CryptoJS.enc.Utf8);
+        this.decryptedPlantName = CryptoJS.AES.decrypt(encryptedPlantName, secretKey).toString(CryptoJS.enc.Utf8);
+  
+        // Use the decrypted values
+        console.log("Decrypted Main HEad:", this.decryptedMainHeadName);
+        console.log("Decrypted Plant Name:", this.decryptedPlantName);
+        // console.log("Decrypted Category ID:", decryptedCatId);
+      } catch (error) {
+        console.error("Error decrypting query parameters:", error);
+      }
     });
-
 
 
 
@@ -173,11 +201,12 @@ export class FileManagerMainheadComponent implements OnInit, OnDestroy {
     this.fileList = [];
     this.serialNumberArray = [];
 
-    this.loginService.getFileListforOther(this.catName, this.startDate, this.endDate).subscribe({
+    this.loginService.getFileListforOther(this.decryptedMainHeadName, this.startDate, this.endDate).subscribe({
       next: (event: any) => {
         if (event instanceof HttpResponse) {
           this.respData = event.body.data;
-
+          console.log("RESP DATA:: ",this.respData);
+          
           const convertToKB = (bytes: number): number => {
             return Math.round(bytes / 1024);
           };
@@ -195,6 +224,8 @@ export class FileManagerMainheadComponent implements OnInit, OnDestroy {
               return false;
             });
           });
+          console.log("FILE LIST:: ",this.fileList);
+          
 
           this.totalData = this.fileList.length;
 

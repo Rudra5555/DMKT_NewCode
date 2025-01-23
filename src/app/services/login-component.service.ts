@@ -249,6 +249,8 @@ AllAdminFileList(startDate:any , endDate:any): Observable<HttpEvent<any>> {
 
 
 getFileLists(mainHead:any,plants:any,departmentName:any,subAreaName:any,sDate:any,eDate:any): Observable<HttpEvent<any>> {
+console.log( "from api call",mainHead,plants,departmentName,subAreaName,sDate,eDate);
+
 
   const url = `${this.baseUrl}/document/get-all-document-by-name/${mainHead}/${plants}/${departmentName}/${subAreaName}?startDate=${sDate}&endDate=${eDate}`;
   

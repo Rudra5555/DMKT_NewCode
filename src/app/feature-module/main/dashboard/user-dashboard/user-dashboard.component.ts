@@ -325,6 +325,7 @@ export class UserDashboardComponent implements OnInit {
   // ************getting main head details***************
 
   getDetailsByCateName(catName: any, catId: any) {
+console.log("catName555",catName);
 
     if (catId == 'main-head') {
       this.categoryList.set(catId, catName);
@@ -474,19 +475,24 @@ export class UserDashboardComponent implements OnInit {
   //   window.location.href = url;
 
   // }
-  navigateToRoute(catMainHeadName: any, catMainHeadId: any) {
+
+  navigateToRoute(catPlantName: any, catMainHeadId: any) {
+    console.log("Main Head Name 55555", this.mainHeadName);
+
+    
+    
     try {
       // Define the secret key (e.g., a timestamp or other secure key)
       const secretKey = this.timestamp; // Ensure this is defined and valid
   
       // Encrypt the parameters
-      const encryptedCatName = CryptoJS.AES.encrypt(catMainHeadName, secretKey).toString();
-      const encryptedCatId = CryptoJS.AES.encrypt(catMainHeadId, secretKey).toString();
+      const encryptedMainHadNAme = CryptoJS.AES.encrypt(this.mainHeadName, secretKey).toString();
+      const encryptedPlantName = CryptoJS.AES.encrypt(catPlantName, secretKey).toString();
   
       // Create the URL with encrypted query parameters
       const url = this.router.serializeUrl(
         this.router.createUrlTree([routes.filemanagermainhead], {
-          queryParams: { catName: encryptedCatName, catId: encryptedCatId }
+          queryParams: { mainHeadName: encryptedMainHadNAme, plantName: encryptedPlantName }
         })
       );
   
@@ -497,7 +503,22 @@ export class UserDashboardComponent implements OnInit {
     }
   }
   
-  
+//   navigateToRoute(catMainHeadName: any, catMainHeadId: any) {
+//   try {
+//     // Create the URL with plain query parameters
+//     const url = this.router.serializeUrl(
+//       this.router.createUrlTree([routes.filemanagermainhead], {
+//         queryParams: { catName: catMainHeadName, catId: catMainHeadId }
+//       })
+//     );
+
+//     // Navigate to the URL
+//     window.location.href = url;
+//   } catch (error) {
+//     console.error("Error processing navigation:", error);
+//   }
+// }
+
  
 
  

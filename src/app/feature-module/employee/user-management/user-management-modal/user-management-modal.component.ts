@@ -54,10 +54,16 @@ export class UserManagementModalComponent implements OnInit {
       userName: ["", [Validators.required]],
       userPhone: ["", [Validators.required]],
       userEmail: ["", [Validators.required]],
-      password: ["barrycuda", [Validators.required, Validators.minLength(6)]],
-      confirmPassword: ["barrycuda", [Validators.required]],
+      // password: ["barrycuda", [Validators.required, Validators.minLength(6)]],
+      // confirmPassword: ["barrycuda", [Validators.required]],
       department:["", [Validators.required]],
       plant:["", [Validators.required]],
+      Admin: [false],
+      User: [false],
+      SuperUser: [false],
+      HOD: [false],
+      Librarian: [false],
+      IsActive: [false],
     },
     
   );
@@ -177,5 +183,34 @@ deleteFile(index: number) {
   this.calculateTotalFileSize(this.files);
   //this.uploadFileForm.get('uploadFile')?.setValue(this.files);
 }
+
+
+addUser(){
+  const formValues = this.addUserForm.value;
+
+  // Create the payload
+  const payload = {
+    userName: formValues.userName,
+    userPhone: formValues.userPhone,
+    userEmail: formValues.userEmail,
+    department: formValues.department,
+    plant: formValues.plant,
+    roles: Object.keys(formValues)
+    .filter(
+      (key) =>
+        ['Admin', 'User', 'SuperUser', 'HOD', 'Librarian'].includes(key) &&
+        formValues[key]
+    )
+    .join(','),
+    isActive: formValues.IsActive, 
+  };
+
+  // Print the payload
+  console.log('Payload:', payload);
+  
+
+}
+
+
 
 }
