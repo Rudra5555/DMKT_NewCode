@@ -47,7 +47,7 @@ export class FileManagerComponent implements OnInit , OnDestroy {
   public currentPage = 1;
   public pageNumberArray: Array<number> = [];
   public pageSelection: Array<pageSelection> = [];
-
+public loggedUserName: any;
 
   dataSource!: MatTableDataSource<getfileList>;
   public fileList: Array<getfileList> = [];
@@ -61,7 +61,7 @@ export class FileManagerComponent implements OnInit , OnDestroy {
   //  public fileList:any;
    public bigId:any;
    public roleFlag: boolean = false;
-
+public loggedUserId: any;
    departmentName:any;
    subAreaName: any;
    subAreaNameOnHeader:any;
@@ -319,63 +319,6 @@ export class FileManagerComponent implements OnInit , OnDestroy {
   }
 
 
-  // transformApiResponseToMap(apiResponse: any[]): Map<string, any> {
-  //   const resultMap = new Map<string, any>();
-
-  //   apiResponse.forEach((item) => {
-  //     const fileName = item.fileName;
-    
-    
-  //     //let listOfDocumentVersoinDtosObj = item.listOfDocumentVersoinDtos;
-  //     let revObj = item.listOfDocumentVersoinDtos.slice().reverse();
-  //     // console.log("bbbbbbbbb:::::::",JSON.stringify(revObj[0]));
-  //     const newUniqueFileName=revObj[0].uniqueFileName;
-  //     const fileSize =revObj[0].fileSize || null;
-      
-  //     // const listOfDocumentVersoinDtos = item.listOfDocumentVersoinDtos.slice().reverse().map((version:any) => ({
-  //     //   fileName:item.fileName,
-  //     //   versionId: version.versionId,
-  //     //   versionName: version.versionName,
-  //     //   versionReleaseDate: version.versionReleaseDate,
-  //     //   fileUrl: version.fileUrl,
-  //     //   uniqueFileName: version.uniqueFileName,
-  //     //   fileSize: version.fileSize,
-  //     //   hodDocument: version.hodDocument,
-  //     //   statutoryDocument: version.statutoryDocument,
-  //     //   restrictedDocument: version.restrictedDocument,
-  //     // }));
-
-  //     const listOfDocumentVersoinDtos = item.listOfDocumentVersoinDtos
-
-  //     const documentType = item.documentType;
-  //     const documentSubType = item.documentSubType;
-  //     const storageLocation = item.storageLocation;
-  //     const fileUrl = item.listOfDocumentVersoinDtos[0]?.fileUrl || null;
-  //     let versionName = revObj[0].versionName
-  //     let versionReleaseDate = revObj[0].versionReleaseDate
-  //     const selectedVersion= versionName.concat("-",versionReleaseDate);
-
-  //     const valueObject = {
-  //       newUniqueFileName,
-  //       fileName,
-  //       fileSize,
-  //       listOfDocumentVersoinDtos,
-  //       documentType,
-  //       documentSubType,
-  //       storageLocation,
-  //       fileUrl,
-  //       selectedVersion
-  //     };
-
-  //     resultMap.set(fileName, valueObject);
-  //   });
-
-  //   console.log("dddddd",JSON.stringify(this.transformedMap));
-    
-
-  //   return resultMap;
-  // }
-
 
   transformApiResponseToMap(apiResponse: any[]): Map<string, any> {
     const resultMap = new Map<string, any>();
@@ -423,67 +366,6 @@ export class FileManagerComponent implements OnInit , OnDestroy {
   }
   
   
-  // getFileListDetailsByFilter() {
-  //   this.fileList = [];
-  //   this.serialNumberArray = [];
-  
-  //   this.loginService.getFileListsByFilter(this.mainHead, this.plants, this.departmentName, this.subAreaName, this.startDate, this.endDate,this.selectedDocType).subscribe({
-  //     next: (event: any) => {
-  //       if (event instanceof HttpResponse) {
-  //         this.respData = event.body.documentLists;
-  //         console.log("response:", this.respData);
-          
-  
-  //         const convertToKB = (bytes: number): string => {
-  //           return (bytes / 1024).toFixed(2);
-  //         };
-  
-  //         this.fileList = this.respData.filter((item: any) => {
-  //           return item.listOfDocumentVersoinDtos.some((version: any) => {
-  //             if (this.loggedUserRole === 'User') {
-  //               return !version.hodDocument && !version.statutoryDocument && !version.restrictedDocument;
-  //             } else if (this.loggedUserRole === 'SuperUser') {
-  //               return (!version.hodDocument && !version.statutoryDocument && !version.restrictedDocument) || version.statutoryDocument;
-  //             } else if (this.loggedUserRole === 'HOD') {
-  //               return (!version.hodDocument && !version.statutoryDocument && !version.restrictedDocument) || version.hodDocument;
-  //             }
-  //             return false;
-  //           });
-  //         });
-  
-  //         this.totalData = this.fileList.length;
-  
-  //         this.fileList.map((item: getfileList, index: number) => {
-  //           const serialNumber = index + 1;
-  //           if (index >= this.skip && serialNumber <= this.limit) {
-  //             item.id = serialNumber;
-  //             this.serialNumberArray.push(serialNumber);
-  //           }
-  //         });
-  
-  //         this.dataSource = new MatTableDataSource<getfileList>(this.fileList);
-  //         this.calculateTotalPages(this.fileList.length, this.pageSize);
-  
-  //         this.fileList.forEach((item: any) => {
-  //           item.selectedVersion = this.getLatestVersion(item.listOfDocumentVersoinDtos);
-  //           item.listOfDocumentVersoinDtos.forEach((version: any) => {
-  //             version.fileSizeKB = convertToKB(parseInt(version.fileSize, 10));
-  //           });
-  //         });
-  
-  //         if (this.fileList.length > 0 && this.fileList[0].selectedVersion) {
-  //           this.doc = this.fileList[0].selectedVersion.fileUrl;
-  //         }
-  
-  //       }
-  //     },
-  //     error: (err: any) => {
-  //       if (err.error && err.error.message) {
-  //         this['msg'] += " " + err.error.message;
-  //       }
-  //     },
-  //   });
-  // }
  
   capitalizeFirstLetter(string: string): string {
     if (!string) return '';
@@ -591,22 +473,6 @@ selectFiles(_event: any): void {
   
 }
 
-// onDocumentTypeChange(docType:any){
-//   console.log("Selected Doctye DATA::",docType);
-//   this.selectedDocType = docType;
-//   this.fileManagerTableData(this.selectedDocType);
-// }
-
-
-// fileManagerTableData(filterData:any){
- 
-//   if(filterData == null || filterData == ''){
-//     this.getFileListDetails();
-//   }else{
-//     alert("else part")
-//     this.getFileListDetailsByFilter();
-//   }
-// }
 
 
 
@@ -786,13 +652,15 @@ onVersionChange(item: any,fileNameAsKey:any, selectedVersion: any) {
 
 }
 
+downloadDocument(doucmentUrl:any, item:any){
+  this.loggedUserRole;
+  this.loggedUserId = localStorage.getItem("loggedInUserId");
+  this.loggedUserName = localStorage.getItem("loggedUserName");
+  console.log(doucmentUrl, this.loggedUserRole, this.loggedUserName, this.loggedUserId, item);
+}
+
 setFileUrl(fileUrl:any){
-  // alert("jiiii")
-  console.log(fileUrl);
-  
     this.doc=fileUrl;
-    
-  
   }
   
   buttonClose(){

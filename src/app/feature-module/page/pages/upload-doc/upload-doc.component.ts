@@ -108,16 +108,12 @@ public newPlant: boolean = false;
   }
 
   ngOnInit(): void {
-
-    // this.subDocumentTypeOption = this.uploadFileForm.value;
-    // console.log("subtype::::",this.subDocumentTypeOption);
-    
+    this.getDocTypeList();
 
     this.uploadFileForm.get('mainHead')?.valueChanges.subscribe(value => {
       const [catName, abbreviation] = value.split('~');
       this.selectedCatName = catName;
       this.selectedCatNameAbbr = abbreviation
-
       if (catName != 'POWER O&M') {
         this.plantList = [];
         this.departmentList = [];
@@ -127,51 +123,26 @@ public newPlant: boolean = false;
 
     });
 
-   
-
-
     this.uploadFileForm.get('plants')?.valueChanges.subscribe(value => {
       if (value != null) {
         this.getAllPlantList(value, "plants");
         this.plantOption = value;
-        console.log(this.plantOption);
-         
         if(this.plantOption == "CPP (1740MW)"){
           this.newPlant = true;
         }else{
           this.newPlant = false;
         }
-        
       } else {
         console.log("No plant selected or value is null.");
-
       }
     });
 
 
     this.uploadFileForm.get('department')?.valueChanges.subscribe(value => {
       const [deptName, deptAbbr] = value.split('~');
-
-         // Find the corresponding department object from the API response
-    const selectedDept = this.departmentList.find(
-      (dept: any) => dept.optionVal === value
-    );
-
-    if (selectedDept) {
-      // Extract the catId for the selected department
-      const deptId = selectedDept.catId;
-      console.log("ffffffffff",deptId);
-      
-      // Call the method with the extracted deptId
-      this.getDocTypeList(deptId);
-    }
-
       this.getSubAreaList(deptName, "department");
       this.selectedDeptCatName = deptName;
-      console.log("qqqqqqqq",this.selectedDeptCatName);
-      
       this.selectedDeptCatNameAbbr = deptAbbr;
-
     });
 
     this.uploadFileForm.get('subArea')?.valueChanges.subscribe(value => {
@@ -179,10 +150,7 @@ public newPlant: boolean = false;
       this.selectedSubAreaCatName = subAreaName;
       this.selectedSubAreaCatNameAbbr = subAreaAbbr;
     });
-
-
     this.getAllMainHeadData();
-
   }
 
   onFileDropped($event: any) {
@@ -375,19 +343,29 @@ public newPlant: boolean = false;
 
       formData.append("file", file);
     }
-    console.log(this.plantOption);
-    console.log(this.selectedDeptCatName);
-    console.log(this.selectedDeptCatNameAbbr);
-    console.log(this.selectedSubAreaCatName);
-    console.log(this.selectedSubAreaCatNameAbbr);
-    console.log("subType::",this.subDocumentTypeOption);
+
+    // console.log(this.plantOption);
+    // console.log(this.selectedDeptCatName);
+    // console.log(this.selectedDeptCatNameAbbr);
+    // console.log(this.selectedSubAreaCatName);
+    // console.log(this.selectedSubAreaCatNameAbbr);
+    // console.log("subType::",this.subDocumentTypeOption);
+    if(this.selectedDeptCatName == null){
+      this.selectedDeptCatName = '';
+    }if(this.selectedDeptCatNameAbbr == null){
+      this.selectedDeptCatNameAbbr = '';
+    }if(this.selectedSubAreaCatName == null){
+      this.selectedSubAreaCatName = '';
+    }if(this.selectedSubAreaCatNameAbbr == null){
+      this.selectedSubAreaCatNameAbbr = '';
+    }
+
  
 
     if (this.plantOption != null && this.selectedDeptCatName != null && this.selectedDeptCatNameAbbr != null && this.selectedSubAreaCatName != null && this.selectedSubAreaCatNameAbbr != null   &&  this.files.length > 0) {
      
       const modalData = {
-     
-        
+
           "department": this.selectedDeptCatName,
           "departAbbr": this.selectedDeptCatNameAbbr,
           "subArea": this.selectedSubAreaCatName,
@@ -402,22 +380,6 @@ public newPlant: boolean = false;
           "hodRestricted": isRestrictedDocument,
           "isRestrictedDocument": ishodRestricted
 
-
-          
-            // "department": "OPERATION",
-            // "departAbbr": "EMD",
-            // "subArea": "BOILER",
-            // "subAreaAbbr": "TRB",
-            // "plants": "CPP-2 (540MW)",
-            // "mainHead": "POWER O&M",
-            // "mainHeadAbbr": "O&M",
-            // "storageLocation": "Soft Copy",
-            // "documentType": "Bills",
-            // "documentSubType": "Layout",
-            // "isStatutory": false,
-            // "hodRestricted": true,
-            // "isRestrictedDocument": true
-        
       
       };
       console.log("payloaddddd:: ",modalData);
@@ -603,9 +565,8 @@ return;
     }
   }
 
-  getDocTypeList(deptId: any) {
-    if (deptId != '') {
-      this.uploadDocument.docTypeList(deptId).subscribe({
+  getDocTypeList() {
+      this.uploadDocument.docTypeListData().subscribe({
         next: (event: any) => {
           if (event instanceof HttpResponse) {
              this.docList = event.body;
@@ -621,8 +582,15 @@ return;
           console.error(err);
         }
       });
-    }
-  }
+      }
+
+
+
+  
+
+
+
+
 
   onDocumentTypeChange(docId: any) {
  
@@ -663,7 +631,7 @@ return;
     }).then(() => {
 
       // window.location.reload();
-
+      window.location.href = window.location.href;
     });
   }
 

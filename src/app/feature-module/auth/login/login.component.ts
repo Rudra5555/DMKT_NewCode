@@ -48,42 +48,17 @@ export class LoginComponent implements OnInit {
   constructor(private router: Router,private loginService : LoginComponentService,private dataService : DataService ,private formBuilder: FormBuilder) {}
 
 
+  
+
+
   ngOnInit(): void {
     this.timestamp = Date.now().toString();
-
-// ***********encryption part**********
-let payload = {
-  "id": "",
-  "first_name": "biplob",
-  "last_name": "das",
-  "email": "biplob1@gmail.com",
-  "user_name": "biplob",
-  "password": "Biplob123@#",
-  "role": "DO"
-};
-
-// //console.log(JSON.stringify(payload));
-
-// Encrypt the payload using AES
-const encryptedMessage = AES.encrypt(JSON.stringify(payload), '123').toString();
-
-// //console.log("This is the encrypted message:", encryptedMessage);
-
-// Decrypt the message
-const bytes = AES.decrypt(encryptedMessage, "123");
-const decryptedData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
-
-// //console.log("Decrypted data:", JSON.stringify(decryptedData, null, 2));
 
 
 
 
     localStorage.clear();
-      // this.loginForm = this.formBuilder.group({
-      //   emailId: ['',[]],
-      //   password: ['',[]]
-        
-      // });
+ 
 
       this.loginForm = this.formBuilder.group({
         emailId: ['', [Validators.required]],  
@@ -231,10 +206,13 @@ if(loginData){
           // this.router.navigate([routes.employee],{queryParams : this.data.response})
         }
         if(this.getRoleData == "SuperUser"){
+          this.router.navigate([routes.employee],{queryParams : this.data.response})
+          console.log("super user",this.getRoleData)
           const secretKey = this.timestamp;
           const encryptedParam = CryptoJS.AES.encrypt(JSON.stringify(this.data.response), secretKey).toString();
           console.log("encrypted::",encryptedParam);
           
+        
           localStorage.setItem("loggedUserName",this.data.response.userName);
           const userId = this.data.response.userId;
           localStorage.setItem("loggedSuperUserId",userId);

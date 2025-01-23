@@ -70,25 +70,6 @@
 				</div>
 			</div>
 		</li>
-		<!-- <li class="nav-item dropdown has-arrow flag-nav">
-			<a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="javascript:void(0);" role="button">
-				<img src="assets/img/flags/us.png" alt="" height="20"> <span>English</span>
-			</a>
-			<div class="dropdown-menu dropdown-menu-right">
-				<a href="javascript:void(0);" class="dropdown-item">
-					<img src="assets/img/flags/us.png" alt="" height="16"> English
-				</a>
-				<a href="javascript:void(0);" class="dropdown-item">
-					<img src="assets/img/flags/fr.png" alt="" height="16"> French
-				</a>
-				<a href="javascript:void(0);" class="dropdown-item">
-					<img src="assets/img/flags/es.png" alt="" height="16"> Spanish
-				</a>
-				<a href="javascript:void(0);" class="dropdown-item">
-					<img src="assets/img/flags/de.png" alt="" height="16"> German
-				</a>
-			</div>
-		</li> -->
 
 		<!-- User/SuperUser bell icon -->
 		<li class="nav-item dropdown" [hidden]="roleFlag">
@@ -139,13 +120,8 @@
 
 		<li class="nav-item dropdown" [hidden]="roleFlag">
 			<a href="javascript:void(0);" class="dropdown-toggle nav-link" data-bs-toggle="dropdown">
-				<!-- <i class="feather icon-bell me-1" style="color:white"></i> -->
 				<i class="fa-regular fa-file me-1" style="color:white"></i>
-				<!-- <i class="fa-regular fa-file me-2" style="font-size: 1.5rem; color: #ffffff; animation: pulse 1.5s infinite;"></i> -->
-				
-
-				 <span
-					class="badge rounded-pill">{{userNotifyCountTwo}}</span>
+				 <span class="badge rounded-pill">{{userNotifyCountTwo}}</span>
 			</a>
 			<div class="dropdown-menu notifications">
 				<div class="topnav-dropdown-header">
@@ -179,56 +155,11 @@
 
 					</ul>
 				</div>
-				<div class="topnav-dropdown-footer">
-
-				</div>
 			</div>
 		</li>
 
 
 <!-- Librarian bell icon -->
-<!-- <li class="nav-item dropdown" [hidden]="roleLibFlag">
-	<a href="javascript:void(0);" class="dropdown-toggle nav-link" data-bs-toggle="dropdown">
-		<i class="fa-regular fa-bell me-1" style="color:white"></i> <span
-			class="badge rounded-pill">{{userNotifyCount}}</span>
-	</a>
-	<div class="dropdown-menu notifications">
-		<div class="topnav-dropdown-header">
-			<span class="notification-title">Notifications</span>
-		</div>
-		<div class="noti-content">
-			<ul class="notification-list" *ngFor="let item of this.resp;">
-				<li class="notification-message" (click)="onItemClick(item)">
-					<a data-bs-toggle="modal" data-bs-target="#notificationModal">
-						<div class="chat-block d-flex">
-							<span class="avatar flex-shrink-0">
-								<img src="assets/img/avatar/avatar-27.jpg" alt="">
-							</span>
-							<div class="media-body flex-grow-1">
-
-								<p class="noti-details"><span class="noti-title">{{item.executerName}}</span>
-									<span [ngClass]="{
-										'text-pending': item.documentApprovalStatus === 'P',
-										'text-approved': item.documentApprovalStatus === 'A',
-										'text-rejected': item.documentApprovalStatus === 'R'
-									  }">
-										{{ getApprovalStatus(item.documentApprovalStatus) }}
-									</span>
-									<span class="noti-title">{{item.documentName}}</span>
-								</p>
-
-							</div>
-						</div>
-					</a>
-				</li>
-
-			</ul>
-		</div>
-		<div class="topnav-dropdown-footer">
-
-		</div>
-	</div>
-</li> -->
 
 <li class="nav-item dropdown" [hidden]="roleLibFlag">
 	<a href="javascript:void(0);" class="dropdown-toggle nav-link" data-bs-toggle="dropdown">
@@ -266,7 +197,9 @@
 </li>
 
 
-<!-- <li class="nav-item dropdown has-arrow flag-nav"> -->
+
+
+	<!-- ROLE SELECTION -->
 	<li class="nav-item dropdown has-arrow flag-nav">
 		<a
 		  class="nav-link dropdown-toggle"
@@ -289,9 +222,7 @@
 		</div>
 	  </li>
 	  
-	  
-<!-- </li> -->
-
+	  <!-- ROLE SELECTION -->
 
 
 		<li class="nav-item dropdown has-arrow main-drop">
@@ -306,12 +237,7 @@
 
 				<a class="dropdown-item" style="color: black;" (click)="logout()">Logout</a>
 			</div>
-			<!-- <div >
-				<label for="roleSelect">Select Role:</label>
-				<select id="roleSelect" [(ngModel)]="selectedRole" (change)="onRoleChange()">
-				  <option *ngFor="let role of roles" [value]="role">{{ role }}</option>
-				</select>
-			</div> -->
+
 		</li>
 		
 	</ul>
@@ -344,7 +270,7 @@
 			<div class="modal-header">
 				<h5 class="modal-title">Requested Document Details</h5>
 				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-					<span aria-hidden="true">&times;</span>
+					<span >&times;</span>
 				</button>
 			</div>
 			<div class="modal-body">
@@ -391,6 +317,15 @@
 										<tr>
 											<td rowspan="2"
 												style="padding: 8px; text-align: left; vertical-align: middle;">
+												<strong>Expiration Date:</strong>
+											</td>
+											<td rowspan="2"
+												style="padding: 8px;text-align: center; vertical-align: middle;">{{validUptoFormated}}</td>
+												
+										<tr></tr>
+										<tr>
+											<td rowspan="2"
+												style="padding: 8px; text-align: left; vertical-align: middle;">
 												<strong>Department Name:</strong>
 											</td>
 											<td rowspan="2"
@@ -401,16 +336,14 @@
 										<tr>
 											<td rowspan="2"
 												style="padding: 8px; text-align: left; vertical-align: middle;">
-												<strong>Unique Document Name:</strong>
+												<strong>Document Name:</strong>
 											</td>
 											<td rowspan="2"
 												style="padding: 8px;text-align: center; vertical-align: middle;position: relative;">
-												<div class="short-name">
-													{{ selectFileData?.uniqueDocumentName | slice:0:10 }}...
-												</div>
-												<div class="full-name-tooltip">
-													{{ selectFileData?.uniqueDocumentName }}
-												</div>
+													<div class="tooltip-container">
+													{{selectFileData?.documentName }}
+													<span class="tooltip-text">{{ selectFileData?.uniqueDocumentName }}</span>
+												  </div>
 											</td>
 										</tr>
 										<tr></tr>
@@ -464,7 +397,7 @@
 			<div class="modal-header">
 				<h5 class="modal-title">Requested Document Details</h5>
 				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-					<span aria-hidden="true">&times;</span>
+					<span >&times;</span>
 				</button>
 			</div>
 			<form [formGroup]="hodModalForm">
@@ -490,15 +423,19 @@
 											<td style="padding: 8px;">{{ selectedHodItem?.RequesterName }}</td>
 										</tr>
 										<tr>
-											<td style="width: 50%;padding: 8px;"><strong>Unique Document Name:</strong>
+											<td style="width: 50%;padding: 8px;"><strong>Document Name:</strong>
 											</td>
 											<td style="padding: 8px;">
-												<div class="short-name-hod">
+												<!-- <div class="short-name-hod">
 													{{ selectedHodItem?.UniqueDocumentName | slice:0:10 }}...
 												</div>
 												<div class="full-Hodname-tooltip">
 													{{ selectedHodItem?.UniqueDocumentName }}
-												</div>
+												</div> -->
+												<div class="tooltip-container">
+													{{ selectedHodItem?.RequestedDocumentName }}
+													<span class="tooltip-text">{{ selectedHodItem?.UniqueDocumentName }}</span>
+												  </div>
 											</td>
 										</tr>
 										<tr>
@@ -520,6 +457,16 @@
 												</a>
 												<span *ngIf="!selectedHodItem?.uploadImg">No attachment available</span>
 											</td>
+										</tr>
+										
+										<tr>
+											<td style="padding: 8px;"><strong>Expiration Date:</strong></td>
+											<td style="padding: 8px;">
+												<!-- <mat-label>To</mat-label> -->
+											<input  bsDatepicker container=".date-input2" type="text" matInput formControlName="expDate" class="form-control floating datetimepicker">
+											<span >The selected date must be greater than the current date.</span>
+										</td>
+											
 										</tr>
 										<tr>
 											<td style="padding: 8px;"><strong>Status:</strong></td>
@@ -587,7 +534,7 @@
 			<div class="modal-header">
 				<h5 class="modal-title">Requested Document Details</h5>
 				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-					<span aria-hidden="true">&times;</span>
+					<span >&times;</span>
 				</button>
 			</div>
 			<form [formGroup]="hodModalForm">
@@ -612,15 +559,19 @@
 											<td style="padding: 8px;">{{ selectedHodItem?.RequesterName }}</td>
 										</tr>
 										<tr>
-											<td style="width: 50%;padding: 8px;"><strong>Unique Document Name:</strong>
+											<td style="width: 50%;padding: 8px;"><strong>Document Name:</strong>
 											</td>
 											<td style="padding: 8px;">
-												<div class="short-name-hod">
+												<!-- <div class="short-name-hod">
 													{{ selectedHodItem?.UniqueDocumentName | slice:0:10 }}...
-												</div>
-												<div class="full-Hodname-tooltip">
+												</div> -->
+												<div class="tooltip-container">
+													{{ selectedHodItem?.RequestedDocumentName }}
+													<span class="tooltip-text">{{ selectedHodItem?.UniqueDocumentName }}</span>
+												  </div>
+												<!-- <div class="full-Hodname-tooltip">
 													{{ selectedHodItem?.UniqueDocumentName }}
-												</div>
+												</div> -->
 											</td>
 										</tr>
 										<tr>
@@ -642,6 +593,15 @@
 												</a>
 												<span *ngIf="!selectedHodItem?.uploadImg">No attachment available</span>
 											</td>
+										</tr>
+										
+										<tr>
+											<td style="padding: 8px;"><strong>Expiration Date:</strong></td>
+											<td style="padding: 8px;">
+												<!-- <mat-label>To</mat-label> -->
+											<input  bsDatepicker container=".date-input2" type="text" matInput formControlName="expDate" class="form-control floating datetimepicker">
+											<span >The selected date must be greater than the current date.</span>
+										</td>
 										</tr>
 										<tr>
 											<td style="padding: 8px;"><strong>Status:</strong></td>

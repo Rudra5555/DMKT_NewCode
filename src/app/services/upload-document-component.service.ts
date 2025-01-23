@@ -9,7 +9,8 @@ export class UploadDocumentComponentService {
   // private baseUrl = 'http://localhost:8080';
   // private serverBaseUrl = 'http://10.101.71.204:9090';
 
- private baseUrl = 'http://103.168.18.28:8080';
+ private baseUrl = 'http://103.168.18.28:8080';//dev server
+// private baseUrl = 'http://10.101.71.204:8282'; //prod server
 
   constructor(private http: HttpClient) { }
 
@@ -72,9 +73,17 @@ export class UploadDocumentComponentService {
       const req = new HttpRequest('GET', `${this.baseUrl}/documentType/getDocumentTypesBy/${deptId}`, {
         responseType: 'json'
       });
-    
       return this.http.request(req);
     }
+
+    docTypeListData(): Observable<HttpEvent<any>> {
+      const req = new HttpRequest('GET', `${this.baseUrl}/documentType/getDocumentTypesAndSubTypes`, {
+        responseType: 'json'
+      });
+      return this.http.request(req);
+    }
+
+
 
     subDocTypeList(docId: any): Observable<HttpEvent<any>> {
       const req = new HttpRequest('GET', `${this.baseUrl}/documentType/getDocumentSubTypesBy/${docId}`, {

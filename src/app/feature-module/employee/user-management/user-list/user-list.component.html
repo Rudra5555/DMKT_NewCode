@@ -22,7 +22,7 @@
 
   <!-- Search Filter -->
   <div class="row filter-row">
-    <div class="col-sm-6 col-md-3">
+    <div class="col-sm-6 col-md-2">
       <div class="input-block mb-3 form-focus inputs">
         <mat-form-field class="example-full-width">
           <mat-label>Employee ID</mat-label>
@@ -30,12 +30,23 @@
         </mat-form-field>
       </div>
     </div>
-    <div class="col-sm-6 col-md-3">
+    <div class="col-sm-6 col-md-2">
       <div class="input-block mb-3 form-focus inputs">
         <mat-form-field class="example-full-width">
           <mat-label>Employee Name</mat-label>
           <input class="form-control floating datetimepicker" type="text" matInput />
         </mat-form-field>
+      </div>
+    </div>
+    <div class="col-sm-6 col-md-3">
+      <div class="input-block mb-3 form-focus select-focus select">
+        <mat-select class="custom-mat-select floating-mat-select" placeholder="Select Plant">
+          <mat-option selected>Select Plant</mat-option>
+          <mat-option value="option1">CPP-2(540 MW)</mat-option>
+          <mat-option value="option2">CPP-3(1200 MW)</mat-option>
+          <mat-option value="option3">CPP(1740 MW)</mat-option>
+        </mat-select>
+        <label class="focus-label">Plant</label>
       </div>
     </div>
     <div class="col-sm-6 col-md-3">
@@ -49,7 +60,7 @@
         <label class="focus-label">Department</label>
       </div>
     </div>
-    <div class="col-sm-6 col-md-3">
+    <div class="col-sm-3 col-md-2">
       <a class="btn btn-success w-100"> Search </a>
     </div>
   </div>
@@ -85,6 +96,7 @@
               <th mat-sort-header="email">Email ID</th>
               <th mat-sort-header="phone">Mobile</th>
               <th mat-sort-header="role">Employee Role</th>
+              <th mat-sort-header="plant">Plant</th>
               <th mat-sort-header="Department">Department</th>
               <th mat-sort-header="status">Status</th>
               <th class="text-end">Action</th>
@@ -106,6 +118,8 @@
               <td>{{ client.email }}</td>
               <td>{{ client.phone }}</td>
               <td>{{ client.role }}</td>
+              <!-- <td>{{ client.plant }}</td> -->
+               <td>CPP-2</td>
               <td>{{ client.role }}</td>
               <td>
                 <div class="dropdown action-label">
@@ -130,8 +144,8 @@
                   <a class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i
                       class="material-icons">more_vert</i></a>
                   <div class="dropdown-menu dropdown-menu-right">
-                    <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#edit_client"><i
-                        class="fa-solid fa-pencil m-r-5" style="color: rgb(8, 28, 247)"></i> Edit</a>
+                    <!-- <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#edit_client"><i
+                        class="fa-solid fa-pencil m-r-5" style="color: rgb(8, 28, 247)"></i> Edit</a> -->
                     <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#delete_client"><i
                         class="fa-regular fa-trash-can m-r-5" style="color: rgb(255, 61, 61)"></i> Delete</a> 
                       

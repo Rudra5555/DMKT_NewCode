@@ -57,6 +57,7 @@ export class UserManagementModalComponent implements OnInit {
       password: ["barrycuda", [Validators.required, Validators.minLength(6)]],
       confirmPassword: ["barrycuda", [Validators.required]],
       department:["", [Validators.required]],
+      plant:["", [Validators.required]],
     },
     
   );
