@@ -214,7 +214,7 @@ console.log("mainHead:: ",this.mainHead);
 
           this.fileList = this.respData.filter((item: any) => {
             return item.listOfDocumentVersoinDtos.some((version: any) => {
-              if (this.loggedUserRole === 'User') {
+              if (this.loggedUserRole === 'User' || this.loggedUserRole === 'Librarian' || this.loggedUserRole === 'Admin') {
                 return !version.hodDocument && !version.statutoryDocument && !version.restrictedDocument;
               } else if (this.loggedUserRole === 'SuperUser') {
                 return (!version.hodDocument && !version.statutoryDocument && !version.restrictedDocument) || version.statutoryDocument;

@@ -102,9 +102,9 @@
                 <th style="color: rgb(22, 32, 138)" mat-sort-header="ver">
                   Versions
                 </th>
-                <th style="color: rgb(22, 32, 138)" mat-sort-header="size">
+                <!-- <th style="color: rgb(22, 32, 138)" mat-sort-header="size">
                   Document Size
-                </th>
+                </th> -->
                 <th style="color: rgb(22, 32, 138)">Download</th>
                 <th style="color: rgb(22, 32, 138)">View</th>
               </tr>
@@ -120,7 +120,12 @@
                   </div>
                 </td>
                 <td>{{ item.documentType? item.documentType : 'N/A' }}</td>
-
+                <td>
+                  {{item.documentSubType? item.documentSubType : 'N/A'}}
+                </td>
+                <td>
+                  {{item.storageLocation? item.storageLocation : 'N/A'}}
+                </td>
                 <td>
                   <mat-select class="custom-mat-select select" id="versionSelect"
                     (selectionChange)="onVersionChange(item, $event.value)" [value]="item.selectedVersion">
@@ -130,7 +135,7 @@
                     </mat-option>
                   </mat-select>
                 </td>
-                <td>{{ item.listOfDocumentVersoinDtos[0].fileSize }} KB</td>
+                <!-- <td>{{ item.listOfDocumentVersoinDtos[0].fileSize }} KB</td> -->
                 <td class="text-center">
                   <a class="dropdown-item" [href]="item.listOfDocumentVersoinDtos[0].fileUrl" target="_blank">
                     <i class="fa-solid fa-download" style="color: rgb(0, 117, 234)"></i>
