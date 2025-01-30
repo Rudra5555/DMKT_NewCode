@@ -459,15 +459,7 @@
 											</td>
 										</tr>
 										
-										<tr>
-											<td style="padding: 8px;"><strong>Expiration Date:</strong></td>
-											<td style="padding: 8px;">
-												<!-- <mat-label>To</mat-label> -->
-											<input  bsDatepicker container=".date-input2" type="text" matInput formControlName="expDate" class="form-control floating datetimepicker">
-											<span >The selected date must be greater than the current date.</span>
-										</td>
-											
-										</tr>
+										
 										<tr>
 											<td style="padding: 8px;"><strong>Status:</strong></td>
 											<td style="padding: 8px;">
@@ -493,6 +485,15 @@
 													Provide the reason for the rejection!
 												</div>
 											</td>
+										</tr>
+										<tr *ngIf="!expDateFlag">
+											<td style="padding: 8px;" ><strong>Expiration Date:</strong></td>
+											<td style="padding: 8px;">
+												<!-- <mat-label>To</mat-label> -->
+											<input  bsDatepicker container=".date-input2" type="text" matInput formControlName="expDate" class="form-control floating datetimepicker">
+											<span >The selected date must be greater than the current date.</span>
+										</td>
+											
 										</tr>
 									</table>
 
@@ -595,14 +596,7 @@
 											</td>
 										</tr>
 										
-										<tr>
-											<td style="padding: 8px;"><strong>Expiration Date:</strong></td>
-											<td style="padding: 8px;">
-												<!-- <mat-label>To</mat-label> -->
-											<input  bsDatepicker container=".date-input2" type="text" matInput formControlName="expDate" class="form-control floating datetimepicker">
-											<span >The selected date must be greater than the current date.</span>
-										</td>
-										</tr>
+										
 										<tr>
 											<td style="padding: 8px;"><strong>Status:</strong></td>
 											<td style="padding: 8px;">
@@ -628,6 +622,14 @@
 													Provide the reason for the rejection!
 												</div>
 											</td>
+										</tr>
+										<tr *ngIf="!expDateFlag">
+											<td style="padding: 8px;"><strong>Expiration Date:</strong></td>
+											<td style="padding: 8px;">
+												<!-- <mat-label>To</mat-label> -->
+											<input  bsDatepicker container=".date-input2" type="text" matInput formControlName="expDate" class="form-control floating datetimepicker">
+											<span >The selected date must be greater than the current date.</span>
+										</td>
 										</tr>
 									</table>
 
