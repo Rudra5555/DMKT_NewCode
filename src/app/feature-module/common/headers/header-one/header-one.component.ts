@@ -117,6 +117,7 @@ export class HeaderOneComponent implements OnInit {
   readNotification: any;
   statutoryUnreadNotification: any;
   statutoryReadNotification: any;
+  expDate: any;
  
   constructor(
     private sideBar: SideBarService,private cdr: ChangeDetectorRef,
@@ -383,6 +384,7 @@ export class HeaderOneComponent implements OnInit {
     
     if (this.approverStatus == "R") {
       this.expDateFlag = true;
+     
       console.log(this.expDateFlag);
       
       this.reasonFlag = true;
@@ -435,29 +437,24 @@ export class HeaderOneComponent implements OnInit {
     // Retrieve form values
     const status = this.hodModalForm.get('status')?.value;
     const reason = this.hodModalForm.get('reason')?.value;
-    const expDate = this.hodModalForm.get('expDate')?.value;
-    if (expDate) {
-      const date = new Date(expDate);
+    this.expDate = this.hodModalForm.get('expDate')?.value;
+    console.log('Form START:', this.expDate);
+    
+    if (this.expDate != '') {
+      const date = new Date(this.expDate);
       const day = String(date.getDate()).padStart(2, '0'); // Ensures two digits for the day
       const month = String(date.getMonth() + 1).padStart(2, '0'); // Month is 0-indexed
       const year = date.getFullYear();
       this.formattedDate = `${day}-${month}-${year}`;
-      console.log(this.formattedDate); // Output: 17 01 2025
+      // console.log("FOrmated data :",this.formattedDate); // Output: 17 01 2025
     }
-    // if (expDate) {
-    //   const date = new Date(expDate);
-    //   const currentDate = new Date();
-    //   date.setHours(0, 0, 0, 0);
-    //   currentDate.setHours(0, 0, 0, 0);
-    
-    //   if (date > currentDate) {
-    //     console.log('The selected date is in the future.');
-    //   } else {
-    //     console.log('The selected date is today or in the past.');
-    //   }
-    // }
-    if (expDate) {
-      const selectedDate = new Date(expDate);
+    else{
+      this.formattedDate = '';
+      // console.log("F)))))rmated data :",this.formattedDate);
+    }
+  
+    if (this.expDate) {
+      const selectedDate = new Date(this.expDate);
       const currentDate = new Date();
     
       // Set time for both dates to 00:00:00 to compare only the date part
@@ -473,7 +470,7 @@ export class HeaderOneComponent implements OnInit {
         console.log('The selected date is valid.');
       }
     }
-    console.log('Form  END:',   expDate);
+    console.log('Form  END:',   this.expDate);
     // Validation checks
     if (!status) {
       console.error('No status selected');
