@@ -112,6 +112,11 @@ export class HeaderOneComponent implements OnInit {
   validUpto: any;
   validUptoFormated: any;
   expDateFlag: boolean = false;
+  selectedFileUploadData: any;
+  userFileReasonFlag: boolean = false;
+  readNotification: any;
+  statutoryUnreadNotification: any;
+  statutoryReadNotification: any;
  
   constructor(
     private sideBar: SideBarService,private cdr: ChangeDetectorRef,
@@ -194,7 +199,15 @@ export class HeaderOneComponent implements OnInit {
       next: (event: any) => {
         if (event instanceof HttpResponse) {
           this.resp = event.body.data
-          this.notificTwo = this.resp;
+          // this.notificTwo = this.resp;
+           // Filter out only the notifications where markAsRead is false
+      this.notificTwo = this.resp.filter((notification: any) => !notification.markAsRead);
+      
+      console.log("Filtered notificTwo", this.notificTwo);
+
+      this.readNotification = this.resp.filter((notification: any) => notification.markAsRead);
+          console.log("readNotification", this.readNotification);
+          
           this.userNotifyCountTwo = this.notificTwo.length;
         }
       },
@@ -267,7 +280,14 @@ export class HeaderOneComponent implements OnInit {
         next: (event: any) => {
           if (event instanceof HttpResponse) {
             this.resp = event.body.data
-            this.respData = this.resp;
+            // this.respData = this.resp;
+            this.respData = this.resp.filter((notification: any) => !notification.markAsRead);
+      
+      console.log("Filtered statutoryUnreadNotification", this.respData);
+
+      this.statutoryReadNotification = this.resp.filter((notification: any) => notification.markAsRead);
+          console.log("statutoryReadNotification", this.statutoryReadNotification);
+            
 
             this.userNotificationData = this.respData;
             this.userNotifyCount = this.userNotificationData.length;
@@ -576,6 +596,48 @@ export class HeaderOneComponent implements OnInit {
     } else {
       this.userReasonFlag = false;
     }
+
+
+     // Call API to mark as read
+  this.loginService.markedAsReadStatutoryNotification(item.stepId).subscribe({
+    next: (response: any) => {
+      console.log('Marked as read response:', response);
+      // if(response.status == 200){
+      // window.location.href = window.location.href;
+      // }
+    },
+    error: (error: any) => {
+      console.error('Error marking as read:', error);
+    }
+  });
+
+  }
+
+  onFileNotificationClick(item:any ){
+console.log('Selected item workflowDocId:', item.workflowDocId);
+// console.log('Selected item onFileNotificationClick:', item);
+
+this.selectedFileUploadData = item;
+if (this.selectedFileUploadData.reason == null || this.selectedFileUploadData.reason == '') {
+  this.userFileReasonFlag = true;
+} else {
+  this.userFileReasonFlag = false;
+}
+
+  // Call API to mark as read
+  this.loginService.markedAsReadFileNotification(item.workflowDocId).subscribe({
+    next: (response: any) => {
+      console.log('Marked as read response:', response);
+      // if(response.status == 200){
+      // window.location.href = window.location.href;
+      // }
+    },
+    error: (error: any) => {
+      console.error('Error marking as read:', error);
+    }
+  });
+
+  
 
   }
 

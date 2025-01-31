@@ -388,4 +388,22 @@ upload(file: any): Observable<HttpEvent<any>> {
     return this.http.request(req);
   }
 
+
+  markedAsReadFileNotification(workflowDocId:any): Observable<HttpEvent<any>> {
+    const req = new HttpRequest('GET', `${this.baseUrl}/doc-request/notification-marking-as-read/${workflowDocId}`, {
+      responseType: 'json'
+    });
+  
+    return this.http.request(req);
+  }
+
+  markedAsReadStatutoryNotification(stepId:any): Observable<HttpEvent<any>> {
+    const req = new HttpRequest('GET', `${this.baseUrl}/workflow/notification-marking-as-read/${stepId}`, {
+      responseType: 'json'
+    });
+  
+    return this.http.request(req);
+  }
+
+
 }
