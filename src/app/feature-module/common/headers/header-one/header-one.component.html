@@ -129,8 +129,8 @@
 				</div>
 				<div class="noti-content">
 					<ul class="notification-list" *ngFor="let item of notificTwo;">
-						<li class="notification-message">
-							<a data-bs-toggle="modal" data-bs-target="#">
+						<li class="notification-message" (click)="onFileNotificationClick(item)">
+							<a data-bs-toggle="modal" data-bs-target="#notificationFileModal">
 								<div class="chat-block d-flex">
 									<span class="avatar flex-shrink-0">
 										<img src="assets/img/avatar/avatar-27.jpg" alt="">
@@ -264,7 +264,6 @@
 <!-- Modal for Bell Icon Start for Users/SuperUsers -->
 
 <div id="notificationModal" class="modal custom-modal fade" role="dialog">
-	
 	<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -379,12 +378,120 @@
 	</div>
 </div>
 
-
-
 <!-- Modal for Bell Icon End -->
 
 
+<!-- Modal for File Bell Icon Start for User/SuperUsers -->
 
+<div id="notificationFileModal" class="modal custom-modal fade" role="dialog">
+	
+	<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">File Upload Notification Details</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+					<span >&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<div>
+					<div class="col-md-12">
+						<div class="card flex-fill">
+							<div class="card-body">
+								<table style="width:100%; border-collapse: collapse;">
+									<thead>
+										<!-- <tr>
+											<td rowspan="2" style="text-align: left; width: 20%;">
+												<ng-container *ngIf="selectFileData?.documentType">
+													<img src="assets/img/{{ selectFileData.documentType }}.png"
+														style="max-width: 40%; padding-bottom: 5%;">
+												</ng-container>
+											</td>
+											<td rowspan="2" style="text-align: center; width: 80%; padding-left: 10px;">
+												<strong style="padding-bottom: 43%;">{{ selectFileData?.documentName
+													}}</strong>
+											</td>
+										</tr> -->
+									</thead>
+									<tbody>
+										<tr>
+											<td rowspan="2"
+												style="padding: 8px; text-align: left; vertical-align: middle;">
+												<strong>Document Name:</strong>
+											</td>
+											<td rowspan="2"
+												style="padding: 8px;text-align: center; vertical-align: middle;">{{
+													selectedFileUploadData?.fileName }}</td>
+										</tr>
+										<tr></tr>
+										<tr>
+											<td rowspan="2"
+												style="padding: 8px; text-align: left; vertical-align: middle;">
+												<strong>Approver/Rejecter’s Name:</strong>
+											</td>
+											<td rowspan="2"
+												style="padding: 8px;text-align: center; vertical-align: middle;">{{
+													selectedFileUploadData?.executedByName}}</td>
+										</tr>
+										<tr></tr>
+										<tr>
+											<td rowspan="2"
+												style="padding: 8px; text-align: left; vertical-align: middle;">
+												<strong>Executed Date:</strong>
+											</td>
+											<td rowspan="2"
+												style="padding: 8px;text-align: center; vertical-align: middle;">{{selectedFileUploadData?.generatedOn}}</td>
+												
+										<tr></tr>
+										
+										<tr></tr>
+										<!-- <tr>
+											<td rowspan="2"
+												style="padding: 8px; text-align: left; vertical-align: middle;">
+												<strong>Document Name:</strong>
+											</td>
+											<td rowspan="2"
+												style="padding: 8px;text-align: center; vertical-align: middle;position: relative;">
+													<div class="tooltip-container">
+													{{selectFileData?.documentName }}
+													<span class="tooltip-text">{{ selectFileData?.uniqueDocumentName }}</span>
+												  </div>
+											</td>
+										</tr> -->
+										<tr></tr>
+										<tr>
+											<td rowspan="2"
+												style="padding: 8px; text-align: left; vertical-align: middle;">
+												<strong>Status:</strong>
+											</td>
+											<td rowspan="2"
+												style="padding: 8px;text-align: center; vertical-align: middle;">
+
+												{{ getApprovalStatusUserModal(selectedFileUploadData?.status) }}
+											</td>
+										</tr>
+										<tr></tr>
+										<tr *ngIf="!userFileReasonFlag">
+											<td rowspan="2"
+												style="padding: 8px; text-align: left; vertical-align: middle;" >
+												<strong>Reason:</strong>
+											</td>
+											<td rowspan="2"
+												style="padding: 8px;text-align: center; vertical-align: middle;">{{
+													selectedFileUploadData?.reason }}</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- Modal for File Bell Icon End for User/SuperUsers -->
 
 
 
@@ -459,15 +566,7 @@
 											</td>
 										</tr>
 										
-										<tr>
-											<td style="padding: 8px;"><strong>Expiration Date:</strong></td>
-											<td style="padding: 8px;">
-												<!-- <mat-label>To</mat-label> -->
-											<input  bsDatepicker container=".date-input2" type="text" matInput formControlName="expDate" class="form-control floating datetimepicker">
-											<span >The selected date must be greater than the current date.</span>
-										</td>
-											
-										</tr>
+										
 										<tr>
 											<td style="padding: 8px;"><strong>Status:</strong></td>
 											<td style="padding: 8px;">
@@ -493,6 +592,15 @@
 													Provide the reason for the rejection!
 												</div>
 											</td>
+										</tr>
+										<tr *ngIf="!expDateFlag">
+											<td style="padding: 8px;" ><strong>Expiration Date:</strong></td>
+											<td style="padding: 8px;">
+												<!-- <mat-label>To</mat-label> -->
+											<input  bsDatepicker container=".date-input2" type="text" matInput formControlName="expDate" class="form-control floating datetimepicker">
+											<span >The selected date must be greater than the current date.</span>
+										</td>
+											
 										</tr>
 									</table>
 
@@ -595,14 +703,7 @@
 											</td>
 										</tr>
 										
-										<tr>
-											<td style="padding: 8px;"><strong>Expiration Date:</strong></td>
-											<td style="padding: 8px;">
-												<!-- <mat-label>To</mat-label> -->
-											<input  bsDatepicker container=".date-input2" type="text" matInput formControlName="expDate" class="form-control floating datetimepicker">
-											<span >The selected date must be greater than the current date.</span>
-										</td>
-										</tr>
+										
 										<tr>
 											<td style="padding: 8px;"><strong>Status:</strong></td>
 											<td style="padding: 8px;">
@@ -628,6 +729,14 @@
 													Provide the reason for the rejection!
 												</div>
 											</td>
+										</tr>
+										<tr *ngIf="!expDateFlag">
+											<td style="padding: 8px;"><strong>Expiration Date:</strong></td>
+											<td style="padding: 8px;">
+												<!-- <mat-label>To</mat-label> -->
+											<input  bsDatepicker container=".date-input2" type="text" matInput formControlName="expDate" class="form-control floating datetimepicker">
+											<span >The selected date must be greater than the current date.</span>
+										</td>
 										</tr>
 									</table>
 
@@ -657,5 +766,7 @@
 	</div>
 </div>
 <!-- Modal for Librarian Ends -->
+
+
 
 
