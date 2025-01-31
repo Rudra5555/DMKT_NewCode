@@ -388,4 +388,12 @@ upload(file: any): Observable<HttpEvent<any>> {
     return this.http.request(req);
   }
 
+  addUser(payload:any ): Observable<HttpEvent<any>> {
+    const req = new HttpRequest('POST', `${this.baseUrl}/user/set-user-info`,payload, {
+      responseType: 'json'
+    });
+  
+    return this.http.request(req);
+  }
+
 }

@@ -1,6 +1,8 @@
+import { HttpResponse } from '@angular/common/http';
 import { Component, ElementRef, OnInit, ViewChild,Input  } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { IDropdownSettings } from 'ng-multiselect-dropdown';
+import { LoginComponentService } from 'src/app/services/login-component.service';
 // import {  IDropdownSettings } from 'ng-multiselect-dropdown';
 
 
@@ -21,7 +23,8 @@ export class UserManagementModalComponent implements OnInit {
   files: any[] = [];
   base64Image: string | null = null;
   public dropdownSettings !:IDropdownSettings;
-  constructor( private formBuilder: FormBuilder) { }
+  msg: any;
+  constructor( private formBuilder: FormBuilder, private loginService: LoginComponentService) { }
 
   ngOnInit(): void {
 
@@ -50,23 +53,38 @@ export class UserManagementModalComponent implements OnInit {
 
     
     //Add clients form
-    this.addUserForm = this.formBuilder.group({
-      userName: ["", [Validators.required]],
-      userPhone: ["", [Validators.required]],
-      userEmail: ["", [Validators.required]],
-      // password: ["barrycuda", [Validators.required, Validators.minLength(6)]],
+    // password: ["barrycuda", [Validators.required, Validators.minLength(6)]],
       // confirmPassword: ["barrycuda", [Validators.required]],
-      department:["", [Validators.required]],
-      plant:["", [Validators.required]],
-      Admin: [false],
-      User: [false],
-      SuperUser: [false],
-      HOD: [false],
-      Librarian: [false],
-      IsActive: [false],
-    },
+  //   this.addUserForm = this.formBuilder.group({
+  //     userName: ["", [Validators.required]],
+  //     userPhone: ["", [Validators.required]],
+  //     userEmail: ["", [Validators.required]],
+      
+  //     department:["", [Validators.required]],
+  //     plant:["", [Validators.required]],
+  //     Admin: [false],
+  //     User: [false],
+  //     SuperUser: [false],
+  //     HOD: [false],
+  //     Librarian: [false],
+  //     IsActive: [false],
+  //   },
     
-  );
+  // );
+  this.addUserForm = this.formBuilder.group({
+    userName: ["", [Validators.required]],
+    userPhone: ["", [Validators.required]],
+    userEmail: ["", [Validators.required, Validators.email]],
+    department: ["", [Validators.required]],
+    plant: ["", [Validators.required]],
+    Admin: [false],
+    User: [false],
+    SuperUser: [false],
+    HOD: [false],
+    Librarian: [false],
+    isActive: [false],
+  });
+  
 
     //Edit UserManagement Form
     this.editUserForm = this.formBuilder.group({
@@ -86,18 +104,58 @@ export class UserManagementModalComponent implements OnInit {
         userName: this.addUserForm.value.userName,
         phoneNumber: this.addUserForm.value.userPhone,
         emailId: this.addUserForm.value.userEmail,
-        password: this.addUserForm.value.password,
-        department: this.addUserForm.value.department,
-        isActive: true,
-        files: this.files.map(file => file.base64),
+        role: "User",
+        password: "",
+        departmentNameList: [
+          {
+            departmentName: this.addUserForm.value.department,
+            plantName: this.addUserForm.value.plant
+          }
+        ],
+        isActive: this.addUserForm.value.isActive,
+        accessRoles: this.getSelectedRoles(),
+        userPicture: this.files?.length ? this.files[0].base64 : null, 
       };
   
-      console.log('Payload:::::::', payload);
-     
+      console.log('Payload:', payload);
+      
+          this.loginService.addUser(payload).subscribe({
+              next: (event: any) => {
+                if (event instanceof HttpResponse) {
+                  const resp = event.body
+
+                  console.log("response",resp);
+                  
+                 
+      
+                }
+              },
+              error: (err: any) => {
+                if (err.error && err.error.message) {
+                  this.msg += " " + err.error.message;
+                }
+              }
+            });
+
     } else {
-      console.error('Form is invalid');
+      console.error('Form is invalid. Please fill all required fields.');
+      this.addUserForm.markAllAsTouched();
     }
   }
+  
+  getSelectedRoles(): string {
+    const selectedRoles = [];
+    if (this.addUserForm.value.Admin) selectedRoles.push("Admin");
+    if (this.addUserForm.value.User) selectedRoles.push("User");
+    if (this.addUserForm.value.SuperUser) selectedRoles.push("SuperUser");
+    if (this.addUserForm.value.HOD) selectedRoles.push("HOD");
+    if (this.addUserForm.value.Librarian) selectedRoles.push("Librarian");
+  
+    return selectedRoles.join(",");
+  }
+  
+  
+  
 
 
   onItemSelect(item: any) {
