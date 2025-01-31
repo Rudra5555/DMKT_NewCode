@@ -932,6 +932,26 @@ export class DataService implements OnInit {
           materialicons: 'person',
           subMenus: [],
         },
+        {
+          menuValue: 'Statutory Notification List',
+          route: routes.StatutoryDocNotificationComponent,
+          hasSubRoute: false,
+          showSubRoute: false,
+          icon: 'bell',
+          base: 'HOD',
+          materialicons: 'person',
+          subMenus: [],
+        }, 
+        {
+          menuValue: 'File Upload Notification List',
+          route: routes.FileUploadNotificationComponent,
+          hasSubRoute: false,
+          showSubRoute: false,
+          icon: 'file',
+          base: 'HOD',
+          materialicons: 'person',
+          subMenus: [],
+        },
       ]
 
 

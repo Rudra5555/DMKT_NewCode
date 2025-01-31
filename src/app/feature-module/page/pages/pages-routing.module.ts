@@ -26,6 +26,8 @@ import { VerifyUploadedDocumentComponent } from './verify-uploaded-document/veri
 import { ApprovedRejectDocListComponent } from './approvedReject-doc-list/approvedReject-doc-list.component';
 import { StatutoryDocComponent } from './statutory-doc/statutory-doc.component';
 import { AuthGuard } from '../../main/dashboard/AuthGuard';
+import { StatutoryDocNotificationComponent } from './statutory-doc-notification/statutory-doc-notification.component';
+import { FileUploadNotificationComponent } from './file-upload-notification/file-upload-notification.component';
 
 
 
@@ -59,7 +61,9 @@ const routes: Routes = [
       { path: "upload-documents", component: UserDocumentUpload,canActivate: [AuthGuard] },
       { path: "verify-uploaded-document", component: VerifyUploadedDocumentComponent,canActivate: [AuthGuard] },
       { path: "approved-reject-document", component: ApprovedRejectDocListComponent,canActivate: [AuthGuard] },
-      { path: "statutory-doc", component: StatutoryDocComponent,canActivate: [AuthGuard] }
+      { path: "statutory-doc", component: StatutoryDocComponent,canActivate: [AuthGuard] },
+      { path: "statutory-doc-notification", component: StatutoryDocNotificationComponent,canActivate: [AuthGuard] },
+      { path: "file-upload-notification", component: FileUploadNotificationComponent,canActivate: [AuthGuard] }
       
       
     ] 

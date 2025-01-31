@@ -179,6 +179,12 @@ export class routes {
   public static get StatutoryDoc(): string {
     return this.baseUrl + '/pages/statutory-doc';
   }
+  public static get StatutoryDocNotificationComponent(): string {
+    return this.baseUrl + '/pages/statutory-doc-notification';
+  } 
+  public static get FileUploadNotificationComponent(): string {
+    return this.baseUrl + '/pages/file-upload-notification';
+  }
   public static get payroll(): string {
     return this.baseUrl + '/payroll';
   }
@@ -395,7 +401,8 @@ export class routes {
   }
   public static get UserDocumentUpload(): string {
     return this.baseUrl + '/pages/upload-documents';
-  }
+  } 
+ 
   public static get acceptrequest(): string {
     return this.baseUrl + '/pages/accept-request';
   }

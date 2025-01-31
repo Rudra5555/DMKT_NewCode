@@ -35,6 +35,8 @@ import { UserDocumentUpload } from './user-document-upload/user-document-upload.
 import { VerifyUploadedDocumentComponent } from './verify-uploaded-document/verify-uploaded-document.component';
 import { ApprovedRejectDocListComponent } from './approvedReject-doc-list/approvedReject-doc-list.component';
 import { StatutoryDocComponent } from './statutory-doc/statutory-doc.component';
+import { StatutoryDocNotificationComponent } from './statutory-doc-notification/statutory-doc-notification.component';
+import { FileUploadNotificationComponent } from './file-upload-notification/file-upload-notification.component';
 
 
 
@@ -56,6 +58,8 @@ import { StatutoryDocComponent } from './statutory-doc/statutory-doc.component';
     ListRequestComponent,
     ApprovalListComponent,
     RequestedDocComponent,
+    StatutoryDocNotificationComponent,
+    FileUploadNotificationComponent,
     UnderMaintenanceComponent,
     PlantComponent,
     DepartmentComponent,
