@@ -201,11 +201,11 @@ export class HeaderOneComponent implements OnInit {
           this.resp = event.body.data
           // this.notificTwo = this.resp;
            // Filter out only the notifications where markAsRead is false
-      this.notificTwo = this.resp.filter((notification: any) => !notification.markAsRead);
+      this.notificTwo = this.resp.filter((notification: any) => !notification.markAsRead); //markedAsRead = false
       
       console.log("Filtered notificTwo", this.notificTwo);
 
-      this.readNotification = this.resp.filter((notification: any) => notification.markAsRead);
+      this.readNotification = this.resp.filter((notification: any) => notification.markAsRead); //markedAsRead = true
           console.log("readNotification", this.readNotification);
           
           this.userNotifyCountTwo = this.notificTwo.length;
@@ -281,11 +281,11 @@ export class HeaderOneComponent implements OnInit {
           if (event instanceof HttpResponse) {
             this.resp = event.body.data
             // this.respData = this.resp;
-            this.respData = this.resp.filter((notification: any) => !notification.markAsRead);
+            this.respData = this.resp.filter((notification: any) => !notification.markAsRead);  //markedAsRead = false
       
       console.log("Filtered statutoryUnreadNotification", this.respData);
 
-      this.statutoryReadNotification = this.resp.filter((notification: any) => notification.markAsRead);
+      this.statutoryReadNotification = this.resp.filter((notification: any) => notification.markAsRead);  //markedAsRead = true
           console.log("statutoryReadNotification", this.statutoryReadNotification);
             
 
