@@ -3,7 +3,7 @@ import { Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { routes } from 'src/app/core/core.index';
 import { DataService } from 'src/app/core/services/data/data.service';
-import { apiResultFormat, getcontactlist } from 'src/app/core/services/interface/models';
+import { apiResultFormat, getreadFileNotificationList } from 'src/app/core/services/interface/models';
 import { pageSelection } from 'src/app/feature-module/employee/employees/departments/departments.component';
 
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
@@ -50,8 +50,8 @@ export class FileUploadNotificationComponent implements OnInit {
   isLoading: boolean = false; 
   public pageNumberArray: Array<number> = [];
   public pageSelection: Array<pageSelection> = [];
-  dataSource!: MatTableDataSource<getcontactlist>;
-  public contactlist: Array<getcontactlist> = [];
+  dataSource!: MatTableDataSource<getreadFileNotificationList>;
+  public readFileNotificationList: Array<getreadFileNotificationList> = [];
   public totalPages = 0;
   public message: any;
   public selectedFiles: any;
@@ -99,7 +99,7 @@ export class FileUploadNotificationComponent implements OnInit {
   selectedFileUrl: any;
   subject = new BehaviorSubject('')
 
-
+  readFileList:any;
 
 
 
@@ -135,6 +135,26 @@ export class FileUploadNotificationComponent implements OnInit {
 
   ngOnInit(): void {
 
+    // this.isLoading = true;
+    // const storedData = localStorage.getItem('fileUploadNotificationList');
+    // const readFileList = storedData ? JSON.parse(storedData) : [];
+
+    // this.totalData = readFileList.length;
+
+    // readFileList.map((item: getreadFileNotificationList, index: number) => {
+    //   const serialNumber = index + 1;
+    //   if (index >= this.skip && serialNumber <= this.limit) {
+    //     item.id = serialNumber;
+    //     this.readFileNotificationList.push(item);
+    //     this.serialNumberArray.push(serialNumber);
+    //   }
+    // });
+
+    // this.dataSource = new MatTableDataSource<getreadFileNotificationList>(this.readFileNotificationList);
+    // this.calculateTotalPages(readFileList.length, this.pageSize);
+    // this.isLoading = false; 
+    
+    this.markAsReadFilesNotif();
     this.setLast7Days();
 
     this.loggedUserId = localStorage.getItem('loggedInUserId');
@@ -158,9 +178,32 @@ export class FileUploadNotificationComponent implements OnInit {
 
   }
 
+  public markAsReadFilesNotif(){
+
+    this.isLoading = true;
+    const storedData = localStorage.getItem('fileUploadNotificationList');
+    const readFileList = storedData ? JSON.parse(storedData) : [];
+
+    this.totalData = readFileList.length;
+
+    readFileList.map((item: getreadFileNotificationList, index: number) => {
+      const serialNumber = index + 1;
+      if (index >= this.skip && serialNumber <= this.limit) {
+        item.id = serialNumber;
+        this.readFileNotificationList.push(item);
+        this.serialNumberArray.push(serialNumber);
+      }
+    });
+
+    this.dataSource = new MatTableDataSource<getreadFileNotificationList>(this.readFileNotificationList);
+    this.calculateTotalPages(readFileList.length, this.pageSize);
+    this.isLoading = false; 
+
+  }
+
   public approvedDocumentList(loggedUserId: any): void {
-    this.contactlist = [];
-    this.isLoading = true; // Start loader
+    // this.contactlist = [];
+    // this.isLoading = true; // Start loader
     this.serialNumberArray = [];
 
     this.loginService.approvedDocList(loggedUserId, this.startDate, this.endDate).subscribe({
@@ -168,21 +211,21 @@ export class FileUploadNotificationComponent implements OnInit {
         if (event instanceof HttpResponse) {
           const responseData = event.body.data;
 
-          const filteredData = responseData.filter((item: getcontactlist) => item.documentApprovalStatus === 'A');
+          // const filteredData = responseData.filter((item: getcontactlist) => item.documentApprovalStatus === 'A');
 
-          this.totalData = filteredData.length;
-          filteredData.map((item: getcontactlist, index: number) => {
-            const serialNumber = index + 1;
-            if (index >= this.skip && serialNumber <= this.limit) {
-              item.id = serialNumber;
-              this.contactlist.push(item);
-              this.serialNumberArray.push(serialNumber);
-            }
-          });
+          // this.totalData = filteredData.length;
+          // filteredData.map((item: getcontactlist, index: number) => {
+          //   const serialNumber = index + 1;
+          //   if (index >= this.skip && serialNumber <= this.limit) {
+          //     item.id = serialNumber;
+          //     this.contactlist.push(item);
+          //     this.serialNumberArray.push(serialNumber);
+          //   }
+          // });
 
-          this.dataSource = new MatTableDataSource<getcontactlist>(this.contactlist);
-          this.calculateTotalPages(filteredData.length, this.pageSize);
-          this.isLoading = false; 
+          // this.dataSource = new MatTableDataSource<getcontactlist>(this.contactlist);
+          // this.calculateTotalPages(filteredData.length, this.pageSize);
+          // this.isLoading = false; 
         }
       },
       error: (err: any) => {
@@ -480,11 +523,11 @@ export class FileUploadNotificationComponent implements OnInit {
 
 
   public sortData(sort: Sort) {
-    const data = this.contactlist.slice();
+    const data = this.readFileNotificationList.slice();
     if (!sort.active || sort.direction === '') {
-      this.contactlist = data;
+      this.readFileNotificationList = data;
     } else {
-      this.contactlist = data.sort((a: any, b: any) => {
+      this.readFileNotificationList = data.sort((a: any, b: any) => {
         const aValue = (a as any)[sort.active];
         const bValue = (b as any)[sort.active];
         return (aValue < bValue ? -1 : 1) * (sort.direction === 'asc' ? 1 : -1);
@@ -494,7 +537,7 @@ export class FileUploadNotificationComponent implements OnInit {
 
   public searchData(value: string): void {
     this.dataSource.filter = value.trim().toLowerCase();
-    this.contactlist = this.dataSource.filteredData;
+    this.readFileNotificationList = this.dataSource.filteredData;
   }
 
   public getMoreData(event: string): void {
@@ -503,13 +546,13 @@ export class FileUploadNotificationComponent implements OnInit {
       this.pageIndex = this.currentPage - 1;
       this.limit += this.pageSize;
       this.skip = this.pageSize * this.pageIndex;
-      this.approvedDocumentList(this.loggedUserId);
+      this.markAsReadFilesNotif();
     } else if (event === 'previous') {
       this.currentPage--;
       this.pageIndex = this.currentPage - 1;
       this.limit -= this.pageSize;
       this.skip = this.pageSize * this.pageIndex;
-      this.approvedDocumentList(this.loggedUserId);
+      this.markAsReadFilesNotif();
     }
   }
 
@@ -522,7 +565,7 @@ export class FileUploadNotificationComponent implements OnInit {
     } else if (pageNumber < this.currentPage) {
       this.pageIndex = pageNumber + 1;
     }
-    this.approvedDocumentList(this.loggedUserId);
+    this.markAsReadFilesNotif();
   }
   private calculateTotalPages(totalData: number, pageSize: number): void {
     this.pageNumberArray = [];
@@ -542,7 +585,7 @@ export class FileUploadNotificationComponent implements OnInit {
     this.limit = this.pageSize;
     this.skip = 0;
     this.currentPage = 1;
-    this.approvedDocumentList(this.loggedUserId);
+    this.markAsReadFilesNotif();
   }
   openFilter() {
     this.filter = !this.filter;
