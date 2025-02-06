@@ -179,7 +179,7 @@ export class ApprovedRejectDocListComponent implements OnInit {
             this.res = event.body.data;
             // const AppAndRejDoclist=this.res;
             let filteredData = this.res;
-            console.log("test");
+
 
             
             // console.log("ccccccccccccccc",filteredData);

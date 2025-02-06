@@ -101,6 +101,14 @@ export class StatutoryDocNotificationComponent implements OnInit {
 
   statutoryReadNotificationList:any;
 
+//   pageSize: number = 10; // Default page size
+// currentPage: number = 1; // Tracks the current page
+// skip: number = 0;        // Number of items to skip
+// limit: number = this.pageSize; // Number of items to display
+// readNotificationList: getReadNotificationList[] = [];
+// serialNumberArray: number[] = [];
+// dataSource: MatTableDataSource<getReadNotificationList>;
+
 
 
 
@@ -165,10 +173,14 @@ export class StatutoryDocNotificationComponent implements OnInit {
   }
 
   public StDocmarkAsReadNotif(){
-
+    this.readNotificationList = [];
+    this.serialNumberArray = [];
     this.isLoading = true;
     const storedData = localStorage.getItem('statutoryReadNotificationList');
     const statutoryReadNotificationList = storedData ? JSON.parse(storedData) : [];
+
+    console.log("dataLists*",statutoryReadNotificationList);
+    
 
     this.totalData = statutoryReadNotificationList.length;
 
@@ -528,6 +540,7 @@ export class StatutoryDocNotificationComponent implements OnInit {
   }
 
   public getMoreData(event: string): void {
+   
     if (event === 'next') {
       this.currentPage++;
       this.pageIndex = this.currentPage - 1;
@@ -607,6 +620,13 @@ export class StatutoryDocNotificationComponent implements OnInit {
   }
 
 }
+
+
+
+
+
+
+
 function hideRequestFromButton() {
   throw new Error('Function not implemented.');
 }

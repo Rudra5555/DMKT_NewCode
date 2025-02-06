@@ -1,4 +1,4 @@
-<div class="content container-fluid" style="height: 150vh;">
+<div class="content container-fluid" style="height: 100vh;">
   <!-- Page Header -->
   <div class="page-header">
     <div class="row align-items-center">
@@ -80,9 +80,8 @@
             </div>
           </div>
         </div>
-        <div class="table-responsive" style="overflow-y: auto; height:500px">
-          <table matSort (matSortChange)="sortData($event)"
-            class="table table-striped custom-table datatable contact-table">
+        <div class="table-responsive">
+          <table matSort (matSortChange)="sortData($event)" class="table table-striped custom-table datatable contact-table">
             <thead>
               <tr>
                 <th mat-sort-header="name">Document Name</th>

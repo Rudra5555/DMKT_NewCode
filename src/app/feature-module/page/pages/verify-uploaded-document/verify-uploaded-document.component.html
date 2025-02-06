@@ -76,8 +76,8 @@
           </div>
         </div>
       </div>
-      <div class="table-responsive"  style="overflow-y: auto; height:430px">
-        <table matSort class="table table-striped custom-table datatable contact-table">
+      <div class="table-responsive">
+        <table matSort (matSortChange)="sortData($event)" class="table table-striped custom-table datatable contact-table">
           <thead>
             <tr>
               <th mat-sort-header="documentName">Document Name</th>
