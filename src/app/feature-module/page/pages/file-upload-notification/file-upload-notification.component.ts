@@ -179,10 +179,15 @@ export class FileUploadNotificationComponent implements OnInit {
   }
 
   public markAsReadFilesNotif(){
+  this.readFileNotificationList = [];
+    this.serialNumberArray = [];
 
     this.isLoading = true;
     const storedData = localStorage.getItem('fileUploadNotificationList');
     const readFileList = storedData ? JSON.parse(storedData) : [];
+
+    console.log("readfileLists*",readFileList);
+    
 
     this.totalData = readFileList.length;
 
