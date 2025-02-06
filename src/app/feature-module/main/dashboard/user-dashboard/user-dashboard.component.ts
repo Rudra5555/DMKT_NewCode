@@ -763,6 +763,7 @@ console.log("catName555",catName);
         this.fileListSearch = Array.from(this.transformedMap.values());
   
        //tetsting
+        console.log("branch testing 1.1");
   
   }
 
