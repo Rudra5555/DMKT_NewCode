@@ -762,8 +762,7 @@ console.log("catName555",catName);
   
         this.fileListSearch = Array.from(this.transformedMap.values());
   
-        // console.log("After::", JSON.stringify(this.transformedMap.get(fileNameAsMapKey)))
-        
+       
   
   }
 
