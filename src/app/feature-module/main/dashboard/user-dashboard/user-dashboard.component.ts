@@ -466,15 +466,7 @@ console.log("catName555",catName);
     return this.datePipe.transform(date, 'yyyy-MM-dd')!;
   }
 
-  // navigateToRoute(catMainHeadName: any, catMainHeadId: any) {
-  //   const url = this.router.serializeUrl(
-  //     this.router.createUrlTree([routes.filemanagermainhead], {
-  //       queryParams: { catName: catMainHeadName, catId: catMainHeadId }
-  //     })
-  //   );
-  //   window.location.href = url;
 
-  // }
 
   navigateToRoute(catPlantName: any, catMainHeadId: any) {
     console.log("Main Head Name 55555", this.mainHeadName);
@@ -482,7 +474,7 @@ console.log("catName555",catName);
     
     
     try {
-      // Define the secret key (e.g., a timestamp or other secure key)
+  
       const secretKey = this.timestamp; // Ensure this is defined and valid
   
       // Encrypt the parameters
@@ -503,25 +495,7 @@ console.log("catName555",catName);
     }
   }
   
-//   navigateToRoute(catMainHeadName: any, catMainHeadId: any) {
-//   try {
-//     // Create the URL with plain query parameters
-//     const url = this.router.serializeUrl(
-//       this.router.createUrlTree([routes.filemanagermainhead], {
-//         queryParams: { catName: catMainHeadName, catId: catMainHeadId }
-//       })
-//     );
 
-//     // Navigate to the URL
-//     window.location.href = url;
-//   } catch (error) {
-//     console.error("Error processing navigation:", error);
-//   }
-// }
-
- 
-
- 
   public sortData(sort: Sort) {
     const data = this.fileListSearch.slice();
     if (!sort.active || sort.direction === '') {
@@ -535,10 +509,7 @@ console.log("catName555",catName);
     }
   }
 
-  // public searchData(value: string): void {
-  //   this.dataSource.filter = value.trim().toLowerCase();
-  //   this.fileListSearch = this.dataSource.filteredData;
-  // }
+
 
   public getMoreData(event: string): void {
     if (event === 'next') {
@@ -546,13 +517,13 @@ console.log("catName555",catName);
       this.pageIndex = this.currentPage - 1;
       this.limit += this.pageSize;
       this.skip = this.pageSize * this.pageIndex;
-      // this.allSubAreaList();
+
     } else if (event === 'previous') {
       this.currentPage--;
       this.pageIndex = this.currentPage - 1;
       this.limit -= this.pageSize;
       this.skip = this.pageSize * this.pageIndex;
-      // this.allSubAreaList();
+     
     }
   }
 
@@ -565,7 +536,7 @@ console.log("catName555",catName);
     } else if (pageNumber < this.currentPage) {
       this.pageIndex = pageNumber + 1;
     }
-    // this.allSubAreaList();
+ 
   }
   private calculateTotalPages(totalData: number, pageSize: number): void {
     this.pageNumberArray = [];
@@ -585,7 +556,7 @@ console.log("catName555",catName);
     this.limit = this.pageSize;
     this.skip = 0;
     this.currentPage = 1;
-    // this.allSubAreaList();
+  
   }
   openFilter() {
     this.filter = !this.filter;
@@ -617,52 +588,7 @@ console.log("catName555",catName);
   }
 
 
-  // public searchData(value: string): void {
-  //   this.dataSource.filter = value.trim().toLowerCase();
-  //   this.fileListSearch = this.dataSource.filteredData;
-  //   console.log("get all file by filter",this.fileList);
-    
-  // }
 
-  // fileNameSearch(): void {
-  //   const searchValue = this.getAllFilesForm.get('searchKeyData')?.value?.trim() || '';
-    
-  //   if (searchValue) {
-  //     this.cardHide = true;
-  //     this.documentNameSearch = false;
-  //     console.log(searchValue);
-  
-  //     // this.dataset.filter = searchValue.toLowerCase();
-  //     // this.fileListSearch = this.dataset.filteredData;
-
-  //     this.loginService.allSearch(searchValue).subscribe({
-  //       next: (event: any) => {
-  //         if (event instanceof HttpResponse) {
-  //           const res = event.body.documentLists;
-  //           this.fileListRes=res;
-
-  //           this.transformedMap = this.transformApiResponseToMap(this.fileListRes);
-
-  //           this.fileListSearch = Array.from(this.transformedMap.values());
-
-  //           this.dataSource = new MatTableDataSource<getSearchfileList>(this.fileListSearch);
-
-            
-            
-  //         }
-  //       },
-  //       error: (err: any) => {
-  //         if (err.error && err.error.message) {
-  //           this.msg += " " + err.error.message;
-  //         }
-  //       },
-  //     });
-
-
-  //   } else {
-  //     console.log("Enter a value");
-  //   }
-  // }
   
   public performSearch(): void {
     const searchValue = this.searchDataValue?.trim().toLowerCase() || ''; // Convert search value to lowercase
@@ -738,7 +664,6 @@ console.log("catName555",catName);
   
     apiResponse.forEach((item) => {
 
-      // let revObj = item.listOfDocumentVersoinDtos.slice().reverse();
 
       const fileName = item.fileName;
       const documentType = item.documentType;
@@ -790,11 +715,8 @@ console.log("catName555",catName);
 
     let selectedVersionDetails = selectedVersion;
     let version=selectedVersion.versionName;
-    // alert(fileName +JSON.stringify(selectedVersion))
-    // alert(fileName +version)/
-    // alert(JSON.stringify(selectedVersionDetails))
-  
-    console.log("nhhhhhhnhnhnhmdhf:::",item);
+
+    // console.log("nhhhhhhnhnhnhmdhf:::",item);
     
   
         const fileName=item.fileName;
@@ -840,8 +762,7 @@ console.log("catName555",catName);
   
         this.fileListSearch = Array.from(this.transformedMap.values());
   
-        // console.log("After::", JSON.stringify(this.transformedMap.get(fileNameAsMapKey)))
-        
+       //tetsting
   
   }
 

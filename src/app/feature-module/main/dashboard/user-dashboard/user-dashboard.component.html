@@ -9,53 +9,24 @@
     <div>
       <form [formGroup]="getAllFilesForm" class="file-search" id="totalGrp">
         <div class="search-bar">
-          <!-- <input  style="margin-left: -37%; position: absolute; margin-top: 76%; width: 23%;" type="text"
-            class="searchBar" placeholder="Enter your search key..."    formControlName="searchKeyData"   (keydown.enter)="$event.preventDefault()"
-            /> -->
-            <!-- <input
-            style="margin-left: -37%; position: absolute; margin-top: 76%; width: 23%;"
-                    id="value"
-                    (keydown.enter)="$event.preventDefault()"
-                    [(ngModel)]="searchDataValue"
-                    formControlName="searchKeyData"
-                    
-                    (ngModelChange)="searchData(searchKeyData)"
-                    type="search"
-                    class="form-control"
-                    placeholder="Search..."
-                  /> -->
-                  <input
-  style="margin-left: -37%; position: absolute; margin-top: 76%; width: 23%;"
-  id="value"
-  [(ngModel)]="searchDataValue"
-  formControlName="searchKeyData"
-  (keydown.enter)="$event.preventDefault()"
-  (ngModelChange)="performSearch()" 
-  type="search"
-  class="form-control searchBar"
-  placeholder="Enter your search key..."
-/>
 
-<!-- <button
-  id="dashboardModalSearch"
-  class="button button-primary"
-  (click)="performSearch()">
-  Search
-</button> -->
-
-                
+          <input style="margin-left: -37%; position: absolute; margin-top: 76%; width: 23%;" id="value"
+            [(ngModel)]="searchDataValue" formControlName="searchKeyData" (keydown.enter)="$event.preventDefault()"
+            (ngModelChange)="performSearch()" type="search" class="form-control searchBar"
+            placeholder="Enter your search key..." />
 
 
-            <button   class="searchBar" id="mainHeadButton"
-            class="button button-primary" (click)="getAllDtaForHide()" data-bs-toggle="modal"  data-bs-target="#viewMainHeadOptions" >
+
+
+
+
+          <button class="searchBar" id="mainHeadButton" class="button button-primary" (click)="getAllDtaForHide()"
+            data-bs-toggle="modal" data-bs-target="#viewMainHeadOptions">
             Choose Main Heads
           </button>
 
-          <!-- <button  id="dashboardModalSearch"
-            class="button button-primary" (click)="fileNameSearch()">
-            Search
-          </button> -->
-          
+
+
         </div>
       </form>
       <img src="assets/img/banner-edit.jpg" class="backgroundImage" />
@@ -63,10 +34,10 @@
   </header>
 
   <!-- </body> -->
-   <div class="cardHeader"  [hidden]="cardHide">
-    <div class="card-body"  style="text-align: center;">{{mainHeadName}} - {{plantType}}</div>
-   </div>
- 
+  <div class="cardHeader" [hidden]="cardHide">
+    <div class="card-body" style="text-align: center;">{{mainHeadName}} - {{plantType}}</div>
+  </div>
+
 
 
   <div class="card-container" #autoScroll [hidden]="cardHide">
@@ -94,12 +65,13 @@
             </div>
             <div *ngIf="item.departmentName == 'AHP'">
               <img src="assets/img/DSC_5538.JPG" width="500" height="500" />
-              </div>
-              <div *ngIf="!['OPERATION', 'MECHANICAL', 'ELECTRICAL', 'C&I', 'CIVIL', 'CHP', 'AHP'].includes(item.departmentName)">
-                <img src="assets/img/DSC_5538.JPG" width="500" height="500" />
+            </div>
+            <div
+              *ngIf="!['OPERATION', 'MECHANICAL', 'ELECTRICAL', 'C&I', 'CIVIL', 'CHP', 'AHP'].includes(item.departmentName)">
+              <img src="assets/img/DSC_5538.JPG" width="500" height="500" />
             </div>
           </div>
-          
+
 
           <div class="avatar-holder">
 
@@ -139,9 +111,10 @@
               <img src="assets/img/Ash-Dyke.jpg" class="avtarImage" />
             </div>
 
-            <div *ngIf="!['OPERATION', 'MECHANICAL', 'ELECTRICAL', 'C&I', 'CIVIL', 'CHP', 'AHP', 'ASH-DYKE'].includes(item.departmentName)">
+            <div
+              *ngIf="!['OPERATION', 'MECHANICAL', 'ELECTRICAL', 'C&I', 'CIVIL', 'CHP', 'AHP', 'ASH-DYKE'].includes(item.departmentName)">
               <img src="assets/img/Power-Sale.jpg" width="500" height="500" />
-          </div>
+            </div>
 
           </div>
           <div class="name">
@@ -205,31 +178,25 @@
                     <img src="assets/img/Power-O&M.jpg" />
                   </div>
 
-                <div class="clickable-div"
-                  *ngIf="item.name == 'POWER SALE'">
-                  <img src="assets/img/Power-Sale.jpg" />
-                </div>
-              
-                <div class="clickable-div"
-                  *ngIf="item.name == 'ASH-DYKE'">
-                  <img src="assets/img/Ash-Dyke.jpg" />
-                </div>
-                <div  class="clickable-div"
-                  *ngIf="item.name == 'PLANT INFRA(OUTSIDE)'">
-                  <img src="assets/img/Plant-Infra.jpg" />
-                </div>
-                <div  class="clickable-div"
-                  *ngIf="item.name == 'POWER-LEGAL'">
-                  <img src="assets/img/Power-Legal.jpg" />
-                </div>
-                <div  class="clickable-div"
-                *ngIf="item.name == 'PLANNING'">
-                <img src="assets/img/Power-Sale.jpg" />
-              </div>
-            </a>
+                  <div class="clickable-div" *ngIf="item.name == 'POWER SALE'">
+                    <img src="assets/img/Power-Sale.jpg" />
+                  </div>
 
-                <div  class="clickable-div"
-                  *ngIf="item.name == 'COAL COMMERCIAL'">
+                  <div class="clickable-div" *ngIf="item.name == 'ASH-DYKE'">
+                    <img src="assets/img/Ash-Dyke.jpg" />
+                  </div>
+                  <div class="clickable-div" *ngIf="item.name == 'PLANT INFRA(OUTSIDE)'">
+                    <img src="assets/img/Plant-Infra.jpg" />
+                  </div>
+                  <div class="clickable-div" *ngIf="item.name == 'POWER-LEGAL'">
+                    <img src="assets/img/Power-Legal.jpg" />
+                  </div>
+                  <div class="clickable-div" *ngIf="item.name == 'PLANNING'">
+                    <img src="assets/img/Power-Sale.jpg" />
+                  </div>
+                </a>
+
+                <div class="clickable-div" *ngIf="item.name == 'COAL COMMERCIAL'">
                   <img src="assets/img/Coal-Commercial.jpg" />
                 </div>
 
@@ -303,7 +270,7 @@
           <button type="button" id="closePlantModalBtn" #closebutton class="btn-close circular-button"
             data-bs-dismiss="modal" aria-label="Close"
             style="position: absolute; top: 10px; right: 10px; width: 20px; height: 20px; border-radius: 50%; background-color: #c3c2c2; border: 1px solid #000000; display: flex; align-items: center; justify-content: center;">
-            <span aria-hidden="true" >&times;</span>
+            <span aria-hidden="true">&times;</span>
           </button>
           <div class="plantContent" style="text-align: center;">
             <h2 style="color: black;">Choose Plant</h2>
@@ -311,12 +278,13 @@
             <div class="row">
               <div class="" *ngFor="let item of plantsList">
                 <div *ngIf="item.name == 'CPP-1'">
-                  <button class="btn-custom btn-green"id='cpp2btn' (click)="navigateToRoute(item.name, item.catType)"
+                  <button class="btn-custom btn-green" id='cpp2btn' (click)="navigateToRoute(item.name, item.catType)"
                     (click)="onClick()"> CPP-1(540MW) </button>
                 </div>
                 <div *ngIf="item.name == 'CPP-2 (540MW)'">
-                  <button class="btn-custom btn-green"id='cpp2btn' (click)="getDetailsByPlantsName(item.name, item.catType)"
-                    (click)="onClick()"> CPP-2(540MW) </button>
+                  <button class="btn-custom btn-green" id='cpp2btn'
+                    (click)="getDetailsByPlantsName(item.name, item.catType)" (click)="onClick()"> CPP-2(540MW)
+                  </button>
                 </div>
                 <div *ngIf="item.name == 'CPP-3 (1200MW)'">
                   <button class="btn-custom btn-green" (click)="getDetailsByPlantsName(item.name, item.catType)"
@@ -330,8 +298,7 @@
               </div>
             </div>
 
-            <!-- <button class="btn-custom btn-white" style="background-color: white; color: black; border: 1px solid #000000; padding: 10px 20px; text-align: center; text-decoration: none; display: inline-block; font-size: 16px; margin: 4px 2px; cursor: pointer; border-radius: 5px;">CPP-3</button>
-          -->
+
           </div>
         </div>
       </div>
@@ -343,26 +310,22 @@
 
 <!-- FILE SEARCH FUNCTION BY DOCUMENT NAME -->
 
-<div class="cardHeader"  [hidden]="documentNameSearch">
-  <div class="card-body"  style="text-align: center;
+<div class="cardHeader" [hidden]="documentNameSearch">
+  <div class="card-body" style="text-align: center;
   font-weight: 600;
   font-size: large;">Searched Result </div>
- </div>
+</div>
 
- <div class="row" [hidden]="documentNameSearch" style="margin-top: 20px; overflow-y: auto;margin-left: 1%;
+<div class="row" [hidden]="documentNameSearch" style="margin-top: 20px; overflow-y: auto;margin-left: 1%;
     margin-right: 1%;">
   <div class="col-md-12">
-    <div class="table_header" >
+    <div class="table_header">
       <div class="row">
         <div class="col-sm-8 col-md-5">
           <div class="dataTables_length">
             <label class="col-form-label" for="">
               Show
-              <select
-                [(ngModel)]="pageSize"
-        
-                class="form-control form-control-sm" id="changePageDataNumber"
-              >
+              <select [(ngModel)]="pageSize" class="form-control form-control-sm" id="changePageDataNumber">
                 <option value="10">10</option>
                 <option value="25">25</option>
                 <option value="50">50</option>
@@ -374,228 +337,117 @@
         </div>
       </div>
     </div>
-    <div
-      class="table-responsive"
-      style="text-align: center; justify-content: center"
-    >
-    <table
-    matSort
-    (matSortChange)="sortData($event)"
-    class="table table-striped custom-table datatable doc-table"
-  >
-    <thead>
-      <tr>
-        <th style="color: rgb(22, 32, 138)" mat-sort-header="name">
-          Document Name
-        </th>
-        <th style="color: rgb(22, 32, 138)" mat-sort-header="docType">
-          Document Type
-        </th>
-        <th style="color: rgb(22, 32, 138)" mat-sort-header="subDocument">
-          Sub-Document Type
-        </th>
-        <th style="color: rgb(22, 32, 138)" mat-sort-header="storage">
-          Storage Location
-        </th>
-        <th style="color: rgb(22, 32, 138)" mat-sort-header="ver">
-          Versions
-        </th>
-        <th style="color: rgb(22, 32, 138)" mat-sort-header="size">
-          Document Size
-        </th>
-        <th style="color: rgb(22, 32, 138)">Download</th>
-        <th style="color: rgb(22, 32, 138)">View</th>
-      </tr>
-    </thead>
+    <div class="table-responsive" style="text-align: center; justify-content: center">
+      <table matSort (matSortChange)="sortData($event)" class="table table-striped custom-table datatable doc-table">
+        <thead>
+          <tr>
+            <th style="color: rgb(22, 32, 138)" mat-sort-header="name">
+              Document Name
+            </th>
+            <th style="color: rgb(22, 32, 138)" mat-sort-header="docType">
+              Document Type
+            </th>
+            <th style="color: rgb(22, 32, 138)" mat-sort-header="subDocument">
+              Sub-Document Type
+            </th>
+            <th style="color: rgb(22, 32, 138)" mat-sort-header="storage">
+              Storage Location
+            </th>
+            <th style="color: rgb(22, 32, 138)" mat-sort-header="ver">
+              Versions
+            </th>
+            <th style="color: rgb(22, 32, 138)" mat-sort-header="size">
+              Document Size
+            </th>
+            <th style="color: rgb(22, 32, 138)">Download</th>
+            <th style="color: rgb(22, 32, 138)">View</th>
+          </tr>
+        </thead>
 
-    <tbody>
-      <div>
-        <!-- <p>Loading...</p>  -->
-        <!-- <i class="fas fa-spinner fa-spin text-info align-items-center me-1"></i> -->
-      </div>
-      <tr *ngFor="let item of fileListSearch">
-        
-        <!-- <td>
-          <h2 class="table-avatar d-flex">
-         <span style="color: rgb(1, 1, 11);"> {{ item.newUniqueFileName }}</span>-<span style="color: blue;">[{{ item.versionName }}-{{ item.versionReleaseDate }}]</span>
-          </h2>
-        </td> -->
+        <tbody>
+          <div>
 
-        <td>
-          <div class="tooltip-container">
-            {{ item.fileName }}
-            <span class="tooltip-text">{{ item.newUniqueFileName }}</span>-<span style="color: blue;">[{{ item.versionName }}-{{ item.versionReleaseDate }}]</span>
           </div>
-        </td>
-        
-          
-        <td>{{ item.documentType? item.documentType : 'N/A' }}</td>
-        <td>
-          {{item.documentSubType? item.documentSubType : 'N/A'}}
-        </td>
-        <td>
-          {{item.storageLocation? item.storageLocation : 'N/A'}}
-        </td>
-       
-        <td>
-          <mat-select
-            class="custom-mat-select select"
-            id="versionSelect"
-            placeholder="Select Version"
-            (selectionChange)="onVersionChange(item, item.fileName, $event.value)"
-           
-          >
-            <mat-option
-              *ngFor="let version of item.listOfDocumentVersoinDtos"
-              [value]="version"
-            >
-              {{ version.versionName }} - {{ version.versionReleaseDate }}
-            </mat-option>
-          </mat-select>
-        </td>
-        
-        
-        <td>{{ item.fileSize }} KB</td>
-        <td class="text-center">
-          <a
-            class="dropdown-item"
-            [href]="item.fileUrl"
-            target="_blank"
-          >
-            <i
-              class="fa-solid fa-download"
-              style="color: rgb(0, 117, 234)"
-            ></i>
-          </a>
-          <!-- {{item.fileUrl}} -->
-        </td>
-        <td class="text-center">
-          <a
-            class="dropdown-item"
-            [href]="item.fileUrl"
-            target="_blank"
-            data-bs-toggle="modal"
-            data-bs-target="#view_files"
-            (click)="setFileUrl(item.fileUrl)"
-          >
-            <i class="fas fa-eye" style="color: rgb(0, 117, 234)"></i>
-          </a>
-          <!-- {{item.fileUrl}} -->
-        </td>
-      </tr>
-      <tr *ngIf=" fileListSearch.length == 0">
-        <td colspan="8" style="text-align: center; color: red">
-          No Records Found!
-        </td>
-      </tr>
-    </tbody>
-  </table>
+          <tr *ngFor="let item of fileListSearch">
+            <td>
+              <div class="tooltip-container">
+                {{ item.fileName }}
+                <span class="tooltip-text">{{ item.newUniqueFileName }}</span>-<span style="color: blue;">[{{
+                  item.versionName }}-{{ item.versionReleaseDate }}]</span>
+              </div>
+            </td>
+
+
+            <td>{{ item.documentType? item.documentType : 'N/A' }}</td>
+            <td>
+              {{item.documentSubType? item.documentSubType : 'N/A'}}
+            </td>
+            <td>
+              {{item.storageLocation? item.storageLocation : 'N/A'}}
+            </td>
+
+            <td>
+              <mat-select class="custom-mat-select select" id="versionSelect" placeholder="Select Version"
+                (selectionChange)="onVersionChange(item, item.fileName, $event.value)">
+                <mat-option *ngFor="let version of item.listOfDocumentVersoinDtos" [value]="version">
+                  {{ version.versionName }} - {{ version.versionReleaseDate }}
+                </mat-option>
+              </mat-select>
+            </td>
+
+
+            <td>{{ item.fileSize }} KB</td>
+            <td class="text-center">
+              <a class="dropdown-item" [href]="item.fileUrl" target="_blank">
+                <i class="fa-solid fa-download" style="color: rgb(0, 117, 234)"></i>
+              </a>
+              <!-- {{item.fileUrl}} -->
+            </td>
+            <td class="text-center">
+              <a class="dropdown-item" [href]="item.fileUrl" target="_blank" data-bs-toggle="modal"
+                data-bs-target="#view_files" (click)="setFileUrl(item.fileUrl)">
+                <i class="fas fa-eye" style="color: rgb(0, 117, 234)"></i>
+              </a>
+              <!-- {{item.fileUrl}} -->
+            </td>
+          </tr>
+          <tr *ngIf=" fileListSearch.length == 0">
+            <td colspan="8" style="text-align: center; color: red">
+              No Records Found!
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
     <div class="table_footer">
       <div class="col-sm-12 col-md-5">
-        <!-- <div class="dataTables_info">
-          Showing {{ serialNumberArray[0] }} to
-          {{ serialNumberArray[serialNumberArray.length - 2] }} of
-          {{ totalData }} entries
-        </div> -->
+
       </div>
 
-      <!-- <div class="col-sm-12 col-md-7">
-        <div class="pagination_section">
-          <ul class="pagination">
-            <li class="page-item" [ngClass]="{
-                disabled: currentPage === 1
-              }">
-              <a (click)="getMoreData('previous')" class="page-link" href="javascript:void(0);" tabindex="-1"><i
-                  class="fa fa-angle-double-left"></i></a>
-            </li>
 
-            @for (item of pageNumberArray; track item; let i = $index) {
-            <li class="page-item" [class.active]="item === currentPage" [ngClass]="
-                  (pageNumberArray[currentPage - 2] > item &&
-                    item !== 1 &&
-                    pageNumberArray.length > 6) ||
-                  (pageNumberArray[currentPage] < item &&
-                    item !== 1 &&
-                    pageNumberArray.length > 6 &&
-                    pageNumberArray.length !== item)
-                    ? 'hide-page-no'
-                    : 'show-page-no'
-                ">
-              <a (click)="moveToPage(item)" class="page-link" href="javascript:void(0);">
-                {{ item }}
-              </a>
-            </li>
-            @if (
-            i === 0 && pageNumberArray.length > 6 && currentPage > 2
-            ) {
-            <li class="page-item" [hidden]="currentPage === 1" (click)="moveToPage(currentPage - 2)"
-              (keydown.enter)="moveToPage(currentPage - 2)" tabindex="0">
-              <a class="page-link" href="javascript:void(0);"> ... </a>
-            </li>
-            }
-            @if (
-            i === pageNumberArray.length - 2 &&
-            pageNumberArray.length > 6
-            ) {
-            <li [hidden]="
-                  currentPage >=
-                    pageNumberArray[pageNumberArray.length - 2] ||
-                  totalData < serialNumberArray[serialNumberArray.length - 1]
-                " class="page-item" (click)="moveToPage(currentPage + 2)"
-              (keydown.enter)="moveToPage(currentPage + 2)" tabindex="0">
-              <a class="page-link" href="javascript:void(0);"> ... </a>
-            </li>
-            }
-            }
-
-            <li class="page-item" [ngClass]="{
-                disabled:
-                  currentPage ===
-                    pageNumberArray[pageNumberArray.length - 1] ||
-                    fileList.length === 0
-              }">
-              <a (click)="getMoreData('next')" class="page-link" href="javascript:void(0);"><i
-                  class=" fa fa-angle-double-right"></i>
-              </a>
-            </li>
-          </ul>
-        </div>
-      </div> -->
     </div>
   </div>
 
-  <div
-  id="view_files"
-  #view_files
-  class="modal custom-modal fade"
-  role="dialog"
->
-  <div class="modal-dialog modal-dialog-centered modal-xl">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">File-Name</h5>
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="modal"
-          aria-label="Close"
-          (click)="buttonClose()"
-        >
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <form>
-          <div class="row">
-            <!-- <iframe src="http://localhost:8080/document/show-pdf/Scope of Work_Digital Library0a1ee6ec-b60f-41da-ac55-31003c08c239"
+  <div id="view_files" #view_files class="modal custom-modal fade" role="dialog">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">File-Name</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="buttonClose()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="row">
+              <!-- <iframe src="http://localhost:8080/document/show-pdf/Scope of Work_Digital Library0a1ee6ec-b60f-41da-ac55-31003c08c239"
                   width="800" height="600"> </iframe> -->
-            <!-- <iframe src="D:\Client project\pdf documents for demo/scope"
+              <!-- <iframe src="D:\Client project\pdf documents for demo/scope"
                   width="800" height="600"> </iframe> -->
-            <!-- <iframe src="http://103.168.18.28:8080/document/show-file/POWER O&M.C&I.TURBINE.CPP-2.318.C72-EN.pdf"
+              <!-- <iframe src="http://103.168.18.28:8080/document/show-file/POWER O&M.C&I.TURBINE.CPP-2.318.C72-EN.pdf"
                   width="800" target="_blank" height="600"> </iframe> -->
 
-            <!-- <iframe
+              <!-- <iframe
             src="http://103.168.18.28:8080/document/show-file/POWER O&M.C&I.TURBINE.CPP-2.32.Copy of Estimated_Time.xlsx"
             width="800" 
             height="600"
@@ -604,32 +456,24 @@
             ...This is an embedded file...
           </iframe> -->
 
-            <!-- <ngx-doc-viewer [url]="doc" [viewer]="viewer" style="width:100%;height:80vh;"></ngx-doc-viewer> -->
+              <!-- <ngx-doc-viewer [url]="doc" [viewer]="viewer" style="width:100%;height:80vh;"></ngx-doc-viewer> -->
 
-             <ngx-doc-viewer
-              [url]="doc"
-              [viewer]="viewer"
-              style="width: 100%; height: 80vh"
-            ></ngx-doc-viewer>
+              <ngx-doc-viewer [url]="doc" [viewer]="viewer" style="width: 100%; height: 80vh"></ngx-doc-viewer>
 
-<!-- <iframe src="https://sharecad.org/cadframe/load?url=http://www.cadsofttools.com/dwgviewer/floorplan.dwg" scrolling="yes"></iframe>
+              <!-- <iframe src="https://sharecad.org/cadframe/load?url=http://www.cadsofttools.com/dwgviewer/floorplan.dwg" scrolling="yes"></iframe>
              -->
 
 
-             <!-- <iframe src="http://localhost:4200/assets/files/anteen.dwg" scrolling="yes"></iframe> -->
-            
-             <!-- <iframe src="https://sharecad.org/cadframe/load?url=http://www.cadsofttools.com/dwgviewer/floorplan.dwg" scrolling="yes" width="100%" height="600"></iframe> -->
+              <!-- <iframe src="http://localhost:4200/assets/files/anteen.dwg" scrolling="yes"></iframe> -->
+
+              <!-- <iframe src="https://sharecad.org/cadframe/load?url=http://www.cadsofttools.com/dwgviewer/floorplan.dwg" scrolling="yes" width="100%" height="600"></iframe> -->
 
 
-          </div>
-        </form>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   </div>
-</div>
 
 </div>
-
-
-
-
