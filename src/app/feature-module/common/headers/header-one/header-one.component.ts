@@ -200,14 +200,17 @@ export class HeaderOneComponent implements OnInit {
       next: (event: any) => {
         if (event instanceof HttpResponse) {
           this.resp = event.body.data
-          // this.notificTwo = this.resp;
+          const notificTwoo = this.resp;
+          console.log("before filter::::",notificTwoo);
+          
            // Filter out only the notifications where markAsRead is false
       this.notificTwo = this.resp.filter((notification: any) => !notification.markAsRead); //markedAsRead = false
       
-      console.log("Filtered notificTwo", this.notificTwo);
+      console.log("Filtered notificTwo::::", this.notificTwo);
 
       this.readNotification = this.resp.filter((notification: any) => notification.markAsRead); //markedAsRead = true
-          console.log("readNotification", this.readNotification);
+          // console.log("readNotification", this.readNotification);
+      localStorage.setItem('fileUploadNotificationList', JSON.stringify(this.readNotification));
           
           this.userNotifyCountTwo = this.notificTwo.length;
         }
@@ -271,13 +274,14 @@ export class HeaderOneComponent implements OnInit {
   }
 
 
-  public userNotificationBell(userId: any) {
-
+  userNotificationBell(userId: any) {
+    
     if (!userId) {
       return;
     } else {
 
       this.loginService.userNotification(userId).subscribe({
+        
         next: (event: any) => {
           if (event instanceof HttpResponse) {
             this.resp = event.body.data
@@ -287,7 +291,8 @@ export class HeaderOneComponent implements OnInit {
       console.log("Filtered statutoryUnreadNotification", this.respData);
 
       this.statutoryReadNotification = this.resp.filter((notification: any) => notification.markAsRead);  //markedAsRead = true
-          console.log("statutoryReadNotification", this.statutoryReadNotification);
+          // console.log("send statutoryReadNotification read list", this.statutoryReadNotification);
+          localStorage.setItem('statutoryReadNotificationList', JSON.stringify(this.statutoryReadNotification));
             
 
             this.userNotificationData = this.respData;
@@ -597,11 +602,15 @@ export class HeaderOneComponent implements OnInit {
 
      // Call API to mark as read
   this.loginService.markedAsReadStatutoryNotification(item.stepId).subscribe({
-    next: (response: any) => {
-      console.log('Marked as read response:', response);
-      // if(response.status == 200){
-      // window.location.href = window.location.href;
-      // }
+    next: (event: any) => {
+      if (event instanceof HttpResponse) {
+        const res = event.body.status
+        console.log("looollll,",res);
+          if(res == 200){
+      this.userNotificationBell(this.loggedUserId)
+      }
+        
+      }
     },
     error: (error: any) => {
       console.error('Error marking as read:', error);

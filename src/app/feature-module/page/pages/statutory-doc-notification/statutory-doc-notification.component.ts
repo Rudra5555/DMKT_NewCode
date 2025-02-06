@@ -3,7 +3,7 @@ import { Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { routes } from 'src/app/core/core.index';
 import { DataService } from 'src/app/core/services/data/data.service';
-import { apiResultFormat, getcontactlist } from 'src/app/core/services/interface/models';
+import { apiResultFormat, getReadNotificationList } from 'src/app/core/services/interface/models';
 import { pageSelection } from 'src/app/feature-module/employee/employees/departments/departments.component';
 
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
@@ -50,8 +50,8 @@ export class StatutoryDocNotificationComponent implements OnInit {
   isLoading: boolean = false; 
   public pageNumberArray: Array<number> = [];
   public pageSelection: Array<pageSelection> = [];
-  dataSource!: MatTableDataSource<getcontactlist>;
-  public contactlist: Array<getcontactlist> = [];
+  dataSource!: MatTableDataSource<getReadNotificationList>;
+  public readNotificationList: Array<getReadNotificationList> = [];
   public totalPages = 0;
   public message: any;
   public selectedFiles: any;
@@ -99,7 +99,7 @@ export class StatutoryDocNotificationComponent implements OnInit {
   selectedFileUrl: any;
   subject = new BehaviorSubject('')
 
-
+  statutoryReadNotificationList:any;
 
 
 
@@ -135,6 +135,12 @@ export class StatutoryDocNotificationComponent implements OnInit {
 
   ngOnInit(): void {
 
+    // const storedData = localStorage.getItem('statutoryReadNotificationList');
+    // this.statutoryReadNotificationList = storedData ? JSON.parse(storedData) : [];
+  
+    // console.log("received notification list",this.statutoryReadNotificationList);
+    this.StDocmarkAsReadNotif();
+
     this.setLast7Days();
 
     this.loggedUserId = localStorage.getItem('loggedInUserId');
@@ -158,9 +164,33 @@ export class StatutoryDocNotificationComponent implements OnInit {
 
   }
 
+  public StDocmarkAsReadNotif(){
+
+    this.isLoading = true;
+    const storedData = localStorage.getItem('statutoryReadNotificationList');
+    const statutoryReadNotificationList = storedData ? JSON.parse(storedData) : [];
+
+    this.totalData = statutoryReadNotificationList.length;
+
+    statutoryReadNotificationList.map((item: getReadNotificationList, index: number) => {
+      const serialNumber = index + 1;
+      if (index >= this.skip && serialNumber <= this.limit) {
+        item.id = serialNumber;
+        this.readNotificationList.push(item);
+        this.serialNumberArray.push(serialNumber);
+      }
+    });
+
+    this.dataSource = new MatTableDataSource<getReadNotificationList>(this.readNotificationList);
+    this.calculateTotalPages(statutoryReadNotificationList.length, this.pageSize);
+    this.isLoading = false; 
+
+  }
+
+
   public approvedDocumentList(loggedUserId: any): void {
-    this.contactlist = [];
-    this.isLoading = true; // Start loader
+    // this.contactlist = [];
+    // this.isLoading = true; // Start loader
     this.serialNumberArray = [];
 
     this.loginService.approvedDocList(loggedUserId, this.startDate, this.endDate).subscribe({
@@ -168,21 +198,21 @@ export class StatutoryDocNotificationComponent implements OnInit {
         if (event instanceof HttpResponse) {
           const responseData = event.body.data;
 
-          const filteredData = responseData.filter((item: getcontactlist) => item.documentApprovalStatus === 'A');
+          // const filteredData = responseData.filter((item: getcontactlist) => item.documentApprovalStatus === 'A');
 
-          this.totalData = filteredData.length;
-          filteredData.map((item: getcontactlist, index: number) => {
-            const serialNumber = index + 1;
-            if (index >= this.skip && serialNumber <= this.limit) {
-              item.id = serialNumber;
-              this.contactlist.push(item);
-              this.serialNumberArray.push(serialNumber);
-            }
-          });
+          // this.totalData = filteredData.length;
+          // filteredData.map((item: getcontactlist, index: number) => {
+          //   const serialNumber = index + 1;
+          //   if (index >= this.skip && serialNumber <= this.limit) {
+          //     item.id = serialNumber;
+          //     this.contactlist.push(item);
+          //     this.serialNumberArray.push(serialNumber);
+          //   }
+          // });
 
-          this.dataSource = new MatTableDataSource<getcontactlist>(this.contactlist);
-          this.calculateTotalPages(filteredData.length, this.pageSize);
-          this.isLoading = false; 
+          // this.dataSource = new MatTableDataSource<getcontactlist>(this.contactlist);
+          // this.calculateTotalPages(filteredData.length, this.pageSize);
+          // this.isLoading = false; 
         }
       },
       error: (err: any) => {
@@ -480,11 +510,11 @@ export class StatutoryDocNotificationComponent implements OnInit {
 
 
   public sortData(sort: Sort) {
-    const data = this.contactlist.slice();
+    const data = this.readNotificationList.slice();
     if (!sort.active || sort.direction === '') {
-      this.contactlist = data;
+      this.readNotificationList = data;
     } else {
-      this.contactlist = data.sort((a: any, b: any) => {
+      this.readNotificationList = data.sort((a: any, b: any) => {
         const aValue = (a as any)[sort.active];
         const bValue = (b as any)[sort.active];
         return (aValue < bValue ? -1 : 1) * (sort.direction === 'asc' ? 1 : -1);
@@ -494,7 +524,7 @@ export class StatutoryDocNotificationComponent implements OnInit {
 
   public searchData(value: string): void {
     this.dataSource.filter = value.trim().toLowerCase();
-    this.contactlist = this.dataSource.filteredData;
+    this.readNotificationList = this.dataSource.filteredData;
   }
 
   public getMoreData(event: string): void {
@@ -503,13 +533,13 @@ export class StatutoryDocNotificationComponent implements OnInit {
       this.pageIndex = this.currentPage - 1;
       this.limit += this.pageSize;
       this.skip = this.pageSize * this.pageIndex;
-      this.approvedDocumentList(this.loggedUserId);
+      this.StDocmarkAsReadNotif();
     } else if (event === 'previous') {
       this.currentPage--;
       this.pageIndex = this.currentPage - 1;
       this.limit -= this.pageSize;
       this.skip = this.pageSize * this.pageIndex;
-      this.approvedDocumentList(this.loggedUserId);
+      this.StDocmarkAsReadNotif();
     }
   }
 
@@ -522,7 +552,7 @@ export class StatutoryDocNotificationComponent implements OnInit {
     } else if (pageNumber < this.currentPage) {
       this.pageIndex = pageNumber + 1;
     }
-    this.approvedDocumentList(this.loggedUserId);
+    this.StDocmarkAsReadNotif();
   }
   private calculateTotalPages(totalData: number, pageSize: number): void {
     this.pageNumberArray = [];
@@ -542,7 +572,7 @@ export class StatutoryDocNotificationComponent implements OnInit {
     this.limit = this.pageSize;
     this.skip = 0;
     this.currentPage = 1;
-    this.approvedDocumentList(this.loggedUserId);
+    this.StDocmarkAsReadNotif();
   }
   openFilter() {
     this.filter = !this.filter;

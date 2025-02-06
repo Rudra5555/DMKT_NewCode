@@ -1103,6 +1103,57 @@ export interface getcontactlist {
   // status: string;
   fileUrl: string;
 }
+
+export interface getreadFileNotificationList {
+  id: number;
+  workflowDocId: string;
+  fileName: string;
+  generatedBy: string;
+  generatedByName: string;
+  generatedOn: string;
+  fileDir: string;
+  fileUrl: string;
+  assignRole: string;
+  assignRoleType: string;
+  executedBy: string;
+  executedByName: string;
+  executedOn: string;
+  status: string;
+  activeStatus: string;
+  remarks: string;
+  reason: string;
+  markAsRead: boolean;
+}
+
+export interface getReadNotificationList {
+  id: number;
+  stepId: string;
+  documentId: string;
+  documentName: string;
+  generateBy: string;
+  requesterName: string;
+  uniqueDocumentName: string;
+  fileUrl: string;
+  executerName: string;
+  departmentName: string;
+  plantName: string;
+  generatedByEmail: string;
+  userDepartment: string;
+  documentType: string;
+  generateOn: string;
+  assignTo: string;
+  documentApprovalStatus: string;
+  executedBy: string;
+  executedOn: string;
+  uploadImg: string;
+  remarks: string;
+  reason: string;
+  validUpto: string;
+  expDate: string;
+  markAsRead: boolean;
+}
+
+
 export interface url {
   url: string;
 }

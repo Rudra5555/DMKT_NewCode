@@ -1,4 +1,4 @@
-<div class="content container-fluid" style="height: 100vh;">
+<div class="content container-fluid" style="height: 150vh;">
   <!-- Page Header -->
   <div class="page-header">
     <div class="row align-items-center">
@@ -24,7 +24,7 @@
     <div class="filter-section">
       <ul>
         <li>
-          <div class="filter-section">
+          <!-- <div class="filter-section">
             <div class="col-xl-12">
               <div class="daterange-picker d-flex centered-div">
                 <div class="form-sort">
@@ -34,7 +34,7 @@
                 </div>
               </div>
             </div>
-          </div>
+          </div> -->
 
         </li>
 
@@ -80,57 +80,48 @@
             </div>
           </div>
         </div>
-        <div class="table-responsive">
+        <div class="table-responsive" style="overflow-y: auto; height:500px">
           <table matSort (matSortChange)="sortData($event)"
             class="table table-striped custom-table datatable contact-table">
             <thead>
               <tr>
                 <th mat-sort-header="name">Document Name</th>
-                <th mat-sort-header="dept">Requestor Department</th>
-                <th mat-sort-header="approvedBy">Approved By</th>
-                <th mat-sort-header="date">Approved D&T</th>
+                <th mat-sort-header="AR name">Approver/Rejecter’s Name</th>
+                <th mat-sort-header="Ex time">Expiration Date</th>
+                <th mat-sort-header="dept">Department Name</th>
                 <th mat-sort-header="status">Status</th>
-                <th>Action</th>
               </tr>
             </thead>
             <tbody>
               <div *ngIf="isLoading" class="spinner-border" style="align-items: center;margin-left: 250%;">
                
               </div>
-              <tr *ngFor="let item of contactlist; ">
+              <tr *ngFor="let item of readNotificationList; ">
                 <td>
                   <h2 class="table-avatar d-flex">
-                    <a class="profile-split d-flex flex-column">{{ replaceDotsWithSlashes(item.uniqueDocumentName) }}
+                    <a class="profile-split d-flex flex-column">{{item.documentName }}
                     </a>
                   </h2>
                 </td>
 
                 <td>
-                  {{ item.departmentName }}
+                  {{ item.executerName}}
 
                 </td>
 
                 <td>
-                  {{ item.executerName }}
+                  {{ item.validUpto }}
 
                 </td>
                 <td>
-                  {{ formatExecutedData(item.executedOn) }}
+                  {{ item.departmentName}}
                 </td>
                 <td>
-                  {{ getStatusText(item.documentApprovalStatus) }}
-                </td>
-                <td class="text-center">
-
-                  <a class="dropdown-item" [href]="item.fileUrl" (click)="openModal(item.fileUrl , item.documentName)"
-                    data-bs-toggle="modal" data-bs-target="#viewApprovedFiles">
-                    <i class="fas fa-eye" style="color: rgb(0, 117, 234)"></i>
-                  </a>
-
+                  {{ item.remarks}}
                 </td>
               </tr>
 
-              <tr *ngIf="!isLoading && contactlist.length==0">
+              <tr *ngIf="!isLoading && readNotificationList.length==0">
                 <td colspan="6" style="text-align: center; color: red">
                   No Records Found!
                 </td>
@@ -201,7 +192,7 @@
                   disabled:
                     currentPage ===
                       pageNumberArray[pageNumberArray.length - 1] ||
-                      contactlist.length === 0
+                      readNotificationList.length === 0
                 }">
                   <a (click)="getMoreData('next')" class="page-link" href="javascript:void(0);"><i
                       class=" fa fa-angle-double-right"></i>
@@ -247,7 +238,7 @@
 
 
   <!-- Add Contact -->
-  <div class="modal custom-modal fade custom-modal-two modal-padding" id="add_contact" role="dialog">
+  <!-- <div class="modal custom-modal fade custom-modal-two modal-padding" id="add_contact" role="dialog">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header header-border justify-content-between p-0">
@@ -343,7 +334,7 @@
 
       </div>
     </div>
-  </div>
+  </div> -->
   <!-- /Add Contact -->
 
 
@@ -363,7 +354,7 @@
 
 
   <!-- Edit Contact -->
-  <div class="modal custom-modal fade custom-modal-two modal-padding" id="edit_contact" role="dialog">
+  <!-- <div class="modal custom-modal fade custom-modal-two modal-padding" id="edit_contact" role="dialog">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header header-border justify-content-between p-0">
@@ -825,11 +816,11 @@
         </div>
       </div>
     </div>
-  </div>
+  </div> -->
   <!-- /Edit Contact -->
 
   <!-- Success Contact -->
-  <div class="modal custom-modal fade" id="success_msg" role="dialog">
+  <!-- <div class="modal custom-modal fade" id="success_msg" role="dialog">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-body">
@@ -847,11 +838,11 @@
         </div>
       </div>
     </div>
-  </div>
+  </div> -->
   <!-- /Success Contact -->
 
   <!-- Delete Contact -->
-  <div class="modal custom-modal fade" id="delete_contact" role="dialog">
+  <!-- <div class="modal custom-modal fade" id="delete_contact" role="dialog">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-body">
@@ -869,11 +860,11 @@
         </div>
       </div>
     </div>
-  </div>
+  </div> -->
   <!-- /Delete Contact -->
 
   <!-- Export -->
-  <div class="modal custom-modal fade modal-padding" id="export" role="dialog">
+  <!-- <div class="modal custom-modal fade modal-padding" id="export" role="dialog">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header header-border justify-content-between p-0">
@@ -941,9 +932,9 @@
         </div>
       </div>
     </div>
-  </div>
+  </div> -->
 
-  <div class="modal custom-modal fade modal-padding" id="add_notes" role="dialog">
+  <!-- <div class="modal custom-modal fade modal-padding" id="add_notes" role="dialog">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header header-border align-items-center justify-content-between p-0">
@@ -1001,7 +992,7 @@
     </div>
 
 
-  </div>
+  </div> -->
 
 
   
