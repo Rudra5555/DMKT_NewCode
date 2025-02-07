@@ -182,7 +182,7 @@ export class ApprovedRejectDocListComponent implements OnInit {
 
 
             
-            console.log("ccccccccccccccc",filteredData);
+            // console.log("ccccccccccccccc",filteredData);
             
 
 
