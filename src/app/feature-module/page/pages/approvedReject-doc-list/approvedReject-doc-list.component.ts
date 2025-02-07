@@ -182,8 +182,9 @@ export class ApprovedRejectDocListComponent implements OnInit {
 
 
             
-            // console.log("ccccccccccccccc",filteredData);
+            console.log("ccccccccccccccc",filteredData);
             
+
 
             filteredData.map((item: getApproveAndRejDoc, index: number) => {
               const serialNumber = index + 1;
