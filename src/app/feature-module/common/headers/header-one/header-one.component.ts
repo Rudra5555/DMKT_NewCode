@@ -186,7 +186,7 @@ export class HeaderOneComponent implements OnInit {
         if (event instanceof HttpResponse) {
           this.resp = event.body.response
           this.roles = this.resp;
-          localStorage.setItem('role', this.roles);
+          // localStorage.setItem('Arole', this.roles);
         }
       },
       error: (err: any) => {

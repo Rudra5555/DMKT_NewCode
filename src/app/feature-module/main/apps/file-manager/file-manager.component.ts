@@ -265,14 +265,18 @@ public loggedUserId: any;
               }
             });
           });
+          console.log("file list one",this.fileListOne);
+          
 
           this.transformedMap = this.transformApiResponseToMap(this.fileListOne);
 
           this.fileList = Array.from(this.transformedMap.values());
+          console.log("file list",JSON.stringify( this.fileList));
+          
           //copy data
           this.copyDataList = Array.from(this.transformedMap.values());
 
-          console.log("vgyvgscgshadfgavsdcha:^^^^",this.finalList);
+          // console.log("vgyvgscgshadfgavsdcha:^^^^",this.finalList);
           
   
           console.log("response..............",this.transformedMap);

@@ -91,7 +91,7 @@ export class UserListComponent implements OnInit {
             localStorage.setItem('Phone', res.response.phoneNumber)
             localStorage.setItem('Email', res.response.emailId)
             localStorage.setItem('IsActive', res.response.isActive)
-            localStorage.setItem('Role', res.response.role)
+            // localStorage.setItem('Role', res.response.role)
             // localStorage.setItem('Department ', res.response)
             // localStorage.setItem('Plant', res.response)
               
