@@ -5,6 +5,8 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Validators } from 'ngx-editor';
 import { DataService, apiResultFormat, getClient, routes } from 'src/app/core/core.index';
 import { UploadDocumentComponentService } from 'src/app/services/upload-document-component.service';
+import { LoginComponentService } from "src/app/services/login-component.service";
+import { HttpResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-user-list',
@@ -28,12 +30,14 @@ export class UserListComponent implements OnInit {
   public pageNumberArray: Array<number> = [];
   public pageSelection: Array<pageSelection> = [];
   public totalPages = 0;
+  msg:any;
   //** / pagination variables
   // constructor(private data: DataService) {}
 
   constructor(
     private data: DataService,
     private formBuilder: FormBuilder,
+    private loginService: LoginComponentService,
 
   ) {
 
@@ -56,27 +60,61 @@ export class UserListComponent implements OnInit {
     this.getTableData();
   }
 
+  // private getTableData(): void {
+  //   this.clientsData = [];
+  //   this.serialNumberArray = [];
+
+  //   this.data.getClient().subscribe((res: apiResultFormat) => {
+  //     this.totalData = res.totalData;
+  //     res.data.map((res: getClient, index: number) => {
+  //       const serialNumber = index + 1;
+  //       if (index >= this.skip && serialNumber <= this.limit) {
+  //         res.id = serialNumber;
+  //         this.clientsData.push(res);
+  //         this.serialNumberArray.push(serialNumber);
+  //       }
+  //     });
+  //     this.dataSource = new MatTableDataSource<getClient>(this.clientsData);
+  //     this.calculateTotalPages(this.totalData, this.pageSize);
+  //   });
+  // }
+  
   private getTableData(): void {
     this.clientsData = [];
     this.serialNumberArray = [];
 
-    this.data.getClient().subscribe((res: apiResultFormat) => {
-      this.totalData = res.totalData;
-      res.data.map((res: getClient, index: number) => {
-        const serialNumber = index + 1;
-        if (index >= this.skip && serialNumber <= this.limit) {
-          res.id = serialNumber;
-          this.clientsData.push(res);
-          this.serialNumberArray.push(serialNumber);
-        }
-      });
-      this.dataSource = new MatTableDataSource<getClient>(this.clientsData);
-      this.calculateTotalPages(this.totalData, this.pageSize);
-    });
+       this.loginService.getUserInfo().subscribe({
+          next: (event: any) => {
+            if (event instanceof HttpResponse) {
+            const res=event.body
 
- 
+            localStorage.setItem('Phone', res.response.phoneNumber)
+            localStorage.setItem('Email', res.response.emailId)
+            localStorage.setItem('IsActive', res.response.isActive)
+            localStorage.setItem('Role', res.response.role)
+            // localStorage.setItem('Department ', res.response)
+            // localStorage.setItem('Plant', res.response)
+              
+            res.response.map((res: getClient, index: number) => {
+              const serialNumber = index + 1;
+              if (index >= this.skip && serialNumber <= this.limit) {
+                res.id = serialNumber;
+                this.clientsData.push(res);
+                this.serialNumberArray.push(serialNumber);
+              }
+            });
+            this.dataSource = new MatTableDataSource<getClient>(this.clientsData);
+            this.calculateTotalPages(this.totalData, this.pageSize);
+
+            }
+          },
+          error: (err: any) => {
+            if (err.error && err.error.message) {
+              this.msg += " " + err.error.message;
+            }
+          }
+        });
   }
-
   public sortData(sort: Sort) {
     const data = this.clientsData.slice();
 
