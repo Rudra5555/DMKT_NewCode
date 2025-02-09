@@ -24,7 +24,7 @@ const routes: Routes = [
   children: [
     // { path: "employee-list", component: EmployeeListComponent },
     // { path: "employee-page", component: EmployeePageContentComponent },
-    // { path: "employee-profile", component: EmployeeProfileComponent },
+    { path: "employee-profile", component: EmployeeProfileComponent },
     // { path: "holidays", component: HolidaysComponent },
     // { path: "leave-admin", component: LeaveAdminComponent },
     // { path: "leave-employee", component: LeaveEmployeeComponent },

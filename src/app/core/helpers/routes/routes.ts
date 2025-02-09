@@ -8,6 +8,7 @@ export class routes {
   static rtl = this.layoutDirection.subscribe((res: string) => {
     this.Url = res;
   });
+  static EmployeeProfileComponent: any;
 
 
   public static get baseUrl(): string {

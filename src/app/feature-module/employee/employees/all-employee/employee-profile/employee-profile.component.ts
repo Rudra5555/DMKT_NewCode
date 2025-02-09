@@ -29,12 +29,27 @@ export class EmployeeProfileComponent implements OnInit {
   public routes = routes;
   bsValue = new Date();
   public addEmployeeForm!: FormGroup;
+  userName: any;
+  userId: any;
+  roles: any;
+  phone: any;
+  email: any;
+  department: any;
+  plant: any;
   constructor(private formBuilder: FormBuilder) {}
 
   ngOnInit() {
     this.addEmployeeForm = this.formBuilder.group({
       client: ['', [Validators.required]],
     });
+
+    this.userName = localStorage.getItem("loggedUserName");
+    this.userId = localStorage.getItem("loggedInUserId");
+    this.roles = localStorage.getItem("role");
+    this.phone = localStorage.getItem("Phone");
+    this.email = localStorage.getItem("Email");
+    this.department = localStorage.getItem("Department");
+    this.plant = localStorage.getItem("Plant");
   }
 
   selectedList1: data[] = [
