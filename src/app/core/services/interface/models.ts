@@ -975,19 +975,33 @@ export interface getGoalList {
   status: string;
   progress: string;
 }
+// export interface getClient {
+//   name: string;
+//   role: string;
+//   department: string;
+//   company: string;
+//   image: string;
+//   clientId: string;
+//   email: string;
+//   phone: string;
+//   status: string;
+//   status1: string;
+//   id: number;
+//   img: string;
+// }
+
 export interface getClient {
-  name: string;
-  role: string;
-  department: string;
-  company: string;
-  image: string;
-  clientId: string;
-  email: string;
-  phone: string;
-  status: string;
-  status1: string;
   id: number;
-  img: string;
+  userId: string;
+  userName: string;
+  phoneNumber: string;
+  emailId: string;
+  password: string;
+  departmentNameList: string;
+  isActive: string;
+  role: string;
+  accessRoles: string;
+  userPicture: string;
 }
 export interface companiesList {
   id: number;

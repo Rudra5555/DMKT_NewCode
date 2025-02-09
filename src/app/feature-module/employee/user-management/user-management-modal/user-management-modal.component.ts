@@ -3,6 +3,7 @@ import { Component, ElementRef, OnInit, ViewChild,Input  } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { IDropdownSettings } from 'ng-multiselect-dropdown';
 import { LoginComponentService } from 'src/app/services/login-component.service';
+import Swal from 'sweetalert2';
 // import {  IDropdownSettings } from 'ng-multiselect-dropdown';
 
 
@@ -124,8 +125,8 @@ export class UserManagementModalComponent implements OnInit {
                 if (event instanceof HttpResponse) {
                   const resp = event.body
 
-                  console.log("response",resp);
-                  
+                  console.log("response =>>",resp);
+                  this.successfulSubmitAlert();
                  
       
                 }
@@ -143,6 +144,20 @@ export class UserManagementModalComponent implements OnInit {
     }
   }
   
+ successfulSubmitAlert() {
+    Swal.fire({
+      position: "center",
+      icon: "success",
+      title: "Your document was uploaded successfully",
+      showConfirmButton: false,
+      timer: 1500
+    }).then(() => {
+
+      // window.location.reload();
+      window.location.href = window.location.href;
+    });
+  }
+
   getSelectedRoles(): string {
     const selectedRoles = [];
     if (this.addUserForm.value.Admin) selectedRoles.push("Admin");

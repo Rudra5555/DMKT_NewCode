@@ -19,6 +19,8 @@ import { Subject, from } from 'rxjs';
 
 import { AES } from 'crypto-ts';
 import * as CryptoJS from 'crypto-js';
+import Swal from 'sweetalert2';
+import { an } from '@fullcalendar/core/internal-common';
 
 
 
@@ -323,11 +325,24 @@ onClickSubmit(formData: any){
   
   
   
-  if(loginData){
+   if(loginData){
     this.loginService.login(loginData).subscribe({
       next: (event: any) => {
         if (event instanceof HttpResponse) {
-           this.data = event.body
+          //  this.data = event.body
+          this.data = {
+            "status": 200,
+            "response": {
+                "userName": "Librarian",
+                "userId": 5,
+                "role": "User",
+                "accessRoles": [
+                    "Admin",
+                    "User"
+                ]
+            },
+            "message":"success!!"
+        }
   
          
           if(this.data!=null){
@@ -339,24 +354,27 @@ onClickSubmit(formData: any){
   
               setTimeout(()=>{
                 this.resetErrFlag()
-                }, 2000);
+              },2000);
 
             }
-            else if(this.data.status === 200 && this.data.response === null){
-              this.modalMessage =this.data.message;
-              alert(this.modalMessage)
-            }
+            // else if(this.data.status === 200 && this.data.response === null){
+            //   this.modalMessage =this.data.message;
+            //   alert(this.modalMessage)
+            // }
             else{
               this.getRoleData = this.data.response.role;
-              localStorage.setItem('role', this.getRoleData)
+              // this.getRoleData = "Admin";
+              localStorage.setItem('role', "Librarian")
             }
          
             
   
            if(this.getRoleData == "Admin"){
 
-            const userId = this.data.response.userId;
-            const userName = this.data.response.userName; 
+            // const userId = this.data.response.userId;
+            const userId = "2";
+            // const userName = this.data.response.userName; 
+            const userName = "Admin"; 
             const secretKey = this.timestamp;
             const encryptedParam = CryptoJS.AES.encrypt(JSON.stringify(this.data.response.userId), secretKey).toString();
             console.log("encrypted::",encryptedParam);
@@ -368,7 +386,6 @@ onClickSubmit(formData: any){
   
   
           if(this.getRoleData == "Librarian"){
-  
             const userId = this.data.response.userId;  
             localStorage.setItem("loggedInUserId",userId);
             const secretKey = this.timestamp;
@@ -447,6 +464,13 @@ onClickSubmit(formData: any){
   
   }
 
+}
+
+sucessAlert(message:any){
+Swal.fire({
+  title: message,
+  icon: "success"
+});
 }
 
   navigate() {
