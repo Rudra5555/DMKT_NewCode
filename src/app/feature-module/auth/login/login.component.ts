@@ -64,7 +64,7 @@ export class LoginComponent implements OnInit {
 
       this.loginForm = this.formBuilder.group({
         emailId: ['', [Validators.required]],  
-        password: ['', [Validators.required, Validators.minLength(6),this.lowercasePasswordValidator]],
+        password: ['', [Validators.required]],
       
       });
      
@@ -329,20 +329,20 @@ onClickSubmit(formData: any){
     this.loginService.login(loginData).subscribe({
       next: (event: any) => {
         if (event instanceof HttpResponse) {
-          //  this.data = event.body
-          this.data = {
-            "status": 200,
-            "response": {
-                "userName": "Librarian",
-                "userId": 5,
-                "role": "User",
-                "accessRoles": [
-                    "Admin",
-                    "User"
-                ]
-            },
-            "message":"success!!"
-        }
+           this.data = event.body
+        //   this.data = {
+        //     "status": 200,
+        //     "response": {
+        //         "userName": "Librarian",
+        //         "userId": 5,
+        //         "role": "User",
+        //         "accessRoles": [
+        //             "Admin",
+        //             "User"
+        //         ]
+        //     },
+        //     "message":"success!!"
+        // }
   
          
           if(this.data!=null){
@@ -357,24 +357,25 @@ onClickSubmit(formData: any){
               },2000);
 
             }
-            // else if(this.data.status === 200 && this.data.response === null){
-            //   this.modalMessage =this.data.message;
-            //   alert(this.modalMessage)
-            // }
+            else if(this.data.status === 200 && this.data.response === null){
+              this.modalMessage =this.data.message;
+              // alert(this.modalMessage)
+              this.sucessAlert(this.modalMessage);
+            }
             else{
               this.getRoleData = this.data.response.role;
               // this.getRoleData = "Admin";
-              localStorage.setItem('role', "Librarian")
+              localStorage.setItem('role',this.getRoleData);
             }
          
             
   
            if(this.getRoleData == "Admin"){
 
-            // const userId = this.data.response.userId;
-            const userId = "2";
-            // const userName = this.data.response.userName; 
-            const userName = "Admin"; 
+            const userId = this.data.response.userId;
+            // const userId = "2";
+            const userName = this.data.response.userName; 
+            // const userName = "Admin"; 
             const secretKey = this.timestamp;
             const encryptedParam = CryptoJS.AES.encrypt(JSON.stringify(this.data.response.userId), secretKey).toString();
             console.log("encrypted::",encryptedParam);
