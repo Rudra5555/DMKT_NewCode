@@ -186,6 +186,7 @@ export class HeaderOneComponent implements OnInit {
         if (event instanceof HttpResponse) {
           this.resp = event.body.response
           this.roles = this.resp;
+          localStorage.setItem('role', this.roles);
         }
       },
       error: (err: any) => {
@@ -695,4 +696,5 @@ if (this.selectedFileUploadData.reason == null || this.selectedFileUploadData.re
   navigation() {
     this.router.navigate([routes.search]);
   }
+  
 }
