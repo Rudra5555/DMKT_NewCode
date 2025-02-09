@@ -19,6 +19,8 @@ import { Subject, from } from 'rxjs';
 
 import { AES } from 'crypto-ts';
 import * as CryptoJS from 'crypto-js';
+import Swal from 'sweetalert2';
+import { an } from '@fullcalendar/core/internal-common';
 
 
 
@@ -344,7 +346,8 @@ onClickSubmit(formData: any){
             }
             else if(this.data.status === 200 && this.data.response === null){
               this.modalMessage =this.data.message;
-              alert(this.modalMessage)
+              this.sucessAlert( this.modalMessage);
+             
             }
             else{
               this.getRoleData = this.data.response.role;
@@ -447,6 +450,13 @@ onClickSubmit(formData: any){
   
   }
 
+}
+
+sucessAlert(message:any){
+Swal.fire({
+  title: message,
+  icon: "success"
+});
 }
 
   navigate() {
