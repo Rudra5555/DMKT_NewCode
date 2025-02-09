@@ -411,4 +411,12 @@ upload(file: any): Observable<HttpEvent<any>> {
     return this.http.request(req);
   }
 
+getUserInfo(): Observable<HttpEvent<any>> {
+  const req = new HttpRequest('GET', `${this.baseUrl}/user/get-all-user-info`, {
+    responseType: 'json'
+  });
+
+  return this.http.request(req);
+  }
+
 }

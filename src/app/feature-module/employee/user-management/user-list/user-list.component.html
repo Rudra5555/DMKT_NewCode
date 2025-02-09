@@ -107,16 +107,16 @@
             <tr>
               <td>
                 <h2 class="table-avatar">
-                  <a [routerLink]="routes.userProfile" class="avatar"><img [src]="client.img" alt="" /></a>
+                  <a [routerLink]="routes.userProfile" class="avatar"><img [src]="client.userPicture" alt="" /></a>
                   <a [routerLink]="routes.userProfile">{{
-                    client.name
+                    client.userName
                     }}</a>
                 </h2>
               </td>
-              <td>{{ client.clientId }}</td>
+              <td>{{ client.userId }}</td>
               <!-- <td>{{ client.company }}</td> -->
-              <td>{{ client.email }}</td>
-              <td>{{ client.phone }}</td>
+              <td>{{ client.emailId }}</td>
+              <td>{{ client.phoneNumber }}</td>
               <td>{{ client.role }}</td>
               <!-- <td>{{ client.plant }}</td> -->
                <td>CPP-2</td>
@@ -126,9 +126,9 @@
                   <a href="javascript:void(0);" class="btn btn-white btn-sm btn-rounded"
                      aria-expanded="false"><i class="fa-regular fa-circle-dot text-success"
                       [ngClass]="{
-                        'text-danger': client.status === 'Inactive'
+                        'text-danger': client.isActive === 'false'
                       }"></i>
-                    {{ client.status }}</a>
+                    {{ client.isActive }}</a>
                   <!-- <div class="dropdown-menu">
                     <a class="dropdown-item" href="javascript:void(0);"><i
                         class="fa-regular fa-circle-dot text-success"></i>
