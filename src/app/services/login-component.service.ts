@@ -365,7 +365,7 @@ upload(file: any): Observable<HttpEvent<any>> {
   }
 
   notificTwo(userId:any ): Observable<HttpEvent<any>> {
-    const req = new HttpRequest('GET', `${this.baseUrl}/doc-request/get-user-notification/${userId}/7/10`, {
+    const req = new HttpRequest('GET', `${this.baseUrl}/doc-request/get-user-notification/${userId}/1/100`, {
       responseType: 'json'
     });
   
