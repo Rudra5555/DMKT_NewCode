@@ -161,7 +161,7 @@
                   </button>
                 </div>
                 <div class="modal-body">
-                  <form [formGroup]="editUserForm">
+                  <form [formGroup]="addUserForm">
                     <div class="card">
                       <div class="card-header">
                         <h5 class="card-title">Image Upload</h5>
@@ -190,52 +190,31 @@
                     <div class="row">
                       <div class="col-md-6">
                         <div class="input-block mb-3">
-                          <label class="col-form-label" for="">Employee ID <span class="text-danger">*</span></label>
-                          <input class="form-control" type="text"
-                            [class.invalid]="editUserForm.get('clientName')?.invalid && editUserForm.get('clientName')?.touched"
+                          <label class="col-form-label" for="">Employee Name <span class="text-danger">*</span></label>
+                          <input class="form-control" type="text"  [readonly]="true"
+                            [class.invalid]="addUserForm.get('userName')?.invalid && addUserForm.get('userName')?.touched"
                             formControlName="userName">
-                          @if (editUserForm.get('clientName')?.invalid && editUserForm.get('clientName')?.touched) {
+                          @if (addUserForm.get('userName')?.invalid && addUserForm.get('userName')?.touched) {
                           <div>
-                            @if (editUserForm.get('clientName')?.invalid && editUserForm.get('clientName')?.touched) {
-                            <small class="text-danger"> *ID is required</small>
+                            @if (addUserForm.get('userName')?.invalid && addUserForm.get('userName')?.touched) {
+                            <small class="text-danger"> *Name is required</small>
                             }
                           </div>
                           }
                         </div>
                       </div>
-                      <!-- <div class="col-md-6">
-                        <div class="input-block mb-3">
-                          <label class="col-form-label" for="">Employee name</label>
-                          <input class="form-control" type="text">
-                        </div>
-                      </div> -->
-                      <div class="col-md-6">
-                        <div class="input-block mb-3">
-                          <label class="col-form-label">Employee Name</label>
-                          <input class="form-control" type="text" formControlName="userName">
-                        </div>
-                      </div>
-
-                      <!-- <form [formGroup]="clientForm">
-                        <div class="col-md-6">
-                          <div class="input-block mb-3">
-                            <label class="col-form-label">Employee Name</label>
-                            <input class="form-control" type="text" formControlName="userName">
-                          </div>
-                        </div>
-                      </form> -->
                       
                       
           
                       <div class="col-md-6">
                         <div class="input-block mb-3">
                           <label class="col-form-label" for="">Email ID<span class="text-danger">*</span></label>
-                          <input class="form-control" type="text"
-                            [class.invalid]="editUserForm.get('userEmail')?.invalid && editUserForm.get('userEmail')?.touched"
+                          <input class="form-control" type="text" [readonly]="true"
+                            [class.invalid]="addUserForm.get('userEmail')?.invalid && addUserForm.get('userEmail')?.touched"
                             formControlName="userEmail">
-                          @if (editUserForm.get('userEmail')?.invalid && editUserForm.get('userEmail')?.touched) {
+                          @if (addUserForm.get('userEmail')?.invalid && addUserForm.get('userEmail')?.touched) {
                           <div>
-                            @if (editUserForm.get('userEmail')?.invalid && editUserForm.get('userEmail')?.touched) {
+                            @if (addUserForm.get('userEmail')?.invalid && addUserForm.get('userEmail')?.touched) {
                             <small class="text-danger"> *Email is required</small>
                             }
                           </div>
@@ -245,49 +224,34 @@
                       <div class="col-md-6">
                         <div class="input-block mb-3">
                           <label class="col-form-label" for="">Phone <span class="text-danger">*</span></label>
-                          <input class="form-control" type="number"
-                            [class.invalid]="editUserForm.get('clientPhone')?.invalid && editUserForm.get('clientPhone')?.touched"
+                          <input class="form-control" type="number" [readonly]="true"
+                            [class.invalid]="addUserForm.get('userPhone')?.invalid && addUserForm.get('userPhone')?.touched"
                             formControlName="userPhone">
-                          @if (editUserForm.get('clientPhone')?.invalid && editUserForm.get('clientPhone')?.touched) {
+                          @if (addUserForm.get('userPhone')?.invalid && addUserForm.get('userPhone')?.touched) {
                           <div>
-                            @if (editUserForm.get('clientPhone')?.invalid && editUserForm.get('clientPhone')?.touched) {
+                            @if (addUserForm.get('userPhone')?.invalid && addUserForm.get('userPhone')?.touched) {
                             <small class="text-danger"> *Phone is required</small>
                             }
                           </div>
                           }
                         </div>
                       </div>
-                      <!-- <div class="col-md-6">
-                        <div class="input-block mb-3">
-                          <label class="col-form-label" for="">Password</label>
-                          <input class="form-control" formControlName="password" value="barrycuda" type="password">
-                        </div>
-                        <div *ngIf="addUserForm.get('password')?.invalid && addUserForm.get('password')?.touched" class="text-danger">
-                          Password is required and must be at least 6 characters long.
-                        </div>
-                      </div> -->
-                      <!-- <div class="col-md-6">
-                        <div class="input-block mb-3">
-                          <label class="col-form-label" for="">Confirm Password</label>
-                          <input class="form-control"  formControlName="confirmPassword" value="barrycuda" type="password">
-                        </div>
-                        
-                      </div> -->
+                 
                       <div class="col-md-6">
                         <div class="input-block mb-3">
                           <label class="col-form-label" for="">Plant Name</label>
-                          <input class="form-control" formControlName="plant" value="barrycuda" type="password">
+                          <input class="form-control" formControlName="plant">
                         </div>
-                        <div *ngIf="editUserForm.get('plant')?.invalid && editUserForm.get('plant')?.touched" class="text-danger">
+                        <div *ngIf="addUserForm.get('plant')?.invalid && addUserForm.get('plant')?.touched" class="text-danger">
                           Password is required and must be at least 6 characters long.
                         </div>
                       </div>
                       <div class="col-md-6">
                         <div class="input-block mb-3">
                           <label class="col-form-label" for="">Department Name</label>
-                          <input class="form-control" formControlName="department" value="barrycuda" type="password">
+                          <input class="form-control" formControlName="department">
                         </div>
-                        <div *ngIf="editUserForm.get('department')?.invalid && editUserForm.get('department')?.touched" class="text-danger">
+                        <div *ngIf="addUserForm.get('department')?.invalid && addUserForm.get('department')?.touched" class="text-danger">
                           Password is required and must be at least 6 characters long.
                         </div>
                       </div>
@@ -310,52 +274,23 @@
                         <tbody>
                           <tr>
                             <td>Roles</td>
-                            <td class="text-center">
-                              <label class="custom_check">
-                                <input type="checkbox" checked>
-                                <span class="checkmark"></span>
-                              </label>
-                            </td>
-                            <td class="text-center">
-                              <label class="custom_check">
-                                <input type="checkbox" checked>
-                                <span class="checkmark"></span>
-                              </label>
-                            </td>
-                            <td class="text-center">
-                              <label class="custom_check">
-                                <input type="checkbox" checked>
-                                <span class="checkmark"></span>
-                              </label>
-                            </td>
-                            <td class="text-center">
-                              <label class="custom_check">
-                                <input type="checkbox" checked>
-                                <span class="checkmark"></span>
-                              </label>
-                            </td>
-                            <td class="text-center">
-                              <label class="custom_check">
-                                <input type="checkbox" checked>
-                                <span class="checkmark"></span>
-                              </label>
-                            </td>
-                            <td class="text-center">
-                              <label class="custom_check">
-                                <input type="checkbox" checked>
-                                <span class="checkmark"></span>
-                              </label>
-                            </td>
+                            <td class="text-center"><input type="checkbox" formControlName="Admin" /></td>
+                            <td class="text-center"><input type="checkbox" formControlName="User" /></td>
+                            <td class="text-center"><input type="checkbox" formControlName="SuperUser" /></td>
+                            <td class="text-center"><input type="checkbox" formControlName="HOD" /></td>
+                            <td class="text-center"><input type="checkbox" formControlName="Librarian" /></td>
+                            <td class="text-center"><input type="checkbox" formControlName="isActive" /></td>
                           </tr>
-                       
                         </tbody>
                       </table>
                     </div>
                     <div class="col-lg-12 text-end form-wizard-button">
-                      <button class="button btn-lights reset-btn" type="reset" data-bs-dismiss="modal">
+                      <!-- <button class="button btn-lights reset-btn" type="reset">
                         Reset
+                      </button> -->
+                      <button class="btn btn-primary" type="submit" (click)="submitAddUserForm()" style="background-color:#36ba45;">
+                        Submit
                       </button>
-                      <button class="btn btn-primary" type="submit" style="background-color:#36ba45;">Submit</button>
                     </div>
                   </form>
                 </div>

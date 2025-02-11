@@ -27,6 +27,9 @@ export class UserManagementModalComponent implements OnInit {
   base64Image: string | null = null;
   public dropdownSettings !:IDropdownSettings;
   msg: any;
+  clientsData:any;
+  roles: string[] = [];
+
   constructor( private formBuilder: FormBuilder, private loginService: LoginComponentService) { }
 
   ngOnInit(): void {
@@ -52,28 +55,6 @@ export class UserManagementModalComponent implements OnInit {
       allowSearchFilter: true
     };
   
-
-
-    
-    //Add clients form
-    // password: ["barrycuda", [Validators.required, Validators.minLength(6)]],
-      // confirmPassword: ["barrycuda", [Validators.required]],
-  //   this.addUserForm = this.formBuilder.group({
-  //     userName: ["", [Validators.required]],
-  //     userPhone: ["", [Validators.required]],
-  //     userEmail: ["", [Validators.required]],
-      
-  //     department:["", [Validators.required]],
-  //     plant:["", [Validators.required]],
-  //     Admin: [false],
-  //     User: [false],
-  //     SuperUser: [false],
-  //     HOD: [false],
-  //     Librarian: [false],
-  //     IsActive: [false],
-  //   },
-    
-  // );
   this.addUserForm = this.formBuilder.group({
     userName: ["", [Validators.required]],
     userPhone: ["", [Validators.required]],
@@ -88,49 +69,32 @@ export class UserManagementModalComponent implements OnInit {
     isActive: [false],
   });
   
-  this.editUserForm = this.formBuilder.group({
-    userName: ["", [Validators.required]],
-    userPhone: ["", [Validators.required]],
-    userEmail: ["", [Validators.required, Validators.email]],
-    department: ["", [Validators.required]],
-    plant: ["", [Validators.required]],
-    Admin: [false],
-    User: [false],
-    SuperUser: [false],
-    HOD: [false],
-    Librarian: [false],
-    isActive: [false],
-  });
-
-    //Edit UserManagement Form
-    // this.editUserForm = this.formBuilder.group({
-    //   editClientName: ["", [Validators.required]],
-    //   editClientPhone: ["", [Validators.required]],
-    //   editClientEmail: ["", [Validators.required]],
-    //   editClientCompany: ["", [Validators.required]],
-    //   editClientRole: ["", [Validators.required]],
-    //   editClientId: ["", [Validators.required]],
-    //   editId: ["", [Validators.required]],
-    // });
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes['client'] && this.client && this.editUserForm) {
-      this.editUserForm.patchValue({
+    if (changes['client'] && this.client && this.addUserForm) {
+
+      this.roles = this.client.accessRoles ? this.client.accessRoles.split(',') : [];
+      console.log("Parsed roles:", this.roles);
+
+      this.addUserForm.patchValue({
         userName: this.client.userName || '',
         userPhone: this.client.phoneNumber || '',
         userEmail: this.client.emailId || '',
         department: this.client.department || '',
-        plant: this.client.plant || '',
-        Admin: this.client.Admin || false,
-        User: this.client.User || false,
-        SuperUser: this.client.SuperUser || false,
-        HOD: this.client.HOD || false,
-        Librarian: this.client.Librarian || false,
+        plant: this.client.plant || '',  
+         Admin: this.roles.includes('Admin'),
+        User: this.roles.includes('User'),
+        SuperUser: this.roles.includes('SuperUser'),
+        HOD: this.roles.includes('HOD'),
+        Librarian: this.roles.includes('Librarian'),
         isActive: this.client.isActive || false,
       });
     }
   }
+
+  
+  
   submitAddUserForm() {
     if (this.addUserForm.valid) {
       const payload = {

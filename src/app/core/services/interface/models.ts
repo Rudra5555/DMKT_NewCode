@@ -998,7 +998,7 @@ export interface getClient {
   emailId: string;
   password: string;
   departmentNameList: string;
-  isActive: string;
+  isActive: boolean;
   role: string;
   accessRoles: string;
   userPicture: string;

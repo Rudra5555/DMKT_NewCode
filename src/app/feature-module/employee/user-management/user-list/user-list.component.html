@@ -148,17 +148,9 @@
                   <a href="javascript:void(0);" class="btn btn-white btn-sm btn-rounded"
                      aria-expanded="false"><i class="fa-regular fa-circle-dot text-success"
                       [ngClass]="{
-                        'text-danger': client.isActive === 'false'
+                        'text-danger': client.isActive === false
                       }"></i>
                     {{ client.isActive }}</a>
-                  <!-- <div class="dropdown-menu">
-                    <a class="dropdown-item" href="javascript:void(0);"><i
-                        class="fa-regular fa-circle-dot text-success"></i>
-                      Active</a>
-                    <a class="dropdown-item" href="javascript:void(0);"><i
-                        class="fa-regular fa-circle-dot text-danger"></i>
-                      Inactive</a>
-                  </div> -->
                 </div>
               </td>
               <td class="text-end">
