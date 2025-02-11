@@ -1,6 +1,6 @@
 import { HttpResponse } from '@angular/common/http';
-import { Component, ElementRef, OnInit, ViewChild,Input  } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from "@angular/forms";
+import { Component, ElementRef, OnInit, ViewChild,Input, SimpleChanges  } from '@angular/core';
+import { FormGroup, FormBuilder, Validators, FormControl } from "@angular/forms";
 import { IDropdownSettings } from 'ng-multiselect-dropdown';
 import { LoginComponentService } from 'src/app/services/login-component.service';
 import Swal from 'sweetalert2';
@@ -13,6 +13,8 @@ import Swal from 'sweetalert2';
   styleUrls: ['./user-management-modal.component.scss']
 })
 export class UserManagementModalComponent implements OnInit {
+  @Input() client: any;
+  
   @ViewChild("fileDropRef", { static: false }) fileDropEl!: ElementRef;
   public addUserForm!: FormGroup ;
   public editUserForm!: FormGroup ;
@@ -86,19 +88,49 @@ export class UserManagementModalComponent implements OnInit {
     isActive: [false],
   });
   
+  this.editUserForm = this.formBuilder.group({
+    userName: ["", [Validators.required]],
+    userPhone: ["", [Validators.required]],
+    userEmail: ["", [Validators.required, Validators.email]],
+    department: ["", [Validators.required]],
+    plant: ["", [Validators.required]],
+    Admin: [false],
+    User: [false],
+    SuperUser: [false],
+    HOD: [false],
+    Librarian: [false],
+    isActive: [false],
+  });
 
     //Edit UserManagement Form
-    this.editUserForm = this.formBuilder.group({
-      editClientName: ["", [Validators.required]],
-      editClientPhone: ["", [Validators.required]],
-      editClientEmail: ["", [Validators.required]],
-      editClientCompany: ["", [Validators.required]],
-      editClientRole: ["", [Validators.required]],
-      editClientId: ["", [Validators.required]],
-      editId: ["", [Validators.required]],
-    });
+    // this.editUserForm = this.formBuilder.group({
+    //   editClientName: ["", [Validators.required]],
+    //   editClientPhone: ["", [Validators.required]],
+    //   editClientEmail: ["", [Validators.required]],
+    //   editClientCompany: ["", [Validators.required]],
+    //   editClientRole: ["", [Validators.required]],
+    //   editClientId: ["", [Validators.required]],
+    //   editId: ["", [Validators.required]],
+    // });
   }
 
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['client'] && this.client && this.editUserForm) {
+      this.editUserForm.patchValue({
+        userName: this.client.userName || '',
+        userPhone: this.client.phoneNumber || '',
+        userEmail: this.client.emailId || '',
+        department: this.client.department || '',
+        plant: this.client.plant || '',
+        Admin: this.client.Admin || false,
+        User: this.client.User || false,
+        SuperUser: this.client.SuperUser || false,
+        HOD: this.client.HOD || false,
+        Librarian: this.client.Librarian || false,
+        isActive: this.client.isActive || false,
+      });
+    }
+  }
   submitAddUserForm() {
     if (this.addUserForm.valid) {
       const payload = {

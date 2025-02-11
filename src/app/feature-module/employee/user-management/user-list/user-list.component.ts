@@ -7,6 +7,7 @@ import { DataService, apiResultFormat, getClient, routes } from 'src/app/core/co
 import { UploadDocumentComponentService } from 'src/app/services/upload-document-component.service';
 import { LoginComponentService } from "src/app/services/login-component.service";
 import { HttpResponse } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-user-list',
@@ -31,6 +32,7 @@ export class UserListComponent implements OnInit {
   public pageSelection: Array<pageSelection> = [];
   public totalPages = 0;
   msg:any;
+  selectedClient: any = {};
   //** / pagination variables
   // constructor(private data: DataService) {}
 
@@ -38,6 +40,7 @@ export class UserListComponent implements OnInit {
     private data: DataService,
     private formBuilder: FormBuilder,
     private loginService: LoginComponentService,
+    private router: Router,
 
   ) {
 
@@ -87,13 +90,6 @@ export class UserListComponent implements OnInit {
           next: (event: any) => {
             if (event instanceof HttpResponse) {
             const res=event.body
-
-            localStorage.setItem('Phone', res.response.phoneNumber)
-            localStorage.setItem('Email', res.response.emailId)
-            localStorage.setItem('IsActive', res.response.isActive)
-            // localStorage.setItem('Role', res.response.role)
-            // localStorage.setItem('Department ', res.response)
-            // localStorage.setItem('Plant', res.response)
               
             res.response.map((res: getClient, index: number) => {
               const serialNumber = index + 1;
@@ -184,8 +180,22 @@ export class UserListComponent implements OnInit {
       this.pageSelection.push({ skip: skip, limit: limit });
     }
   }
+
+  navigateWithClient(client: any) {
+    localStorage.setItem('selectedClient', JSON.stringify(client));
+    // this.router.navigate(['/user-profile']);
+    
+  }
+
+  setSelectedClient(client: any) {
+    this.selectedClient = { ...client }; // Store selected client data
+    console.log("Selected Client:", this.selectedClient);
+  }
+
 }
 export interface pageSelection {
   skip: number;
   limit: number;
 }
+
+

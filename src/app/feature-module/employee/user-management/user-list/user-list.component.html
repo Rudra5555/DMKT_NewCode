@@ -1,6 +1,6 @@
-<app-user-management-modal></app-user-management-modal>
+<app-user-management-modal [client]="selectedClient"></app-user-management-modal>
 <!-- Page Content -->
-<div class="content container-fluid" style="height: 100vh;">
+<div class="content container-fluid" style="height: 150vh;">
   <!-- Page Header -->
   <div class="page-header">
     <div class="row align-items-center">
@@ -22,22 +22,38 @@
 
   <!-- Search Filter -->
   <div class="row filter-row">
-    <div class="col-sm-6 col-md-2">
+    <!-- <div class="col-sm-6 col-md-2">
       <div class="input-block mb-3 form-focus inputs">
         <mat-form-field class="example-full-width">
           <mat-label>Employee ID</mat-label>
           <input class="form-control floating datetimepicker" type="text" matInput />
         </mat-form-field>
       </div>
-    </div>
-    <div class="col-sm-6 col-md-2">
+    </div> -->
+
+    <!-- <div class="col-sm-6 col-md-2">
       <div class="input-block mb-3 form-focus inputs">
         <mat-form-field class="example-full-width">
           <mat-label>Employee Name</mat-label>
           <input class="form-control floating datetimepicker" type="text" matInput />
         </mat-form-field>
       </div>
+    </div> -->
+
+    <div class="col-sm-6 col-md-2"> 
+      <div class="input-block mb-3 form-focus inputs">
+        <mat-form-field class="example-full-width">
+          <mat-label>Search</mat-label>
+          <input class="form-control floating datetimepicker" type="text" matInput 
+                 [(ngModel)]="searchDataValue" 
+                 [ngModelOptions]="{standalone: true}" 
+                 (ngModelChange)="searchData(searchDataValue)" 
+                  />
+        </mat-form-field>
+      </div>
     </div>
+
+    
     <div class="col-sm-6 col-md-3">
       <div class="input-block mb-3 form-focus select-focus select">
         <mat-select class="custom-mat-select floating-mat-select" placeholder="Select Plant">
@@ -106,9 +122,15 @@
             @for (client of clientsData; track client; let i = $index) {
             <tr>
               <td>
-                <h2 class="table-avatar">
+                <!-- <h2 class="table-avatar">
                   <a [routerLink]="routes.userProfile" class="avatar"><img [src]="client.userPicture" alt="" /></a>
                   <a [routerLink]="routes.userProfile">{{
+                    client.userName
+                    }}</a>
+                </h2> -->
+                <h2 class="table-avatar">
+                  <a [routerLink]="" class="avatar"><img [src]="client.userPicture" alt="" /></a>
+                  <a [routerLink]="routes.userProfile" (click)="navigateWithClient(client)">{{
                     client.userName
                     }}</a>
                 </h2>
@@ -144,7 +166,7 @@
                   <a class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i
                       class="material-icons">more_vert</i></a>
                   <div class="dropdown-menu dropdown-menu-right">
-                    <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#edit_client"><i
+                    <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#edit_client" (click)="setSelectedClient(client)"><i
                         class="fa-solid fa-pencil m-r-5" style="color: rgb(8, 28, 247)"></i> Edit</a>
                     <!-- <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#delete_client"><i
                         class="fa-regular fa-trash-can m-r-5" style="color: rgb(255, 61, 61)"></i> Delete</a>  -->

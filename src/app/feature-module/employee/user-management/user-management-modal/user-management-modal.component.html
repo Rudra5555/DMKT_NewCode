@@ -161,7 +161,7 @@
                   </button>
                 </div>
                 <div class="modal-body">
-                  <form [formGroup]="addUserForm">
+                  <form [formGroup]="editUserForm">
                     <div class="card">
                       <div class="card-header">
                         <h5 class="card-title">Image Upload</h5>
@@ -192,33 +192,50 @@
                         <div class="input-block mb-3">
                           <label class="col-form-label" for="">Employee ID <span class="text-danger">*</span></label>
                           <input class="form-control" type="text"
-                            [class.invalid]="addUserForm.get('clientName')?.invalid && addUserForm.get('clientName')?.touched"
+                            [class.invalid]="editUserForm.get('clientName')?.invalid && editUserForm.get('clientName')?.touched"
                             formControlName="userName">
-                          @if (addUserForm.get('clientName')?.invalid && addUserForm.get('clientName')?.touched) {
+                          @if (editUserForm.get('clientName')?.invalid && editUserForm.get('clientName')?.touched) {
                           <div>
-                            @if (addUserForm.get('clientName')?.invalid && addUserForm.get('clientName')?.touched) {
+                            @if (editUserForm.get('clientName')?.invalid && editUserForm.get('clientName')?.touched) {
                             <small class="text-danger"> *ID is required</small>
                             }
                           </div>
                           }
                         </div>
                       </div>
-                      <div class="col-md-6">
+                      <!-- <div class="col-md-6">
                         <div class="input-block mb-3">
                           <label class="col-form-label" for="">Employee name</label>
                           <input class="form-control" type="text">
                         </div>
+                      </div> -->
+                      <div class="col-md-6">
+                        <div class="input-block mb-3">
+                          <label class="col-form-label">Employee Name</label>
+                          <input class="form-control" type="text" formControlName="userName">
+                        </div>
                       </div>
+
+                      <!-- <form [formGroup]="clientForm">
+                        <div class="col-md-6">
+                          <div class="input-block mb-3">
+                            <label class="col-form-label">Employee Name</label>
+                            <input class="form-control" type="text" formControlName="userName">
+                          </div>
+                        </div>
+                      </form> -->
+                      
+                      
           
                       <div class="col-md-6">
                         <div class="input-block mb-3">
                           <label class="col-form-label" for="">Email ID<span class="text-danger">*</span></label>
                           <input class="form-control" type="text"
-                            [class.invalid]="addUserForm.get('clientEmail')?.invalid && addUserForm.get('clientEmail')?.touched"
+                            [class.invalid]="editUserForm.get('userEmail')?.invalid && editUserForm.get('userEmail')?.touched"
                             formControlName="userEmail">
-                          @if (addUserForm.get('clientEmail')?.invalid && addUserForm.get('clientEmail')?.touched) {
+                          @if (editUserForm.get('userEmail')?.invalid && editUserForm.get('userEmail')?.touched) {
                           <div>
-                            @if (addUserForm.get('clientEmail')?.invalid && addUserForm.get('clientEmail')?.touched) {
+                            @if (editUserForm.get('userEmail')?.invalid && editUserForm.get('userEmail')?.touched) {
                             <small class="text-danger"> *Email is required</small>
                             }
                           </div>
@@ -229,11 +246,11 @@
                         <div class="input-block mb-3">
                           <label class="col-form-label" for="">Phone <span class="text-danger">*</span></label>
                           <input class="form-control" type="number"
-                            [class.invalid]="addUserForm.get('clientPhone')?.invalid && addUserForm.get('clientPhone')?.touched"
+                            [class.invalid]="editUserForm.get('clientPhone')?.invalid && editUserForm.get('clientPhone')?.touched"
                             formControlName="userPhone">
-                          @if (addUserForm.get('clientPhone')?.invalid && addUserForm.get('clientPhone')?.touched) {
+                          @if (editUserForm.get('clientPhone')?.invalid && editUserForm.get('clientPhone')?.touched) {
                           <div>
-                            @if (addUserForm.get('clientPhone')?.invalid && addUserForm.get('clientPhone')?.touched) {
+                            @if (editUserForm.get('clientPhone')?.invalid && editUserForm.get('clientPhone')?.touched) {
                             <small class="text-danger"> *Phone is required</small>
                             }
                           </div>
@@ -261,7 +278,7 @@
                           <label class="col-form-label" for="">Plant Name</label>
                           <input class="form-control" formControlName="plant" value="barrycuda" type="password">
                         </div>
-                        <div *ngIf="addUserForm.get('plant')?.invalid && addUserForm.get('plant')?.touched" class="text-danger">
+                        <div *ngIf="editUserForm.get('plant')?.invalid && editUserForm.get('plant')?.touched" class="text-danger">
                           Password is required and must be at least 6 characters long.
                         </div>
                       </div>
@@ -270,7 +287,7 @@
                           <label class="col-form-label" for="">Department Name</label>
                           <input class="form-control" formControlName="department" value="barrycuda" type="password">
                         </div>
-                        <div *ngIf="addUserForm.get('department')?.invalid && addUserForm.get('department')?.touched" class="text-danger">
+                        <div *ngIf="editUserForm.get('department')?.invalid && editUserForm.get('department')?.touched" class="text-danger">
                           Password is required and must be at least 6 characters long.
                         </div>
                       </div>
