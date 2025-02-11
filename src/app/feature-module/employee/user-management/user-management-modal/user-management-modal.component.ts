@@ -3,6 +3,7 @@ import { Component, ElementRef, OnInit, ViewChild,Input, SimpleChanges  } from '
 import { FormGroup, FormBuilder, Validators, FormControl } from "@angular/forms";
 import { IDropdownSettings } from 'ng-multiselect-dropdown';
 import { LoginComponentService } from 'src/app/services/login-component.service';
+import { UploadDocumentComponentService } from 'src/app/services/upload-document-component.service';
 import Swal from 'sweetalert2';
 // import {  IDropdownSettings } from 'ng-multiselect-dropdown';
 
@@ -22,16 +23,19 @@ export class UserManagementModalComponent implements OnInit {
   public selectedItems :any;
   public uploadDocumentSizeFlag: boolean = false;
   public uploadDocumentFlag: boolean = false;
-  // public  dropdownSettings :any;
+  public departmentList: any[] = [];
   files: any[] = [];
   base64Image: string | null = null;
   public dropdownSettings !:IDropdownSettings;
   msg: any;
+  plantOption: any;
+  newPlant: boolean = false;
+  selectedDeptCatName: any;
   clientsData:any;
   roles: string[] = [];
+  constructor( private formBuilder: FormBuilder, private loginService: LoginComponentService,private uploadDocument: UploadDocumentComponentService) { }
 
-  constructor( private formBuilder: FormBuilder, private loginService: LoginComponentService) { }
-
+  
   ngOnInit(): void {
 
     this.dropdownList = [
@@ -59,7 +63,7 @@ export class UserManagementModalComponent implements OnInit {
     userName: ["", [Validators.required]],
     userPhone: ["", [Validators.required]],
     userEmail: ["", [Validators.required, Validators.email]],
-    department: ["", [Validators.required]],
+    department: ["", []],
     plant: ["", [Validators.required]],
     Admin: [false],
     User: [false],
@@ -68,6 +72,29 @@ export class UserManagementModalComponent implements OnInit {
     Librarian: [false],
     isActive: [false],
   });
+
+  this.addUserForm.get('plant')?.valueChanges.subscribe(value => {
+    if (value != null) {
+      console.log("Plant selected: ", value);
+      this.getAllPlantList(value, "plants");
+      this.plantOption = value;
+      if(this.plantOption == "CPP (1740MW)"){
+        this.newPlant = true;
+      }else{
+        this.newPlant = false;
+      }
+    } else {
+      console.log("No plant selected or value is null.");
+    }
+  });
+  this.addUserForm.get('department')?.valueChanges.subscribe(value => {
+    const [deptName, deptAbbr] = value.split('~');
+    // this.getSubAreaList(deptName, "department");
+    this.selectedDeptCatName = deptName;
+    this.selectedDeptCatName = deptAbbr;
+    console.log("Selected department: ", deptName);
+    
+  });
   
   }
 
@@ -95,7 +122,73 @@ export class UserManagementModalComponent implements OnInit {
 
   
   
+  // submitAddUserForm() {
+  //   if (this.addUserForm.valid) {
+  //     const payload = {
+  //       userName: this.addUserForm.value.userName,
+  //       phoneNumber: this.addUserForm.value.userPhone,
+  //       emailId: this.addUserForm.value.userEmail,
+  //       role: "User",
+  //       password: "",
+  //       departmentNameList: [
+  //         {
+  //           departmentName: this.addUserForm.value.department,
+  //           plantName: this.addUserForm.value.plant
+  //         }
+  //       ],
+  //       isActive: this.addUserForm.value.isActive,
+  //       accessRoles: this.getSelectedRoles(),
+  //       userPicture: this.files?.length ? this.files[0].base64 : null, 
+  //     };
+  
+  //     console.log('Payload:', payload);
+      
+  //         this.loginService.addUser(payload).subscribe({
+  //             next: (event: any) => {
+  //               if (event instanceof HttpResponse) {
+  //                 const resp = event.body
+
+  //                 console.log("response =>>",resp);
+  //                 this.successfulSubmitAlert();
+                 
+      
+  //               }
+  //             },
+  //             error: (err: any) => {
+  //               if (err.error && err.error.message) {
+  //                 this.msg += " " + err.error.message;
+  //               }
+  //             }
+  //           });
+
+  //   } else {
+  //     console.error('Form is invalid. Please fill all required fields.');
+  //     this.addUserForm.markAllAsTouched();
+  //   }
+  // }
+  
+  getAllPlantList(selectedValue: string, plantHeader: string) {
+
+    if (selectedValue != '' && plantHeader != null) {
+console.log("selectedValue",selectedValue);
+console.log("plantHeader",plantHeader);
+      this.uploadDocument.allPlantList(selectedValue, plantHeader).subscribe({
+        next: (event: any) => {
+          if (event instanceof HttpResponse) {
+            this.departmentList = event.body?.categoryList || [];
+            console.log("Updated departmentList: ", this.departmentList);
+            
+          }
+        },
+        error: (err: any) => {
+          console.error(err);
+        }
+      });
+    }
+  }
+
   submitAddUserForm() {
+  
     if (this.addUserForm.valid) {
       const payload = {
         userName: this.addUserForm.value.userName,
@@ -105,7 +198,7 @@ export class UserManagementModalComponent implements OnInit {
         password: "",
         departmentNameList: [
           {
-            departmentName: this.addUserForm.value.department,
+            departmentName: this.selectedDeptCatName,
             plantName: this.addUserForm.value.plant
           }
         ],
@@ -139,7 +232,7 @@ export class UserManagementModalComponent implements OnInit {
       this.addUserForm.markAllAsTouched();
     }
   }
-  
+
  successfulSubmitAlert() {
     Swal.fire({
       position: "center",

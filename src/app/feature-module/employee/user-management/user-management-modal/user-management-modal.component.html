@@ -79,28 +79,29 @@
             
             <!-- Plant Selection -->
             <div class="col-md-6">
-              <br>
-              <div class="input-block mb-3">
-                <mat-select class="custom-mat-select floating-mat-select" placeholder="Select Plant" formControlName="plant">
+              <div class="input-block mb-3" >
+                <label class="col-form-label">Plants <span class="text-danger">*</span></label>
+                <mat-select formControlName="plant" class="custom-mat-select select" placeholder="Select" >
                   <mat-option value="" disabled>Select Plant</mat-option>
-                  <mat-option value="CPP-2(540 MW)">CPP-2 (540 MW)</mat-option>
-                  <mat-option value="CPP-3(1200 MW)">CPP-3 (1200 MW)</mat-option>
-                  <mat-option value="CPP-1(1740 MW)">CPP-1 (1740 MW)</mat-option>
+                  <mat-option value="CPP-2 (540MW)">CPP-2 (540 MW)</mat-option>
+                  <mat-option value="CPP-3 (1200MW)">CPP-3 (1200 MW)</mat-option>
+                  <mat-option value="CPP (1740MW)">CPP (1740 MW)</mat-option>
+                  <mat-option value="CPP-1">CPP-1</mat-option>
                 </mat-select>
-                <div *ngIf="addUserForm.get('plant')?.invalid && addUserForm.get('plant')?.touched" class="text-danger">
+                <div *ngIf="addUserForm.get('plant')?.invalid && (addUserForm.get('plant')?.touched || addUserForm.get('plant')?.dirty)" class="text-danger">
                   Plant is required.
                 </div>
               </div>
             </div>
         
-            <!-- Department -->
-            <div class="col-md-6">
-              <div class="input-block mb-3">
-                <label class="col-form-label">Department</label>
-                <input class="form-control" type="text" formControlName="department">
-                <div *ngIf="addUserForm.get('department')?.invalid && addUserForm.get('department')?.touched" class="text-danger">
-                  Department is required.
-                </div>
+            <div class="input-block mb-3" >
+              <label class="col-form-label">Department </label>
+              <mat-select formControlName="department" class="custom-mat-select select" placeholder="Select" >
+                <mat-option value="">--Select--</mat-option>
+                <mat-option *ngFor="let element of departmentList" [value]="element.catName + '~' + element.abbreviation" >{{element.catName}}</mat-option>
+              </mat-select>
+              <div *ngIf="addUserForm.get('department')?.invalid && (addUserForm.get('department')?.touched || addUserForm.get('department')?.dirty)" class="text-danger">
+                Department is required.
               </div>
             </div>
           </div>
