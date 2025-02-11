@@ -73,6 +73,20 @@ export class UserManagementModalComponent implements OnInit {
     isActive: [false],
   });
 
+  this.editUserForm = this.formBuilder.group({
+    userName: ["", [Validators.required]],
+    userPhone: ["", [Validators.required]],
+    userEmail: ["", [Validators.required, Validators.email]],
+    department: ["", []],
+    plant: ["", [Validators.required]],
+    Admin: [false],
+    User: [false],
+    SuperUser: [false],
+    HOD: [false],
+    Librarian: [false],
+    isActive: [false],
+  });
+
   this.addUserForm.get('plant')?.valueChanges.subscribe(value => {
     if (value != null) {
       console.log("Plant selected: ", value);
@@ -91,7 +105,7 @@ export class UserManagementModalComponent implements OnInit {
     const [deptName, deptAbbr] = value.split('~');
     // this.getSubAreaList(deptName, "department");
     this.selectedDeptCatName = deptName;
-    this.selectedDeptCatName = deptAbbr;
+    // this.selectedDeptCatName = deptAbbr;
     console.log("Selected department: ", deptName);
     
   });
@@ -99,12 +113,12 @@ export class UserManagementModalComponent implements OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes['client'] && this.client && this.addUserForm) {
+    if (changes['client'] && this.client && this.editUserForm) {
 
       this.roles = this.client.accessRoles ? this.client.accessRoles.split(',') : [];
       console.log("Parsed roles:", this.roles);
 
-      this.addUserForm.patchValue({
+      this.editUserForm.patchValue({
         userName: this.client.userName || '',
         userPhone: this.client.phoneNumber || '',
         userEmail: this.client.emailId || '',
@@ -233,6 +247,51 @@ console.log("plantHeader",plantHeader);
     }
   }
 
+  editAddUserForm() {
+  
+    if (this.editUserForm.valid) {
+      const payload = {
+        userName: this.editUserForm.value.userName,
+        phoneNumber: this.editUserForm.value.userPhone,
+        emailId: this.editUserForm.value.userEmail,
+        role: "User",
+        password: "",
+        departmentNameList: [
+          {
+            departmentName: this.editUserForm.value.department,
+            plantName: this.editUserForm.value.plant
+          }
+        ],
+        isActive: this.editUserForm.value.isActive,
+        accessRoles: this.getSelectedRolesEdit(),
+        userPicture: this.files?.length ? this.files[0].base64 : null, 
+      };
+  
+      console.log('Payload:', payload);
+      
+          this.loginService.addUser(payload).subscribe({
+              next: (event: any) => {
+                if (event instanceof HttpResponse) {
+                  const resp = event.body
+
+                  console.log("response =>>",resp);
+                  this.successfulSubmitAlert();
+                 
+      
+                }
+              },
+              error: (err: any) => {
+                if (err.error && err.error.message) {
+                  this.msg += " " + err.error.message;
+                }
+              }
+            });
+
+    } else {
+      console.error('Form is invalid. Please fill all required fields.');
+      this.addUserForm.markAllAsTouched();
+    }
+  }
  successfulSubmitAlert() {
     Swal.fire({
       position: "center",
@@ -254,6 +313,17 @@ console.log("plantHeader",plantHeader);
     if (this.addUserForm.value.SuperUser) selectedRoles.push("SuperUser");
     if (this.addUserForm.value.HOD) selectedRoles.push("HOD");
     if (this.addUserForm.value.Librarian) selectedRoles.push("Librarian");
+  
+    return selectedRoles.join(",");
+  }
+
+  getSelectedRolesEdit(): string {
+    const selectedRoles = [];
+    if (this.editUserForm.value.Admin) selectedRoles.push("Admin");
+    if (this.editUserForm.value.User) selectedRoles.push("User");
+    if (this.editUserForm.value.SuperUser) selectedRoles.push("SuperUser");
+    if (this.editUserForm.value.HOD) selectedRoles.push("HOD");
+    if (this.editUserForm.value.Librarian) selectedRoles.push("Librarian");
   
     return selectedRoles.join(",");
   }
@@ -330,21 +400,21 @@ console.log("plantHeader",plantHeader);
   }
 
   calculateTotalFileSize(files: Array<any>) {
-    const fiftyMB = 2 * 1024 * 1024;
+    const fiveKB = 5 * 1024;
     let totalSize = 0;
 
     for (const file of files) {
       totalSize += file.size;
     }
 
-    if (totalSize <= fiftyMB) {
+    if (totalSize <= fiveKB) {
       this.uploadDocumentSizeFlag = false;
     } else {
       this.uploadDocumentSizeFlag = true;
-    }
+    }
 
 
-  }
+  }
   onFileDropped($event: any) {
     this.prepareFilesList($event);
 

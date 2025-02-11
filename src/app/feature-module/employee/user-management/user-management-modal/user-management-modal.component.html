@@ -35,6 +35,9 @@
               </div>
             </div>
           </div>
+          <div *ngIf="uploadDocumentFlag || uploadDocumentSizeFlag" class="text-danger" style="margin-left: 2%; padding-bottom: 4%;">
+            Image size should be under 5KB.
+          </div>
         
           <div class="row">
             <!-- Employee Name -->
@@ -162,7 +165,7 @@
                   </button>
                 </div>
                 <div class="modal-body">
-                  <form [formGroup]="addUserForm">
+                  <form [formGroup]="editUserForm">
                     <div class="card">
                       <div class="card-header">
                         <h5 class="card-title">Image Upload</h5>
@@ -289,7 +292,7 @@
                       <!-- <button class="button btn-lights reset-btn" type="reset">
                         Reset
                       </button> -->
-                      <button class="btn btn-primary" type="submit" (click)="submitAddUserForm()" style="background-color:#36ba45;">
+                      <button class="btn btn-primary" type="submit" (click)="editAddUserForm()" style="background-color:#36ba45;">
                         Submit
                       </button>
                     </div>
