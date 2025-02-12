@@ -7,30 +7,7 @@ import Swal from 'sweetalert2';
 import { routes } from 'src/app/core/helpers/routes/routes';
 
 
-export interface Option {
-  value: string;
-  label: string;
-  children?: Option[];
-}
 
-export const OPTIONS: Option[] = [
-  {
-    value: 'fruits',
-    label: 'Fruits',
-    children: [
-      { value: 'apple', label: 'Apple' },
-      { value: 'banana', label: 'Banana' }
-    ]
-  },
-  {
-    value: 'vegetables',
-    label: 'Vegetables',
-    children: [
-      { value: 'carrot', label: 'Carrot' },
-      { value: 'broccoli', label: 'Broccoli' }
-    ]
-  }
-];
 
 
 
@@ -72,7 +49,6 @@ export class UploadDocComponent implements OnInit {
   selectedCatNameAbbr: any;
   selectedDeptCatNameAbbr: any;
   selectedSubAreaCatNameAbbr: any;
-  options: Option[] = OPTIONS;
   selectedValue: string | undefined;
   docList:any;
   subDocList:any;
@@ -82,6 +58,7 @@ export class UploadDocComponent implements OnInit {
   subDocListSize: any;
 docMap = new Map<number, string>();
 public newPlant: boolean = false;
+public invalidFileExtensionFlag: boolean = false;
  
   
 
@@ -159,7 +136,7 @@ public newPlant: boolean = false;
   }
 
   fileBrowseHandler(files: any) {
-    // console.log("upload agaiannn");
+
     this.prepareFilesList(files.target.files);
   }
 
@@ -192,12 +169,23 @@ public newPlant: boolean = false;
     if (files != null) {
       this.uploadDocumentFlag = false;
     }
-    for (const item of files) {
-      item.progress = 0;
-      this.files.push(item);
 
-      this.calculateTotalFileSize(this.files);
-    }
+    const allowedExtensions = [".pdf", ".docx", ".xlsx", ".jpeg", ".dwg"];
+
+for (const item of files) {
+  this.invalidFileExtensionFlag = false; 
+  const fileExtension = item.name.slice(item.name.lastIndexOf(".")).toLowerCase();
+
+  if (allowedExtensions.includes(fileExtension)) {
+    item.progress = 0;
+    this.files.push(item);
+    this.calculateTotalFileSize(this.files);
+  } else {
+    console.warn(`File type not allowed: ${item.name}`);
+    this.invalidFileExtensionFlag = true;
+
+  }
+}
     this.uploadFilesSimulator(0);
     this.uploadFileForm.get('uploadFile')?.setValue(this.files);
 
@@ -344,12 +332,6 @@ public newPlant: boolean = false;
       formData.append("file", file);
     }
 
-    // console.log(this.plantOption);
-    // console.log(this.selectedDeptCatName);
-    // console.log(this.selectedDeptCatNameAbbr);
-    // console.log(this.selectedSubAreaCatName);
-    // console.log(this.selectedSubAreaCatNameAbbr);
-    // console.log("subType::",this.subDocumentTypeOption);
     if(this.selectedDeptCatName == null){
       this.selectedDeptCatName = '';
     }if(this.selectedDeptCatNameAbbr == null){
