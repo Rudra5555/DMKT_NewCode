@@ -90,6 +90,7 @@ export class UserListComponent implements OnInit {
           next: (event: any) => {
             if (event instanceof HttpResponse) {
             const res=event.body
+            this.totalData = res.response.length;
               
             res.response.map((res: getClient, index: number) => {
               const serialNumber = index + 1;

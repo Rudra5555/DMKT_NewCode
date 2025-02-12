@@ -29,9 +29,10 @@
               <div class="row">
                 <div class="col-md-5">
                   <div class="profile-info-left">
-                    <h3 class="user-name m-t-0 mb-0">{{userName}}</h3>
-                    <h6 class="text-muted" *ngFor="let role of roles">Employee Role: {{role}}</h6>
+                    <h3 class="user-name m-t-0 mb-0">{{firstName}}</h3>
+                    <h4 class="user-name m-t-0 mb-0">{{lastName}}</h4>
                     <div class="staff-id">Employee ID : {{userId}}</div>
+                    <div class="staff-id">Role : {{roles}}</div>
                    
                  
                   </div>
@@ -46,17 +47,15 @@
                       <div class="title">Email:</div>
                       <div class="text">{{email}}</div>
                     </li>
-                    <li>
-                      <div class="title">Plant Name:</div>
-                      <div class="text">{{plant}}</div>
-                    </li>
-                    <li>
-                      <div class="title">Department Name:</div>
-                      <div class="text">{{department}}</div>
-                    </li>
-                    
+                    <ul>
+                      <div class="title">Dept and Plant</div>
+                      <li *ngFor="let item of departmentNameList">          
+                        <div class="text">{{ item.departmentName }} -->{{ item.plantName }}</div>
+                      </li>
+                    </ul>
                     
                   </ul>
+                 
                 </div>
               </div>
             </div>

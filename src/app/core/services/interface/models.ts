@@ -997,12 +997,19 @@ export interface getClient {
   phoneNumber: string;
   emailId: string;
   password: string;
-  departmentNameList: string;
+  departmentNameList:details[];
+  departmentName: string;
+  plantName: string;
   isActive: boolean;
   role: string;
   accessRoles: string;
   userPicture: string;
 }
+export interface details {
+  departmentName: string;
+  plantName: string;
+}
+
 export interface companiesList {
   id: number;
   company: string;
