@@ -115,10 +115,17 @@
 
                 <td>
                   <div class="tooltip-container">
-                    {{ item.fileName }}
-                    <span class="tooltip-text">{{ item.newUniqueFileName }}</span>-<span style="color: blue;">[{{ item.versionName }}-{{ item.versionReleaseDate }}]</span>
+                    {{ item.fileName }}-
+                    <span style="color: blue;">
+                      [{{ item.selectedVersion?.versionName || 'N/A' }}-{{ item.selectedVersion?.versionReleaseDate || 'N/A' }}]
+                    </span>
+                    <span class="tooltip-text">
+                      {{ item.selectedVersion?.newUniqueFileName || 'N/A' }}
+                    </span>
                   </div>
                 </td>
+                
+                
                 <td>{{ item.documentType? item.documentType : 'N/A' }}</td>
                 <td>
                   {{item.documentSubType? item.documentSubType : 'N/A'}}

@@ -271,7 +271,7 @@ public loggedUserId: any;
           this.transformedMap = this.transformApiResponseToMap(this.fileListOne);
 
           this.fileList = Array.from(this.transformedMap.values());
-          console.log("file list",JSON.stringify( this.fileList));
+          // console.log("file list",JSON.stringify( this.fileList));
           
           //copy data
           this.copyDataList = Array.from(this.transformedMap.values());
