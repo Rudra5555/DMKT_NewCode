@@ -44,6 +44,10 @@ export class LoginComponent implements OnInit {
   public getDisplayName:any;
   public departmentDetails:any;
   public data : any;
+  public getPhNumber:any;
+  public getEmail:any;
+  public getPicture:any;
+
   
   errorFlg:boolean=false
   errorMsg:any;
@@ -111,6 +115,9 @@ onClickSubmit(formData: any){
       next: (event: any) => {
         if (event instanceof HttpResponse) {
            this.data = event.body
+           
+           console.log("Event Data",this.data);
+           
 
           if(this.data!=null){
            
@@ -133,11 +140,22 @@ onClickSubmit(formData: any){
               this.getTitle = this.data.response.title;
               this.getDisplayName = this.data.response.displayName;
               this.departmentDetails = this.data.response.departmentNameList;
+              this.getPhNumber = this.data.response.phoneNumber;
+              this.getEmail = this.data.response.emailId;
+              this.getPicture = this.data.response.userPicture;
+
+              console.log("Name",this.getDisplayName);
+              console.log("deptDetails",this.departmentDetails);
+              
 
               localStorage.setItem('role',this.getRoleData);
               localStorage.setItem('title',this.getTitle);
               localStorage.setItem('name',this.getDisplayName);
               localStorage.setItem('deptDetails', JSON.stringify(this.departmentDetails));
+
+              localStorage.setItem('phNumberLog',this.getPhNumber);
+              localStorage.setItem('EmailLog',this.getEmail);
+              localStorage.setItem('PictureLog',this.getPicture);
             }
          
             

@@ -244,7 +244,7 @@
                       <div class="col-md-6">
                         <div class="input-block mb-3">
                           <label class="col-form-label" for="">Plant Name</label>
-                          <input class="form-control" formControlName="plant">
+                          <input class="form-control" formControlName="plant" [readonly]="true"> 
                         </div>
                         <div *ngIf="addUserForm.get('plant')?.invalid && addUserForm.get('plant')?.touched" class="text-danger">
                           Password is required and must be at least 6 characters long.
@@ -253,7 +253,7 @@
                       <div class="col-md-6">
                         <div class="input-block mb-3">
                           <label class="col-form-label" for="">Department Name</label>
-                          <input class="form-control" formControlName="department">
+                          <input class="form-control" formControlName="department" [readonly]="true">
                         </div>
                         <div *ngIf="addUserForm.get('department')?.invalid && addUserForm.get('department')?.touched" class="text-danger">
                           Password is required and must be at least 6 characters long.

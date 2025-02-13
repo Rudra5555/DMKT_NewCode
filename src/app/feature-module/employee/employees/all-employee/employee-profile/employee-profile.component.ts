@@ -39,6 +39,7 @@ export class EmployeeProfileComponent implements OnInit {
   firstName:any;
   lastName:any;
   departmentNameList:any;
+  picture:any;
   constructor(private formBuilder: FormBuilder) {}
 
   ngOnInit() {
@@ -51,14 +52,17 @@ export class EmployeeProfileComponent implements OnInit {
     this.roles = localStorage.getItem("role");
     this.firstName = localStorage.getItem("name");
     this.lastName = localStorage.getItem("title");
-    this.phone = localStorage.getItem("Phone");
-    this.email = localStorage.getItem("Email");
+    this.phone = localStorage.getItem("phNumberLog");
+    this.email = localStorage.getItem("EmailLog");
+    this.picture = localStorage.getItem("PictureLog");
 
 
     const storedData = localStorage.getItem('deptDetails');
     this.departmentNameList = storedData ? JSON.parse(storedData) : [];
     
-    console.log(this.departmentNameList);
+    console.log("deptDetails",this.departmentNameList);
+    console.log("Name",this.firstName);
+    
 
     
 
