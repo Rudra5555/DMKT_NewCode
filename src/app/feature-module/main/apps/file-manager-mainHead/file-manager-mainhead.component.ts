@@ -139,11 +139,6 @@ console.log("mainHead:: ",this.mainHead);
 //this.decryptedMainHead = CryptoJS.AES.decrypt(encryptedMainHead, secretKey).toString(CryptoJS.enc.Utf8);
         this.decryptedMainHeadName = CryptoJS.AES.decrypt(encryptedMainHeadName, secretKey).toString(CryptoJS.enc.Utf8);
         this.decryptedPlantName = CryptoJS.AES.decrypt(encryptedPlantName, secretKey).toString(CryptoJS.enc.Utf8);
-  
-        // Use the decrypted values
-        console.log("Decrypted Main HEad:", this.decryptedMainHeadName);
-        console.log("Decrypted Plant Name:", this.decryptedPlantName);
-        // console.log("Decrypted Category ID:", decryptedCatId);
       } catch (error) {
         console.error("Error decrypting query parameters:", error);
       }

@@ -3,7 +3,6 @@
   <div class="page-header">
     <div class="row align-items-center">
       <div class="col-md-4">
-        <!-- <h3 class="page-title"> Document </h3> -->
         <h5 class="page-title">{{ departmentName }} / {{ subAreaName }}</h5>
 
         <ul class="breadcrumb">
@@ -62,9 +61,6 @@
         <li>
           <div class="search-set">
             <div class="search-input">
-              <!-- <a href="javascript:void(0);" class="btn btn-searchset"
-                ><i class="las la-search"></i
-              ></a> -->
               <div class="dataTables_filter">
                 <label>
                   <input
@@ -85,20 +81,6 @@
         </li>
       </ul>
     </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -153,9 +135,6 @@
                 <th style="color: rgb(22, 32, 138)" mat-sort-header="ver">
                   Versions
                 </th>
-                <!-- <th style="color: rgb(22, 32, 138)" mat-sort-header="size">
-                  Document Size
-                </th> -->
                 <th style="color: rgb(22, 32, 138)">Download</th>
                 <th style="color: rgb(22, 32, 138)">View</th>
               </tr>
@@ -163,16 +142,8 @@
 
             <tbody>
               <div *ngIf="isLoading" class="spinner-border" style="align-items: center;margin-left: 340%;">
-                <!-- <p>Loading...</p>  -->
-                <!-- <i class="fas fa-spinner fa-spin text-info align-items-center me-1"></i> -->
               </div>
               <tr *ngFor="let item of fileList">
-                
-                <!-- <td>
-                  <h2 class="table-avatar d-flex">
-                    {{ item.newUniqueFileName }}-<span style="color: blue;">[{{ item.versionName }}-{{ item.versionReleaseDate }}]</span>
-                  </h2>
-                </td> -->
                 <td>
                   <div class="tooltip-container">
                     {{ item.fileName }}
