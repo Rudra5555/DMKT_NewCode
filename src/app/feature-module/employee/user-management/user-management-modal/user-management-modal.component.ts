@@ -33,6 +33,7 @@ export class UserManagementModalComponent implements OnInit {
   selectedDeptCatName: any;
   clientsData:any;
   roles: string[] = [];
+  isHodChecked: boolean = false;
   constructor( private formBuilder: FormBuilder, private loginService: LoginComponentService,private uploadDocument: UploadDocumentComponentService) { }
 
   
@@ -110,6 +111,12 @@ export class UserManagementModalComponent implements OnInit {
     
   });
   
+  }
+
+  toggleButton() {
+    this.isHodChecked = this.addUserForm.get('HOD')?.value;
+    console.log("HOD checked: ", this.isHodChecked);
+    
   }
 
   ngOnChanges(changes: SimpleChanges) {

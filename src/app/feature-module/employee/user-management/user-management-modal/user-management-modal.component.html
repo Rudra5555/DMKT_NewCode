@@ -129,20 +129,29 @@
                   <td class="text-center"><input type="checkbox" formControlName="Admin" /></td>
                   <td class="text-center"><input type="checkbox" formControlName="User" /></td>
                   <td class="text-center"><input type="checkbox" formControlName="SuperUser" /></td>
-                  <td class="text-center"><input type="checkbox" formControlName="HOD" /></td>
+                  <td class="text-center"><input type="checkbox" formControlName="HOD" (change)="toggleButton()"/></td>
                   <td class="text-center"><input type="checkbox" formControlName="Librarian" /></td>
                   <td class="text-center"><input type="checkbox" formControlName="isActive" /></td>
                 </tr>
               </tbody>
             </table>
           </div>
+          <!-- <div *ngIf="isHodChecked" class="add-department-section">
+            <button class="button btn btn-primary"  style="background-color:#366bba;"  data-bs-toggle="tooltip" data-bs-placement="top" title="Add Department">
+              <i class="fas fa-plus"></i>
+            </button>
+          </div> -->
+          
+          
         
           <!-- Form Buttons -->
           <div class="col-lg-12 text-end form-wizard-button">
+            
             <button class="button btn-lights reset-btn" type="reset">
               Reset
             </button>
-            <button class="btn btn-primary" type="submit" (click)="submitAddUserForm()" style="background-color:#36ba45;">
+           
+            <button class="button btn btn-primary" type="submit" (click)="submitAddUserForm()" style="background-color:#36ba45;">
               Submit
             </button>
           </div>

@@ -104,33 +104,16 @@ console.log("mainHead:: ",this.mainHead);
 
   }
 
-  setLast15Days() {
-    const endDate = new Date();
-    const startDate = new Date();
-    startDate.setDate(endDate.getDate() - 15);
+ 
 
-    this.bsRangeValue = [startDate, endDate];
-    this.onDateRangeSelected();
 
-  }
-
-  onDateRangeSelected() {
-    this.startDate = this.formatDate(this.bsRangeValue[0]);
-    this.endDate = this.formatDate(this.bsRangeValue[1]);
-    this.getFileListDetails()
-
-  }
-
-  formatDate(date: Date): string {
-    return this.datePipe.transform(date, 'yyyy-MM-dd')!;
-  }
 
 
 
   ngOnInit(): void {
     this.getDocumentTypeList();
-
     this.loggedUserRole = localStorage.getItem("role")
+
     this.setLast15Days();
 
     // this.route.queryParams.subscribe(params => {
@@ -156,11 +139,6 @@ console.log("mainHead:: ",this.mainHead);
 //this.decryptedMainHead = CryptoJS.AES.decrypt(encryptedMainHead, secretKey).toString(CryptoJS.enc.Utf8);
         this.decryptedMainHeadName = CryptoJS.AES.decrypt(encryptedMainHeadName, secretKey).toString(CryptoJS.enc.Utf8);
         this.decryptedPlantName = CryptoJS.AES.decrypt(encryptedPlantName, secretKey).toString(CryptoJS.enc.Utf8);
-  
-        // Use the decrypted values
-        console.log("Decrypted Main HEad:", this.decryptedMainHeadName);
-        console.log("Decrypted Plant Name:", this.decryptedPlantName);
-        // console.log("Decrypted Category ID:", decryptedCatId);
       } catch (error) {
         console.error("Error decrypting query parameters:", error);
       }
@@ -192,14 +170,41 @@ console.log("mainHead:: ",this.mainHead);
       docType: ["", [Validators.required]],
     });
 
-
-
+    this.getFileListDetails();
 
   }
+
+  setLast15Days() {
+    console.log("setLast15Days");
+    
+    const endDate = new Date();
+    const startDate = new Date();
+    startDate.setDate(endDate.getDate() - 15);
+
+    this.bsRangeValue = [startDate, endDate];
+    this.onDateRangeSelected();
+
+  }
+
+  onDateRangeSelected() {
+    this.startDate = this.formatDate(this.bsRangeValue[0]);
+    this.endDate = this.formatDate(this.bsRangeValue[1]);
+
+    this.getFileListDetails()
+
+  }
+
+  formatDate(date: Date): string {
+    return this.datePipe.transform(date, 'yyyy-MM-dd')!;
+  }
+
+ 
 
   getFileListDetails() {
     this.fileList = [];
     this.serialNumberArray = [];
+    console.log("api details:: ",this.decryptedMainHeadName, this.startDate, this.endDate);
+    
 
     this.loginService.getFileListforOther(this.decryptedMainHeadName, this.startDate, this.endDate).subscribe({
       next: (event: any) => {
