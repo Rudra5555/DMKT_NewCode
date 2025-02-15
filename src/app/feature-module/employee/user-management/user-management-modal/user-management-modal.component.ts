@@ -65,6 +65,7 @@ export class UserManagementModalComponent implements OnInit {
     userPhone: ["", [Validators.required]],
     userEmail: ["", [Validators.required, Validators.email]],
     department: ["", []],
+    mainRole: ["", []],
     plant: ["", [Validators.required]],
     Admin: [false],
     User: [false],
@@ -215,7 +216,53 @@ console.log("plantHeader",plantHeader);
         userName: this.addUserForm.value.userName,
         phoneNumber: this.addUserForm.value.userPhone,
         emailId: this.addUserForm.value.userEmail,
-        role: "User",
+        role:  this.addUserForm.value.mainRole,
+        password: "",
+        departmentNameList: [
+          {
+            departmentName: this.selectedDeptCatName,
+            plantName: this.addUserForm.value.plant
+          }
+        ],
+        isActive: this.addUserForm.value.isActive,
+        accessRoles: this.getSelectedRoles(),
+        userPicture: this.files?.length ? this.files[0].base64 : null, 
+      };
+  
+      console.log('Payload:', payload);
+      
+          this.loginService.addUser(payload).subscribe({
+              next: (event: any) => {
+                if (event instanceof HttpResponse) {
+                  const resp = event.body
+
+                  console.log("response =>>",resp);
+                  this.successfulSubmitAlert();
+                 
+      
+                }
+              },
+              error: (err: any) => {
+                if (err.error && err.error.message) {
+                  this.msg += " " + err.error.message;
+                }
+              }
+            });
+
+    } else {
+      console.error('Form is invalid. Please fill all required fields.');
+      this.addUserForm.markAllAsTouched();
+    }
+  }
+
+  submitAddUserFormLibrarian() {
+  
+    if (this.addUserForm.valid) {
+      const payload = {
+        userName: this.addUserForm.value.userName,
+        phoneNumber: this.addUserForm.value.userPhone,
+        emailId: this.addUserForm.value.userEmail,
+        role:  "User",
         password: "",
         departmentNameList: [
           {
@@ -370,6 +417,8 @@ console.log("plantHeader",plantHeader);
 
 
   prepareFilesList(files: Array<any>) {
+    console.log("files",files);
+    
     if (files != null) {
       this.uploadDocumentFlag = false;
     }

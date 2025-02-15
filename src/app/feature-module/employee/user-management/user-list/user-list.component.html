@@ -11,11 +11,18 @@
           <!-- <li class="breadcrumb-item active">User Management</li> -->
         </ul>
       </div>
-      <div class="col-auto float-end ms-auto">
-        <a class="btn add-btn" data-bs-toggle="modal" data-bs-target="#add_client" id="addUser"><i
-            class="la la-plus-circle"></i>
-          Add User</a>
+      <div class="col-auto float-end ms-auto" *ngIf="librarianRoleFlag">
+        <a class="btn add-btn" data-bs-toggle="modal" data-bs-target="#add_client_librarian" id="addUserLibrarian">
+          <i class="la la-plus-circle"></i> Add User from Librarian
+        </a>
       </div>
+      
+      <div class="col-auto float-end ms-auto" *ngIf="adminRoleFlag">
+        <a class="btn add-btn" data-bs-toggle="modal" data-bs-target="#add_client_admin" id="addUserAdmin">
+          <i class="la la-plus-circle"></i> Add User from Admin
+        </a>
+      </div>
+      
     </div>
   </div>
   <!-- /Page Header -->

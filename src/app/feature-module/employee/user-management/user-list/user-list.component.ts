@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -33,6 +33,10 @@ export class UserListComponent implements OnInit {
   public totalPages = 0;
   msg:any;
   selectedClient: any = {};
+  loggedInUser: any;
+  adminRoleFlag: boolean = false;
+  librarianRoleFlag: boolean = false;
+
   //** / pagination variables
   // constructor(private data: DataService) {}
 
@@ -41,6 +45,7 @@ export class UserListComponent implements OnInit {
     private formBuilder: FormBuilder,
     private loginService: LoginComponentService,
     private router: Router,
+    private cdr: ChangeDetectorRef
 
   ) {
 
@@ -61,6 +66,16 @@ export class UserListComponent implements OnInit {
 
   ngOnInit(): void {
     this.getTableData();
+    this.loggedInUser = localStorage.getItem('role')?.trim().toLowerCase();
+    console.log("Logged In User:", this.loggedInUser);
+  
+    this.adminRoleFlag = this.loggedInUser === 'admin';
+    this.librarianRoleFlag = this.loggedInUser === 'librarian';
+  
+    console.log("Admin Role Flag:", this.adminRoleFlag);
+    console.log("Librarian Role Flag:", this.librarianRoleFlag);
+  
+    this.cdr.detectChanges();  // Force UI update
   }
 
   // private getTableData(): void {
