@@ -123,15 +123,34 @@ export class UserManagementModalComponent implements OnInit {
   ngOnChanges(changes: SimpleChanges) {
     if (changes['client'] && this.client && this.editUserForm) {
 
+      console.log("clienttt",this.client);
+      
+
       this.roles = this.client.accessRoles ? this.client.accessRoles.split(',') : [];
       console.log("Parsed roles:", this.roles);
+
+    //   const departmentNames = this.client.departmentNameList
+    //   ? this.client.departmentNameList.map((dept: { departmentName: any; }) => dept.departmentName).join(', ')
+    //   : '';
+
+    // const plantNames = this.client.departmentNameList
+    //   ? this.client.departmentNameList.map((plant: { plantName: any; }) => plant.plantName).join(', ')
+    //   : '';
+
+    const departmentNames = this.client.departmentNameList && Array.isArray(this.client.departmentNameList)
+    ? this.client.departmentNameList.map((dept: { departmentName: any; }) => dept.departmentName || 'N/A').join(', ')
+    : 'N/A';
+
+  const plantNames = this.client.departmentNameList && Array.isArray(this.client.departmentNameList)
+    ? this.client.departmentNameList.map((plant: { plantName: any; }) => plant.plantName || 'N/A').join(', ')
+    : 'N/A';
 
       this.editUserForm.patchValue({
         userName: this.client.userName || '',
         userPhone: this.client.phoneNumber || '',
         userEmail: this.client.emailId || '',
-        department: this.client.department || '',
-        plant: this.client.plant || '',  
+        department: departmentNames ,
+        plant: plantNames ,  
          Admin: this.roles.includes('Admin'),
         User: this.roles.includes('User'),
         SuperUser: this.roles.includes('SuperUser'),

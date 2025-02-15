@@ -105,6 +105,7 @@ export class UserListComponent implements OnInit {
           next: (event: any) => {
             if (event instanceof HttpResponse) {
             const res=event.body
+           
             this.totalData = res.response.length;
               
             res.response.map((res: getClient, index: number) => {
@@ -127,6 +128,29 @@ export class UserListComponent implements OnInit {
           }
         });
   }
+
+  // getPlantNames(client: getClient): string {
+  //   return client.departmentNameList.map(dept => dept.plantName).join(', ');
+  // }
+
+  // getDepartmentNames(client: getClient): string {
+  //   return client.departmentNameList.map(dept => dept.departmentName).join(', ');
+  // }
+
+  getPlantNames(client: getClient): string {
+    return client.departmentNameList && Array.isArray(client.departmentNameList)
+      ? client.departmentNameList.map(dept => dept.plantName || 'N/A').join(', ')
+      : 'N/A';
+  }
+  
+  getDepartmentNames(client: getClient): string {
+    return client.departmentNameList && Array.isArray(client.departmentNameList)
+      ? client.departmentNameList.map(dept => dept.departmentName || 'N/A').join(', ')
+      : 'N/A';
+  }
+  
+  
+
   public sortData(sort: Sort) {
     const data = this.clientsData.slice();
 
