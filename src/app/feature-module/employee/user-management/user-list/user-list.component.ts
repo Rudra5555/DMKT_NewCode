@@ -49,18 +49,7 @@ export class UserListComponent implements OnInit {
 
   ) {
 
-    // this.uploadFileForm = this.formBuilder.group({
-    //   uploadFile: ["", [Validators.required]],
-    //   mainHead: ['', Validators.required],
-    //   plants: ["", [Validators.required]],
-    //   department: ["", [Validators.required]],
-    //   subArea: ["", [Validators.required]],
-    //   documentType: ["", [Validators.required]],
-    //   storageLocation: ["", [Validators.required]],
-    //   isStatutoryDocument: ["", [Validators.required]],
-    //   isRestrictedDocument: ["", [Validators.required]],
-    //   isHodDocument: ["", [Validators.required]],
-    // });
+
 
   }
 
@@ -78,24 +67,6 @@ export class UserListComponent implements OnInit {
     this.cdr.detectChanges();  // Force UI update
   }
 
-  // private getTableData(): void {
-  //   this.clientsData = [];
-  //   this.serialNumberArray = [];
-
-  //   this.data.getClient().subscribe((res: apiResultFormat) => {
-  //     this.totalData = res.totalData;
-  //     res.data.map((res: getClient, index: number) => {
-  //       const serialNumber = index + 1;
-  //       if (index >= this.skip && serialNumber <= this.limit) {
-  //         res.id = serialNumber;
-  //         this.clientsData.push(res);
-  //         this.serialNumberArray.push(serialNumber);
-  //       }
-  //     });
-  //     this.dataSource = new MatTableDataSource<getClient>(this.clientsData);
-  //     this.calculateTotalPages(this.totalData, this.pageSize);
-  //   });
-  // }
   
   private getTableData(): void {
     this.clientsData = [];
@@ -129,13 +100,7 @@ export class UserListComponent implements OnInit {
         });
   }
 
-  // getPlantNames(client: getClient): string {
-  //   return client.departmentNameList.map(dept => dept.plantName).join(', ');
-  // }
 
-  // getDepartmentNames(client: getClient): string {
-  //   return client.departmentNameList.map(dept => dept.departmentName).join(', ');
-  // }
 
   getPlantNames(client: getClient): string {
     return client.departmentNameList && Array.isArray(client.departmentNameList)

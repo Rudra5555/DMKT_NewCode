@@ -81,6 +81,7 @@ export class UserManagementModalComponent implements OnInit {
     userEmail: ["", [Validators.required, Validators.email]],
     department: ["", []],
     plant: ["", [Validators.required]],
+    mainRole: ["", []],
     Admin: [false],
     User: [false],
     SuperUser: [false],
@@ -151,6 +152,7 @@ export class UserManagementModalComponent implements OnInit {
         userEmail: this.client.emailId || '',
         department: departmentNames ,
         plant: plantNames ,  
+        mainRole: this.client.role || '',
          Admin: this.roles.includes('Admin'),
         User: this.roles.includes('User'),
         SuperUser: this.roles.includes('SuperUser'),
@@ -162,52 +164,7 @@ export class UserManagementModalComponent implements OnInit {
   }
 
   
-  
-  // submitAddUserForm() {
-  //   if (this.addUserForm.valid) {
-  //     const payload = {
-  //       userName: this.addUserForm.value.userName,
-  //       phoneNumber: this.addUserForm.value.userPhone,
-  //       emailId: this.addUserForm.value.userEmail,
-  //       role: "User",
-  //       password: "",
-  //       departmentNameList: [
-  //         {
-  //           departmentName: this.addUserForm.value.department,
-  //           plantName: this.addUserForm.value.plant
-  //         }
-  //       ],
-  //       isActive: this.addUserForm.value.isActive,
-  //       accessRoles: this.getSelectedRoles(),
-  //       userPicture: this.files?.length ? this.files[0].base64 : null, 
-  //     };
-  
-  //     console.log('Payload:', payload);
-      
-  //         this.loginService.addUser(payload).subscribe({
-  //             next: (event: any) => {
-  //               if (event instanceof HttpResponse) {
-  //                 const resp = event.body
 
-  //                 console.log("response =>>",resp);
-  //                 this.successfulSubmitAlert();
-                 
-      
-  //               }
-  //             },
-  //             error: (err: any) => {
-  //               if (err.error && err.error.message) {
-  //                 this.msg += " " + err.error.message;
-  //               }
-  //             }
-  //           });
-
-  //   } else {
-  //     console.error('Form is invalid. Please fill all required fields.');
-  //     this.addUserForm.markAllAsTouched();
-  //   }
-  // }
-  
   getAllPlantList(selectedValue: string, plantHeader: string) {
 
     if (selectedValue != '' && plantHeader != null) {
@@ -328,6 +285,52 @@ console.log("plantHeader",plantHeader);
         phoneNumber: this.editUserForm.value.userPhone,
         emailId: this.editUserForm.value.userEmail,
         role: "User",
+        password: "",
+        departmentNameList: [
+          {
+            departmentName: this.editUserForm.value.department,
+            plantName: this.editUserForm.value.plant
+          }
+        ],
+        isActive: this.editUserForm.value.isActive,
+        accessRoles: this.getSelectedRolesEdit(),
+        userPicture: this.files?.length ? this.files[0].base64 : null, 
+      };
+  
+      console.log('Payload:', payload);
+      
+          this.loginService.addUser(payload).subscribe({
+              next: (event: any) => {
+                if (event instanceof HttpResponse) {
+                  const resp = event.body
+
+                  console.log("response =>>",resp);
+                  this.successfulSubmitAlert();
+                 
+      
+                }
+              },
+              error: (err: any) => {
+                if (err.error && err.error.message) {
+                  this.msg += " " + err.error.message;
+                }
+              }
+            });
+
+    } else {
+      console.error('Form is invalid. Please fill all required fields.');
+      this.addUserForm.markAllAsTouched();
+    }
+  }
+
+  editAddUserFormAdmin() {
+  
+    if (this.editUserForm.valid) {
+      const payload = {
+        userName: this.editUserForm.value.userName,
+        phoneNumber: this.editUserForm.value.userPhone,
+        emailId: this.editUserForm.value.userEmail,
+        role:  this.editUserForm.value.mainRole,
         password: "",
         departmentNameList: [
           {

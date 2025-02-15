@@ -12,14 +12,14 @@
         </ul>
       </div>
       <div class="col-auto float-end ms-auto" *ngIf="librarianRoleFlag">
-        <a class="btn add-btn" data-bs-toggle="modal" data-bs-target="#add_client_librarian" id="addUserLibrarian">
-          <i class="la la-plus-circle"></i> Add User from Librarian
+        <a class="button btn btn-success" data-bs-toggle="modal" data-bs-target="#add_client_librarian" id="addUserLibrarian" >
+          <i class="la la-plus-circle"></i> Add User
         </a>
       </div>
       
       <div class="col-auto float-end ms-auto" *ngIf="adminRoleFlag">
-        <a class="btn add-btn" data-bs-toggle="modal" data-bs-target="#add_client_admin" id="addUserAdmin">
-          <i class="la la-plus-circle"></i> Add User from Admin
+        <a class="button btn btn-success" data-bs-toggle="modal" data-bs-target="#add_client_admin" id="addUserAdmin">
+          <i class="la la-plus-circle"></i> Add User
         </a>
       </div>
       
@@ -167,10 +167,17 @@
                   <a class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i
                       class="material-icons">more_vert</i></a>
                   <div class="dropdown-menu dropdown-menu-right">
-                    <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#edit_client" (click)="setSelectedClient(client)"><i
-                        class="fa-solid fa-pencil m-r-5" style="color: rgb(8, 28, 247)"></i> Edit</a>
-                    <!-- <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#delete_client"><i
-                        class="fa-regular fa-trash-can m-r-5" style="color: rgb(255, 61, 61)"></i> Delete</a>  -->
+                    <!-- <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#edit_client" (click)="setSelectedClient(client)"><i
+                        class="fa-solid fa-pencil m-r-5" style="color: rgb(8, 28, 247)"></i> Edit</a> -->
+
+                        <a *ngIf="adminRoleFlag" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#edit_client_admin" (click)="setSelectedClient(client)">
+                          <i class="fa-solid fa-pencil m-r-5" style="color: rgb(8, 28, 247)"></i> Edit (Admin)
+                        </a>
+                        
+                        <!-- Edit Button for Librarian -->
+                        <a *ngIf="librarianRoleFlag" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#edit_client" (click)="setSelectedClient(client)">
+                          <i class="fa-solid fa-pencil m-r-5" style="color: rgb(247, 143, 8)"></i> Edit (Librarian)
+                        </a>
                       
                   </div>
                 </div>

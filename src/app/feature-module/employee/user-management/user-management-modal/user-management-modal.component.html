@@ -159,7 +159,7 @@
                   <td class="text-center"><input type="checkbox" formControlName="Admin" /></td>
                   <td class="text-center"><input type="checkbox" formControlName="User" /></td>
                   <td class="text-center"><input type="checkbox" formControlName="SuperUser" /></td>
-                  <td class="text-center"><input type="checkbox" formControlName="HOD" (change)="toggleButton()"/></td>
+                  <td class="text-center"><input type="checkbox" formControlName="HOD" /></td>
                   <td class="text-center"><input type="checkbox" formControlName="Librarian" /></td>
                   <td class="text-center"><input type="checkbox" formControlName="isActive" /></td>
                 </tr>
@@ -171,16 +171,6 @@
               <i class="fas fa-plus"></i>
             </button>
 
-
-            <!-- <div class="dropdown">
-              <button>Select Fruits</button>
-              <div class="dropdown-content">
-                <label><input type="checkbox" name="fruits" value="apple"> Apple</label>
-                <label><input type="checkbox" name="fruits" value="orange"> Orange</label>
-                <label><input type="checkbox" name="fruits" value="banana"> Banana</label>
-                <label><input type="checkbox" name="fruits" value="grape"> Grape</label>
-              </div>
-            </div> -->
           </div>
           
           
@@ -336,7 +326,7 @@
                               <td>Roles</td>
                               <td class="text-center"><input type="checkbox" formControlName="User" /></td>
                               <td class="text-center"><input type="checkbox" formControlName="SuperUser" /></td>
-                              <td class="text-center"><input type="checkbox" formControlName="HOD" (change)="toggleButton()"/></td>
+                              <td class="text-center"><input type="checkbox" formControlName="HOD" /></td>
                               <td class="text-center"><input type="checkbox" formControlName="isActive" /></td>
                             </tr>
                           </tbody>
@@ -346,17 +336,7 @@
                         <button class="button btn btn-primary"  style="background-color:#366bba;"  data-bs-toggle="tooltip" data-bs-placement="top" title="Add Department">
                           <i class="fas fa-plus"></i>
                         </button>
-            
-            
-                        <!-- <div class="dropdown">
-                          <button>Select Fruits</button>
-                          <div class="dropdown-content">
-                            <label><input type="checkbox" name="fruits" value="apple"> Apple</label>
-                            <label><input type="checkbox" name="fruits" value="orange"> Orange</label>
-                            <label><input type="checkbox" name="fruits" value="banana"> Banana</label>
-                            <label><input type="checkbox" name="fruits" value="grape"> Grape</label>
-                          </div>
-                        </div> -->
+
                       </div>
                       
                       
@@ -381,7 +361,7 @@
 
             <!-- /Add Client Modal from Librarian -->
 
-          <!-- Edit Client Modal -->
+          <!-- Edit Client Modal Librarian-->
           <div id="edit_client" class="modal custom-modal fade" role="dialog">
             <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
               <div class="modal-content">
@@ -494,22 +474,22 @@
                         <thead>
                           <tr>
                             <th>Role Permission</th>
-                            <th class="text-center">Admin</th>
+                            <!-- <th class="text-center">Admin</th> -->
                             <th class="text-center">User</th>
                             <th class="text-center">SuperUser</th>
                             <th class="text-center">HOD</th>
-                            <th class="text-center">Librarian</th>
+                            <!-- <th class="text-center">Librarian</th> -->
                             <th class="text-center">IsActive</th>
                           </tr>
                         </thead>
                         <tbody>
                           <tr>
                             <td>Roles</td>
-                            <td class="text-center"><input type="checkbox" formControlName="Admin" /></td>
+                            <!-- <td class="text-center"><input type="checkbox" formControlName="Admin" /></td> -->
                             <td class="text-center"><input type="checkbox" formControlName="User" /></td>
                             <td class="text-center"><input type="checkbox" formControlName="SuperUser" /></td>
                             <td class="text-center"><input type="checkbox" formControlName="HOD" /></td>
-                            <td class="text-center"><input type="checkbox" formControlName="Librarian" /></td>
+                            <!-- <td class="text-center"><input type="checkbox" formControlName="Librarian" /></td> -->
                             <td class="text-center"><input type="checkbox" formControlName="isActive" /></td>
                           </tr>
                         </tbody>
@@ -529,6 +509,183 @@
             </div>
                     </div>
                     <!-- /Edit Client Modal -->
+
+                    <!-- Edit Modal from admin -->
+                    <div id="edit_client_admin" class="modal custom-modal fade" role="dialog">
+                      <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title">Edit Employee Modal</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+                          </div>
+                          <div class="modal-body">
+                            <form [formGroup]="editUserForm">
+                              <div class="card">
+                                <div class="card-header">
+                                  <h5 class="card-title">Image Upload</h5>
+                                </div>
+                                <div class="container" appDnd (fileDropped)="onFileDropped($event)" >
+                                  <input type="file" #fileDropRef id="fileDropRef"   (change)="fileBrowseHandler($event)" />
+                                  <img src="assets/img/dnd/ic-upload-file.svg" alt="">
+                                  <h3>Drag and drop file here</h3>
+                                  <h3>or</h3>
+                                  <label for="fileDropRef">Browse for file</label>
+                                </div>
+                                <!-- File list section (hidden when no files are uploaded) -->
+                              <div class="files-list" *ngIf="files && files.length > 0" style="overflow-y: auto;">
+                                <div class="single-file" *ngFor="let file of files; let i = index" style="overflow-y: auto;">
+                                  <img src="assets/img/dnd/ic-file.svg" width="45px" alt="file">
+                                  <div class="info">
+                                    <h4 class="name">{{ file?.name }}</h4>
+                                    <p class="size">{{ formatBytes(file?.size) }}</p>
+                                    <app-progress [progress]="file?.progress"></app-progress>
+                                  </div>
+                                  <img src="assets/img/dnd/ic-delete-file.svg" class="delete" width="20px" alt="file" (click)="deleteFile(i)">
+                                </div>
+                              </div>
+                              </div>
+                    
+                              <div class="row">
+                                <div class="col-md-6">
+                                  <div class="input-block mb-3">
+                                    <label class="col-form-label" for="">Employee Name <span class="text-danger">*</span></label>
+                                    <input class="form-control" type="text"  [readonly]="true"
+                                      [class.invalid]="addUserForm.get('userName')?.invalid && addUserForm.get('userName')?.touched"
+                                      formControlName="userName">
+                                    @if (addUserForm.get('userName')?.invalid && addUserForm.get('userName')?.touched) {
+                                    <div>
+                                      @if (addUserForm.get('userName')?.invalid && addUserForm.get('userName')?.touched) {
+                                      <small class="text-danger"> *Name is required</small>
+                                      }
+                                    </div>
+                                    }
+                                  </div>
+                                </div>
+                                
+                                
+                    
+                                <div class="col-md-6">
+                                  <div class="input-block mb-3">
+                                    <label class="col-form-label" for="">Email ID<span class="text-danger">*</span></label>
+                                    <input class="form-control" type="text" [readonly]="true"
+                                      [class.invalid]="addUserForm.get('userEmail')?.invalid && addUserForm.get('userEmail')?.touched"
+                                      formControlName="userEmail">
+                                    @if (addUserForm.get('userEmail')?.invalid && addUserForm.get('userEmail')?.touched) {
+                                    <div>
+                                      @if (addUserForm.get('userEmail')?.invalid && addUserForm.get('userEmail')?.touched) {
+                                      <small class="text-danger"> *Email is required</small>
+                                      }
+                                    </div>
+                                    }
+                                  </div>
+                                </div>
+                                <div class="col-md-6">
+                                  <div class="input-block mb-3">
+                                    <label class="col-form-label" for="">Phone <span class="text-danger">*</span></label>
+                                    <input class="form-control" type="number" [readonly]="true"
+                                      [class.invalid]="addUserForm.get('userPhone')?.invalid && addUserForm.get('userPhone')?.touched"
+                                      formControlName="userPhone">
+                                    @if (addUserForm.get('userPhone')?.invalid && addUserForm.get('userPhone')?.touched) {
+                                    <div>
+                                      @if (addUserForm.get('userPhone')?.invalid && addUserForm.get('userPhone')?.touched) {
+                                      <small class="text-danger"> *Phone is required</small>
+                                      }
+                                    </div>
+                                    }
+                                  </div>
+                                </div>
+                           
+                                <div class="col-md-6">
+                                  <div class="input-block mb-3">
+                                    <label class="col-form-label" for="">Plant Name</label>
+                                    <input class="form-control" formControlName="plant" [readonly]="true"> 
+                                  </div>
+                                  <div *ngIf="addUserForm.get('plant')?.invalid && addUserForm.get('plant')?.touched" class="text-danger">
+                                    Password is required and must be at least 6 characters long.
+                                  </div>
+                                </div>
+                                <div class="col-md-6">
+                                  <div class="input-block mb-3">
+                                    <label class="col-form-label" for="">Department Name</label>
+                                    <input class="form-control" formControlName="department" [readonly]="true">
+                                  </div>
+                                  <div *ngIf="addUserForm.get('department')?.invalid && addUserForm.get('department')?.touched" class="text-danger">
+                                    Password is required and must be at least 6 characters long.
+                                  </div>
+                                </div>
+                              </div>
+
+                                <!-- Main Role -->
+          <div class="table-responsive m-t-15">
+            <table class="table table-striped custom-table">
+              <thead>
+                <tr>
+                  <th>Main Role Permission</th>
+                  <th class="text-center">Admin</th>
+                  <th class="text-center">User</th>
+                  <th class="text-center">Librarian</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Roles</td>
+                  <td class="text-center">
+                    <input type="radio" formControlName="mainRole" value="Admin" />
+                  </td>
+                  <td class="text-center">
+                    <input type="radio" formControlName="mainRole" value="User" />
+                  </td>
+                  <td class="text-center">
+                    <input type="radio" formControlName="mainRole" value="Librarian" />
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+
+                              <div class="table-responsive m-t-15">
+                                <table class="table table-striped custom-table">
+                                  <thead>
+                                    <tr>
+                                      <th>Role Permission</th>
+                                      <th class="text-center">Admin</th>
+                                      <th class="text-center">User</th>
+                                      <th class="text-center">SuperUser</th>
+                                      <th class="text-center">HOD</th>
+                                      <th class="text-center">Librarian</th>
+                                      <th class="text-center">IsActive</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    <tr>
+                                      <td>Roles</td>
+                                      <td class="text-center"><input type="checkbox" formControlName="Admin" /></td>
+                                      <td class="text-center"><input type="checkbox" formControlName="User" /></td>
+                                      <td class="text-center"><input type="checkbox" formControlName="SuperUser" /></td>
+                                      <td class="text-center"><input type="checkbox" formControlName="HOD" /></td>
+                                      <td class="text-center"><input type="checkbox" formControlName="Librarian" /></td>
+                                      <td class="text-center"><input type="checkbox" formControlName="isActive" /></td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                              </div>
+                              <div class="col-lg-12 text-end form-wizard-button">
+                                <!-- <button class="button btn-lights reset-btn" type="reset">
+                                  Reset
+                                </button> -->
+                                <button class="btn btn-primary" type="submit" (click)="editAddUserFormAdmin()" style="background-color:#36ba45;">
+                                  Submit
+                                </button>
+                              </div>
+                            </form>
+                          </div>
+                        </div>
+                      </div>
+                              </div>
+                    <!-- Edit Modal from admin -->
 
                     <!-- Delete Client Modal -->
                     <div class="modal custom-modal fade" id="delete_client" role="dialog">
