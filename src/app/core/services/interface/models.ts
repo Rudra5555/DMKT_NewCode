@@ -83,6 +83,7 @@ export interface reqUploadDoc {
   activeStatus: string;
   remarks: string;
   reason: string;
+  markAsRead: boolean;
 }
 
 export interface getApproveAndRejDoc {
@@ -998,12 +999,14 @@ export interface getClient {
   emailId: string;
   password: string;
   departmentNameList:details[];
-  departmentName: string;
-  plantName: string;
+  // departmentName: string;
+  // plantName: string;
   isActive: boolean;
   role: string;
   accessRoles: string;
   userPicture: string;
+  title: string;
+  displayName: string
 }
 export interface details {
   departmentName: string;

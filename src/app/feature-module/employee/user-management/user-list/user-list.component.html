@@ -141,8 +141,10 @@
               <td>{{ client.phoneNumber }}</td>
               <td>{{ client.role }}</td>
               <!-- <td>{{ client.plant }}</td> -->
-               <td>{{ client.departmentName? client.departmentName : 'N/A' }}</td>
-              <td>{{ client.plantName? client.plantName : 'N/A' }}</td>
+               <!-- <td>{{ client.departmentName? client.departmentName : 'N/A' }}</td>
+              <td>{{ client.plantName? client.plantName : 'N/A' }}</td> -->
+              <td>{{ getPlantNames(client) }}</td>
+              <td>{{ getDepartmentNames(client) }}</td>
               <td>
                 <div class="dropdown action-label">
                   <a href="javascript:void(0);" class="btn btn-white btn-sm btn-rounded"
