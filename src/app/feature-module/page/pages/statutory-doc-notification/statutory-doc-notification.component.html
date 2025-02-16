@@ -88,11 +88,12 @@
                 <th mat-sort-header="AR name">Approver/Rejecter’s Name</th>
                 <th mat-sort-header="Ex time">Expiration Date</th>
                 <th mat-sort-header="dept">Department Name</th>
+                <th mat-sort-header="remark">Remarks</th>
                 <th mat-sort-header="status">Status</th>
               </tr>
             </thead>
-            <tbody>
-              <div *ngIf="isLoading" class="spinner-border" style="align-items: center;margin-left: 250%;">
+            <tbody style="text-align: center;">
+              <div *ngIf="isLoading" class="spinner-border" style="align-items: left;margin-left: 250%;">
                
               </div>
               <tr *ngFor="let item of readNotificationList; ">
@@ -117,6 +118,9 @@
                 </td>
                 <td>
                   {{ item.remarks}}
+                </td>
+                <td>
+                  {{ getStatusText(item.documentApprovalStatus) }}
                 </td>
               </tr>
 

@@ -12,10 +12,7 @@
         </ul>
 
       </div>
-      <!-- <div class="col-md-12 modalButtons" *ngIf="!this.roleFlag">
-        <a href="javascript:void(0);" class="btn add-btn" data-bs-toggle="modal" data-bs-target="#add_contact"
-          id="modalButton"><i class="la la-plus-circle"></i>Request Document</a>
-      </div> -->
+   
 
     </div>
 
@@ -90,7 +87,7 @@
                 <th mat-sort-header="status">Status</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody style="text-align: center;">
               <div *ngIf="isLoading" class="spinner-border" style="align-items: center;margin-left: 250%;">
                
               </div>
@@ -112,7 +109,8 @@
 
                 </td>
                 <td>
-                  {{ item.status}}
+                  {{ getStatusText(item.status) }}
+                
                 </td>
               </tr>
 
