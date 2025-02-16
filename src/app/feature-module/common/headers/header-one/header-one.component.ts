@@ -197,33 +197,35 @@ export class HeaderOneComponent implements OnInit {
     });
 
 
-    this.loginService.notificTwo(this.loggedUserId).subscribe({
-      next: (event: any) => {
-        if (event instanceof HttpResponse) {
-          this.resp = event.body.data
-          const notificTwoo = this.resp;
-          console.log("before filter::::",notificTwoo);
+    // this.loginService.notificTwo(this.loggedUserId).subscribe({
+    //   next: (event: any) => {
+    //     if (event instanceof HttpResponse) {
+    //       this.resp = event.body.data
+    //       const notificTwoo = this.resp;
+    //       console.log("before filter::::",notificTwoo);
           
-           // Filter out only the notifications where markAsRead is false
-      this.notificTwo = this.resp.filter((notification: any) => !notification.markAsRead); //markedAsRead = false
+    //        // Filter out only the notifications where markAsRead is false
+    //   this.notificTwo = this.resp.filter((notification: any) => !notification.markAsRead); //markedAsRead = false
       
-      console.log("Filtered notificTwo::::", this.notificTwo);
+    //   console.log("Filtered notificTwo::::", this.notificTwo);
 
-      this.readNotification = this.resp.filter((notification: any) => notification.markAsRead); //markedAsRead = true
-          // console.log("readNotification", this.readNotification);
-      localStorage.setItem('fileUploadNotificationList', JSON.stringify(this.readNotification));
+    //   this.readNotification = this.resp.filter((notification: any) => notification.markAsRead); //markedAsRead = true
+    //       // console.log("readNotification", this.readNotification);
+    //   localStorage.setItem('fileUploadNotificationList', JSON.stringify(this.readNotification));
           
-          this.userNotifyCountTwo = this.notificTwo.length;
-        }
-      },
-      error: (err: any) => {
-        if (err.error && err.error.message) {
-          this.msg += " " + err.error.message;
-        }
-      }
-    });
+    //       this.userNotifyCountTwo = this.notificTwo.length;
+    //     }
+    //   },
+    //   error: (err: any) => {
+    //     if (err.error && err.error.message) {
+    //       this.msg += " " + err.error.message;
+    //     }
+    //   }
+    // });
 
     this.userNotificationBell(this.loggedUserId);
+    this.userFileNotificationBell(this.loggedUserId);
+
     this.uname = localStorage.getItem("loggedUserName");
     console.log(this.uname);
 
@@ -299,6 +301,41 @@ export class HeaderOneComponent implements OnInit {
             this.userNotificationData = this.respData;
             this.userNotifyCount = this.userNotificationData.length;
 
+          }
+        },
+        error: (err: any) => {
+          if (err.error && err.error.message) {
+            this.msg += " " + err.error.message;
+          }
+        }
+      });
+
+    }
+
+  }
+
+  userFileNotificationBell(userId: any) {
+    
+    if (!userId) {
+      return;
+    } else {
+      this.loginService.notificTwo(userId).subscribe({
+        next: (event: any) => {
+          if (event instanceof HttpResponse) {
+            this.resp = event.body.data
+            const notificTwoo = this.resp;
+            console.log("before filter::::",notificTwoo);
+            
+             // Filter out only the notifications where markAsRead is false
+        this.notificTwo = this.resp.filter((notification: any) => !notification.markAsRead); //markedAsRead = false
+        
+        console.log("Filtered notificTwo::::", this.notificTwo);
+  
+        this.readNotification = this.resp.filter((notification: any) => notification.markAsRead); //markedAsRead = true
+            // console.log("readNotification", this.readNotification);
+        localStorage.setItem('fileUploadNotificationList', JSON.stringify(this.readNotification));
+            
+            this.userNotifyCountTwo = this.notificTwo.length;
           }
         },
         error: (err: any) => {
@@ -635,9 +672,9 @@ if (this.selectedFileUploadData.reason == null || this.selectedFileUploadData.re
   this.loginService.markedAsReadFileNotification(item.workflowDocId).subscribe({
     next: (response: any) => {
       console.log('Marked as read response:', response);
-      // if(response.status == 200){
-      // window.location.href = window.location.href;
-      // }
+      if(response.status == 200){
+     this.userFileNotificationBell(this.loggedUserId)
+      }
     },
     error: (error: any) => {
       console.error('Error marking as read:', error);
