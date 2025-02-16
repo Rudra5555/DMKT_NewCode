@@ -92,7 +92,7 @@ export class SubAreaComponent implements OnInit{
      public departmentFlag: boolean = false;
      startDate:any;
      endDate:any;
-  
+     plantId:any;
      remarks: string = '';
      selectedCatNameAbbr: any;
      selectedDeptCatNameAbbr: any;
@@ -112,7 +112,7 @@ export class SubAreaComponent implements OnInit{
       this.bsRangeValue = [this.bsValue, this.maxDate];
 
       this.uploadFileForm = this.formBuilder.group({
-           mainHead: ['', Validators.required],
+           mainHead: ['', []],
         plants: ["", [Validators.required]],
         department: ["", [Validators.required]],
         subArea: ["", [Validators.required]],
@@ -120,6 +120,7 @@ export class SubAreaComponent implements OnInit{
       });
   
     }
+    
   
     setLast15Days() {
       const endDate = new Date();
@@ -149,41 +150,6 @@ export class SubAreaComponent implements OnInit{
 
  
     this.setLast15Days();
-    
-
-   this.getRole = localStorage.getItem('role');
-   if(this.getRole == "Admin"){
-    this.roleFlag = true;
-    
-  }if(this.getRole == "Librarian"){
-    this.roleFlag = true;
-  }if(this.getRole == "User"){
-    this.roleFlag = false;
-
-  }if(this.getRole == "SuperUser"){
-    this.roleFlag = false;
-
-  }if(this.getRole == "Hod"){
-    this.roleFlag = false;
-
-  }
-
-
-
-    this.uploadFileForm.get('mainHead')?.valueChanges.subscribe(value => {
-      const [catName, abbreviation] = value.split('~');
-      this.selectedCatName = catName;
-      this.selectedCatNameAbbr = abbreviation
-console.log(this.selectedCatName,this.selectedCatNameAbbr);
-
-      // if (catName != 'POWER O&M') {
-      //   this.plantList = [];
-      //   this.departmentList = [];
-      //   this.subAreaList = [];
-      // }
-      this.getMainHeadList(catName, "main-head");
-
-    });
 
     this.getAllMainHeadData();
     
@@ -191,6 +157,12 @@ console.log(this.selectedCatName,this.selectedCatNameAbbr);
       if (value != null) {
         this.getAllPlantList(value, "plants");
         this.plantOption = value;
+        if( this.plantOption == "CPP-2 (540MW)"){
+          this.plantId = 1;}
+        if( this.plantOption == "CPP-3 (1200MW)"){
+          this.plantId = 2;}
+        console.log(this.plantOption);
+        
       } else {
         console.log("No plant selected or value is null.");
 
@@ -224,25 +196,6 @@ console.log(this.selectedCatName,this.selectedCatNameAbbr);
   }
 
 
-  getMainHeadList(selectedValue: string, mainHead: string) {
-console.log(selectedValue,mainHead);
-
-    if (selectedValue != '' && mainHead != null) {
-
-      this.uploadDocument.allDataList(selectedValue, mainHead).subscribe({
-        next: (event: any) => {
-          if (event instanceof HttpResponse) {
-            this.plantList = event.body?.categoryList || [];
-            console.log(this.plantList);
-            
-          }
-        },
-        error: (err: any) => {
-          console.error(err);
-        }
-      });
-    }
-  }
 
   getAllPlantList(selectedValue: string, plantHeader: string) {
 
@@ -251,6 +204,8 @@ console.log(selectedValue,mainHead);
         next: (event: any) => {
           if (event instanceof HttpResponse) {
             this.departmentList = event.body?.categoryList || [];
+            console.log(this.departmentList);
+            
           }
         },
         error: (err: any) => {
@@ -328,18 +283,7 @@ console.log(selectedValue,mainHead);
     });
   }
 
-getStatusText(statusCode: string): string {
-  switch (statusCode) {
-    case 'A':
-      return 'Approved';
-    case 'R':
-      return 'Rejected';
-    case 'P':
-      return 'Pending';
-    default:
-      return statusCode; 
-  }
-}
+
 
 
 openModal(fileUrl: string , documentName : string) {
@@ -410,36 +354,27 @@ openModal(fileUrl: string , documentName : string) {
       },
     });
   }
-  
+  closeModalBtn(){
+    this.uploadFileForm.get('plants')?.reset('');
+    this.uploadFileForm.get('department')?.reset('');
+    this.uploadFileForm.get('subAreaAbbr')?.reset('');
+    this.uploadFileForm.get('subArea')?.reset('');
 
+}
   onSubmit(): void {
+    
     if (this.uploadFileForm.invalid) {
       console.log('Form is invalid');
       this.uploadFileForm.markAllAsTouched();
+      this.unsuccessfulSubmitAlert();
       return;
     }
   
     const formData = this.uploadFileForm.value;
-  
-    const selectedMainHead = this.mainHeadList.find(
-      (item) => item.optionVal === formData.mainHead
-    );
-   console.log(selectedMainHead);
-   
-  
-    const selectedPlant = this.plantList.find(
-      (item) => item.catName === formData.plants
-    );  
-  
 
     const selectedDepartment = this.departmentList.find(
       (item) => item.catName === formData.department
     ); 
-
-
-    const headId = selectedMainHead?.catId;
-  
-    const plantId = selectedPlant?.catId;
 
     const departmentId = selectedDepartment?.catId;
   
@@ -447,8 +382,8 @@ openModal(fileUrl: string , documentName : string) {
       subAreaName: formData.subArea,
       abbreviation: formData.subAreaAbbr,
       departmentId: departmentId,
-      plantId: plantId,
-      headId: headId
+      plantId: this.plantId,
+      headId: "1"
       
     };
     // console.log("fgfgfgf",payload);
@@ -457,15 +392,13 @@ openModal(fileUrl: string , documentName : string) {
       next: (event: any) => {
         if (event instanceof HttpResponse) {
           const res = event.body;
-          // console.log("huuuuuuuuuu",res);
-          console.log("huuuuuuuuuu",res);
           this.uploadFileForm.get('mainHead')?.reset('');
           this.uploadFileForm.get('plants')?.reset('');
           this.uploadFileForm.get('department')?.reset('');
           this.uploadFileForm.get('subAreaAbbr')?.reset('');
           this.uploadFileForm.get('subArea')?.reset('');
           
-            this.successfulSubmitAlert();
+          this.successfulSubmitAlert();
         }
       },
       error: (err: any) => {
@@ -595,15 +528,12 @@ unsuccessfulSubmitAlert() {
     icon: "error",
     title: "Oops...",
     text: "Something went wrong!",
-  });
+  }).then(() => {
+
+    window.location.reload();
+
+  });;
 }
-
-
-
-
-
-
-
 
 
 }

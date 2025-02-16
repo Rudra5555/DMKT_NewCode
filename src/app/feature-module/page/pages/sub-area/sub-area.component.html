@@ -4,13 +4,7 @@
     <div class="row align-items-center">
       <div class="col-md-4">
         <h3 class="page-title">Add Sub-Area</h3>
-        <!-- <ul class="breadcrumb">
-          <li class="breadcrumb-item">
-            <a >Dashboard</a>
-          </li>
-          <li class="breadcrumb-item active" style="color: black;">Recent Uploaded Document List</li>
-        </ul> -->
-       
+              
       </div>
       <div class="col-md-12 modalButtons" >
         <a href="javascript:void(0);" class="btn add-btn" data-bs-toggle="modal" data-bs-target="#add_subArea"
@@ -24,17 +18,7 @@
   <div class="filter-section">
     <ul>
       <li>
-        <!-- <div class="filter-section">
-          <div class="col-xl-12">
-            <div class="daterange-picker d-flex centered-div">
-              <div class="form-sort">
-                <i class="las la-calendar"></i>
-                <input type="text" class="form-control date-range bookingrange" #drp="bsDaterangepicker"
-                  bsDaterangepicker [(ngModel)]="bsRangeValue" (ngModelChange)="onDateRangeSelected()" />
-              </div>
-              </div>
-          </div>
-        </div> -->
+       
 
         <div class="filter-section">
           <div class="col-xl-12">
@@ -53,7 +37,7 @@
       <li>
         <div class="search-set">
           <div class="search-input">
-            <!-- <a href="javascript:void(0);" class="btn btn-searchset"><i class="las la-search"></i></a> -->
+
             <div class="dataTables_filter">
               <label>
                 <input style="height:43px"  [(ngModel)]="searchDataValue" [ngModelOptions]="{standalone: true}"
@@ -102,8 +86,6 @@
         </thead>
         <tbody>
           <div *ngIf="isLoading" class="spinner-border" style="align-items: center;margin-left: 300%;">
-            <!-- <p>Loading...</p>  -->
-            <!-- <i class="fas fa-spinner fa-spin text-info align-items-center me-1"></i> -->
           </div>
           <tr *ngFor="let item of contactlist; ">
             <td>
@@ -212,44 +194,6 @@
     </div>
   </div>
 
-  <div
-  id="viewApprovedFiles"
-  #viewApprovedFiles
-  class="modal custom-modal fade"
-  role="dialog"
->
-  <div class="modal-dialog modal-dialog-centered modal-xl">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">File-Name:</h5><span style="font-weight: 500; font-size: medium; font-weight: bold;">{{approvedDocumentName}}</span>
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="modal"
-          aria-label="Close"
-        >
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <form>
-          <div class="row">
-            
-
-            <ngx-doc-viewer
-              [url]="doc"
-              [viewer]="viewer"
-              style="width: 100%; height: 80vh">
-              <div class="spinner-border" id="lodingSpinner" role="status">
-                <span class="sr-only">Loading...</span>
-              </div>
-          </ngx-doc-viewer>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
-</div>
 
 </div>
 
@@ -258,11 +202,11 @@
 
 <div class="modal firstModal custom-modal fade" id="add_subArea" role="dialog">
   <div class="modal-dialog modal-dialog-right modal-md" role="document">
-    <div class="modal-content">
+    <div class="modal-content" >
       <div class="modal-header d-flex justify-content-between align-items-center" style="background: linear-gradient(to right, #f2f9fb 0%, #00820e 100%) !important;">
         <h3 style="margin: 0;  margin-top: -4%;
     padding-bottom: 4%;">Add Sub-Area</h3>
-        <button type="button" id="closeModalBtn" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+        <button type="button" id="closeModalBtn" class="btn-close" (click)="closeModalBtn()" data-bs-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -272,16 +216,8 @@
             <div class="col-sm-6">
               <div class="input-block mb-3">
                 <label class="col-form-label">Main Head<span class="text-danger">*</span></label>
-                <mat-select formControlName="mainHead" class="custom-mat-select select" placeholder="Select" required>
-                  <mat-option value="">--Select--</mat-option>
-                  <mat-option *ngFor="let item of mainHeadList;"
-                    [value]="item.catName + '~' + item.abbreviation">{{item.catName}}</mat-option>
-                </mat-select>
-                <div
-                  *ngIf="uploadFileForm.get('mainHead')?.invalid && (uploadFileForm.get('mainHead')?.touched || uploadFileForm.get('mainHead')?.dirty)"
-                  class="text-danger">
-                  Main Head is required.
-                </div>
+                <input class="form-control" formControlName="mainHead" type="text"  placeholder="POWER O&M" readonly>
+
               </div>
 
               <div class="input-block mb-3" >
@@ -309,8 +245,9 @@
                 <label class="col-form-label">Plant Name <span class="text-danger">*</span></label>
                 <mat-select formControlName="plants" class="custom-mat-select select" placeholder="Select">
                   <mat-option value="">--Select--</mat-option>
-                  <mat-option *ngFor="let element of plantList"
-                    [value]="element.catName">{{element.catName}}</mat-option>
+
+                    <mat-option value="CPP-2 (540MW)">CPP-2 (540MW)</mat-option>
+                    <mat-option value="CPP-3 (1200MW)">CPP-3 (1200MW)</mat-option>
                 </mat-select>
 
                 <div

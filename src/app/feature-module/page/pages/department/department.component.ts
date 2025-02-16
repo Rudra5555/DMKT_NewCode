@@ -16,6 +16,7 @@ import { Observable } from 'rxjs';
 import { pageSelection } from '../../subscriptions/subscribed-companies/subscribed-companies.component';
 import { UploadDocumentComponentService } from 'src/app/services/upload-document-component.service';
 import Swal from 'sweetalert2';
+import { el } from '@fullcalendar/core/internal-common';
 declare let $: any;
 
 @Component({
@@ -89,7 +90,7 @@ export class DepartmentComponent implements OnInit{
      documentId:any;
      departmentId:any;
      plant:any;
-  
+    plantId:any;
      startDate:any;
      endDate:any;
   
@@ -105,7 +106,7 @@ export class DepartmentComponent implements OnInit{
      generatedBy:any;
      selectedFileUrl:any;
      allDeptList:any;
-  
+     selectedPlant:any;
   
     
   
@@ -118,7 +119,7 @@ export class DepartmentComponent implements OnInit{
       this.bsRangeValue = [this.bsValue, this.maxDate];
 
       this.uploadFileForm = this.formBuilder.group({
-         mainHead: ['', Validators.required],
+         mainHead: ['', []],
         plants: ["", [Validators.required]],
         department: ["", [Validators.required]],
         departmentAbbr: ["", [Validators.required]],
@@ -154,109 +155,29 @@ export class DepartmentComponent implements OnInit{
 
   ngOnInit() {
 
-    // this.uploadFileForm = this.formBuilder.group({
-    //   mainHead: ['', Validators.required],
-    //   plants: ['',Validators.required],
-    //   department: ['', Validators.required],
-    //   departmentAbbr: ['', Validators.required]
-    // });
- 
     this.setLast15Days();
-    
-
-   this.getRole = localStorage.getItem('role');
-   if(this.getRole == "Admin"){
-    this.roleFlag = true;
-    
-    //console.log(this.roleFlag)
-  }if(this.getRole == "Librarian"){
-    this.roleFlag = true;
-  }if(this.getRole == "User"){
-    this.roleFlag = false;
-    //console.log(this.roleFlag)
-  }if(this.getRole == "SuperUser"){
-    this.roleFlag = false;
-    //console.log(this.roleFlag)
-  }if(this.getRole == "Hod"){
-    this.roleFlag = false;
-    //console.log(this.roleFlag)
+   
   }
 
-  
-
-    this.uploadFileForm.get('mainHead')?.valueChanges.subscribe(value => {
-      const [catName, abbreviation] = value.split('~');
-      this.selectedCatName = catName;
-      this.selectedCatNameAbbr = abbreviation
-console.log(this.selectedCatName,this.selectedCatNameAbbr);
-
-      // if (catName != 'POWER O&M') {
-      //   this.plantList = [];
-      //   this.departmentList = [];
-      //   this.subAreaList = [];
-      // }
-      this.getMainHeadList(catName, "main-head");
-
-    });
-
-    this.getAllMainHeadData();
-    
- 
+  closeModalBtn() {
+    this.uploadFileForm.get('plants')?.reset('');
+    this.uploadFileForm.get('department')?.reset('');
+    this.uploadFileForm.get('departmentAbbr')?.reset('');
   }
 
 
-  getAllMainHeadData() {
-    this.uploadDocument.allMainHeadList().subscribe({
-      next: (event: any) => {
-        if (event instanceof HttpResponse) {
-          this.mainHeadList = event.body?.categoryList || [];
-          console.log("mmmmm",this.mainHeadList);
-          
 
-        }
-      },
-      error: (err: any) => {
-        console.error(err);
-      }
-    });
+
+  onPlantSelect(event: any) {
+    this.selectedPlant = event.value;
+    if(this.selectedPlant == "CPP-2 (540MW)"){
+      this.plantId = 1;}
+    if(this.selectedPlant == "CPP-3 (1200MW)"){
+      this.plantId = 2;}
+     
+    console.log('Selected Plant:', this.plantId);
+    // You can perform any action here, like sending it to a service or storing in a variable.
   }
-
-
-  getMainHeadList(selectedValue: string, mainHead: string) {
-console.log(selectedValue,mainHead);
-
-    if (selectedValue != '' && mainHead != null) {
-
-      this.uploadDocument.allDataList(selectedValue, mainHead).subscribe({
-        next: (event: any) => {
-          if (event instanceof HttpResponse) {
-            this.plantList = event.body?.categoryList || [];
-            console.log(this.plantList);
-            
-          }
-        },
-        error: (err: any) => {
-          console.error(err);
-        }
-      });
-    }
-  }
-
-  // getAllPlantList(selectedValue: string, plantHeader: string) {
-
-  //   if (selectedValue != '' && plantHeader != null) {
-  //     this.uploadDocument.allPlantList(selectedValue, plantHeader).subscribe({
-  //       next: (event: any) => {
-  //         if (event instanceof HttpResponse) {
-  //           this.departmentList = event.body?.categoryList || [];
-  //         }
-  //       },
-  //       error: (err: any) => {
-  //         console.error(err);
-  //       }
-  //     });
-  //   }
-  // }
 
 
   getDeptFileList() {
@@ -299,18 +220,7 @@ console.log(selectedValue,mainHead);
     });
   }
 
-getStatusText(statusCode: string): string {
-  switch (statusCode) {
-    case 'A':
-      return 'Approved';
-    case 'R':
-      return 'Rejected';
-    case 'P':
-      return 'Pending';
-    default:
-      return statusCode; 
-  }
-}
+
 
 
 openModal(fileUrl: string , documentName : string) {
@@ -392,31 +302,16 @@ openModal(fileUrl: string , documentName : string) {
     if (this.uploadFileForm.invalid) {
       console.log('Form is invalid');
       this.uploadFileForm.markAllAsTouched();
+      this.unsuccessfulSubmitAlert();
       return;
     }
-  
-    const formData = this.uploadFileForm.value;
-  
-    const selectedMainHead = this.mainHeadList.find(
-      (item) => item.optionVal === formData.mainHead
-    );
-    console.log(selectedMainHead);
-  
-    const selectedPlant = this.plantList.find(
-      (item) => item.catName === formData.plants
-    );  
 
-  
-  
-    const headId = selectedMainHead?.catId;
-  
-    const plantId = selectedPlant?.catId;
-  
+    const formData = this.uploadFileForm.value;
     const payload = {
       departmentName: formData.department,
       departmentAbbr: formData.departmentAbbr,
-      plantId: plantId,
-      headId: headId,
+      plantId: this.plantId,
+      headId: '1',
     };
     console.log(payload);
     
@@ -425,7 +320,6 @@ openModal(fileUrl: string , documentName : string) {
       next: (event: any) => {
         if (event instanceof HttpResponse) {
           const res = event.body;
-          console.log("huuuuuuuuuu",res);
           this.uploadFileForm.get('mainHead')?.reset('');
           this.uploadFileForm.get('plants')?.reset('');
           this.uploadFileForm.get('department')?.reset('');
@@ -442,9 +336,6 @@ openModal(fileUrl: string , documentName : string) {
     console.log('Payload:', payload);
   }
   
-  
-
-
   public sortData(sort: Sort) {
     const data = this.contactlist.slice();
 
@@ -560,13 +451,12 @@ unsuccessfulSubmitAlert() {
     icon: "error",
     title: "Oops...",
     text: "Something went wrong!",
-  });
+  }).then(() => {
+
+    window.location.reload();
+
+  });;
 }
-
-
-
-
-
 
 
 }
