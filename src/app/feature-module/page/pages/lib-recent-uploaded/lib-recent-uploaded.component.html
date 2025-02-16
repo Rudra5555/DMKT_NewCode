@@ -1,69 +1,8 @@
-<div class="content container-fluid" style="height: 100vh">
+<div class="content container-fluid" style="height: 110vh">
   <!-- Page Header -->
   <div class="page-header">
-    <div class="row align-items-center">
-      <div class="col-md-4">
-        <h3 class="page-title">Recent Uploaded Document List</h3>
-        <!-- <ul class="breadcrumb">
-          <li class="breadcrumb-item">
-            <a >Dashboard</a>
-          </li>
-          <li class="breadcrumb-item active" style="color: black;">Recent Uploaded Document List</li>
-        </ul> -->
-       
-      </div>
-
-    
-  </div>
-
+  <h3>Recent Updated Document</h3>
   <hr />
-  
-  <div class="filter-section">
-    <ul>
-      <li>
-        <!-- <div class="filter-section">
-          <div class="col-xl-12">
-            <div class="daterange-picker d-flex centered-div">
-              <div class="form-sort">
-                <i class="las la-calendar"></i>
-                <input type="text" class="form-control date-range bookingrange" #drp="bsDaterangepicker"
-                  bsDaterangepicker [(ngModel)]="bsRangeValue" (ngModelChange)="onDateRangeSelected()" />
-              </div>
-              </div>
-          </div>
-        </div> -->
-
-        <div class="filter-section">
-          <div class="col-xl-12">
-            <div class="daterange-picker d-flex centered-div">
-              <div class="form-sort">
-                <i class="las la-calendar"></i>
-                <input type="text" class="form-control date-range bookingrange" #drp="bsDaterangepicker" bsDaterangepicker
-                  [(ngModel)]="bsRangeValue" (ngModelChange)="onDateRangeSelected()" />
-              </div>
-            </div>
-          </div>
-        </div>
-
-      </li>
-
-      <li>
-        <div class="search-set">
-          <div class="search-input">
-            <!-- <a href="javascript:void(0);" class="btn btn-searchset"><i class="las la-search"></i></a> -->
-            <div class="dataTables_filter">
-              <label>
-                <input style="height:43px"  [(ngModel)]="searchDataValue" [ngModelOptions]="{standalone: true}"
-                  [ngModelOptions]="{standalone: true}" (ngModelChange)="searchData(searchDataValue)" type="search"
-                  class="form-control" placeholder="Search..." />
-              </label>
-            </div>
-          </div>
-        </div>
-      </li>
-    </ul>
-  </div>
-
   <div class="row">
     <div class="col-md-12">
       <div class="table_header">
@@ -72,7 +11,7 @@
             <div class="dataTables_length">
               <label class="col-form-label" for="">
                 Show
-                <select [(ngModel)]="pageSize" (ngModelChange)="changePageSize()" class="form-control form-control-sm">
+                <select [(ngModel)]="pageSize" (ngModelChange)="changePageSize($event)" class="form-control form-control-sm">
                   <option value="10">10</option>
                   <option value="25">25</option>
                   <option value="50">50</option>
@@ -82,6 +21,41 @@
               </label>
             </div>
           </div>
+        </div>
+
+        <div class="filter-section">
+          <ul>
+            <li>
+            
+      
+              <div class="filter-section">
+                <div class="col-xl-12">
+                  <div class="daterange-picker d-flex centered-div">
+                    <div class="form-sort">
+                      <i class="las la-calendar"></i>
+                      <input type="text" class="form-control date-range bookingrange" #drp="bsDaterangepicker" bsDaterangepicker
+                        [(ngModel)]="bsRangeValue" (ngModelChange)="onDateRangeSelected()" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+      
+            </li>
+      
+            <li>
+              <div class="search-set">
+                <div class="search-input">
+                  <div class="dataTables_filter">
+                    <label>
+                      <input style="height:43px"  [(ngModel)]="searchDataValue" [ngModelOptions]="{standalone: true}"
+                        [ngModelOptions]="{standalone: true}" (ngModelChange)="searchData(searchDataValue)" type="search"
+                        class="form-control" placeholder="Search..." />
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </li>
+          </ul>
         </div>
       </div>
       <div class="table-responsive">
@@ -102,8 +76,6 @@
         </thead>
         <tbody>
           <div *ngIf="isLoading" class="spinner-border" style="align-items: center;margin-left: 400%;">
-            <!-- <p>Loading...</p>  -->
-            <!-- <i class="fas fa-spinner fa-spin text-info align-items-center me-1"></i> -->
           </div>
           <tr *ngFor="let item of contactlist; ">
             <td>
@@ -171,6 +143,7 @@
         
         </tbody>
       </table>
+      
       </div>
       <div class="table_footer" style="height: 200px;" >
         <div class="col-sm-12 col-md-5">
@@ -180,7 +153,7 @@
             {{ totalData }} entries
           </div>
         </div>
-
+    
         <div class="col-sm-12 col-md-7">
           <div class="pagination_section">
             <ul class="pagination">
@@ -190,7 +163,7 @@
                 <a (click)="getMoreData('previous')" class="page-link" href="javascript:void(0);" tabindex="-1"><i
                     class="fa fa-angle-double-left"></i></a>
               </li>
-
+    
               @for (item of pageNumberArray; track item; let i = $index) {
               <li class="page-item" [class.active]="item === currentPage" [ngClass]="
                     (pageNumberArray[currentPage - 2] > item &&
@@ -229,7 +202,7 @@
               </li>
               }
               }
-
+    
               <li class="page-item" [ngClass]="{
                   disabled:
                     currentPage ===
@@ -245,8 +218,8 @@
         </div>
       </div>
     </div>
+    
   </div>
-
   <div
   id="viewApprovedFiles"
   #viewApprovedFiles

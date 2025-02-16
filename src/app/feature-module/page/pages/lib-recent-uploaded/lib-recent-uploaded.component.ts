@@ -5,10 +5,8 @@ import { routes } from 'src/app/core/core.index';
 import { DataService } from 'src/app/core/services/data/data.service';
 import { apiResultFormat, getRecentDocument } from 'src/app/core/services/interface/models';
 import { pageSelection } from 'src/app/feature-module/employee/employees/departments/departments.component';
-// import { datasModel } from '../../deals/deals-details/deals-details.component';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { MatChipEditedEvent, MatChipInputEvent } from '@angular/material/chips';
-// import { datasModel } from 'src/app/feature-module/crm/analytics/analytics.component';
 import { FormGroup, FormBuilder, Validators, ReactiveFormsModule } from "@angular/forms";
 import { clientsDatas, companiesList} from 'src/app/core/core.index';
 import { FileManagementService } from 'src/app/services/file-management.service';
@@ -16,7 +14,6 @@ import { HttpResponse } from '@angular/common/http';
 import { BehaviorSubject, flatMap, Observable, ReplaySubject, Subject } from 'rxjs';
 import { LoginComponentService } from 'src/app/services/login-component.service';
 import { encode } from 'base64-arraybuffer';
-// import { FormsModule } from '@angular/forms';
 import { NgxDocViewerModule, ViewerType } from 'ngx-doc-viewer';
 import Swal from 'sweetalert2';
 import { ThisReceiver } from '@angular/compiler';
@@ -39,7 +36,6 @@ export class LibRecentUploadedComponent implements OnInit {
   bsValue = new Date();
   bsRangeValue: Date[] = [];
   maxDate = new Date();
-  // pagination variables
   public noRecordFlag: boolean = false;
   public lastIndex = 0;
   public pageSize = 10;
@@ -57,39 +53,35 @@ export class LibRecentUploadedComponent implements OnInit {
   public message: any;
   public selectedFiles: any;
   public uploadFileForm!: FormGroup ;
-    public editClientForm!: FormGroup ;
-  //  public multipleFiles: File[] = [];
+  public editClientForm!: FormGroup ;
   public reasonFlag: boolean = false;
   public requestFileFlag: boolean = false;
   public uploadDocumentFlag: boolean = false;
   public uploadDocumentSizeFlag: boolean = false;
-   public getRole:any;
-   public roleFlag: boolean = false;
-   userId: number | undefined;
+  public getRole:any;
+  public roleFlag: boolean = false;
+  userId: number | undefined;
   userName: string | undefined;
   base64String:any;
   public approvedDocumentName: any;
   doc: string = '';
   viewer: ViewerType = 'google';
   selectedType = 'xlsx';
-public requestedFileName: any
+  public requestedFileName: any
   res: any;
   isLoading: boolean = false; 
   public disableSubmitBtn:boolean= false;
-
-  //  public uploadDocumentFlag: boolean = false;
-  //  public uploadDocumentSizeFlag: boolean = false;
-   public documentTypeFlag: boolean = false;
-   public fileNames: string[] = [];
-   files: any[] = [];
+  public documentTypeFlag: boolean = false;
+  public fileNames: string[] = [];
+  files: any[] = [];
    
-   searchQuery: string = '';
-   documentList: Array<{ displayText: string, referenceId: number }> = [];
-   dataLoaded: boolean = false;
-   selectedDocument: string = ''; // To store the selected document text
-   documentId:any;
-   departmentId:any;
-   plant:any;
+  searchQuery: string = '';
+  documentList: Array<{ displayText: string, referenceId: number }> = [];
+  dataLoaded: boolean = false;
+  selectedDocument: string = '';
+  documentId:any;
+  departmentId:any;
+  plant:any;
 
    startDate:any;
    endDate:any;
@@ -104,21 +96,15 @@ public requestedFileName: any
    loggedSuperUserId:any;
    generatedBy:any;
    selectedFileUrl:any;
-  //  public requestProof : any
+
+   public fullDataList:any;
+   public filteredList:any;
+ 
   subject = new BehaviorSubject('')
 
-
-  
-
-
-
-  //** / pagination variables
   constructor(private data: DataService,private datePipe: DatePipe, _uploadService: FileManagementService, private formBuilder: FormBuilder, private loginService : LoginComponentService) {
  
-
-    this.bsRangeValue = [this.bsValue, this.maxDate];
-
-
+  this.bsRangeValue = [this.bsValue, this.maxDate];
   }
 
   setLast15Days() {
@@ -135,47 +121,32 @@ public requestedFileName: any
     this.startDate = this.formatDate(this.bsRangeValue[0]);
      this.endDate = this.formatDate(this.bsRangeValue[1]);
 
-
      this.getFileListDetails()
   
-    
   }
   
   formatDate(date: Date): string {
     return this.datePipe.transform(date, 'yyyy-MM-dd')!;
   }
 
-
-
   ngOnInit(): void {
-
-    
+  
     this.setLast15Days();
     
-
    this.getRole = localStorage.getItem('role');
    if(this.getRole == "Admin"){
     this.roleFlag = true;
     
-    //console.log(this.roleFlag)
   }if(this.getRole == "Librarian"){
     this.roleFlag = true;
   }if(this.getRole == "User"){
     this.roleFlag = false;
-    //console.log(this.roleFlag)
   }if(this.getRole == "SuperUser"){
     this.roleFlag = false;
-    //console.log(this.roleFlag)
   }if(this.getRole == "Hod"){
     this.roleFlag = false;
-    //console.log(this.roleFlag)
   }
 
-
-
-    
-    // this.getTableData();
-    // this.getFileListDetails()
     this.uploadFileForm = this.formBuilder.group({
   
       uploadFile: ["", [Validators.required]],
@@ -185,50 +156,23 @@ public requestedFileName: any
       docType: ["", [Validators.required]],
     });
 
-
-
-    
-    // this.getTableData();
-
   }
 
   getFileListDetails() {
-    this.isLoading = true; // Start loader
+    this.isLoading = true;
     this.contactlist = [];
-    this.serialNumberArray = [];
 
     this.loginService.AllAdminFileList(this.startDate, this.endDate).subscribe({
       next: (event: any) => {
         if (event instanceof HttpResponse) {
-          this.respData = event.body.response;
+          this.res = event.body.response;
 
-          let filteredData = this.respData;
-
-          console.log("mnmnmnmnmnmnmnm",filteredData);
+          this.totalData=this.res.length;
           
-          if(this.contactlist.length == 0){
-            this.noRecordFlag = true;
-          }
-  
-          this.totalData = this.respData.length;
-
-          const convertToKB = (bytes: number): number => {
-            return Math.round(bytes / 1024);
-          };
-
-        filteredData.map((item: getRecentDocument, index: number) => {
-          const serialNumber = index + 1;
-          if (index >= this.skip && serialNumber <= this.limit) {
-            item.id = serialNumber;
-            console.log("id_item",item.documentSubType);
-            
-            this.contactlist.push(item);
-            this.serialNumberArray.push(serialNumber);
-          }
-        });
-
-        this.dataSource = new MatTableDataSource<getRecentDocument>(this.contactlist);
-        this.calculateTotalPages(filteredData.length, this.pageSize);
+          this.fullDataList = [...this.res];
+          this.filteredList = [...this.res];
+          this.paginateData(this.filteredList);
+          this.calculateTotalPages(this.filteredList.length, this.pageSize);
           
         this.isLoading = false; 
   
@@ -238,193 +182,10 @@ public requestedFileName: any
         if (err.error && err.error.message) {
           this['msg'] += " " + err.error.message;
         }
-        this.isLoading = false; // Stop loader on error
+        this.isLoading = false;
       },
     });
   }
-
-getStatusText(statusCode: string): string {
-  switch (statusCode) {
-    case 'A':
-      return 'Approved';
-    case 'R':
-      return 'Rejected';
-    case 'P':
-      return 'Pending';
-    default:
-      return statusCode; 
-  }
-}
-
-
-openModal(fileUrl: string , documentName : string) {
-  this.approvedDocumentName = documentName;
-  this.doc =  fileUrl;
-}
-
-
-  onFocus(): void {
-    if (!this.dataLoaded) {
-      this.loadInitialData(); 
-      this.dataLoaded = true;
-    }
-  }
-
-
-  loadInitialData(): void {
-    this.loginService.searchDocuments('').subscribe({
-      next: (event: any) => {
-        if (event instanceof HttpResponse) {
-          //console.log('API Response:', event.body);  
-  
-          if (event.body && event.body.data && Array.isArray(event.body.data)) {
-            this.documentList = event.body.data.map((doc: any) => ({
-              displayText: `${doc.uniqueFileName} (${doc.docVersion})`,
-              refernceId: doc.refernceId,
-              department: doc.department,  
-              plant: doc.plant,
-              fileName : doc.plant           
-            }));
-          } else {
-            console.error('Unexpected response format:', event.body);
-            this.documentList = [];
-          }
-        }
-      },
-      error: (err: any) => {
-        if (err.error && err.error.message) {
-          this['msg'] += " " + err.error.message;
-        }
-      },
-    });
-  }
-  
-  onSearch(): void {
-    this.loginService.searchDocuments(this.searchQuery).subscribe({
-      next: (event: any) => {
-        if (event instanceof HttpResponse) {
-          //console.log('API Response:', event.body); 
-  
-          if (event.body && event.body.data && Array.isArray(event.body.data)) {
-            this.documentList = event.body.data.map((doc: any) => ({
-              displayText: `${doc.uniqueFileName} (${doc.docVersion})`,
-              refernceId: doc.refernceId,
-              department: doc.department, 
-              plant: doc.plant,
-              fileName : doc.fileName             
-            }));
-          } else {
-            console.error('Unexpected response format:', event.body);
-            this.documentList = [];
-          }
-        }
-      },
-      error: (err: any) => {
-        if (err.error && err.error.message) {
-          this['msg'] += " " + err.error.message;
-        }
-      },
-    });
-  }
-  
-
-
-  onFileDropped($event: any) {
-    this.prepareFilesList($event);
-   
-  }
-
-  fileBrowseHandler(files: any) {
-   
-    this.prepareFilesList(files.target.files);
-
-  }
-
-  deleteFile(index: number) {
-    if (this['files'][index].progress < 100) {
-      //console.log("Upload in progress.");
-      return;
-    }
-    this['files'].splice(index, 1);
-    this.calculateTotalFileSize(this['files']);
-  }
-
-  uploadFilesSimulator(index: number) {
-    setTimeout(() => {
-      if (index === this['files'].length) return;
-      const progressInterval = setInterval(() => {
-        if (this['files'][index].progress === 100) {
-          clearInterval(progressInterval);
-          this.uploadFilesSimulator(index + 1);
-        } else {
-          this['files'][index].progress += 5;
-        }
-      }, 50);
-    }, 50);
-    //console.log("deleted file", this['files']);
-    
-  }
-
-  prepareFilesList(files: Array<any>) {
-
-    if(files != null ){
-      this.uploadDocumentFlag = false;
-    }
-    for (const item of files) {
-      item.progress = 0;
-      this.files.push(item);
-      
-
-      this.calculateTotalFileSize(this.files);
-    }
-    this.fileDropEl.nativeElement.value = "";
-    this.uploadFilesSimulator(0);
- 
-
-    
-  }
-
-  getBase64EncodedFileData(file: File): Observable<string> {
-    return new Observable(observer => {
-      const reader = new FileReader();
-  
-      reader.onload = () => {
-        const { result } = reader;
-        const data = result as ArrayBuffer; 
-        const base64Encoded = encode(data);
-  
-        observer.next(base64Encoded);
-        observer.complete();
-      };
-  
-      reader.onerror = () => {
-        observer.error(reader.error);
-      };
-  
-      reader.readAsArrayBuffer(file);
-    });
-  }
-
-  calculateTotalFileSize(files: Array<any>) {
-    const fiftyMB = 2 * 1024 * 1024;
-    let totalSize = 0;
-    
-    for (const file of files) {
-      totalSize += file.size;
-    }
-  
-    if (totalSize <= fiftyMB) {
-      //console.log("Total file size pass" ,totalSize);
-      this['uploadDocumentSizeFlag'] = false;
-    } else {
-      //console.log("Total file size fail");
-      this['uploadDocumentSizeFlag'] = true;
-    }
-  
-  }
-
-
-
 
   formatBytes(bytes: number, decimals = 2): string {
     if (bytes === 0) return "0 Bytes";
@@ -436,74 +197,104 @@ openModal(fileUrl: string , documentName : string) {
   }
 
 
-
-  public sortData(sort: Sort) {
-    const data = this.contactlist.slice();
-
-    /* eslint-disable @typescript-eslint/no-explicit-any */
-    if (!sort.active || sort.direction === '') {
-      this.contactlist = data;
-    } else {
-      this.contactlist = data.sort((a: any, b: any) => {
-        const aValue = (a as any)[sort.active];
-        const bValue = (b as any)[sort.active];
-        return (aValue < bValue ? -1 : 1) * (sort.direction === 'asc' ? 1 : -1);
-      });
-    }
-  }
-
-  public searchData(value: string): void {
-    this.dataSource.filter = value.trim().toLowerCase();
-    this.contactlist = this.dataSource.filteredData;
-  }
-
-  public getMoreData(event: string): void {
-    if (event === 'next') {
-      this.currentPage++;
-      this.pageIndex = this.currentPage - 1;
-      this.limit += this.pageSize;
-      this.skip = this.pageSize * this.pageIndex;
-      this.getFileListDetails()
-    } else if (event === 'previous') {
-      this.currentPage--;
-      this.pageIndex = this.currentPage - 1;
-      this.limit -= this.pageSize;
-      this.skip = this.pageSize * this.pageIndex;
-      this.getFileListDetails()
-    }
-  }
-
-  public moveToPage(pageNumber: number): void {
-    this.currentPage = pageNumber;
-    this.skip = this.pageSelection[pageNumber - 1].skip;
-    this.limit = this.pageSelection[pageNumber - 1].limit;
-    if (pageNumber > this.currentPage) {
-      this.pageIndex = pageNumber - 1;
-    } else if (pageNumber < this.currentPage) {
-      this.pageIndex = pageNumber + 1;
-    }
-    this.getFileListDetails()
-  }
-  private calculateTotalPages(totalData: number, pageSize: number): void {
-    this.pageNumberArray = [];
-    this.totalPages = totalData / pageSize;
-    if (this.totalPages % 1 !== 0) {
-      this.totalPages = Math.trunc(this.totalPages + 1);
-    }
-    for (let i = 1; i <= this.totalPages; i++) {
-      const limit = pageSize * i;
-      const skip = limit - pageSize;
-      this.pageNumberArray.push(i);
-      this.pageSelection.push({ skip: skip, limit: limit });
-    }
-  }
-  public changePageSize(): void {
-    this.pageSelection = [];
-    this.limit = this.pageSize;
-    this.skip = 0;
-    this.currentPage = 1;
-    this.getFileListDetails()
-  }
+// ***************************************
+ public sortData(sort: Sort) {
+     if (!sort.active || sort.direction === '') {
+       return;
+     }
+   
+     this.filteredList = this.filteredList.sort((a: any, b: any) => {
+       const aValue = (a as any)[sort.active];
+       const bValue = (b as any)[sort.active];
+   
+       return (aValue < bValue ? -1 : 1) * (sort.direction === 'asc' ? 1 : -1);
+     });
+   
+     this.paginateData(this.filteredList);
+   }
+   
+ 
+   public getMoreData(event: string): void {
+     if (event === 'next' && this.currentPage < this.totalPages) {
+       this.currentPage++;
+     } else if (event === 'previous' && this.currentPage > 1) {
+       this.currentPage--;
+     }
+   
+     this.skip = (this.currentPage - 1) * this.pageSize;
+     this.paginateData(this.filteredList);
+   }
+   
+ 
+   public moveToPage(pageNumber: number): void {
+     if (pageNumber < 1 || pageNumber > this.totalPages) return;
+   
+     this.currentPage = pageNumber;
+     this.skip = (pageNumber - 1) * this.pageSize;
+   
+     this.paginateData(this.filteredList);
+   }
+   
+ 
+ 
+   public searchData(value: string): void {
+     const filterValue = value.trim().toLowerCase();
+   
+     // 🔹 Search within full dataset
+     this.filteredList = this.fullDataList.filter((item: getRecentDocument) => 
+       item.fileName.toLowerCase().includes(filterValue)
+     );
+   
+     console.log("Filtered List:", this.filteredList);
+   
+     this.skip = 0;
+     this.calculateTotalPages(this.filteredList.length, this.pageSize);
+     this.paginateData(this.filteredList);
+   }
+   
+ 
+ 
+   private calculateTotalPages(totalData: number, pageSize: number): void {
+     this.pageNumberArray = [];
+     this.pageSelection = [];
+   
+     this.totalPages = Math.ceil(totalData / pageSize);
+   
+     for (let i = 1; i <= this.totalPages; i++) {
+       const limit = pageSize * i;
+       const skip = limit - pageSize;
+       this.pageNumberArray.push(i);
+       this.pageSelection.push({ skip: skip, limit: limit });
+     }
+   }
+ 
+   private paginateData(data: getRecentDocument[]): void {
+     this.contactlist = [];
+     this.serialNumberArray = [];
+   
+     data.forEach((item, index) => {
+       const serialNumber = index + 1;
+       if (index >= this.skip && index < this.skip + this.pageSize) {
+         item.id = serialNumber;
+         this.contactlist.push(item);
+         this.serialNumberArray.push(serialNumber);
+       }
+     });
+   
+     this.dataSource = new MatTableDataSource<getRecentDocument>([...this.contactlist]);
+   }
+ 
+   
+   public changePageSize(newPageSize: number): void {
+     this.pageSize = newPageSize; 
+     this.currentPage = 1;
+     this.skip = 0;
+   
+     this.calculateTotalPages(this.filteredList.length, this.pageSize);
+     this.paginateData(this.filteredList); 
+   }
+   
+  // *****************************************
   openFilter() {
     this.filter = !this.filter;
   }

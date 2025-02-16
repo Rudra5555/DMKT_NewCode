@@ -1,6 +1,3 @@
-// import {Component, ViewChild} from '@angular/core';
-// import {MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
-// import {DataTablesModule} from 'angular-datatables';
 import { routes } from 'src/app/core/helpers/routes/routes';
 import { Component, OnInit } from '@angular/core';
 import { FileManagementService } from 'src/app/services/file-management.service';
@@ -17,8 +14,6 @@ import { pageSelection } from "src/app/feature-module/employee/employees/departm
 import { COMMA, ENTER } from "@angular/cdk/keycodes";
 
 declare let $: any;
-
-
 
 export interface Option {
   value: string;
@@ -52,7 +47,6 @@ export const OPTIONS: Option[] = [
   styleUrls: ['./verify-uploaded-document.component.scss']
 })
 export class VerifyUploadedDocumentComponent implements OnInit {
-  // @ViewChild("fileDropRef", { static: false }) fileDropEl!: ElementRef;
   files: any[] = [];
   public routes = routes;
   public message: any;
@@ -92,6 +86,7 @@ export class VerifyUploadedDocumentComponent implements OnInit {
   loggedUserId:any;
   respData: any;
   fileList: any;
+  originalFileList:any;
   remarks:any;
 
   // ***********
@@ -124,6 +119,7 @@ export class VerifyUploadedDocumentComponent implements OnInit {
   docMap = new Map<number, string>();
   subDocumentTypeOption: any;
   public newPlant: boolean= false;
+  isLoading: boolean = false;
   // ***************
 
   constructor(
@@ -147,14 +143,14 @@ export class VerifyUploadedDocumentComponent implements OnInit {
       isHodDocument: ["", [Validators.required]],
     });
     const today = new Date();
-    this.dateRange = [today, today]; // Set current date as default for both start and end date
+    this.dateRange = [today, today];
 
     this.bsConfig = {
       isAnimated: true,
       adaptivePosition: true,
       containerClass: 'theme-blue',
       showWeekNumbers: false,
-      rangeInputFormat: 'MM/DD/YYYY', // Set date format as needed
+      rangeInputFormat: 'MM/DD/YYYY',
       minMode: 'day'};
     this.rejectForm = this.formBuilder.group({
       rejectRemarks: ['', [Validators.required, Validators.minLength(5)]],
@@ -167,9 +163,6 @@ export class VerifyUploadedDocumentComponent implements OnInit {
     this.loggedUserId = localStorage.getItem('loggedInUserId');
 
     this.getFileListDetails()
-
-    // console.log("bbbbb",this.loggedUserId);
-    
 
     this.uploadFileForm.get('mainHead')?.valueChanges.subscribe(value => {
       const [catName, abbreviation] = value.split('~');
@@ -207,13 +200,12 @@ export class VerifyUploadedDocumentComponent implements OnInit {
     this.uploadFileForm.get('department')?.valueChanges.subscribe(value => {
       const [deptName, deptAbbr] = value.split('~');
 
-         // Find the corresponding department object from the API response
     const selectedDept = this.departmentList.find(
       (dept: any) => dept.optionVal === value
     );
 
     if (selectedDept) {
-      // Extract the catId for the selected department
+
       const deptId = selectedDept.catId;
       console.log("ffffffffff",deptId);
       
@@ -246,15 +238,18 @@ export class VerifyUploadedDocumentComponent implements OnInit {
 
 
   getFileListDetails() {
-  
+    this.isLoading = true;
     this.loginService.librarianVerifyDoc(this.loggedUserId).subscribe({
       next: (event: any) => {
         if (event instanceof HttpResponse) {
           this.respData = event.body.data;
           this.fileList = this.respData;
+
+          this.totalData=this.fileList.length;
+          this.originalFileList=this.fileList;
   
         console.log("ffffffffff",this.respData);
-        
+        this.isLoading = false;
   
         }
       },
@@ -262,6 +257,7 @@ export class VerifyUploadedDocumentComponent implements OnInit {
         if (err.error && err.error.message) {
           // this['msg'] += " " + err.error.message;
         }
+        this.isLoading = false;
       },
     });
   }
@@ -871,9 +867,23 @@ export class VerifyUploadedDocumentComponent implements OnInit {
   }
 
   public searchData(value: string): void {
-    this.dataSource.filter = value.trim().toLowerCase();
-    this.contactlist = this.dataSource.filteredData;
+    if (!this.originalFileList || !Array.isArray(this.originalFileList)) {
+      return;
+    }
+  
+    if (!value.trim()) {
+      this.fileList = [...this.originalFileList];
+      return;
+    }
+  
+    this.fileList = this.originalFileList.filter(file =>
+      file?.fileName?.toLowerCase().includes(value.trim().toLowerCase()) ||
+      file?.generatedByName?.toLowerCase().includes(value.trim().toLowerCase())
+    );
   }
+  
+  
+  
 
   public getMoreData(event: string): void {
     if (event === 'next') {

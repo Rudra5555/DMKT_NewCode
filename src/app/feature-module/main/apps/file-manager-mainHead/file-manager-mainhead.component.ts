@@ -217,16 +217,30 @@ console.log("mainHead:: ",this.mainHead);
           };
 
 
+          // this.fileList = this.respData.filter((item: any) => {
+          //   return item.listOfDocumentVersoinDtos.some((version: any) => {
+          //     if (this.loggedUserRole === 'User' || this.loggedUserRole === 'Librarian' || this.loggedUserRole === 'Admin') {
+          //       return !version.hodDocument && !version.statutoryDocument && !version.restrictedDocument;
+          //     } else if (this.loggedUserRole === 'SuperUser') {
+          //       return (!version.hodDocument && !version.statutoryDocument && !version.restrictedDocument) || version.statutoryDocument;
+          //     } else if (this.loggedUserRole === 'HOD') {
+          //       return (!version.hodDocument && !version.statutoryDocument && !version.restrictedDocument) || version.hodDocument;
+          //     }
+          //     return false;
+          //   });
+          // });
+
           this.fileList = this.respData.filter((item: any) => {
             return item.listOfDocumentVersoinDtos.some((version: any) => {
-              if (this.loggedUserRole === 'User' || this.loggedUserRole === 'Librarian' || this.loggedUserRole === 'Admin') {
+              if (this.loggedUserRole === 'User') {
                 return !version.hodDocument && !version.statutoryDocument && !version.restrictedDocument;
               } else if (this.loggedUserRole === 'SuperUser') {
                 return (!version.hodDocument && !version.statutoryDocument && !version.restrictedDocument) || version.statutoryDocument;
               } else if (this.loggedUserRole === 'HOD') {
                 return (!version.hodDocument && !version.statutoryDocument && !version.restrictedDocument) || version.hodDocument;
+              }else if (this.loggedUserRole === 'Librarian' || this.loggedUserRole === 'Admin') {
+                return true; 
               }
-              return false;
             });
           });
           console.log("FILE LIST:: ",this.fileList);
