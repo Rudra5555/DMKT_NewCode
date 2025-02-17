@@ -1,6 +1,6 @@
 <app-user-management-modal [client]="selectedClient"></app-user-management-modal>
 <!-- Page Content -->
-<div class="content container-fluid" style="height: 150vh;">
+<div class="content container-fluid" style="height: 100vh;">
   <!-- Page Header -->
   <div class="page-header">
     <div class="row align-items-center">
@@ -118,14 +118,14 @@
               
               <th mat-sort-header="email">Email ID</th>
               <th mat-sort-header="phone">Mobile</th>
-              <th mat-sort-header="role">Employee Role</th>
-              <th mat-sort-header="plant">Plant</th>
+              <th mat-sort-header="role" style="padding-left: 60px;">Employee Role</th>
+              <th mat-sort-header="plant" style="padding-left: -60px;">Plant</th>
               <th mat-sort-header="Department">Department</th>
               <th mat-sort-header="status">Status</th>
               <th class="text-end">Action</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody >
             @for (client of clientsData; track client; let i = $index) {
             <tr>
               <td>
@@ -145,13 +145,13 @@
               <td>{{ client.userId }}</td>
               <!-- <td>{{ client.company }}</td> -->
               <td>{{ client.emailId }}</td>
-              <td>{{ client.phoneNumber }}</td>
-              <td>{{ client.role }}</td>
+              <td >{{ client.phoneNumber }}</td>
+              <td style="padding-left: 65px;">{{ client.role }}</td>
               <!-- <td>{{ client.plant }}</td> -->
                <!-- <td>{{ client.departmentName? client.departmentName : 'N/A' }}</td>
               <td>{{ client.plantName? client.plantName : 'N/A' }}</td> -->
-              <td>{{ getPlantNames(client) }}</td>
-              <td>{{ getDepartmentNames(client) }}</td>
+              <td style="text-align: center;">{{ getPlantNames(client) }}</td>
+              <td style="text-align: center;">{{ getDepartmentNames(client) }}</td>
               <td>
                 <div class="dropdown action-label">
                   <a href="javascript:void(0);" class="btn btn-white btn-sm btn-rounded"

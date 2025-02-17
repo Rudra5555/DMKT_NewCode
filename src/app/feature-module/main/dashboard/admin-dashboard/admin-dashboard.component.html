@@ -31,9 +31,12 @@
         <div class="card-body">
           <span class="dash-widget-icon"><i class="fa-solid fa-user"></i></span>
           <div class="dash-widget-info" id="arrows">
-            <h3 class="count">{{ fileCount }} <span class="arrow up"><i class="fas fa-arrow-up"
-                  style="height: 83px;font-size:24px;"></i><i id="downArrow" class=""
-                  style="height: 83px;font-size:24px;"></i>(+{{incCount}})</span></h3>
+            <h3 class="count">{{ fileCount }}</h3>
+             <!-- <span class="arrow up">
+              <i class="fas fa-arrow-up"
+                  style="height: 83px;font-size:24px;"></i>
+                  <i id="downArrow" class=""
+                  style="height: 83px;font-size:24px;"></i>(+{{incCount}})</span> -->
             <span class="countName">Total Documents</span>
           </div>
         </div>
@@ -44,9 +47,10 @@
         <div class="card-body">
           <span class="dash-widget-icon"><i class="fa-solid fa-user"></i></span>
           <div class="dash-widget-info">
-            <h3 class="count">{{totalActiveUser}}<span class="arrow up"><i class="fas fa-arrow-up"
+            <h3 class="count">{{totalActiveUser}}</h3>
+            <!-- <span class="arrow up"><i class="fas fa-arrow-up"
                   style="height: 83px;font-size:24px;"></i><i id="downArrow" class=""
-                  style="height: 83px;font-size:24px;"></i></span></h3>
+                  style="height: 83px;font-size:24px;"></i></span> -->
             <span class="countName">Total Active Users</span>
           </div>
         </div>
@@ -57,9 +61,10 @@
         <div class="card-body">
           <span class="dash-widget-icon"><i class="fa-solid fa-user"></i></span>
           <div class="dash-widget-info">
-            <h3 class="count">{{totalActiveHod}}<span class="arrow up"><i class="fas fa-arrow-up"
+            <h3 class="count">{{totalActiveHod}}</h3>
+            <!-- <span class="arrow up"><i class="fas fa-arrow-up"
                   style="height: 83px;font-size:24px;"></i><i id="downArrow" *ngIf="isIncrease === false" class=""
-                  style="height: 83px;font-size:24px;"></i></span></h3>
+                  style="height: 83px;font-size:24px;"></i></span> -->
             <span class="countName">Total Active HODs</span>
           </div>
         </div>
@@ -70,9 +75,10 @@
         <div class="card-body">
           <span class="dash-widget-icon"><i class="fa-solid fa-user"></i></span>
           <div class="dash-widget-info">
-            <h3 class="count">{{totalDepartment}}<span class="arrow up"><i class="fas fa-arrow-up"
+            <h3 class="count">{{totalDepartment}}</h3>
+            <!-- <span class="arrow up"><i class="fas fa-arrow-up"
                   style="height: 83px;font-size:24px;"></i><i id="downArrow" class=""
-                  style="height: 83px;font-size:24px;"></i></span></h3>
+                  style="height: 83px;font-size:24px;"></i></span> -->
             <span class="countName">Total Department</span>
           </div>
         </div>
@@ -143,7 +149,6 @@
             <thead>
               <tr>
                 <th>Document Name</th>
-                <th>Document Extension</th>
                 <th>Department Name</th>
                 <th>Sub-Area</th>
                 <th>Storage Location</th>
@@ -157,10 +162,15 @@
                
               </div> -->
               <tr *ngFor="let item of fileList">
-                <td><a [routerLink]="">{{item.fileName}}</a></td>
+                <!-- <td><a >{{item.fileName}}</a></td> -->
                 <td>
-                  <h2>{{item.extension}}</h2>
+                  <div class="tooltip-container">
+                    {{ item.fileName }}
+                    <!-- <span class="tooltip-text">{{ item.newUniqueFileName }}</span> -->
+                    <!-- -<span style="color: blue;">[{{ item.versionName }}-{{ item.versionReleaseDate }}]</span> -->
+                  </div>
                 </td>
+                
                 <td>
                   {{item.department? item.department : 'N/A'}}
                 </td>

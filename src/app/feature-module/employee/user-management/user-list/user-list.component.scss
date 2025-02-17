@@ -13,10 +13,16 @@ a#addUser {
     position: relative;
   }
   
-  .custom-table thead th {
-    position: sticky;
-    top: 0;
-    background-color: #fff; /* Matches table background */
-    z-index: 2;
-    box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.4); /* Optional shadow for better visibility */
+  .table th {
+    font-weight: 500;
+    text-align: center;
+    white-space: nowrap;
+    border-top: 1px solid #E9E9EA;
+    padding: 1rem 0.75rem;
+    background-color: #81ed81;
+    background: linear-gradient(to top, #f2f9fb 0%, #81ed81 100%) !important;
+    color: #3636b1;
+  }
+  .table body {
+    text-align: center;
   }

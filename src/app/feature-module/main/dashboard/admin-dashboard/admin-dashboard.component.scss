@@ -45,7 +45,7 @@ div#recentDatePicker[_ngcontent-ng-c3207148860] {
 
 /* Adjusting spacing to be responsive */
 span.countName {
-  margin-top: -20%;
+  margin-top: 0%;
   /* Adjust percentage to be more balanced */
 }
 
@@ -129,4 +129,25 @@ div#applicationDatePicker {
   background-color: #fff; /* Matches table background */
   z-index: 2;
   box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.4); /* Optional shadow for better visibility */
+}
+.tooltip-container .tooltip-text {
+  visibility: hidden; 
+  width: max-content; 
+  background-color: #333; 
+  color: #fff; 
+  text-align: center;
+  border-radius: 4px; 
+  padding: 5px; 
+  position: absolute; 
+  z-index: 1; 
+  bottom: 150%; 
+  left: 60%; 
+  transform: translateX(-30%); 
+  opacity: 0; 
+  transition: opacity 0.3s ease-in-out; 
+}
+
+.tooltip-container:hover .tooltip-text {
+  visibility: visible; 
+  opacity: 1; 
 }
