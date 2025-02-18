@@ -47,8 +47,8 @@
               <th mat-sort-header="documentName">Document Name</th>
               <th mat-sort-header="requestorDepartment">Requestor Id</th>
               <th mat-sort-header="requestorId">Requestor Name</th>
-              <!-- <th mat-sort-header="executorName">Executor Name</th>
-              <th mat-sort-header="executedTime">Executed Time</th> -->
+              <!-- <th mat-sort-header="executorName">Executor Name</th> -->
+              <th mat-sort-header="remarks">Remarks</th>
               <th mat-sort-header="action">Action</th>
               <th mat-sort-header="status">Status</th>
 
@@ -73,6 +73,10 @@
 
               <td>
                 {{ item.generatedByName }}
+
+              </td>
+              <td>
+                {{ item.remarks }}
 
               </td>
 
