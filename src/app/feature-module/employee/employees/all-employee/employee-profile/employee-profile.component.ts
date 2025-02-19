@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { DomSanitizer } from '@angular/platform-browser';
 import { routes } from 'src/app/core/core.index';
 interface data {
   value: string;
@@ -41,7 +42,8 @@ export class EmployeeProfileComponent implements OnInit {
   departmentNameList:any;
   picture:any;
   accessRoles: any;
-  constructor(private formBuilder: FormBuilder) {}
+  sanitizedImage: any;
+  constructor(private formBuilder: FormBuilder,private sanitizer: DomSanitizer,) {}
 
   ngOnInit() {
     this.addEmployeeForm = this.formBuilder.group({
@@ -56,7 +58,8 @@ export class EmployeeProfileComponent implements OnInit {
     this.lastName = localStorage.getItem("title");
     this.phone = localStorage.getItem("phNumberLog");
     this.email = localStorage.getItem("EmailLog");
-    this.picture = localStorage.getItem("PictureLog");
+    this.picture = localStorage.getItem("PictureLog") || '/assets/img/userIcon.png';
+    this.sanitizedImage = this.sanitizer.bypassSecurityTrustUrl(this.picture);
 
 console.log("Picture",this.picture);
 

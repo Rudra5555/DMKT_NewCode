@@ -71,7 +71,7 @@
   <div class="card shadow-lg rounded overflow-hidden">
 
     <div class="card-header bg-light d-flex align-items-center">
-      <img [src]="picture || './assets/img/userIcon.png'" alt="Profile Picture" 
+      <img [src]="sanitizedImage || '/assets/img/userIcon.png'" alt="Profile Picture" 
            class="rounded-circle border me-3" width="50" height="50">
       <div>
         <h5 class="mb-1 text-dark">{{ firstName }} {{ lastName }}</h5>
