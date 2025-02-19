@@ -56,11 +56,14 @@ export class UserListComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.getTableData();
+    this.cdr.markForCheck();
 
+    
     const client = this.idleService.getClientData();
     console.log("Client Data:", client);
 
-    this.getTableData();
+   
     this.loggedInUser = localStorage.getItem('role')?.trim().toLowerCase();
     console.log("Logged In User:", this.loggedInUser);
   
@@ -82,6 +85,8 @@ export class UserListComponent implements OnInit {
           next: (event: any) => {
             if (event instanceof HttpResponse) {
             const res=event.body
+            console.log("User Data:", res);
+            
            
             this.totalData = res.response.length;
               
