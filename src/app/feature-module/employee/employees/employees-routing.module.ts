@@ -16,6 +16,7 @@ import { OvertimeComponent } from './overtime/overtime.component';
 import { ShiftListComponent } from './shift-list/shift-list.component';
 import { ShiftScheduleComponent } from './shift-schedule/shift-schedule.component';
 import { TimesheetComponent } from './timesheet/timesheet.component';
+import { AuthGuard } from '../../main/dashboard/AuthGuard';
 
 const routes: Routes = [
   { 
@@ -24,7 +25,7 @@ const routes: Routes = [
   children: [
     // { path: "employee-list", component: EmployeeListComponent },
     // { path: "employee-page", component: EmployeePageContentComponent },
-    { path: "employee-profile", component: EmployeeProfileComponent },
+    { path: "employee-profile", component: EmployeeProfileComponent,canActivate: [AuthGuard] },
     // { path: "holidays", component: HolidaysComponent },
     // { path: "leave-admin", component: LeaveAdminComponent },
     // { path: "leave-employee", component: LeaveEmployeeComponent },

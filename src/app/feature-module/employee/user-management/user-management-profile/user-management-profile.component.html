@@ -1,7 +1,7 @@
 <!-- Page Content -->
 <div class="content container-fluid" style="height: 82vh;">
 
-    <!-- Page Header -->
+
     <div class="page-header">
         <div class="row">
             <div class="col-sm-12">
@@ -13,9 +13,9 @@
             </div>
         </div>
     </div>
-    <!-- /Page Header -->
+   
 
-    <div class="card mb-0">
+    <!-- <div class="card mb-0">
         <div class="card-body">
             <div class="row">
                 <div class="col-md-12">
@@ -23,7 +23,7 @@
                         <div class="profile-img-wrap">
                             <div class="profile-img">
                                 <a href="javascript:void(0);">
-                                    <!-- <img [src]="picture" alt="" /> -->
+                                    
                                     <img [src]="picture || 'assets/img/userIcon.png'" alt="Profile Picture" />
 
                                 </a>
@@ -52,16 +52,13 @@
                                         </li>
                                         <li>
                                             <span class="title">Department:</span>
-                                            <span class="text">waiting</span>
+                                            <span class="text">{{departmentNameList}}</span>
                                         </li>
                                         <li>
                                             <span class="title">plant:</span>
-                                            <span class="text">waiting</span>
+                                            
                                         </li>
-                                        <li>
-                                            <span class="title">Gender:</span>
-                                            <span class="text">waiting</span>
-                                        </li>
+                                        
                                     </ul>
                                 </div>
                             </div>
@@ -70,17 +67,41 @@
                 </div>
             </div>
         </div>
-    </div>
-    <!-- <div class="card tab-box">
-        <div class="row user-tabs">
-            <div class="col-lg-12 col-md-12 col-sm-12 line-tabs">
-                <ul class="nav nav-tabs nav-tabs-bottom">
-                    <li class="nav-item col-sm-3"><a class="nav-link active" data-bs-toggle="tab"
-                            href="#myprojects">Projects</a></li>
-                    <li class="nav-item col-sm-3"><a class="nav-link" data-bs-toggle="tab" href="#tasks">Tasks</a></li>
-                </ul>
+    </div> -->
+   
+    <div class="card shadow-lg rounded overflow-hidden">
+        <!-- Header Section -->
+        <div class="card-header bg-light d-flex align-items-center">
+            <!-- <img [src]="picture || 'assets/img/userIcon.png'" alt="Profile Picture" 
+                 class="rounded-circle border me-3" width="60" height="60"> -->
+                 <img [src]="sanitizedImage || 'assets/img/userIcon.png'" 
+     alt="Profile Picture" class="rounded-circle border me-3" 
+     width="60" height="60">
+            <div>
+                <h5 class="mb-1 text-dark">{{ userName }}</h5>
+                <small class="text-muted">Employee ID: <strong>{{ id }}</strong></small>
+                <br>
+                <small class="text-muted">Role: <strong>{{ role }}</strong></small>
             </div>
         </div>
-    </div> -->
+    
+        <!-- Body Section -->
+        <div class="card-body bg-white text-dark">
+            <div class="row">
+                <div class="col-md-6">
+                    <p><strong>Phone:</strong> {{ phoneNumber }}</p>
+                    <p><strong>Email: </strong> <a  class="text-success">{{ emailId }}</a></p>
+                </div>
+                <div class="col-md-6">
+                    <h6 ><strong>Plant & Department</strong></h6>
+                    <ul class="list-unstyled">
+                        <li *ngFor="let item of departmentNameList">
+                            <i class="bi bi-building"></i> {{ item.plantName }} / {{ item.departmentName }}
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    
 </div>
-<!-- /Page Content -->

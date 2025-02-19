@@ -234,42 +234,7 @@ export class StatutoryDocComponent implements OnInit {
     });
   }
 
-  // *******************************
 
-  // public approvedDocumentList(loggedUserId: any): void {
-  //   this.contactlist = [];
-  //   this.serialNumberArray = [];
-
-  //   this.loginService.approvedDocList(loggedUserId, this.startDate, this.endDate).subscribe({
-  //     next: (event: any) => {
-  //       if (event instanceof HttpResponse) {
-  //         const responseData = event.body.data;
-
-  //         const filteredData = responseData.filter((item: getcontactlist) => item.documentApprovalStatus === 'A');
-
-  //         this.totalData = filteredData.length;
-  //         filteredData.map((item: getcontactlist, index: number) => {
-  //           const serialNumber = index + 1;
-  //           if (index >= this.skip && serialNumber <= this.limit) {
-  //             item.id = serialNumber;
-  //             this.contactlist.push(item);
-  //             this.serialNumberArray.push(serialNumber);
-  //           }
-  //         });
-
-  //         this.dataSource = new MatTableDataSource<getcontactlist>(this.contactlist);
-  //         this.calculateTotalPages(filteredData.length, this.pageSize);
-  //       }
-  //     },
-  //     error: (err: any) => {
-  //       if (err.error && err.error.message) {
-  //         this.msg += " " + err.error.message;
-  //       }
-  //     }
-  //   });
-  // }
-
-  // *****************************************
 
   getStatusText(statusCode: string): string {
     switch (statusCode) {
@@ -298,92 +263,7 @@ console.log(this.plantType);
 
 
   }
-  // onFocus(): void {
-  //   if (!this.dataLoaded) {
-  //     this.loadInitialData();
-  //     this.dataLoaded = true;
-  //   }
-  // }
 
-
-  // loadInitialData(): void {
-  //   this.loginService.searchDocuments('').subscribe({
-  //     next: (event: any) => {
-  //       if (event instanceof HttpResponse) {
-
-  //         if (event.body && event.body.data && Array.isArray(event.body.data)) {
-  //           this.documentList = event.body.data.map((doc: any) => ({
-  //             displayText: `${doc.uniqueFileName} (${doc.docVersion})`,
-  //             refernceId: doc.refernceId,
-  //             department: doc.department,
-  //             plant: doc.plant,
-  //             fileName: doc.plant
-  //           }));
-  //         } else {
-  //           console.error('Unexpected response format:', event.body);
-  //           this.documentList = [];
-  //         }
-  //       }
-  //     },
-  //     error: (err: any) => {
-  //       if (err.error && err.error.message) {
-  //         this['msg'] += " " + err.error.message;
-  //       }
-  //     },
-  //   });
-  // }
-
-  // onSearch(): void {
-  //   this.loginService.searchDocuments(this.searchQuery).subscribe({
-  //     next: (event: any) => {
-  //       if (event instanceof HttpResponse) {
-  //         if (event.body && event.body.data && Array.isArray(event.body.data)) {
-  //           this.documentList = event.body.data.map((doc: any) => ({
-  //             displayText: `${doc.uniqueFileName} (${doc.docVersion})`,
-  //             refernceId: doc.refernceId,
-  //             department: doc.department,
-  //             plant: doc.plant,
-  //             fileName: doc.fileName
-              
-  //           }));
-          
-  //         } else {
-  //           console.error('Unexpected response format:', event.body);
-  //           this.documentList = [];
-  //         }
-  //       }
-  //     },
-  //     error: (err: any) => {
-  //       if (err.error && err.error.message) {
-  //         this['msg'] += " " + err.error.message;
-  //       }
-  //     },
-  //   });
-    
-  // }
-
-
-// getAllStatutoryData(doc: { displayText: string; refernceId: any; department: string; plant: string, fileName: string }): void {
-//   this.documentId = doc.refernceId;
-
-//   console.log(doc);
-  
-// }
-
-  // selectDocument(doc: { displayText: string; refernceId: any; department: string; plant: string, fileName: string }): void {
-  //   if (!doc) return;
-  //   this.documentId = doc.refernceId;
-  //   this.departmentId = doc.department;
-  //   this.plant = doc.plant;
-  //   this.selectedDocument = doc.displayText;
-  //   this.searchQuery = doc.displayText;
-  //   this.documentList = [];
-
-  //   if (this.documentId != null) {
-  //     this.requestFileFlag = false
-  //   }
-
-  // }
 
 
 

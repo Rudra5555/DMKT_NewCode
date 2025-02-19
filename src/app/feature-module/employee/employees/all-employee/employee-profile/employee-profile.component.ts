@@ -40,6 +40,7 @@ export class EmployeeProfileComponent implements OnInit {
   lastName:any;
   departmentNameList:any;
   picture:any;
+  accessRoles: any;
   constructor(private formBuilder: FormBuilder) {}
 
   ngOnInit() {
@@ -50,12 +51,14 @@ export class EmployeeProfileComponent implements OnInit {
     this.userName = localStorage.getItem("loggedUserName");
     this.userId = localStorage.getItem("loggedInUserId");
     this.roles = localStorage.getItem("role");
+    this.accessRoles = localStorage.getItem("accessRole");
     this.firstName = localStorage.getItem("name");
     this.lastName = localStorage.getItem("title");
     this.phone = localStorage.getItem("phNumberLog");
     this.email = localStorage.getItem("EmailLog");
     this.picture = localStorage.getItem("PictureLog");
 
+console.log("Picture",this.picture);
 
     const storedData = localStorage.getItem('deptDetails');
     this.departmentNameList = storedData ? JSON.parse(storedData) : [];
@@ -68,105 +71,5 @@ export class EmployeeProfileComponent implements OnInit {
 
   }
 
-  selectedList1: data[] = [
-    { value: 'Select PF contribution' },
-    { value: 'Yes' },
-    { value: 'No' },
-  ];
-  selectedList2: data[] = [
-    { value: 'Select PF contribution' },
-    { value: 'Yes' },
-    { value: 'No' },
-  ];
-  selectedList3: data[] = [
-    { value: 'Select PF contribution' },
-    { value: 'Yes' },
-    { value: 'No' },
-  ];
-  selectedList4: data[] = [
-    { value: 'Select additional rate' },
-    { value: '0%' },
-    { value: '1%' },
-    { value: '2%' },
-    { value: '3%' },
-    { value: '4%' },
-    { value: '5%' },
-    { value: '6%' },
-    { value: '7%' },
-    { value: '8%' },
-    { value: '9%' },
-    { value: '10%' },
-  ];
-  selectedList5: data[] = [
-    { value: 'Select PF contribution' },
-    { value: 'Yes' },
-    { value: 'No' },
-  ];
-  selectedList6: data[] = [
-    { value: 'Select additional rate' },
-    { value: '0%' },
-    { value: '1%' },
-    { value: '2%' },
-    { value: '3%' },
-    { value: '4%' },
-    { value: '5%' },
-    { value: '6%' },
-    { value: '7%' },
-    { value: '8%' },
-    { value: '9%' },
-    { value: '10%' },
-  ];
-  selectedList7: data[] = [
-    { value: 'Select ESI contribution' },
-    { value: 'Yes' },
-    { value: 'No' },
-  ];
-  selectedList8: data[] = [
-    { value: 'Select ESI contribution' },
-    { value: 'Yes' },
-    { value: 'No' },
-  ];
-  selectedList9: data[] = [
-    { value: 'Select ESI contribution' },
-    { value: 'Yes' },
-    { value: 'No' },
-  ];
-  selectedList10: data[] = [
-    { value: 'Select additional rate' },
-    { value: '0%' },
-    { value: '1%' },
-    { value: '2%' },
-    { value: '3%' },
-    { value: '4%' },
-    { value: '5%' },
-    { value: '6%' },
-    { value: '7%' },
-    { value: '8%' },
-    { value: '9%' },
-    { value: '10%' },
-  ];
-  selectedList11: data[] = [{ value: 'Male' }, { value: 'Female' }];
-  selectedList12: data[] = [
-    { value: 'Select Department' },
-    { value: 'Web Development' },
-    { value: 'IT Management' },
-    { value: 'Marketing' },
-  ];
-  selectedList13: data[] = [
-    { value: 'Select Designation' },
-    { value: 'Web Designer' },
-    { value: 'Web Developer' },
-    { value: 'Android Developer' },
-  ];
-  selectedList14: data[] = [
-    { value: '-' },
-    { value: 'Wilmer Deluna' },
-    { value: 'Lesley Grauer' },
-    { value: 'Jeffery Lalor' },
-  ];
-  selectedList15: data[] = [
-    { value: '-' },
-    { value: 'Single' },
-    { value: 'Married' },
-  ];
+  
 }

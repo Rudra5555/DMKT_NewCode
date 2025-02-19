@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { routes } from 'src/app/core/core.index';
 
 @Component({
@@ -18,6 +19,11 @@ export class UserManagementProfileComponent {
   picture:any;
 
   isTaskCompleted: boolean[] = [false];
+  departmentNameList: any;
+  plantNameList: any;
+  sanitizedImage: SafeUrl = "";
+
+  constructor(private sanitizer: DomSanitizer, private cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     const storedClient = localStorage.getItem('selectedClient');
@@ -26,12 +32,15 @@ export class UserManagementProfileComponent {
 
       this.id=client.userId;
       this.userName=client.userName;
-      this.role=client.role;
+      this.role=client.accessRoles;
       this.phoneNumber=client.phoneNumber;
       this.emailId=client.emailId;
-      this.picture=client.userPicture;
-      // this.picture = client?.picture || 'assets/default-image.jpg';
-      // this.picture = client.picture;
+      // this.picture=client.userPicture;
+
+      this.picture = client.userPicture;
+      this.sanitizedImage = this.sanitizer.bypassSecurityTrustUrl(this.picture);
+      this.departmentNameList = client.departmentNameList;
+     
       
 
 
@@ -40,7 +49,10 @@ export class UserManagementProfileComponent {
     } else {
       console.log('No client data found');
     }
+    this.cdr.detectChanges();
   }
+
+
 
   toggleTaskCompleted(index: number) {
     this.isTaskCompleted[index] = !this.isTaskCompleted[index];

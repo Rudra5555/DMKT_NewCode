@@ -8,6 +8,7 @@ import { UploadDocumentComponentService } from 'src/app/services/upload-document
 import { LoginComponentService } from "src/app/services/login-component.service";
 import { HttpResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { IdleService } from 'src/app/services/idle.service';
 
 @Component({
   selector: 'app-user-list',
@@ -45,7 +46,8 @@ export class UserListComponent implements OnInit {
     private formBuilder: FormBuilder,
     private loginService: LoginComponentService,
     private router: Router,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private idleService: IdleService
 
   ) {
 
@@ -54,6 +56,10 @@ export class UserListComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
+    const client = this.idleService.getClientData();
+    console.log("Client Data:", client);
+    
     this.getTableData();
     this.loggedInUser = localStorage.getItem('role')?.trim().toLowerCase();
     console.log("Logged In User:", this.loggedInUser);
@@ -186,11 +192,20 @@ export class UserListComponent implements OnInit {
     }
   }
 
-  navigateWithClient(client: any) {
-    localStorage.setItem('selectedClient', JSON.stringify(client));
-    // this.router.navigate(['/user-profile']);
+  // navigateWithClient(client: any) {
+
+  //   // localStorage.setItem('selectedClient', JSON.stringify(client));
+  //   // this.router.navigate(['/user-profile']);
     
+  // }
+
+  navigateWithClient(client: any) {
+    if (!client) return;
+    
+    this.idleService.setClientData(client);
+    console.log("Client data stored in IdleService.");
   }
+
 
   setSelectedClient(client: any) {
     this.selectedClient = { ...client }; // Store selected client data

@@ -13,7 +13,7 @@ export class IdleService {
   private lastActivity?: Date;
   private idleCheckInterval = 9000; //seconds
   private idleSubscription?: Subscription; 
-
+  private clientData: any = null; 
 
   constructor() { 
     this.resetTimer();
@@ -52,7 +52,19 @@ stopWatching(){
   }
 }
 
+setClientData(client: any) {
+  const { password, ...safeClientData } = client;
+  this.clientData = safeClientData;
+}
 
+getClientData() {
+  return this.clientData;
+}
+
+private clearClientData() {
+  this.clientData = null;
+  console.log("Client data cleared due to inactivity.");
+}
 
 
 

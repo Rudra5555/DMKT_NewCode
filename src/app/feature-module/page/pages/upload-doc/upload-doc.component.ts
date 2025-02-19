@@ -196,7 +196,7 @@ for (const item of files) {
   }
 
   calculateTotalFileSize(files: Array<any>) {
-    const fiftyMB = 2 * 1024 * 1024;
+    const fiftyMB = 10 * 1024 * 1024;
     let totalSize = 0;
 
     for (const file of files) {
@@ -384,7 +384,7 @@ for (const item of files) {
             this.uploadFileForm.controls['isRestrictedDocument'].reset();
             this.uploadFileForm.controls['isHodDocument'].reset();
             this.clearFileInput();
-            this.successfulSubmitAlert();
+            // this.successfulSubmitAlert();
           }
         },
         error: (err: any) => {

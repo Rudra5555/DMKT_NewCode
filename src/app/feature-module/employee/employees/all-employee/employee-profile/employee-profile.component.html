@@ -15,7 +15,7 @@
   </div>
   <!-- /Page Header -->
 
-  <div class="card mb-0">
+  <!-- <div class="card mb-0">
     <div class="card-body" style="height: 160px;">
       <div class="row">
         <div class="col-md-12">
@@ -23,7 +23,7 @@
             <div class="profile-img-wrap">
               <div class="profile-img">
                 <img [src]="picture || 'assets/img/userIcon.png'" alt="Profile Picture" />
-                <!-- <a><img alt="" src="assets/img/profiles/avatar-2.jpg"></a> -->
+                
               </div>
             </div>
             <div class="profile-basic">
@@ -65,9 +65,51 @@
         </div>
       </div>
     </div>
+  </div> -->
+
+
+  <div class="card shadow-lg rounded overflow-hidden">
+
+    <div class="card-header bg-light d-flex align-items-center">
+      <img [src]="picture || './assets/img/userIcon.png'" alt="Profile Picture" 
+           class="rounded-circle border me-3" width="50" height="50">
+      <div>
+        <h5 class="mb-1 text-dark">{{ firstName }} {{ lastName }}</h5>
+        <small class="text-muted">Employee ID: {{ userId }}</small>
+        <br>
+        <small class="text-muted">Main Role:
+           <strong>{{ roles }}</strong>
+        </small>
+        <br>
+        <small class="text-muted">Access Role: 
+          <strong>{{ accessRoles }}</strong>
+        </small>
+      </div>
+    </div>
+  
+
+    <div class="card-body bg-white text-dark">
+      <div class="row">
+        <div class="col-md-6">
+          <p><strong>Phone:</strong> {{ phone }}</p>
+          <p><strong>Email: </strong> <a  class="text-success">{{ email }}</a></p>
+        </div>
+        <div class="col-md-6">
+          <h6 ><strong>Plant and Department</strong></h6>
+          <ul class="list-unstyled">
+            <li *ngFor="let item of departmentNameList">
+              <i class="bi bi-building"></i> {{ item.plantName }} / {{ item.departmentName }} 
+              
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
   </div>
+  
+  
 
-
+  
           </div>
         
          
