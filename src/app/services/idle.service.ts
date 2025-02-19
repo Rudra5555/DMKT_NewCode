@@ -13,7 +13,7 @@ export class IdleService {
   private lastActivity?: Date;
   private idleCheckInterval = 9000; //seconds
   private idleSubscription?: Subscription; 
-  private clientData: any = null; 
+  private clientData: any; 
 
   constructor() { 
     this.resetTimer();
@@ -52,19 +52,23 @@ stopWatching(){
   }
 }
 
-setClientData(client: any) {
-  const { password, ...safeClientData } = client;
-  this.clientData = safeClientData;
+
+setClientData(client: any): void {
+  this.clientData = client;
+  sessionStorage.setItem('clientData', JSON.stringify(client));
+  console.log('Client data set in IdleService:', this.clientData);
 }
 
-getClientData() {
-  return this.clientData;
+
+getClientData(): any {
+  const storedClient = sessionStorage.getItem('clientData');
+  if (storedClient) {
+    this.clientData = JSON.parse(storedClient);
+  }
+  return this.clientData; // Return data from localStorage
 }
 
-private clearClientData() {
-  this.clientData = null;
-  console.log("Client data cleared due to inactivity.");
-}
+
 
 
 

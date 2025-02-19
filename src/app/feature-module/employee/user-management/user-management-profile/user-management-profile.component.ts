@@ -1,5 +1,7 @@
-import { ChangeDetectorRef, Component } from '@angular/core';
+
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import { IdleService } from 'src/app/services/idle.service'; // Import IdleService
 import { routes } from 'src/app/core/core.index';
 
 @Component({
@@ -7,65 +9,44 @@ import { routes } from 'src/app/core/core.index';
   templateUrl: './user-management-profile.component.html',
   styleUrls: ['./user-management-profile.component.scss']
 })
-export class UserManagementProfileComponent {
+export class UserManagementProfileComponent implements OnInit {
   public routes = routes;
   isClassAdded = false;
   isHiddenTask = false;
-  id:any;
-  userName:any;
-  role:any;
-  phoneNumber:any;
-  emailId:any;
-  picture:any;
-
-  isTaskCompleted: boolean[] = [false];
+  id: any;
+  userName: any;
+  role: any;
+  phoneNumber: any;
+  emailId: any;
+  picture: any;
+  sanitizedImage: SafeUrl = '';
   departmentNameList: any;
   plantNameList: any;
-  sanitizedImage: SafeUrl = "";
 
-  constructor(private sanitizer: DomSanitizer, private cdr: ChangeDetectorRef) {}
+  constructor(
+    private sanitizer: DomSanitizer,
+    private cdr: ChangeDetectorRef,
+    private idleService: IdleService // Inject IdleService here
+  ) {}
 
   ngOnInit(): void {
-    const storedClient = localStorage.getItem('selectedClient');
+    const storedClient = this.idleService.getClientData(); // Get client data from IdleService
     if (storedClient) {
-      const client = JSON.parse(storedClient);
-
-      this.id=client.userId;
-      this.userName=client.userName;
-      this.role=client.accessRoles;
-      this.phoneNumber=client.phoneNumber;
-      this.emailId=client.emailId;
-      // this.picture=client.userPicture;
-
-      this.picture = client.userPicture;
+      this.id = storedClient.userId;
+      this.userName = storedClient.userName;
+      this.role = storedClient.accessRoles;
+      this.phoneNumber = storedClient.phoneNumber;
+      this.emailId = storedClient.emailId;
+      this.picture = storedClient.userPicture;
       this.sanitizedImage = this.sanitizer.bypassSecurityTrustUrl(this.picture);
-      this.departmentNameList = client.departmentNameList;
-     
-      
+      this.departmentNameList = storedClient.departmentNameList;
 
-
-      console.log('Received Client Data:', client);
-      // alert('Client Name: ' + client.userName);
+      console.log('Received Client Data from IdleService:', storedClient);
     } else {
       console.log('No client data found');
     }
     this.cdr.detectChanges();
   }
 
-
-
-  toggleTaskCompleted(index: number) {
-    this.isTaskCompleted[index] = !this.isTaskCompleted[index];
-  }
-
-  public isHidden: boolean[] = [false];
-  toggleVisibility(index: number) {
-    this.isHidden[index] = !this.isHidden[index];
-  }
-  addClass(){
-    this.isClassAdded =!this.isClassAdded
-  }
-  taskDelete(){
-    this.isHiddenTask = !this.isHiddenTask;
-  }
+ 
 }

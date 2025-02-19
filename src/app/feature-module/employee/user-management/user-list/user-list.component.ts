@@ -59,7 +59,7 @@ export class UserListComponent implements OnInit {
 
     const client = this.idleService.getClientData();
     console.log("Client Data:", client);
-    
+
     this.getTableData();
     this.loggedInUser = localStorage.getItem('role')?.trim().toLowerCase();
     console.log("Logged In User:", this.loggedInUser);
@@ -192,15 +192,12 @@ export class UserListComponent implements OnInit {
     }
   }
 
-  // navigateWithClient(client: any) {
-
-  //   // localStorage.setItem('selectedClient', JSON.stringify(client));
-  //   // this.router.navigate(['/user-profile']);
-    
-  // }
 
   navigateWithClient(client: any) {
     if (!client) return;
+    console.log("Navigating to User Management Profile with Client Data:", client);
+    
+    console.log(client.userPicture);
     
     this.idleService.setClientData(client);
     console.log("Client data stored in IdleService.");
