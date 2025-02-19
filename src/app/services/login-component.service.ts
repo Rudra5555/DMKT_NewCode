@@ -10,8 +10,8 @@ export class LoginComponentService {
   // private baseUrl = 'http://localhost:8080';
   // private serverBaseUrl = 'http://103.168.18.28:8080';
 
-//  private baseUrl = 'http://103.168.18.28:8080'; //dev server
- private baseUrl = 'http://10.101.71.204:8080'; //prod server
+ private baseUrl = 'http://103.168.18.28:8080'; //dev server
+//  private baseUrl = 'http://10.101.71.204:8080'; //prod server
 
 //private baseUrl = 'http://10.101.71.204:9090';
 

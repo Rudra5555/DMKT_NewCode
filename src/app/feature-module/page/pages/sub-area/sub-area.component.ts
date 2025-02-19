@@ -151,7 +151,9 @@ export class SubAreaComponent implements OnInit{
  
     this.setLast15Days();
 
-    this.getAllMainHeadData();
+    this.getMainHeadList();
+
+ 
     
     this.uploadFileForm.get('plants')?.valueChanges.subscribe(value => {
       if (value != null) {
@@ -181,20 +183,24 @@ export class SubAreaComponent implements OnInit{
   }
 
 
-  getAllMainHeadData() {
-    this.uploadDocument.allMainHeadList().subscribe({
+
+  getMainHeadList() {
+
+    this.uploadDocument.allDataList("POWER O&M", "main-head").subscribe({
       next: (event: any) => {
         if (event instanceof HttpResponse) {
-          this.mainHeadList = event.body?.categoryList || [];
-
+          // this.plantList = event.body?.categoryList || [];
+           this.plantList = (event.body?.categoryList || []).filter((item: { catId: number; }) => item.catId !== 9);
+          console.log(this.plantList);
+          
         }
       },
       error: (err: any) => {
         console.error(err);
       }
     });
-  }
-
+  
+}
 
 
   getAllPlantList(selectedValue: string, plantHeader: string) {
@@ -204,6 +210,8 @@ export class SubAreaComponent implements OnInit{
         next: (event: any) => {
           if (event instanceof HttpResponse) {
             this.departmentList = event.body?.categoryList || [];
+            
+
             console.log(this.departmentList);
             
           }

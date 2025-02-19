@@ -59,7 +59,7 @@ export class UserListComponent implements OnInit {
     this.getTableData();
     this.cdr.markForCheck();
 
-    
+
     const client = this.idleService.getClientData();
     console.log("Client Data:", client);
 
@@ -99,6 +99,7 @@ export class UserListComponent implements OnInit {
               }
             });
             this.dataSource = new MatTableDataSource<getClient>(this.clientsData);
+            this.cdr.detectChanges();
             this.calculateTotalPages(this.totalData, this.pageSize);
 
             }

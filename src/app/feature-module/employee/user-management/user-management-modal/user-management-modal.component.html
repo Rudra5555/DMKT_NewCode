@@ -86,10 +86,11 @@
                 <label class="col-form-label">Plants <span class="text-danger">*</span></label>
                 <mat-select formControlName="plant" class="custom-mat-select select" placeholder="Select" >
                   <mat-option value="" disabled>Select Plant</mat-option>
-                  <mat-option value="CPP-2 (540MW)">CPP-2 (540 MW)</mat-option>
+                  <mat-option *ngFor="let element of plantList" [value]="element.catName" >{{element.catName}}</mat-option>
+                  <!-- <mat-option value="CPP-2 (540MW)">CPP-2 (540 MW)</mat-option>
                   <mat-option value="CPP-3 (1200MW)">CPP-3 (1200 MW)</mat-option>
                   <mat-option value="CPP (1740MW)">CPP (1740 MW)</mat-option>
-                  <mat-option value="CPP-1">CPP-1</mat-option>
+                  <mat-option value="CPP-1">CPP-1</mat-option> -->
                 </mat-select>
                 <div *ngIf="addUserForm.get('plant')?.invalid && (addUserForm.get('plant')?.touched || addUserForm.get('plant')?.dirty)" class="text-danger">
                   Plant is required.
@@ -282,10 +283,12 @@
                             <label class="col-form-label">Plants <span class="text-danger">*</span></label>
                             <mat-select formControlName="plant" class="custom-mat-select select" placeholder="Select" >
                               <mat-option value="" disabled>Select Plant</mat-option>
-                              <mat-option value="CPP-2 (540MW)">CPP-2 (540 MW)</mat-option>
-                              <mat-option value="CPP-3 (1200MW)">CPP-3 (1200 MW)</mat-option>
-                              <mat-option value="CPP (1740MW)">CPP (1740 MW)</mat-option>
-                              <mat-option value="CPP-1">CPP-1</mat-option>
+                              <mat-option *ngFor="let element of plantList" [value]="element.catName" >{{element.catName}}</mat-option>
+                              <!-- <mat-option value="CPP (1740MW)">CPP (1740MW)</mat-option> -->
+                  <!-- <mat-option value="CPP-2 (540MW)">CPP-2 (540 MW)</mat-option>
+                  <mat-option value="CPP-3 (1200MW)">CPP-3 (1200 MW)</mat-option>
+                  <mat-option value="CPP (1740MW)">CPP (1740 MW)</mat-option>
+                  <mat-option value="CPP-1">CPP-1</mat-option> -->
                             </mat-select>
                             <div *ngIf="addUserForm.get('plant')?.invalid && (addUserForm.get('plant')?.touched || addUserForm.get('plant')?.dirty)" class="text-danger">
                               Plant is required.
@@ -399,7 +402,7 @@
                     </div>
                     <div *ngIf="uploadDocumentFlag || uploadDocumentSizeFlag" class="text-danger" style="margin-left: 2%; padding-bottom: 4%;">
                       Image size should be under 5KB.
-                    </div>
+                    </div>
           
                     <div class="row">
                       <div class="col-md-6">

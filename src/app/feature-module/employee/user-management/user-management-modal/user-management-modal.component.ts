@@ -34,32 +34,15 @@ export class UserManagementModalComponent implements OnInit {
   clientsData:any;
   roles: string[] = [];
   isHodChecked: boolean = false;
+  plantList: any;
   constructor( private formBuilder: FormBuilder, private loginService: LoginComponentService,private uploadDocument: UploadDocumentComponentService) { }
 
   
   ngOnInit(): void {
 
-    this.dropdownList = [
-      { item_id: 1, item_text: 'Mumbai' },
-      { item_id: 2, item_text: 'Bangaluru' },
-      { item_id: 3, item_text: 'Pune' },
-      { item_id: 4, item_text: 'Navsari' },
-      { item_id: 5, item_text: 'New Delhi' }
-    ];
-    this.selectedItems = [
-      { item_id: 3, item_text: 'Pune' },
-      { item_id: 4, item_text: 'Navsari' }
-    ];
-    this.dropdownSettings  = {
-      singleSelection: false,
-      idField: 'item_id',
-      textField: 'item_text',
-      selectAllText: 'Select All',
-      unSelectAllText: 'UnSelect All',
-      itemsShowLimit: 3,
-      allowSearchFilter: true
-    };
-  
+    this.getMainHeadList();
+
+
   this.addUserForm = this.formBuilder.group({
     userName: ["", [Validators.required]],
     userPhone: ["", [Validators.required]],
@@ -113,6 +96,27 @@ export class UserManagementModalComponent implements OnInit {
     
   });
   
+  }
+
+
+
+  getMainHeadList() {
+
+      this.uploadDocument.allDataList("POWER O&M", "main-head").subscribe({
+        next: (event: any) => {
+          if (event instanceof HttpResponse) {
+            // this.plantList = event.body?.categoryList || [];
+            this.plantList = (event.body?.categoryList || []).filter((item: { catId: number; }) => item.catId !== 9);
+
+            console.log(this.plantList);
+            
+          }
+        },
+        error: (err: any) => {
+          console.error(err);
+        }
+      });
+    
   }
 
   toggleButton() {
