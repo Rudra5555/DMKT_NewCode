@@ -160,44 +160,44 @@ public loggedUserId: any;
 
 
 
-    this.route.queryParams.subscribe(params => {
-      if (params['fileList']) {
-        this.fileList = JSON.parse(decodeURIComponent(params['fileList']));
+    // this.route.queryParams.subscribe(params => {
+    //   if (params['fileList']) {
+    //     this.fileList = JSON.parse(decodeURIComponent(params['fileList']));
     
-        const convertToKB = (bytes: number): number => {
-          return Math.round((bytes / 1024) );
-        };
+    //     const convertToKB = (bytes: number): number => {
+    //       return Math.round((bytes / 1024) );
+    //     };
           
-        this.fileList = this.fileList.filter((item: any) => {
-          return item.listOfDocumentVersoinDtos.some((version: any) => {
-            if (this.loggedUserRole === 'User') {
-              return !version.hodDocument && !version.statutoryDocument && !version.restrictedDocument;
-            } else if (this.loggedUserRole === 'SuperUser') {
-              return (!version.hodDocument && !version.statutoryDocument && !version.restrictedDocument) || version.statutoryDocument;
-            } else if (this.loggedUserRole === 'HOD') {
-              return (!version.hodDocument && !version.statutoryDocument && !version.restrictedDocument) || version.hodDocument;
-            }
-            return false;
-          });
-        });
+    //     this.fileList = this.fileList.filter((item: any) => {
+    //       return item.listOfDocumentVersoinDtos.some((version: any) => {
+    //         if (this.loggedUserRole === 'User') {
+    //           return !version.hodDocument && !version.statutoryDocument && !version.restrictedDocument;
+    //         } else if (this.loggedUserRole === 'SuperUser') {
+    //           return (!version.hodDocument && !version.statutoryDocument && !version.restrictedDocument) || version.statutoryDocument;
+    //         } else if (this.loggedUserRole === 'HOD') {
+    //           return (!version.hodDocument && !version.statutoryDocument && !version.restrictedDocument) || version.hodDocument;
+    //         }
+    //         return false;
+    //       });
+    //     });
         
 
-        this.fileList.forEach((item: any) => {
-          item.selectedVersion = this.getLatestVersion(item.listOfDocumentVersoinDtos);
-          item.listOfDocumentVersoinDtos.forEach((version: any) => {
-            version.fileSizeKB = convertToKB(parseInt(version.fileSize, 10));
-          });
-        });
+    //     this.fileList.forEach((item: any) => {
+    //       item.selectedVersion = this.getLatestVersion(item.listOfDocumentVersoinDtos);
+    //       item.listOfDocumentVersoinDtos.forEach((version: any) => {
+    //         version.fileSizeKB = convertToKB(parseInt(version.fileSize, 10));
+    //       });
+    //     });
     
     
-        if (this.fileList.length > 0 && this.fileList[0].selectedVersion) {
-          this.doc = this.fileList[0].selectedVersion.fileUrl;
+    //     if (this.fileList.length > 0 && this.fileList[0].selectedVersion) {
+    //       this.doc = this.fileList[0].selectedVersion.fileUrl;
         
-        }
-      } else {
+    //     }
+    //   } else {
 
-          } 
-        }); 
+    //       } 
+    //     }); 
 
 
 
@@ -304,12 +304,12 @@ public loggedUserId: any;
           
           this.calculateTotalPages(this.fileList.length, this.pageSize);
   
-          this.fileList.forEach((item: any) => {
-            item.selectedVersion = this.getLatestVersion(item.listOfDocumentVersoinDtos);
-            item.listOfDocumentVersoinDtos.forEach((version: any) => {
-              version.fileSizeKB = convertToKB(parseInt(version.fileSize, 10));
-            });
-          });
+          // this.fileList.forEach((item: any) => {
+          //   item.selectedVersion = this.getLatestVersion(item.listOfDocumentVersoinDtos);
+          //   item.listOfDocumentVersoinDtos.forEach((version: any) => {
+          //     version.fileSizeKB = convertToKB(parseInt(version.fileSize, 10));
+          //   });
+          // });
           this.isLoading = false;
         }
       },

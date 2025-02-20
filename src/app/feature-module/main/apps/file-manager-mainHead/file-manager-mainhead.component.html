@@ -35,10 +35,12 @@
             <i class="las la-filter"></i>
             <mat-select
             class="select leads"
-            placeholder="Select Filter" 
+            placeholder="Select Filter"  (selectionChange)="onDocumentTypeChange($event.value)"
           >
-          <div *ngFor="let item of documentTypeDataList">
-            <mat-option value="item.documentName">{{item.documentName}}</mat-option>
+          <div>
+            <mat-option [value]="">All</mat-option>
+            <mat-option *ngFor="let item of documentTypeList" [value]="item">{{item}}</mat-option>
+            
           </div>
           </mat-select>
           </div>
@@ -110,22 +112,17 @@
               </tr>
             </thead>
 
+          
             <tbody>
+              <div *ngIf="isLoading" class="spinner-border" style="align-items: center;margin-left: 340%;">
+              </div>
               <tr *ngFor="let item of fileList">
-
                 <td>
                   <div class="tooltip-container">
-                    {{ item.fileName }}-
-                    <span style="color: blue;">
-                      [{{ item.selectedVersion?.versionName || 'N/A' }}-{{ item.selectedVersion?.versionReleaseDate || 'N/A' }}]
-                    </span>
-                    <span class="tooltip-text">
-                      {{ item.selectedVersion?.newUniqueFileName || 'N/A' }}
-                    </span>
+                    {{ item.fileName }}
+                    <span class="tooltip-text">{{ item.newUniqueFileName }}</span>-<span style="color: blue;">[{{ item.versionName }}-{{ item.versionReleaseDate }}]</span>
                   </div>
                 </td>
-                
-                
                 <td>{{ item.documentType? item.documentType : 'N/A' }}</td>
                 <td>
                   {{item.documentSubType? item.documentSubType : 'N/A'}}
@@ -133,29 +130,53 @@
                 <td>
                   {{item.storageLocation? item.storageLocation : 'N/A'}}
                 </td>
+               
                 <td>
-                  <mat-select class="custom-mat-select select" id="versionSelect"
-                    (selectionChange)="onVersionChange(item, $event.value)" [value]="item.selectedVersion">
-                    <mat-option *ngFor="let version of item.listOfDocumentVersoinDtos" [value]="version">
-                      {{ version.versionName }} -
-                      {{ version.versionReleaseDate }}
+                  <mat-select
+                    class="custom-mat-select select"
+                    id="versionSelect"
+                    placeholder="Select Version"
+                    (selectionChange)="onVersionChange(item, item.fileName, $event.value)"
+                   
+                  >
+                    <mat-option
+                      *ngFor="let version of item.listOfDocumentVersoinDtos"
+                      [value]="version"
+                    >
+                      {{ version.versionName }} - {{ version.versionReleaseDate }}
                     </mat-option>
                   </mat-select>
                 </td>
-                <!-- <td>{{ item.listOfDocumentVersoinDtos[0].fileSize }} KB</td> -->
+                
+                
+                <!-- <td>{{ item.fileSize }} KB</td> -->
                 <td class="text-center">
-                  <a class="dropdown-item" [href]="item.listOfDocumentVersoinDtos[0].fileUrl" target="_blank">
-                    <i class="fa-solid fa-download" style="color: rgb(0, 117, 234)"></i>
+                  <a
+                    class="dropdown-item"
+                    [href]="item.fileUrl"
+                    target="_blank"
+                    (click)="downloadDocument(item.fileUrl,item)"
+                  >
+                    <i
+                      class="fa-solid fa-download"
+                      style="color: rgb(0, 117, 234)"
+                    ></i>
                   </a>
                 </td>
                 <td class="text-center">
-                  <a class="dropdown-item" [href]="item.listOfDocumentVersoinDtos[0].fileUrl" target="_blank"
-                    data-bs-toggle="modal" data-bs-target="#view_files">
+                  <a
+                    class="dropdown-item"
+                    [href]="item.fileUrl"
+                    target="_blank"
+                    data-bs-toggle="modal"
+                    data-bs-target="#view_files"
+                    (click)="setFileUrl(item.fileUrl)"
+                  >
                     <i class="fas fa-eye" style="color: rgb(0, 117, 234)"></i>
                   </a>
                 </td>
               </tr>
-              <tr *ngIf="fileList.length == 0">
+              <tr *ngIf="!isLoading && fileList.length == 0">
                 <td colspan="8" style="text-align: center; color: red">
                   No Records Found!
                 </td>
@@ -242,7 +263,7 @@
 
 
   <!-- File Upload Modal -->
-  <div id="view_files" #view_files class="modal custom-modal fade" role="dialog">
+  <!-- <div id="view_files" #view_files class="modal custom-modal fade" role="dialog">
     <div class="modal-dialog modal-dialog-centered modal-xl">
       <div class="modal-content">
         <div class="modal-header">
@@ -260,5 +281,67 @@
         </div>
       </div>
     </div>
+  </div> -->
+  <div
+  id="view_files"
+  #view_files
+  class="modal custom-modal fade"
+  role="dialog"
+>
+  <div class="modal-dialog modal-dialog-centered modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">File-Name</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+          (click)="buttonClose()"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="row">
+            <!-- <iframe src="http://localhost:8080/document/show-pdf/Scope of Work_Digital Library0a1ee6ec-b60f-41da-ac55-31003c08c239"
+                  width="800" height="600"> </iframe> -->
+            <!-- <iframe src="D:\Client project\pdf documents for demo/scope"
+                  width="800" height="600"> </iframe> -->
+            <!-- <iframe src="http://103.168.18.28:8080/document/show-file/POWER O&M.C&I.TURBINE.CPP-2.318.C72-EN.pdf"
+                  width="800" target="_blank" height="600"> </iframe> -->
+
+            <!-- <iframe
+            src="http://103.168.18.28:8080/document/show-file/POWER O&M.C&I.TURBINE.CPP-2.32.Copy of Estimated_Time.xlsx"
+            width="800" 
+            height="600"
+            frameborder="0"
+          >
+            ...This is an embedded file...
+          </iframe> -->
+
+            <!-- <ngx-doc-viewer [url]="doc" [viewer]="viewer" style="width:100%;height:80vh;"></ngx-doc-viewer> -->
+
+             <ngx-doc-viewer
+              [url]="doc"
+              [viewer]="viewer"
+              style="width: 100%; height: 80vh"
+            ></ngx-doc-viewer>
+
+<!-- <iframe src="https://sharecad.org/cadframe/load?url=http://www.cadsofttools.com/dwgviewer/floorplan.dwg" scrolling="yes"></iframe>
+             -->
+
+
+             <!-- <iframe src="http://localhost:4200/assets/files/anteen.dwg" scrolling="yes"></iframe> -->
+            
+             <!-- <iframe src="https://sharecad.org/cadframe/load?url=http://www.cadsofttools.com/dwgviewer/floorplan.dwg" scrolling="yes" width="100%" height="600"></iframe> -->
+
+
+          </div>
+        </form>
+      </div>
+    </div>
   </div>
+</div>
 </div>
