@@ -154,7 +154,7 @@ export class DepartmentComponent implements OnInit{
   
 
   ngOnInit() {
-
+    this.getMainHeadList();
     this.setLast15Days();
    
   }
@@ -165,15 +165,38 @@ export class DepartmentComponent implements OnInit{
     this.uploadFileForm.get('departmentAbbr')?.reset('');
   }
 
+  getMainHeadList() {
 
+    this.uploadDocument.allDataList("POWER O&M", "main-head").subscribe({
+      next: (event: any) => {
+        if (event instanceof HttpResponse) {
+          // this.plantList = event.body?.categoryList || [];
+           this.plantList = (event.body?.categoryList || []).filter((item: { catId: number; }) => item.catId !== 9);
+          console.log(this.plantList);
+          
+        }
+      },
+      error: (err: any) => {
+        console.error(err);
+      }
+    });
+  
+}
 
 
   onPlantSelect(event: any) {
     this.selectedPlant = event.value;
+    
     if(this.selectedPlant == "CPP-2 (540MW)"){
-      this.plantId = 1;}
+      this.plantId = 1;
+    }
     if(this.selectedPlant == "CPP-3 (1200MW)"){
-      this.plantId = 2;}
+      this.plantId = 2;
+    }
+      if(this.selectedPlant == "CPP-1"){
+        this.plantId = 9;
+      }
+      // const [deptName, deptAbbr] = event.split('~'); // for automation user this code
      
     console.log('Selected Plant:', this.plantId);
     // You can perform any action here, like sending it to a service or storing in a variable.

@@ -47,7 +47,7 @@ export class LoginComponent implements OnInit {
   public getPhNumber:any;
   public getEmail:any;
   public getPicture:any;
-
+  accessRoles: any;
   
   errorFlg:boolean=false
   errorMsg:any;
@@ -110,11 +110,246 @@ onClickSubmit(formData: any){
   
   
   
-   if(loginData){
+  //  if(loginData){
+  //   this.loginService.login(loginData).subscribe({
+  //     next: (event: any) => {
+  //       if (event instanceof HttpResponse) {
+  //          this.data = event.body
+           
+  //          console.log("Event Data",this.data);
+           
+
+  //         if(this.data!=null){
+           
+  //           if(this.data.status ===417){
+
+  //             this.errorFlg=true;
+  //             this.errorMsg="Invalid UserName Or Password!!!!!"
+  
+  //             setTimeout(()=>{
+  //               this.resetErrFlag()
+  //             },2000);
+
+  //           }
+  //           else if(this.data.status === 200 && this.data.response === null){
+  //             this.modalMessage =this.data.message;
+  //             this.sucessAlert(this.modalMessage);
+  //           }
+  //           else{
+  //             this.getRoleData = this.data.response.role;
+  //             this.getTitle = this.data.response.title;
+  //             this.getDisplayName = this.data.response.displayName;
+  //             this.departmentDetails = this.data.response.departmentNameList;
+  //             this.getPhNumber = this.data.response.phoneNumber;
+  //             this.getEmail = this.data.response.emailId;
+  //             this.getPicture = this.data.response.userPicture;
+
+  //             console.log("Name",this.getDisplayName);
+  //             console.log("deptDetails",this.departmentDetails);
+              
+
+  //             localStorage.setItem('role',this.getRoleData);
+  //             localStorage.setItem('title',this.getTitle);
+  //             localStorage.setItem('name',this.getDisplayName);
+  //             localStorage.setItem('deptDetails', JSON.stringify(this.departmentDetails));
+
+  //             localStorage.setItem('phNumberLog',this.getPhNumber);
+  //             localStorage.setItem('EmailLog',this.getEmail);
+  //             localStorage.setItem('PictureLog',this.getPicture);
+  //           }
+         
+            
+  
+  //          if(this.getRoleData == "Admin"){
+
+  //           const userId = this.data.response.userId;
+  //           // const userId = "2";
+  //           const userName = this.data.response.userName; 
+  //           // const userName = "Admin"; 
+  //           const secretKey = this.timestamp;
+  //           const encryptedParam = CryptoJS.AES.encrypt(JSON.stringify(this.data.response.userId), secretKey).toString();
+  //           console.log("encrypted::",encryptedParam);
+  //           this.router.navigate([routes.employee],{queryParams : { param: encryptedParam }}) 
+  //           localStorage.setItem("loggedUserName", userName);
+  //           localStorage.setItem("loggedInUserId",userId);
+  
+  //         }
+  
+  
+  //         if(this.getRoleData == "Librarian"){
+  //           const userId = this.data.response.userId;  
+  //           localStorage.setItem("loggedInUserId",userId);
+  //           const secretKey = this.timestamp;
+  //           const encryptedParam = CryptoJS.AES.encrypt(JSON.stringify(this.data.value), secretKey).toString();
+  //           console.log("encrypted::",encryptedParam);
+  //           this.router.navigate([routes.employee],{queryParams : { param: encryptedParam }})   
+  //           localStorage.setItem("loggedUserName",this.data.response.userName);        
+  //         }
+  
+  //         if(this.getRoleData == "User"){
+  //           const userId = this.data.response.userId;
+  //           localStorage.setItem("loggedInUserId",userId)
+  //           const navigationExtras:NavigationExtras = {
+  //             state:{
+  //               username:this.getRoleData
+  //             }
+  //           }
+  //          localStorage.setItem("loggedUserName",this.data.response.userName);
+  //          const secretKey = this.timestamp;
+  //          const encryptedParam = CryptoJS.AES.encrypt(JSON.stringify(this.data.response), secretKey).toString();
+  //          console.log("encrypted::",encryptedParam);     
+  //           this.router.navigate([routes.employee],{queryParams : { param: encryptedParam }})
+  //         }
+
+  //         if(this.getRoleData == "SuperUser"){
+  //           this.router.navigate([routes.employee],{queryParams : this.data.response})
+  //           console.log("super user",this.getRoleData)
+  //           const secretKey = this.timestamp;
+  //           const encryptedParam = CryptoJS.AES.encrypt(JSON.stringify(this.data.response), secretKey).toString();
+  //           console.log("encrypted::",encryptedParam);
+
+  //           localStorage.setItem("loggedUserName",this.data.response.userName);
+  //           const userId = this.data.response.userId;
+  //           localStorage.setItem("loggedSuperUserId",userId);
+  //           localStorage.setItem("loggedInUserId",userId);
+  //         }
+  
+  //         if(this.getRoleData == "HOD"){
+  
+  //           const hodId = this.data.response.userId;
+  //           localStorage.setItem("loggedHodId",hodId);
+  //           localStorage.setItem("loggedInUserId",hodId)
+  //           const navigationExtras:NavigationExtras = {
+  //             state:{
+  //               username:this.getRoleData
+  //             }
+  //           }
+  //          localStorage.setItem("loggedUserName",this.data.response.userName);
+  //          const secretKey =  this.timestamp;
+  //          const encryptedParam = CryptoJS.AES.encrypt(JSON.stringify(this.data.response), secretKey).toString();
+  //          console.log("encrypted::",encryptedParam);
+           
+  
+  //           this.router.navigate([routes.employee],{queryParams : { param: encryptedParam }})
+  //         }
+      
+  
+  //         }
+
+         
+  //         const msg = JSON.stringify(event) + ": Successful!";
+  //       }
+  //     },
+  //     error: (err: any) => {
+  //       let msg = loginData + ": Failed!";
+  
+  //       if (err.error && err.error.message) {
+  //         msg += " " + err.error.message;
+  //       }
+  
+  //       this.message.push(msg);
+     
+  //     }
+  //   });
+  
+  
+  // }
+  if(loginData){
     this.loginService.login(loginData).subscribe({
       next: (event: any) => {
         if (event instanceof HttpResponse) {
-           this.data = event.body
+          //  this.data = event.body
+          this.data={
+            "status": 200,
+            "response": {
+                "userName": "Librarian",
+                "userId":3,
+                "role": "Librarian",
+                "accessRoles": [
+                    "User",
+                    "Admin",
+                    "HOD",
+                    "Librarian",
+                    "SuperUser"
+                ],
+                "title":"Rahul",
+                "displayName": "Das",
+                "departmentNameList": [
+                    {
+                        "departmentName": "OPERATION",
+                        "plantName": "CPP-2 (540MW)"
+                    },
+                    {
+                        "departmentName": "C&I",
+                        "plantName": "CPP-3 (1200MW)"
+                    }
+                ],
+                "userPicture": "1234567890",
+                "phoneNumber": "9678824924",
+                "emailId": "nitish@gmail.com"
+            },
+            "message": "success!!"
+        }
+
+      //   this.data={
+      //     "status": 200,
+      //     "response": {
+      //         "userName": "User",
+      //         "userId":1,
+      //         "role": "User",
+      //         "accessRoles": [
+      //             "User",
+      //             "Admin",
+      //             "HOD"
+      //         ],
+      //         "title":"Biplob",
+      //         "displayName": "Das",
+      //         "departmentNameList": [
+      //             {
+      //                 "departmentName": "OPERATION",
+      //                 "plantName": "CPP-2 (540MW)"
+      //             },
+      //             {
+      //                 "departmentName": "C&I",
+      //                 "plantName": "CPP-3 (1200MW)"
+      //             }
+      //         ],
+      //         "userPicture": "1234567890",
+      //         "phoneNumber": "9678824924",
+      //         "emailId": "nitish@gmail.com"
+      //     },
+      //     "message": "success!!"
+      // }
+
+    //   this.data={
+    //     "status": 200,
+    //     "response": {
+    //         "userName": "Admin",
+    //         "userId":2,
+    //         "role": "Admin",
+    //         "accessRoles": [
+    //             "User",
+    //             "Admin",
+    //             "HOD"
+    //         ],
+    //         "title":"Nitish",
+    //         "displayName": "Paul",
+    //         "departmentNameList": [
+    //             {
+    //                 "departmentName": "OPERATION",
+    //                 "plantName": "CPP-2 (540MW)"
+    //             },
+    //             {
+    //                 "departmentName": "C&I",
+    //                 "plantName": "CPP-3 (1200MW)"
+    //             }
+    //         ],
+    //         "userPicture": "1234567890",
+    //         "phoneNumber": "9678824924",
+    //         "emailId": "nitish@gmail.com"
+    //     },
+    //     "message": "success!!"
+    // }
            
            console.log("Event Data",this.data);
            
@@ -133,6 +368,8 @@ onClickSubmit(formData: any){
             }
             else if(this.data.status === 200 && this.data.response === null){
               this.modalMessage =this.data.message;
+             
+              
               this.sucessAlert(this.modalMessage);
             }
             else{
@@ -143,12 +380,13 @@ onClickSubmit(formData: any){
               this.getPhNumber = this.data.response.phoneNumber;
               this.getEmail = this.data.response.emailId;
               this.getPicture = this.data.response.userPicture;
-
+              this.accessRoles = this.data.response.accessRoles;
               console.log("Name",this.getDisplayName);
               console.log("deptDetails",this.departmentDetails);
               
 
               localStorage.setItem('role',this.getRoleData);
+              localStorage.setItem('accessRole',this.accessRoles);
               localStorage.setItem('title',this.getTitle);
               localStorage.setItem('name',this.getDisplayName);
               localStorage.setItem('deptDetails', JSON.stringify(this.departmentDetails));

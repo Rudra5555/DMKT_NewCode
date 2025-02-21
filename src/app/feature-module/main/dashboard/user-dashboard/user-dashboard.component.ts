@@ -195,6 +195,41 @@ export class UserDashboardComponent implements OnInit {
 
   }
 
+  getTopImage(departmentName: string): string {
+    const topImages: { [key: string]: string } = {
+      OPERATION: 'assets/img/areaImage1.JPG',
+      MECHANICAL: 'assets/img/DSC_5538.JPG',
+      ELECTRICAL: 'assets/img/DSC_0070.JPG',
+      "C&I": 'assets/img/DSC_5538.JPG',
+      CIVIL: 'assets/img/DSC_0070.JPG',
+      CHP: 'assets/img/DSC_5538.JPG',
+      AHP: 'assets/img/DSC_5538.JPG',
+    };
+    return topImages[departmentName] || 'assets/img/DSC_5538.JPG'; // Default image
+  }
+  
+  getAvatarImage(departmentName: string): string {
+    const avatarImages: { [key: string]: string } = {
+      OPERATION: 'assets/img/Power-O&M.jpg',
+      "ASH-DYKE": 'assets/img/Ash-Dyke.jpg',
+      ELECTRICAL: 'assets/img/Power-Sale.jpg',
+      MECHANICAL: 'assets/img/Ash-Dyke.jpg',
+      "C&I": 'assets/img/Plant-Infra.jpg',
+      CIVIL: 'assets/img/Coal-Commercial.jpg',
+      CHP: 'assets/img/Plant-Infra.jpg',
+      AHP: 'assets/img/Power-Sale.jpg',
+    };
+    return avatarImages[departmentName] || 'assets/img/Power-Sale.jpg'; // Default avatar
+  }
+
+  getFontSize(listLength: number): string {
+    if (listLength > 15) return '0.6rem';
+    if (listLength > 10) return '0.6rem';
+    if (listLength > 6) return '0.7rem';
+    return '0.8rem';
+  }
+  
+
   onClick(): void {
     this.autoScroll.nativeElement.scrollIntoView({ behavior: 'smooth' });
   }
@@ -325,7 +360,8 @@ export class UserDashboardComponent implements OnInit {
   // ************getting main head details***************
 
   getDetailsByCateName(catName: any, catId: any) {
-console.log("catName555",catName);
+
+
 
     if (catId == 'main-head') {
       this.categoryList.set(catId, catName);
@@ -361,6 +397,9 @@ console.log("catName555",catName);
   // **************getting Plants name*******************
 
   getDetailsByPlantsName(catName: any, catId: any) {
+    console.log("catName555",catName);
+console.log("catId555",catId);
+
     this.onClick();
 
     if (catId == 'plants') {
@@ -378,10 +417,13 @@ console.log("catName555",catName);
       next: (event: any) => {
         if (event instanceof HttpResponse) {
           this.plantsList = event.body.categoryList
+          if(this.plantsList.length==0){
+            this.navigateToRoute(catName,catId);
+          }
           console.log(this.plantsList);
-          this.subAreaList = event.body.categoryList
-          console.log(this.subAreaList);
-          let subArea = event.body.categoryList
+          // this.subAreaList = event.body.categoryList
+          // console.log(this.subAreaList);
+          // let subArea = event.body.categoryList
           if (event.body && Array.isArray(event.body.categoryList)) {
             this.data = event.body.categoryList;
           } else {
@@ -469,7 +511,11 @@ console.log("catName555",catName);
 
 
   navigateToRoute(catPlantName: any, catMainHeadId: any) {
-    console.log("Main Head Name 55555", this.mainHeadName);
+    // console.log("Main Head Name 55555", this.mainHeadName);
+    // console.log("Plant Name 55555", catPlantName);
+    // console.log("Main Head Id 55555", catMainHeadId);
+    
+    
 
     
     

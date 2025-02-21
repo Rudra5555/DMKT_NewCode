@@ -231,9 +231,11 @@
                 <label class="col-form-label">Plant Name <span class="text-danger">*</span></label>
                 <mat-select formControlName="plants" class="custom-mat-select select"  (selectionChange)="onPlantSelect($event)" placeholder="Select">
                   <mat-option value="">--Select--</mat-option>
-
-                    <mat-option value="CPP-2 (540MW)">CPP-2 (540MW)</mat-option>
+ <mat-option *ngFor="let element of plantList" [value]="element.catName" >{{element.catName}}</mat-option>
+ <!-- <mat-option *ngFor="let element of plantList" [value]="element.catName + '~' + element.catId" >{{element.catName}}</mat-option> -->
+                    <!-- <mat-option value="CPP-2 (540MW)">CPP-2 (540MW)</mat-option>
                     <mat-option value="CPP-3 (1200MW)">CPP-3 (1200MW)</mat-option>
+                    <mat-option value="CPP-1">CPP-1 (270MW)</mat-option> -->
                 </mat-select>
                 <div
                   *ngIf="uploadFileForm.get('plants')?.invalid && (uploadFileForm.get('plants')?.touched || uploadFileForm.get('plants')?.dirty)"

@@ -40,9 +40,12 @@
 
 
 
-  <div class="card-container" #autoScroll [hidden]="cardHide">
-    <div class="row justify-content-center align-items-center">
+  <!-- <div class="card-container" #autoScroll [hidden]="cardHide">
+   
+        <div class="row justify-content-center align-items-center ">
       <div class="col-sm-3 col-6" *ngFor="let item of plantsList; let i = index">
+        
+
         <div class="card">
           <div class="ds-top">
             <div *ngIf="item.departmentName == 'OPERATION'">
@@ -137,7 +140,40 @@
       </div>
     </div>
     
+  </div> -->
+
+
+  <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 justify-content-center" #autoScroll [hidden]="cardHide">
+    <div class="col-md-3 d-flex justify-content-center" *ngFor="let item of plantsList; let i = index">
+    
+      <div class="card">
+        <div class="ds-top">
+          <img [src]="getTopImage(item.departmentName)" alt="Top Image" class="top-img" />
+        </div>
+      
+        <div class="avatar-holder">
+          <img [src]="getAvatarImage(item.departmentName)" alt="Avatar" class="avatar-img" />
+        </div>
+      
+        <h5 class="department-title">{{ item.departmentName }}</h5>
+        <div class="name">
+          
+          <ol>
+            <li *ngFor="let sub of item.listOfSubAreaDtos">
+              <h5 class="subAreasName" [ngStyle]="{'font-size': getFontSize(item.listOfSubAreaDtos.length)}" (click)="getDetailsByPlantsDataName(item.departmentName,sub.subAreaName)">
+                ➤ {{ sub.subAreaName }}
+              </h5>
+            </li>
+          </ol>
+        </div>
+      </div>
+      
+    </div>
   </div>
+  
+  
+  
+
 
 
 </body>
@@ -270,7 +306,7 @@
           <!-- Written content section -->
           <button type="button" id="closePlantModalBtn" #closebutton class="btn-close circular-button"
             data-bs-dismiss="modal" aria-label="Close"
-            style="position: absolute; top: 10px; right: 10px; width: 20px; height: 20px; border-radius: 50%; background-color: #c3c2c2; border: 1px solid #000000; display: flex; align-items: center; justify-content: center;">
+            style="position: absolute; top: 10px; right: 10px; width: 20px; height: 20px; border-radius: 50%; background-color: #ffffff; border: 1px solid #000000; display: flex; align-items: center; justify-content: center;">
             <span aria-hidden="true">&times;</span>
           </button>
           <div class="plantContent" style="text-align: center;">
@@ -279,7 +315,9 @@
             <div class="row">
               <div class="" *ngFor="let item of plantsList">
                 <div *ngIf="item.name == 'CPP-1'">
-                  <button class="btn-custom btn-green" id='cpp2btn' (click)="navigateToRoute(item.name, item.catType)"
+                  <!-- <button class="btn-custom btn-green" id='cpp2btn' (click)="navigateToRoute(item.name, item.catType)"
+                    (click)="onClick()"> CPP-1(270MW) </button> -->
+                    <button class="btn-custom btn-green" id='cpp2btn' (click)="getDetailsByPlantsName(item.name, item.catType)"
                     (click)="onClick()"> CPP-1(270MW) </button>
                 </div>
                 <div *ngIf="item.name == 'CPP-2 (540MW)'">
@@ -354,12 +392,12 @@
             <th style="color: rgb(22, 32, 138)" mat-sort-header="storage">
               Storage Location
             </th>
-            <th style="color: rgb(22, 32, 138)" mat-sort-header="ver">
+            <th style="color: rgb(22, 32, 138)" mat-sort-header="ver" >
               Versions
             </th>
-            <th style="color: rgb(22, 32, 138)" mat-sort-header="size">
+            <!-- <th style="color: rgb(22, 32, 138)" mat-sort-header="size">
               Document Size
-            </th>
+            </th> -->
             <th style="color: rgb(22, 32, 138)">Download</th>
             <th style="color: rgb(22, 32, 138)">View</th>
           </tr>
@@ -387,8 +425,8 @@
               {{item.storageLocation? item.storageLocation : 'N/A'}}
             </td>
 
-            <td>
-              <mat-select class="custom-mat-select select" id="versionSelect" placeholder="Select Version"
+            <td >
+              <mat-select class="custom-mat-select select wider-select" id="versionSelect" placeholder="Select Version"
                 (selectionChange)="onVersionChange(item, item.fileName, $event.value)">
                 <mat-option *ngFor="let version of item.listOfDocumentVersoinDtos" [value]="version">
                   {{ version.versionName }} - {{ version.versionReleaseDate }}
@@ -397,7 +435,7 @@
             </td>
 
 
-            <td>{{ item.fileSize }} KB</td>
+            <!-- <td>{{ item.fileSize }} KB</td> -->
             <td class="text-center">
               <a class="dropdown-item" [href]="item.fileUrl" target="_blank">
                 <i class="fa-solid fa-download" style="color: rgb(0, 117, 234)"></i>

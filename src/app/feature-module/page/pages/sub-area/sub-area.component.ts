@@ -163,6 +163,8 @@ export class SubAreaComponent implements OnInit{
           this.plantId = 1;}
         if( this.plantOption == "CPP-3 (1200MW)"){
           this.plantId = 2;}
+          if( this.plantOption == "CPP-1"){
+            this.plantId = 9;}
         console.log(this.plantOption);
         
       } else {
@@ -385,6 +387,8 @@ openModal(fileUrl: string , documentName : string) {
     ); 
 
     const departmentId = selectedDepartment?.catId;
+    console.log("departmentId",departmentId);
+    
   
     const payload = {
       subAreaName: formData.subArea,
