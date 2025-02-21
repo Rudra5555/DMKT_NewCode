@@ -38,6 +38,15 @@ export class UserListComponent implements OnInit {
   adminRoleFlag: boolean = false;
   librarianRoleFlag: boolean = false;
 
+  uniqueDepartments: string[] = [];
+  uniquePlants: string[] = [];
+
+// selectedDepartment: string = '';
+// selectedPlant: string = '';
+// filteredRecords: any[] = []; 
+// allRecords: any[] = [];
+// copyDataList:any
+
   //** / pagination variables
   // constructor(private data: DataService) {}
 
@@ -85,9 +94,15 @@ export class UserListComponent implements OnInit {
           next: (event: any) => {
             if (event instanceof HttpResponse) {
             const res=event.body
-            console.log("User Data:", res);
-            
-           
+            // console.log("User Data:", res);
+            // this.copyDataList=res.response;
+
+            let dropdownData = this.getUniqueDropdownOptions(res);
+            this.uniqueDepartments = dropdownData.uniqueDepartments;
+            this.uniquePlants = dropdownData.uniquePlants;
+
+            // console.log("dropdown datas:::",dropdownData);
+
             this.totalData = res.response.length;
               
             res.response.map((res: getClient, index: number) => {
@@ -112,6 +127,34 @@ export class UserListComponent implements OnInit {
         });
   }
 
+  getUniqueDropdownOptions(response: any) {
+    let departmentSet = new Set<string>();
+    let plantSet = new Set<string>();
+  
+    response.response.forEach((user: any) => {
+      user.departmentNameList.forEach((dept: any) => {
+        departmentSet.add(dept.departmentName);
+        plantSet.add(dept.plantName);
+      });
+    });
+
+    let uniqueDepartments = Array.from(departmentSet);
+    let uniquePlants = Array.from(plantSet);
+  
+    return { uniqueDepartments, uniquePlants };
+  }
+  
+  filterRecordsByPlant() {
+
+    // if (this.selectedPlant) {
+    //   this.clientsData = this.copyDataList.filter((user: { departmentNameList: any[]; }) =>
+    //     user.departmentNameList.some(dept => dept.plantName === this.selectedPlant)
+    //   );
+    // } else {
+    //   this.clientsData = this.copyDataList;
+    // }
+  }
+  
 
 
   getPlantNames(client: getClient): string {

@@ -79,8 +79,22 @@ export class FileManagerMainheadComponent implements OnInit, OnDestroy {
   catName: any;
   catId: any
   loggedUserRole: any;
-
+  isLoading: boolean = false;
   respData: any;
+  public loggedUserName: any;
+  public loggedUserId:any;
+  transformedMap: Map<string, any> = new Map();
+  documentTypeSet = new Set<string>();
+  documentTypeList:any;
+
+  resultMap:any;
+
+  valueObject:any;
+  finalList:any;
+
+  fileListOne:any;
+
+  copyDataList:any;
 
   private unsubscribe$ = new Subject<void>();
 
@@ -201,6 +215,7 @@ console.log("mainHead:: ",this.mainHead);
  
 
   getFileListDetails() {
+    this.isLoading = true; 
     this.fileList = [];
     this.serialNumberArray = [];
     console.log("api details:: ",this.decryptedMainHeadName, this.startDate, this.endDate);
@@ -216,21 +231,7 @@ console.log("mainHead:: ",this.mainHead);
             return Math.round(bytes / 1024);
           };
 
-
-          // this.fileList = this.respData.filter((item: any) => {
-          //   return item.listOfDocumentVersoinDtos.some((version: any) => {
-          //     if (this.loggedUserRole === 'User' || this.loggedUserRole === 'Librarian' || this.loggedUserRole === 'Admin') {
-          //       return !version.hodDocument && !version.statutoryDocument && !version.restrictedDocument;
-          //     } else if (this.loggedUserRole === 'SuperUser') {
-          //       return (!version.hodDocument && !version.statutoryDocument && !version.restrictedDocument) || version.statutoryDocument;
-          //     } else if (this.loggedUserRole === 'HOD') {
-          //       return (!version.hodDocument && !version.statutoryDocument && !version.restrictedDocument) || version.hodDocument;
-          //     }
-          //     return false;
-          //   });
-          // });
-
-          this.fileList = this.respData.filter((item: any) => {
+          this.fileListOne = this.respData.filter((item: any) => {
             return item.listOfDocumentVersoinDtos.some((version: any) => {
               if (this.loggedUserRole === 'User') {
                 return !version.hodDocument && !version.statutoryDocument && !version.restrictedDocument;
@@ -243,11 +244,29 @@ console.log("mainHead:: ",this.mainHead);
               }
             });
           });
-          console.log("FILE LIST:: ",this.fileList);
-          
+          this.transformedMap = this.transformApiResponseToMap(this.fileListOne);
 
+          this.fileList = Array.from(this.transformedMap.values());
+          // console.log("file list",JSON.stringify( this.fileList));
+          
+          //copy data
+          this.copyDataList = Array.from(this.transformedMap.values());
+
+          // console.log("vgyvgscgshadfgavsdcha:^^^^",this.finalList);
+          
+  
+          console.log("response..............",this.transformedMap);
+          
           this.totalData = this.fileList.length;
 
+          this.respData.forEach((item: any) => {
+            if (item.documentType) {
+              this.documentTypeSet.add(item.documentType);
+            }
+          });
+          
+          this.documentTypeList = Array.from(this.documentTypeSet);
+  
           this.fileList.map((item: getfileList, index: number) => {
             const serialNumber = index + 1;
             if (index >= this.skip && serialNumber <= this.limit) {
@@ -255,21 +274,19 @@ console.log("mainHead:: ",this.mainHead);
               this.serialNumberArray.push(serialNumber);
             }
           });
-
+  
           this.dataSource = new MatTableDataSource<getfileList>(this.fileList);
+          console.log("all get file",this.dataSource);
+          
           this.calculateTotalPages(this.fileList.length, this.pageSize);
-
-          this.fileList.forEach((item: any) => {
-            item.selectedVersion = this.getLatestVersion(item.listOfDocumentVersoinDtos);
-            item.listOfDocumentVersoinDtos.forEach((version: any) => {
-              version.fileSizeKB = convertToKB(parseInt(version.fileSize, 10));
-            });
-          });
-
-
-          if (this.fileList.length > 0 && this.fileList[0].selectedVersion) {
-            this.doc = this.fileList[0].selectedVersion.fileUrl;
-          }
+  
+          // this.fileList.forEach((item: any) => {
+          //   item.selectedVersion = this.getLatestVersion(item.listOfDocumentVersoinDtos);
+          //   item.listOfDocumentVersoinDtos.forEach((version: any) => {
+          //     version.fileSizeKB = convertToKB(parseInt(version.fileSize, 10));
+          //   });
+          // });
+          this.isLoading = false;
 
         }
       },
@@ -281,6 +298,50 @@ console.log("mainHead:: ",this.mainHead);
     });
   }
 
+  transformApiResponseToMap(apiResponse: any[]): Map<string, any> {
+    const resultMap = new Map<string, any>();
+  
+    apiResponse.forEach((item) => {
+
+      // let revObj = item.listOfDocumentVersoinDtos.slice().reverse();
+
+      const fileName = item.fileName;
+      const documentType = item.documentType;
+      const documentSubType = item.documentSubType;
+      const storageLocation = item.storageLocation;
+  
+      const listOfDocumentVersoinDtos = item.listOfDocumentVersoinDtos.slice().reverse() || [];
+      if (listOfDocumentVersoinDtos.length === 0) {
+        console.warn(`No versions found for file: ${fileName}`);
+        return;
+      }
+  
+      const firstVersion = listOfDocumentVersoinDtos[0];
+  
+      const newUniqueFileName = firstVersion.newUniqueFileName;
+      const fileUrl = firstVersion.fileUrl || null;
+      const fileSize = firstVersion.fileSize ;
+      const versionName=firstVersion.versionName
+      const versionReleaseDate=firstVersion.versionReleaseDate
+  
+      const valueObject = {
+        newUniqueFileName,
+        fileName,
+        fileSize,
+        listOfDocumentVersoinDtos,
+        documentType,
+        documentSubType,
+        storageLocation,
+        fileUrl,
+        versionName,
+        versionReleaseDate
+      };
+  
+      resultMap.set(fileName, valueObject);
+    });
+  
+    return resultMap;
+  }
 
   capitalizeFirstLetter(string: string): string {
     if (!string) return '';
@@ -288,6 +349,105 @@ console.log("mainHead:: ",this.mainHead);
   }
 
 
+  // getLatestVersion(versions: any[]): any {
+  //   return versions.reduce((latest, version) => {
+  //     return new Date(version.versionReleaseDate) > new Date(latest.versionReleaseDate) ? version : latest;
+  //   });
+  // }
+  
+  
+  onVersionChange(item: any,fileNameAsKey:any, selectedVersion: any) {
+  
+    let selectedVersionDetails = selectedVersion;
+    let version=selectedVersion.versionName;
+    // alert(fileName +JSON.stringify(selectedVersion))
+    // alert(fileName +version)/
+    // alert(JSON.stringify(selectedVersionDetails))
+  
+    console.log("nhhhhhhnhnhnhmdhf:::",item);
+    
+  
+        const fileName=item.fileName;
+        const extension=item.extension;
+        const documentType = item.documentType;
+        const documentSubType = item.documentSubType;
+        const storageLocation = item.storageLocation;
+        const listOfDocumentVersoinDtos= item.listOfDocumentVersoinDtos;
+  
+        item.listOfDocumentVersoinDtos.forEach((elem: any) => {
+  
+                  if(elem.versionName==version)
+                  {
+                    const newUniqueFileName=elem.uniqueFileName;
+                    const fileSize =elem.fileSize;
+                    const fileUrl = elem.fileUrl ;
+                    const versionName=elem.versionName
+                    const versionReleaseDate=elem.versionReleaseDate
+  
+                    this.valueObject = {
+                      newUniqueFileName,
+                      fileName,
+                      fileSize,
+                      listOfDocumentVersoinDtos,
+                      documentType,
+                      documentSubType,
+                      storageLocation,
+                      fileUrl,
+                      versionName,
+                      versionReleaseDate
+                    };
+                    
+                  }
+             
+              });
+  
+     
+       
+  
+        console.log("value object uuuuuuuuuuuNNNNNNNNN",this.valueObject);
+        
+        this.transformedMap.set(fileNameAsKey, this.valueObject);
+  
+        this.fileList = Array.from(this.transformedMap.values());
+  
+        // console.log("After::", JSON.stringify(this.transformedMap.get(fileNameAsMapKey)))
+        
+  
+  }
+  
+  downloadDocument(doucmentUrl:any, item:any){
+    this.loggedUserRole;
+    this.loggedUserId = localStorage.getItem("loggedInUserId");
+    this.loggedUserName = localStorage.getItem("loggedUserName");
+    console.log(doucmentUrl, this.loggedUserRole, this.loggedUserName, this.loggedUserId, item);
+  }
+  
+  setFileUrl(fileUrl:any){
+      this.doc=fileUrl;
+    }
+    
+    buttonClose(){
+      this.doc=''
+    }
+
+
+
+    onDocumentTypeChange(docType: any) {
+  
+      const filteredData = this.copyDataList.filter((item: any) => item.documentType === docType);
+    
+      if(filteredData!='' ){
+        this.fileList = this.copyDataList.filter((item: any) => item.documentType === docType);
+      }
+      else{
+        this.fileList = this.copyDataList;
+      }
+      }
+
+
+
+
+// ****************************************************
 
   public sortData(sort: Sort) {
     const data = this.fileList.slice();
@@ -492,10 +652,10 @@ console.log("mainHead:: ",this.mainHead);
     });
   }
 
-  onVersionChange(item: any, version: any) {
-    item.selectedVersion = version;
-    this.doc = version.fileUrl;
-  }
+  // onVersionChange(item: any, version: any) {
+  //   item.selectedVersion = version;
+  //   this.doc = version.fileUrl;
+  // }
 
 
 

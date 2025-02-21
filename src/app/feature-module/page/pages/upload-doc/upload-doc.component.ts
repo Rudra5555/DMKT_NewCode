@@ -384,7 +384,7 @@ for (const item of files) {
             this.uploadFileForm.controls['isRestrictedDocument'].reset();
             this.uploadFileForm.controls['isHodDocument'].reset();
             this.clearFileInput();
-            // this.successfulSubmitAlert();
+            this.successfulSubmitAlert();
           }
         },
         error: (err: any) => {
