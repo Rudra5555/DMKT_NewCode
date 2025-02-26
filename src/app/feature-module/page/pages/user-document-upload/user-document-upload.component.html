@@ -19,8 +19,7 @@
       <div class="row">
         <div class="col-sm-12">
           <div class="input-block mb-3">
-            <label class="col-form-label" for="">Upload Files <span class="text-danger">(.pdf, .docx, .xlsx,
-                .jpeg, .dwg)*</span></label>
+            <label class="col-form-label" for="">Upload Files <span class="text-danger">(.pdf, .docx, .xlsx, .jpeg, .dwg, .jpg, .txt, .csv, .xls, .ppt, .png)*</span></label>
 
             <div class="card">
               <div class="card-header">
@@ -49,8 +48,11 @@
 
               <!-- Error message for file validation -->
               <div *ngIf="uploadDocumentFlag || uploadDocumentSizeFlag" class="text-danger" style="margin-left: 2%; padding-bottom: 4%;">
-                Upload Document is required and File size should be under 2MB.
+                Upload Document is required and File size should be under 5MB.
               </div>
+              <div *ngIf="invalidFileExtensionFlag" class="text-danger" style="margin-left: 2%; padding-bottom: 4%;">
+                Only PDF, DOCX, XLSX, JPEG, DWG, JPG, TXT, CSV, XLS, PPT, and PNG files are allowed.
+            </div>
 
               <div class="contact-input-set">
                 <div class="col-lg-12">

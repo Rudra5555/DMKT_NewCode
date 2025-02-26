@@ -73,6 +73,7 @@ export class HeaderOneComponent implements OnInit {
   public uname: any;
   public userRole: any;
   public roleFlag: boolean = true;
+  public roleFlagStatutory: boolean = true;
   public roleLibFlag: boolean = true;
   public rejectReasonFlag = false;
   public roleFlagHod: boolean = true;
@@ -698,6 +699,7 @@ if (this.selectedFileUploadData.reason == null || this.selectedFileUploadData.re
       this.roleFlagHod = true;
       this.roleFlag = false;
       this.roleLibFlag = true;
+      
     }
     if (this.userRole == "HOD") {
       this.roleFlag = true;
@@ -708,6 +710,14 @@ if (this.selectedFileUploadData.reason == null || this.selectedFileUploadData.re
       this.roleLibFlag = false;
       this.roleFlag = true;
       this.roleFlagHod = true;
+
+    }
+    if (this.userRole == "User") {
+      this.roleFlagHod = true;
+      this.roleFlag = false;
+      this.roleLibFlag = true;
+      this.roleFlagStatutory=false;
+      
     }
   }
 

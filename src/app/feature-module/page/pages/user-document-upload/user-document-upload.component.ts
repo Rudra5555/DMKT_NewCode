@@ -24,6 +24,7 @@ export class UserDocumentUpload implements OnInit{
   public remarksData :any;
   uploadDocumentFlag: boolean=false;
   public remarkFlag : boolean = false;
+  public invalidFileExtensionFlag: boolean = false;
   public uploadDocumentSizeFlag: boolean = false;
 
   loggedUserId:any;
@@ -98,14 +99,35 @@ export class UserDocumentUpload implements OnInit{
     if (files != null) {
       this.uploadDocumentFlag = false;
     }
-    for (const item of files) {
+    // for (const item of files) {
+    //   item.progress = 0;
+    //   this.files.push(item);
+
+    //   this.calculateTotalFileSize(this.files);
+    // }
+    // this.uploadFilesSimulator(0);
+  //  this.uploadFileForm.get('uploadFile')?.setValue(this.files);
+
+  const allowedExtensions = [".pdf", ".docx", ".xlsx", ".jpeg", ".dwg", ".jpg", ".txt", ".csv", ".xls", ".ppt", ".png"];
+
+
+  for (const item of files) {
+    this.invalidFileExtensionFlag = false; 
+    const fileExtension = item.name.slice(item.name.lastIndexOf(".")).toLowerCase();
+  
+    if (allowedExtensions.includes(fileExtension)) {
       item.progress = 0;
       this.files.push(item);
-
       this.calculateTotalFileSize(this.files);
+    } else {
+      console.warn(`File type not allowed: ${item.name}`);
+      this.invalidFileExtensionFlag = true;
+  
     }
-    this.uploadFilesSimulator(0);
-  //  this.uploadFileForm.get('uploadFile')?.setValue(this.files);
+
+  }
+  this.uploadFilesSimulator(0);
+    this.uploadFileForm.get('uploadFile')?.setValue(this.files);
 
   }
 
@@ -115,17 +137,17 @@ export class UserDocumentUpload implements OnInit{
   }
 
   calculateTotalFileSize(files: Array<any>) {
-    const fiftyMB = 2 * 1024 * 1024;
+    const fileSizeMB = 5 * 1024 * 1024;
     let totalSize = 0;
 
     for (const file of files) {
       totalSize += file.size;
     }
 
-    if (totalSize <= fiftyMB) {
-      this.uploadDocumentFlag = false;
+    if (totalSize <= fileSizeMB) {
+      this.uploadDocumentSizeFlag = false;
     } else {
-      this.uploadDocumentFlag = true;
+      this.uploadDocumentSizeFlag = true;
     }
 
 

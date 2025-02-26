@@ -106,9 +106,9 @@ public loggedUserId: any;
     this.route.queryParams.subscribe(params => {
       this.departmentName = params['DepartmentName'];
       this.subAreaName = params['subAreaName'];
-      this.categoryList=params['categoryList'];
-       this.mainHead = params['mainHead'];
-     this.plants =params['plants'];
+      this.categoryList = params['categoryList'];
+      this.mainHead = params['mainHead'];
+      this.plants = params['plants'];
       
       
       this.subAreaNameOnHeader = this.capitalizeFirstLetter(params['subAreaName']);
