@@ -191,8 +191,8 @@ export class SubAreaComponent implements OnInit{
     this.uploadDocument.allDataList("POWER O&M", "main-head").subscribe({
       next: (event: any) => {
         if (event instanceof HttpResponse) {
-          // this.plantList = event.body?.categoryList || [];
-           this.plantList = (event.body?.categoryList || []).filter((item: { catId: number; }) => item.catId !== 9);
+          this.plantList = event.body?.categoryList || [];
+          //  this.plantList = (event.body?.categoryList || []).filter((item: { catId: number; }) => item.catId !== 9);
           console.log(this.plantList);
           
         }
