@@ -148,19 +148,15 @@ getTotalDepartment(): Observable<HttpEvent<any>> {
   return this.http.request(req);
     }
 
-onDateRangeSelected(startDate:any , endDate:any): Observable<HttpEvent<any>> {
-
-  //console.log('Formatted Start Date:', startDate);
-  //console.log('Formatted End Date:', endDate);
-  
-  const req = new HttpRequest('GET', `${this.baseUrl}/department-plot/get-plot/${startDate}/${endDate}`, {
+onDateRangeSelectedPie(startDate:any , endDate:any): Observable<HttpEvent<any>> {
+  const req = new HttpRequest('GET', `${this.baseUrl}/department-plot/user-dept-chart/${startDate}/${endDate}`, {
     responseType: 'json'
   });
 
   return this.http.request(req);
     }
 
-onDateRangeSelectedPie(startDate:any , endDate:any): Observable<HttpEvent<any>> {
+onDateRangeSelectedBar(startDate:any , endDate:any): Observable<HttpEvent<any>> {
 
   //console.log('Formatted Start Date for Pie:', startDate);
   //console.log('Formatted End Date for Pie:', endDate);

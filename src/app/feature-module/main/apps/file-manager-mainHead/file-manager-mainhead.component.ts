@@ -261,7 +261,7 @@ console.log("mainHead:: ",this.mainHead);
           
           this.totalData = this.fileList.length;
 
-          this.respData.forEach((item: any) => {
+          this.fileListOne.forEach((item: any) => {
             if (item.documentType) {
               this.documentTypeSet.add(item.documentType);
             }
