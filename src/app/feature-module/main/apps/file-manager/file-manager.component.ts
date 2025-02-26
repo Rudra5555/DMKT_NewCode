@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { routes } from 'src/app/core/core.index';
@@ -6,18 +6,20 @@ import { DataService } from 'src/app/core/services/data/data.service';
 import { apiResultFormat, getfileList } from 'src/app/core/services/interface/models';
 import { pageSelection } from 'src/app/feature-module/employee/employees/departments/departments.component';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import { MatChipEditedEvent, MatChipInputEvent } from '@angular/material/chips';
+
 import { FormGroup, FormBuilder, Validators, ReactiveFormsModule } from "@angular/forms";
-import { clientsDatas, companiesList} from 'src/app/core/core.index';
+
 import { FileManagementService } from 'src/app/services/file-management.service';
 import { HttpResponse } from '@angular/common/http';
 import { filter, flatMap, of, Subject, switchMap, takeUntil } from 'rxjs';
-import { ResourceLoader } from '@angular/compiler';
+
 import { NgxDocViewerModule, ViewerType } from 'ngx-doc-viewer';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { param } from 'jquery';
 import { DatePipe } from '@angular/common';
 import { LoginComponentService } from 'src/app/services/login-component.service';
+import Swal from 'sweetalert2';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-file-manager',
@@ -70,9 +72,8 @@ public loggedUserId: any;
    mainHead:any;
    plants:any;
 
-   doc: string = '';
-   viewer: ViewerType = 'google';
-   selectedType = 'xlsx';
+   docView: any;
+
    isLoading: boolean = false; 
    startDate:any;
    endDate:any;
@@ -95,9 +96,12 @@ public loggedUserId: any;
   fileListOne:any;
 
   copyDataList:any;
-
+  @ViewChild('view_files', { static: false }) viewFilesModal!: ElementRef;
   //** / pagination variables
-  constructor(private data: DataService, _uploadService: FileManagementService, private formBuilder: FormBuilder,private route: ActivatedRoute, private router: Router,private datePipe: DatePipe,private loginService : LoginComponentService) {
+  constructor(private data: DataService, private cdr: ChangeDetectorRef,
+    _uploadService: FileManagementService, private formBuilder: FormBuilder,
+        private route: ActivatedRoute, private router: Router,
+        private datePipe: DatePipe,private loginService : LoginComponentService,private sanitizer: DomSanitizer) {
 
     this.route.queryParams.subscribe(params => {
       this.departmentName = params['DepartmentName'];
@@ -601,9 +605,7 @@ onVersionChange(item: any,fileNameAsKey:any, selectedVersion: any) {
 
   let selectedVersionDetails = selectedVersion;
   let version=selectedVersion.versionName;
-  // alert(fileName +JSON.stringify(selectedVersion))
-  // alert(fileName +version)/
-  // alert(JSON.stringify(selectedVersionDetails))
+
 
   console.log("nhhhhhhnhnhnhmdhf:::",item);
   
@@ -645,15 +647,13 @@ onVersionChange(item: any,fileNameAsKey:any, selectedVersion: any) {
    
      
 
-      console.log("value object uuuuuuuuuuuNNNNNNNNN",this.valueObject);
+      // console.log("value object uuuuuuuuuuuNNNNNNNNN",this.valueObject);
       
       this.transformedMap.set(fileNameAsKey, this.valueObject);
 
       this.fileList = Array.from(this.transformedMap.values());
 
-      // console.log("After::", JSON.stringify(this.transformedMap.get(fileNameAsMapKey)))
-      
-
+   
 }
 
 downloadDocument(doucmentUrl:any, item:any){
@@ -663,16 +663,91 @@ downloadDocument(doucmentUrl:any, item:any){
   console.log(doucmentUrl, this.loggedUserRole, this.loggedUserName, this.loggedUserId, item);
 }
 
-setFileUrl(fileUrl:any){
-    this.doc=fileUrl;
+
+setFileUrl(fileUrl: any, fileName: any, fileSize: number, event: Event) {
+  event.preventDefault(); // Prevents the modal from opening by default
+
+  const fileExtension = fileName.split('.').pop()?.toLowerCase();
+  const maxSize = 5 * 1024 * 1024; // 5 MB in bytes
+
+  if (fileExtension === 'pdf' && fileSize <= maxSize) {
+    // Open modal for PDF within size limit
+    this.openModal(fileUrl);
+  } else if (fileExtension !== 'pdf') {
+    // Show popup for non-PDF files
+    this.fileExtensionPopup();
+   
+  } else {
+    // Show popup if file is larger than 5MB
+    this.fileSizePopup();
+ 
   }
-  
-  buttonClose(){
-    this.doc=''
-  }
-convertBytesToKB(bytes: number): string {
-  return (bytes / 1024).toFixed(2) + ' KB';
 }
+
+// Function to open modal for PDFs
+openModal(fileUrl: any) {
+  console.log("Opening modal for PDF:", fileUrl);
+  this.docView = this.sanitizer.bypassSecurityTrustResourceUrl(fileUrl);
+  setTimeout(() => {
+    const modalTrigger = document.getElementById('view_files');
+    if (modalTrigger) {
+      modalTrigger.classList.add('show');
+      modalTrigger.style.display = 'block';
+      document.body.classList.add('modal-open');
+    
+    }
+  }, 10);
+}
+
+
+
+// Function to show popup if file is too large
+fileSizePopup() {
+  Swal.fire({
+    title: "File size too large",
+    text: "The file is larger than 5 MB and cannot be viewed. It will be downloaded instead.",
+    icon: "warning",
+  });
+}
+
+  unsuccessfulSubmitAlert() {
+    Swal.fire({
+      title: "File Size is too large to view, Please download to view the file",
+      icon: "warning",
+      showClass: {
+        popup: `animate__animated animate__fadeInUp animate__faster`
+      },
+      hideClass: {
+        popup: `animate__animated animate__fadeOutDown animate__faster`
+      }
+    });
+  }
+  fileExtensionPopup() {
+    Swal.fire({
+      title: "Only PDF files can be viewed",
+      text: "This file type cannot be previewed. It will be downloaded instead.",
+      icon: "warning",
+      showClass: {
+        popup: `animate__animated animate__fadeInUp animate__faster`
+      },
+      hideClass: {
+        popup: `animate__animated animate__fadeOutDown animate__faster`
+      }
+    });
+  }
+  buttonClose(){
+    const modalElement = document.getElementById('view_files'); // Get modal element
+    if (modalElement) {
+      modalElement.classList.remove('show'); // Remove Bootstrap's "show" class
+      modalElement.style.display = 'none'; // Hide modal
+      document.body.classList.remove('modal-open'); // Remove background overlay
+    }
+  
+    this.docView =  this.docView = this.sanitizer.bypassSecurityTrustResourceUrl('');;
+    this.cdr.detectChanges();
+    
+  }
+
 
 onDocumentTypeChange(docType: any) {
   
