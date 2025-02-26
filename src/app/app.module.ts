@@ -9,6 +9,7 @@ import { SharedModule } from './shared/shared.module';
 import { RouterModule } from '@angular/router';
 import { ToasterService } from './core/services/toaster/toaster.service';
 import {MatTabsModule} from '@angular/material/tabs';
+import { NgChartsModule } from 'ng2-charts';
 
 @NgModule({
   declarations: [AppComponent],
@@ -18,7 +19,8 @@ import {MatTabsModule} from '@angular/material/tabs';
     BrowserAnimationsModule,
     RouterModule,
     SharedModule,
-    MatTabsModule
+    MatTabsModule,
+    NgChartsModule
    
   ],
   providers: [ToasterService],

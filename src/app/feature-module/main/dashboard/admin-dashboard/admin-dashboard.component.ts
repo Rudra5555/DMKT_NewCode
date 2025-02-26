@@ -47,6 +47,7 @@ export class AdminDashboardComponent implements OnInit {
 
   fileCount: any;
   incCount: any;
+  pieRes:any;
 
   public barChartLabels2: string[] = [];
   public barChartType: ChartType = 'bar';
@@ -104,21 +105,7 @@ export class AdminDashboardComponent implements OnInit {
           this.res = event.body;
 
           this.res = event.body.response;
-
-          // this.res = event.body.response.filter((file: any) =>
-          //   !file.isHodDocument && !file.isStatutory && !file.isRestrictedDocument
-          // );
           this.fileList = this.res;
-          console.log(this.fileList);
-          
-
-          // if (this.fileList == "") {
-          //   this.noRecordFlag = true;
-
-
-          // }
-          
-
         }
       },
       error: (err: any) => {
@@ -129,26 +116,7 @@ export class AdminDashboardComponent implements OnInit {
       },
     });
 
-
-
-
-    this.loginService.onDateRangeSelectedPie(startDate, endDate).subscribe({
-
-      next: (event: any) => {
-        if (event instanceof HttpResponse) {
-          this.res = event.body;
-
-        }
-      },
-      error: (err: any) => {
-        if (err.error && err.error.message) {
-          this.msg += " " + err.error.message;
-        }
-      },
-    });
-
-
-    this.loginService.onDateRangeSelected(startDate, endDate).subscribe({
+    this.loginService.onDateRangeSelectedBar(startDate, endDate).subscribe({
       next: (event: any) => {
         if (event instanceof HttpResponse) {
           this.res = event.body;
@@ -166,6 +134,43 @@ export class AdminDashboardComponent implements OnInit {
                 stack: 'a'
               };
             })
+          };
+        }
+      },
+      error: (err: any) => {
+        if (err.error && err.error.message) {
+          this.msg += " " + err.error.message;
+        }
+      },
+    });
+
+    
+    this.loginService.onDateRangeSelectedPie(startDate, endDate).subscribe({
+      next: (event: any) => {
+        if (event instanceof HttpResponse) {
+           this.pieRes = event.body.data;
+        //    this.pieRes =[
+        //     {
+        //         "dept": "OPERATION",
+        //         "userCount": 4
+        //     },
+        //     {
+        //         "dept": "MECHANICAL",
+        //         "userCount": 32
+        //     },
+        //     {
+        //         "dept": "ELECTRICAL",
+        //         "userCount": 12
+        //     }
+        // ]
+
+           this.pieChartData = {
+            labels: this.pieRes.map((deptData: any) => deptData.dept), 
+            datasets: [
+              {
+                data: this.pieRes.map((deptData: any) => deptData.userCount), 
+              }
+            ]
           };
         }
       },
@@ -269,16 +274,22 @@ export class AdminDashboardComponent implements OnInit {
   };
 
   public barChartLabels1: string[] = ['07/07/2024', '08/07/2024', '09/07/2024', '10/07/2024', '11/07/2024', '12/07/2024', '13/07/2024'];
-
-
   public barChartLegend = true;
   public barChartPlugins = [];
+  
   public barChartData2: ChartData<'bar'> = {
     labels: this.barChartLabels2,
     datasets: []
   };
 
-
+  public pieChartData: ChartData<'pie', number[], string | string[]> = {
+    labels:[],
+    datasets: [
+      {
+        data: [],
+      },
+    ],
+  };
 
   public barChartData1: ChartData<'bar'> = {
     labels: this.barChartLabels1,
@@ -290,18 +301,14 @@ export class AdminDashboardComponent implements OnInit {
   };
 
 
-  public pieChartData: ChartData<'pie', number[], string | string[]> = {
-    labels: ['Mechanical', 'Electrical', 'Boiler', 'Civil', 'C&I', 'Turbine', 'Bop'],
-    datasets: [
-      {
-        data: [300, 500, 100, 20, 23, 67, 90],
-      },
-    ],
-  };
-
-
-
-
+  // public pieChartData: ChartData<'pie', number[], string | string[]> = {
+  //   labels: ['Mechanical', 'Electrical', 'Boiler', 'Civil', 'C&I', 'Turbine', 'Bop'],
+  //   datasets: [
+  //     {
+  //       data: [300, 500, 100, 20, 23, 67, 90],
+  //     },
+  //   ],
+  // };
 
   updateFileCount(newCount: number): void {
     if (this.previousFileCount === null) {
@@ -318,10 +325,7 @@ export class AdminDashboardComponent implements OnInit {
     this.totalFileCount = newCount;
   }
 
-
-
-
-
 }
+
 
 

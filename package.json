@@ -34,6 +34,8 @@
     "@types/quill": "^2.0.14",
     "base64-arraybuffer": "^1.0.2",
     "bootstrap": "^5.3.2",
+    "chart.js": "^4.4.8",
+    "chartjs-plugin-datalabels": "^2.2.0",
     "crypto-js": "^4.2.0",
     "crypto-ts": "^1.0.2",
     "igniteui-angular": "^18.0.4",
