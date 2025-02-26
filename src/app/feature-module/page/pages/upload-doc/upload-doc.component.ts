@@ -170,7 +170,9 @@ public invalidFileExtensionFlag: boolean = false;
       this.uploadDocumentFlag = false;
     }
 
-    const allowedExtensions = [".pdf", ".docx", ".xlsx", ".jpeg", ".dwg"];
+    // const allowedExtensions = [".pdf", ".docx", ".xlsx", ".jpeg", ".dwg"];
+    const allowedExtensions = [".pdf", ".docx", ".xlsx", ".jpeg", ".dwg", ".jpg", ".txt", ".csv", ".xls", ".ppt", ".png"];
+
 
 for (const item of files) {
   this.invalidFileExtensionFlag = false; 
@@ -196,14 +198,14 @@ for (const item of files) {
   }
 
   calculateTotalFileSize(files: Array<any>) {
-    const fiftyMB = 10 * 1024 * 1024;
+    const fileSizeMB = 5 * 1024 * 1024;
     let totalSize = 0;
 
     for (const file of files) {
       totalSize += file.size;
     }
 
-    if (totalSize <= fiftyMB) {
+    if (totalSize <= fileSizeMB) {
       this.uploadDocumentSizeFlag = false;
     } else {
       this.uploadDocumentSizeFlag = true;

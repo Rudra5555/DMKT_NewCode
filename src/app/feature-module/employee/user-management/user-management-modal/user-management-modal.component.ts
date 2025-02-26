@@ -291,10 +291,7 @@ console.log("plantHeader",plantHeader);
         role: "User",
         password: "",
         departmentNameList: [
-          {
-            departmentName: this.editUserForm.value.department,
-            plantName: this.editUserForm.value.plant
-          }
+         
         ],
         isActive: this.editUserForm.value.isActive,
         accessRoles: this.getSelectedRolesEdit(),
@@ -337,10 +334,7 @@ console.log("plantHeader",plantHeader);
         role:  this.editUserForm.value.mainRole,
         password: "",
         departmentNameList: [
-          {
-            departmentName: this.editUserForm.value.department,
-            plantName: this.editUserForm.value.plant
-          }
+          
         ],
         isActive: this.editUserForm.value.isActive,
         accessRoles: this.getSelectedRolesEdit(),

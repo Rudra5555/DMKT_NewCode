@@ -135,24 +135,7 @@ export class FileUploadNotificationComponent implements OnInit {
 
   ngOnInit(): void {
 
-    // this.isLoading = true;
-    // const storedData = localStorage.getItem('fileUploadNotificationList');
-    // const readFileList = storedData ? JSON.parse(storedData) : [];
 
-    // this.totalData = readFileList.length;
-
-    // readFileList.map((item: getreadFileNotificationList, index: number) => {
-    //   const serialNumber = index + 1;
-    //   if (index >= this.skip && serialNumber <= this.limit) {
-    //     item.id = serialNumber;
-    //     this.readFileNotificationList.push(item);
-    //     this.serialNumberArray.push(serialNumber);
-    //   }
-    // });
-
-    // this.dataSource = new MatTableDataSource<getreadFileNotificationList>(this.readFileNotificationList);
-    // this.calculateTotalPages(readFileList.length, this.pageSize);
-    // this.isLoading = false; 
     
     this.markAsReadFilesNotif();
     this.setLast7Days();
@@ -216,21 +199,7 @@ export class FileUploadNotificationComponent implements OnInit {
         if (event instanceof HttpResponse) {
           const responseData = event.body.data;
 
-          // const filteredData = responseData.filter((item: getcontactlist) => item.documentApprovalStatus === 'A');
-
-          // this.totalData = filteredData.length;
-          // filteredData.map((item: getcontactlist, index: number) => {
-          //   const serialNumber = index + 1;
-          //   if (index >= this.skip && serialNumber <= this.limit) {
-          //     item.id = serialNumber;
-          //     this.contactlist.push(item);
-          //     this.serialNumberArray.push(serialNumber);
-          //   }
-          // });
-
-          // this.dataSource = new MatTableDataSource<getcontactlist>(this.contactlist);
-          // this.calculateTotalPages(filteredData.length, this.pageSize);
-          // this.isLoading = false; 
+   
         }
       },
       error: (err: any) => {

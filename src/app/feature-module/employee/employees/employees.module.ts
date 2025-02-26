@@ -15,7 +15,7 @@ import { LeaveSettingsComponent } from './leave-settings/leave-settings.componen
 import { AttendanceAdminComponent } from './attendance-admin/attendance-admin.component';
 import { AttendanceEmployeeComponent } from './attendance-employee/attendance-employee.component';
 import { DepartmentsComponent } from './departments/departments.component';
-import { DesignationsComponent } from './designations/designations.component';
+// import { DesignationsComponent } from './designations/designations.component';
 import { TimesheetComponent } from './timesheet/timesheet.component';
 import { OvertimeComponent } from './overtime/overtime.component';
 import { ShiftScheduleComponent } from './shift-schedule/shift-schedule.component';
@@ -36,7 +36,7 @@ import { ShiftListComponent } from './shift-list/shift-list.component';
     AttendanceAdminComponent,
     AttendanceEmployeeComponent,
     DepartmentsComponent,
-    DesignationsComponent,
+    // DesignationsComponent,
     TimesheetComponent,
     OvertimeComponent,
     ShiftScheduleComponent,
