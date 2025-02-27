@@ -198,7 +198,7 @@ for (const item of files) {
   }
 
   calculateTotalFileSize(files: Array<any>) {
-    const fileSizeMB = 5 * 1024 * 1024;
+    const fileSizeMB = 200 * 1024 * 1024;
     let totalSize = 0;
 
     for (const file of files) {
