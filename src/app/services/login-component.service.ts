@@ -415,4 +415,16 @@ getUserInfo(): Observable<HttpEvent<any>> {
   return this.http.request(req);
   }
 
+getFilterUserList(dept:any,plant:any): Observable<HttpEvent<any>> {
+
+console.log("service dept",dept);
+console.log("service plant",plant);
+
+  const req = new HttpRequest('GET', `${this.baseUrl}/user/get-all-user-info?dept=${dept}&plant=${plant}`, {
+    responseType: 'json'
+  });
+
+  return this.http.request(req);
+  }
+
 }

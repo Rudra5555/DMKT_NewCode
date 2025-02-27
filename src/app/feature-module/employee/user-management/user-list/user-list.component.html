@@ -45,9 +45,9 @@
     </div>
 
     
-    <div class="col-sm-6 col-md-3">
+    <!-- <div class="col-sm-6 col-md-3">
       <div class="input-block mb-3 form-focus select-focus select">
-        <mat-select class="custom-mat-select floating-mat-select"(selectionChange)="filterRecordsByPlant()" placeholder="Select Plant">
+        <mat-select class="custom-mat-select floating-mat-select" placeholder="Select Plant">
           <mat-option selected>Select Plant</mat-option>
           <mat-option *ngFor="let plant of uniquePlants" [value]="plant">
             {{ plant }}
@@ -69,7 +69,36 @@
     </div>
     <div class="col-sm-3 col-md-2">
       <a class="btn btn-success w-100"> Search </a>
+    </div> -->
+
+    <div class="col-sm-6 col-md-3">
+      <div class="input-block mb-3 form-focus select-focus select">
+        <mat-select class="custom-mat-select floating-mat-select" placeholder="Select Plant" [(ngModel)]="selectedPlant">
+          <mat-option [value]="null">Select Plant</mat-option>
+          <mat-option *ngFor="let plant of uniquePlants" [value]="plant">
+            {{ plant }}
+          </mat-option>
+        </mat-select>
+        <label class="focus-label">Plant</label>
+      </div>
     </div>
+    
+    <div class="col-sm-6 col-md-3">
+      <div class="input-block mb-3 form-focus select-focus select">
+        <mat-select class="custom-mat-select floating-mat-select" placeholder="Select Department" [(ngModel)]="selectedDepartment">
+          <mat-option [value]="">Select Department</mat-option>
+          <mat-option *ngFor="let department of uniqueDepartments" [value]="department">
+            {{ department }}
+          </mat-option>
+        </mat-select>
+        <label class="focus-label">Department</label>
+      </div>
+    </div>
+    
+    <div class="col-sm-3 col-md-2">
+      <a class="btn btn-success w-100" (click)="applyFilter()"> Search </a>
+    </div>
+    
   </div>
   <!-- Search Filter -->
 

@@ -41,6 +41,9 @@ export class UserListComponent implements OnInit {
   uniqueDepartments: string[] = [];
   uniquePlants: string[] = [];
 
+  selectedPlant: string = '';
+  selectedDepartment: string = '';
+
 // selectedDepartment: string = '';
 // selectedPlant: string = '';
 // filteredRecords: any[] = []; 
@@ -144,16 +147,43 @@ export class UserListComponent implements OnInit {
     return { uniqueDepartments, uniquePlants };
   }
   
-  filterRecordsByPlant() {
+  applyFilter() {
 
-    // if (this.selectedPlant) {
-    //   this.clientsData = this.copyDataList.filter((user: { departmentNameList: any[]; }) =>
-    //     user.departmentNameList.some(dept => dept.plantName === this.selectedPlant)
-    //   );
-    // } else {
-    //   this.clientsData = this.copyDataList;
-    // }
+    this.clientsData = [];
+    this.serialNumberArray = [];
+    // console.log("Selected Plant:", this.selectedPlant);
+    // console.log("Selected Department:", this.selectedDepartment);
+
+       this.loginService.getFilterUserList(this.selectedDepartment,this.selectedPlant).subscribe({
+          next: (event: any) => {
+            if (event instanceof HttpResponse) {
+            const res=event.body
+            // console.log("Filter User Data:", res);
+  
+            this.totalData = res.response.length;
+              
+            res.response.map((res: getClient, index: number) => {
+              const serialNumber = index + 1;
+              if (index >= this.skip && serialNumber <= this.limit) {
+                res.id = serialNumber;
+                this.clientsData.push(res);
+                this.serialNumberArray.push(serialNumber);
+              }
+            });
+            this.dataSource = new MatTableDataSource<getClient>(this.clientsData);
+            this.cdr.detectChanges();
+            this.calculateTotalPages(this.totalData, this.pageSize);
+
+            }
+          },
+          error: (err: any) => {
+            if (err.error && err.error.message) {
+              this.msg += " " + err.error.message;
+            }
+          }
+        });
   }
+  
   
 
 
