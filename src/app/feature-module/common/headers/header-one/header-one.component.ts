@@ -8,6 +8,7 @@ import { HttpEvent, HttpResponse } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { E } from '@angular/cdk/keycodes';
 import Swal from 'sweetalert2';
+import { DomSanitizer } from '@angular/platform-browser';
 
 
 
@@ -119,9 +120,11 @@ export class HeaderOneComponent implements OnInit {
   statutoryUnreadNotification: any;
   statutoryReadNotification: any;
   expDate: any;
+  picture: any;
+  sanitizedImage: any;
  
   constructor(
-    private sideBar: SideBarService,private cdr: ChangeDetectorRef,
+    private sideBar: SideBarService,private cdr: ChangeDetectorRef,private sanitizer: DomSanitizer,
     private router: Router, private fb: FormBuilder, private loginService: LoginComponentService, private snackBar: MatSnackBar
 
   ) {
@@ -181,6 +184,11 @@ export class HeaderOneComponent implements OnInit {
 
     this.selectedUserRole = localStorage.getItem('role');
     this.loggedUserId = localStorage.getItem('loggedInUserId');
+    this.picture = localStorage.getItem("PictureLog") || '/assets/img/userIcon.png';
+    console.log("Picture", this.picture);
+    
+    this.sanitizedImage = this.sanitizer.bypassSecurityTrustUrl(this.picture);
+
 
     this.loginService.accessRole(this.loggedUserId).subscribe({
       next: (event: any) => {
