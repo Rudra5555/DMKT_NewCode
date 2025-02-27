@@ -227,7 +227,8 @@
 
 		<li class="nav-item dropdown has-arrow main-drop">
 			<a href="javascript:void(0);" class="dropdown-toggle nav-link" data-bs-toggle="dropdown">
-				<span class="user-img me-2"><img src="assets/img/avatar/avatar-27.jpg" alt="">
+				<span class="user-img me-2"><img [src]="sanitizedImage || '/assets/img/userIcon.png'" alt="" 
+           class="rounded-circle border me-3" width="50" height="50">
 					<span class="status online"></span></span>
 
 				<span style="color: rgb(255, 255, 255);">{{uname}}</span>
