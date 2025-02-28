@@ -57,7 +57,7 @@ export class VerifyUploadedDocumentComponent implements OnInit {
   bsConfig: Partial<BsDatepickerConfig>;
   dateRange: Date[];
   public rejectForm!: FormGroup;
-
+  public buttonDisabled : boolean = false;
   public mainHeadList: any[] = [];
   public selectedCatName: any;
   public plantOption: any;
@@ -549,12 +549,13 @@ for (const item of files) {
         "hodRestricted": ishodRestricted
       };
       console.log(modalData);
+      this.buttonDisabled = true;
       formData.append("requestbody", JSON.stringify(modalData));
 
       this.loginService.upload(formData).subscribe({
         next: (event: any) => {
           if (event instanceof HttpResponse) {
-
+            this.buttonDisabled = false;
             this.uploadFileForm.get('uploadFile')?.reset('');
             this.uploadFileForm.get('mainHead')?.reset('');
             this.uploadFileForm.get('plants')?.reset('');
@@ -855,7 +856,8 @@ for (const item of files) {
       timer: 1500
     }).then(() => {
 
-      window.location.reload();
+     // window.location.reload();
+     window.location.href = window.location.href;
 
     });
   }
@@ -865,7 +867,12 @@ for (const item of files) {
       icon: "error",
       title: "Oops...",
       text: "Something went wrong!",
-    });
+    }).then(() => {
+
+     // window.location.reload();
+     window.location.href = window.location.href;
+
+    });;
   }
 
 

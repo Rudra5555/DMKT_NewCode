@@ -56,6 +56,7 @@ export class UploadDocComponent implements OnInit {
   docTypeId: any;
   docTypeName: any;
   subDocListSize: any;
+  public buttonDisabled: boolean = false;
 docMap = new Map<number, string>();
 public newPlant: boolean = false;
 public invalidFileExtensionFlag: boolean = false;
@@ -368,11 +369,14 @@ for (const item of files) {
       };
       console.log("payloaddddd:: ",modalData);
       formData.append("requestbody", JSON.stringify(modalData));
-     
+      this.buttonDisabled = true;
 
       this.uploadService.upload(formData).subscribe({
         next: (event: any) => {
+          console.log("event",event);
+          
           if (event instanceof HttpResponse) {
+            this.buttonDisabled = false;
 
             this.uploadFileForm.get('uploadFile')?.reset('');
             this.uploadFileForm.get('mainHead')?.reset('');
@@ -624,6 +628,10 @@ return;
       icon: "error",
       title: "Oops...",
       text: "Something went wrong!",
-    });
+    }).then(() => {
+
+      // window.location.reload();
+      window.location.href = window.location.href;
+    });;
   }
 }
