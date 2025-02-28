@@ -74,7 +74,7 @@
     <div class="col-sm-6 col-md-3">
       <div class="input-block mb-3 form-focus select-focus select">
         <mat-select class="custom-mat-select floating-mat-select" placeholder="Select Plant" [(ngModel)]="selectedPlant">
-          <mat-option [value]="null">Select Plant</mat-option>
+          <mat-option [value]="''">Select Plant</mat-option>
           <mat-option *ngFor="let plant of uniquePlants" [value]="plant">
             {{ plant }}
           </mat-option>
@@ -86,7 +86,7 @@
     <div class="col-sm-6 col-md-3">
       <div class="input-block mb-3 form-focus select-focus select">
         <mat-select class="custom-mat-select floating-mat-select" placeholder="Select Department" [(ngModel)]="selectedDepartment">
-          <mat-option [value]="">Select Department</mat-option>
+          <mat-option [value]="''">Select Department</mat-option>
           <mat-option *ngFor="let department of uniqueDepartments" [value]="department">
             {{ department }}
           </mat-option>
