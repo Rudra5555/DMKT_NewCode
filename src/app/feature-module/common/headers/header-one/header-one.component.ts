@@ -171,22 +171,22 @@ export class HeaderOneComponent implements OnInit {
       expDate: ['', Validators.required],
       reason: ['', Validators.required]
     });
-    // let expDate = this.hodModalForm.get('expDate')?.value;
-    // if (expDate) {
-    //   const date = new Date(expDate);
-    //   const day = String(date.getDate()).padStart(2, '0'); // Ensures two digits for the day
-    //   const month = String(date.getMonth() + 1).padStart(2, '0'); // Month is 0-indexed
-    //   const year = date.getFullYear();
-    //   const formattedDate = `${day} ${month} ${year}`;
-    //   console.log(formattedDate); // Output: 17 01 2025
-    // }
-    // this.dateFlag = true;
+
 
     this.selectedUserRole = localStorage.getItem('role');
     this.loggedUserId = localStorage.getItem('loggedInUserId');
-    this.picture = localStorage.getItem("PictureLog") || '/assets/img/userIcon.png';
-    console.log("Picture", this.picture);
+    this.picture = localStorage.getItem('PictureLog');
+
+    console.log("Picture URL (before checking):", this.picture);
     
+    // Ensure we catch null, undefined, empty strings, and invalid values
+    if (!this.picture || this.picture === "null" || this.picture === "undefined" || this.picture.trim() === "" || this.picture === "1234567890") {
+      this.picture = '/assets/img/userIcon.png';
+      localStorage.setItem('PictureLog', this.picture);
+      console.log("Final Picture URL (after setting default):", this.picture);
+    }
+    
+    // Sanitize image
     this.sanitizedImage = this.sanitizer.bypassSecurityTrustUrl(this.picture);
 
 
@@ -206,31 +206,7 @@ export class HeaderOneComponent implements OnInit {
     });
 
 
-    // this.loginService.notificTwo(this.loggedUserId).subscribe({
-    //   next: (event: any) => {
-    //     if (event instanceof HttpResponse) {
-    //       this.resp = event.body.data
-    //       const notificTwoo = this.resp;
-    //       console.log("before filter::::",notificTwoo);
-          
-    //        // Filter out only the notifications where markAsRead is false
-    //   this.notificTwo = this.resp.filter((notification: any) => !notification.markAsRead); //markedAsRead = false
-      
-    //   console.log("Filtered notificTwo::::", this.notificTwo);
 
-    //   this.readNotification = this.resp.filter((notification: any) => notification.markAsRead); //markedAsRead = true
-    //       // console.log("readNotification", this.readNotification);
-    //   localStorage.setItem('fileUploadNotificationList', JSON.stringify(this.readNotification));
-          
-    //       this.userNotifyCountTwo = this.notificTwo.length;
-    //     }
-    //   },
-    //   error: (err: any) => {
-    //     if (err.error && err.error.message) {
-    //       this.msg += " " + err.error.message;
-    //     }
-    //   }
-    // });
 
     this.userNotificationBell(this.loggedUserId);
     this.userFileNotificationBell(this.loggedUserId);
