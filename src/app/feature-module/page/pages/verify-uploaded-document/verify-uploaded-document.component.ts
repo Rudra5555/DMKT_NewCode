@@ -161,6 +161,8 @@ export class VerifyUploadedDocumentComponent implements OnInit {
 
   ngOnInit(): void {
 
+    this.getDocTypeList();
+
     this.loggedUserId = localStorage.getItem('loggedInUserId');
 
     this.getFileListDetails()
@@ -211,7 +213,6 @@ export class VerifyUploadedDocumentComponent implements OnInit {
       console.log("ffffffffff",deptId);
       
       // Call the method with the extracted deptId
-      this.getDocTypeList(deptId);
     }
 
       this.getSubAreaList(deptName, "department");
@@ -548,7 +549,7 @@ for (const item of files) {
         "isRestrictedDocument": isRestrictedDocument,
         "hodRestricted": ishodRestricted
       };
-      console.log(modalData);
+      console.log("payload for all",modalData);
       this.buttonDisabled = true;
       formData.append("requestbody", JSON.stringify(modalData));
 
@@ -617,11 +618,11 @@ for (const item of files) {
         }
       });
       return;
-    } if (this.plantOption == null && this.selectedDeptCatName == null && this.selectedSubAreaCatName == null && this.documentTypeOption != '' && this.storageLocationOption != '') {
+    } if (this.plantOption != null && this.selectedDeptCatName == null && this.selectedSubAreaCatName == null && this.documentTypeOption != '' && this.storageLocationOption != '') {
       const modalData = {
         "mainHead": this.selectedCatName,
         "mainHeadAbbr": this.selectedCatNameAbbr,
-        "plants": null,
+        "plants": this.plantOption,
         "department": null,
         "departAbbr": null,
         "subArea": null,
@@ -634,7 +635,7 @@ for (const item of files) {
         "hodRestricted": ishodRestricted
 
       };
-      console.log(modalData);
+      console.log("second payload for other",modalData);
 
 
       formData.append("requestbody", JSON.stringify(modalData));
@@ -796,11 +797,9 @@ for (const item of files) {
       });
     }
   }
-  getDocTypeList(deptId: any) {
-    console.log(deptId);
-    
-    if (deptId != '') {
-      this.uploadDocument.docTypeList(deptId).subscribe({
+  getDocTypeList() {
+    // console.log();
+      this.uploadDocument.docTypeListData().subscribe({
         next: (event: any) => {
           if (event instanceof HttpResponse) {
              this.docList = event.body;
@@ -816,7 +815,7 @@ for (const item of files) {
           console.error(err);
         }
       });
-    }
+    
   }
 
   onDocumentTypeChange(docId: any) {

@@ -69,12 +69,12 @@ private baseUrl = 'http://10.101.71.204:8080'; //prod server
       return this.http.request(req);
     }
 
-    docTypeList(deptId: any): Observable<HttpEvent<any>> {
-      const req = new HttpRequest('GET', `${this.baseUrl}/documentType/getDocumentTypesBy/${deptId}`, {
-        responseType: 'json'
-      });
-      return this.http.request(req);
-    }
+    // docTypeList(deptId: any): Observable<HttpEvent<any>> {
+    //   const req = new HttpRequest('GET', `${this.baseUrl}/documentType/getDocumentTypesBy/${deptId}`, {
+    //     responseType: 'json'
+    //   });
+    //   return this.http.request(req);
+    // }
 
     docTypeListData(): Observable<HttpEvent<any>> {
       const req = new HttpRequest('GET', `${this.baseUrl}/documentType/getDocumentTypesAndSubTypes`, {
