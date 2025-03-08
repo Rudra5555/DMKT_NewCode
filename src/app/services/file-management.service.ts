@@ -10,8 +10,8 @@ export class FileManagementService {
   
 
   public directory:any;
-  // private baseUrl = 'http://103.168.18.28:8080'; //dev server
-  private baseUrl = 'http://10.101.71.204:8080'; //prod server
+  private baseUrl = 'http://103.168.18.28:8080'; //dev server
+  // private baseUrl = 'http://10.101.71.204:8080'; //prod server
 
 
   constructor(private http: HttpClient) { }

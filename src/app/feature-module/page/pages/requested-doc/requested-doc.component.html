@@ -12,10 +12,7 @@
         </ul>
 
       </div>
-      <!-- <div class="col-md-12 modalButtons" *ngIf="!this.roleFlag">
-        <a href="javascript:void(0);" class="btn add-btn" data-bs-toggle="modal" data-bs-target="#add_contact"
-          id="modalButton"><i class="la la-plus-circle"></i>Request Document</a>
-      </div> -->
+    
 
     </div>
 
@@ -90,7 +87,9 @@
                 <th mat-sort-header="approvedBy">Approved By</th>
                 <th mat-sort-header="date">Approved D&T</th>
                 <th mat-sort-header="status">Status</th>
-                <th>Action</th>
+                <!-- <th>Action</th> -->
+                <th style="color: rgb(22, 32, 138)">Download</th>
+                <th style="color: rgb(22, 32, 138)">View</th>
               </tr>
             </thead>
             <tbody>
@@ -121,13 +120,37 @@
                   {{ getStatusText(item.documentApprovalStatus) }}
                 </td>
                 <td class="text-center">
+                  <a
+                    class="dropdown-item"
+                    [href]="item.fileUrl"
+                    target="_blank"
+                    (click)="downloadDocument(item.fileUrl,item)"
+                  >
+                    <i
+                      class="fa-solid fa-download"
+                      style="color: rgb(0, 117, 234)"
+                    ></i>
+                  </a>
+                </td>
+                <td class="text-center">
+                  <a
+                    class="dropdown-item"
+                    [href]="item.fileUrl"
+                    target="_blank"
+                    
+                    (click)="setFileUrl(item.fileUrl, item.documentName , +item.fileSize, $event)"
+                  >
+                    <i class="fas fa-eye" style="color: rgb(0, 117, 234)"></i>
+                  </a>
+                </td>
+                <!-- <td class="text-center">
 
                   <a class="dropdown-item" [href]="item.fileUrl" (click)="openModal(item.fileUrl , item.documentName)"
                     data-bs-toggle="modal" data-bs-target="#viewApprovedFiles">
                     <i class="fas fa-eye" style="color: rgb(0, 117, 234)"></i>
                   </a>
 
-                </td>
+                </td> -->
               </tr>
 
               <tr *ngIf="!isLoading && contactlist.length==0">
