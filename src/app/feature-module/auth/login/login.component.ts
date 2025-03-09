@@ -114,37 +114,8 @@ onClickSubmit(formData: any){
     this.loginService.login(loginData).subscribe({
       next: (event: any) => {
         if (event instanceof HttpResponse) {
-          //  this.data = event.body
-          this.data={
-            "status": 200,
-            "response": {
-                "userName": "Librarian",
-                "userId":3,
-                "role": "Librarian",
-                "accessRoles": [
-                    "User",
-                    "Admin",
-                    "HOD"
-                ],
-                "title":"Rahul",
-                "displayName": "Das",
-                "departmentNameList": [
-                    {
-                        "departmentName": "OPERATION",
-                        "plantName": "CPP-2 (540MW)"
-                    },
-                    {
-                        "departmentName": "C&I",
-                        "plantName": "CPP-3 (1200MW)"
-                    }
-                ],
-                "userPicture": "1234567890",
-                "phoneNumber": "9678824924",
-                "emailId": "nitish@gmail.com"
-            },
-            "message": "success!!"
-        }
-                   
+           this.data = event.body
+                  
           if(this.data!=null){
            
             if(this.data.status ===417){

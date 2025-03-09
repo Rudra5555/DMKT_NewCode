@@ -64,82 +64,22 @@ export class FileUploadNotificationComponent implements OnInit {
   public getRole: any;
   public roleFlag: boolean = false;
   userName: string | undefined;
-  base64String: any;
-  public approvedDocumentName: any;
-  doc: string = '';
-  viewer: ViewerType = 'google';
-  selectedType = 'xlsx';
-  public requestedFileName: any
   res: any;
-  public disableSubmitBtn: boolean = false;
-  public documentTypeFlag: boolean = false;
-  public fileNames: string[] = [];
   files: any[] = [];
-
-  searchQuery: string = '';
-  documentList: Array<{ displayText: string, referenceId: number }> = [];
-  dataLoaded: boolean = false;
-  selectedDocument: string = ''; // To store the selected document text
-  documentId: any;
-  departmentId: any;
-  plant: any;
-
-  remarks: string = '';
-
-  startDate: any;
-  endDate: any;
-
   resp: any;
   msg: any;
   respData: any;
-  selectFileData: any;
   loggedUserId: any;
   loggedSuperUserId: any;
-  generatedBy: any;
-  selectedFileUrl: any;
   subject = new BehaviorSubject('')
-
   readFileList:any;
 
-
-
-
-  //** / pagination variables
   constructor(private data: DataService, private datePipe: DatePipe, _uploadService: FileManagementService, private formBuilder: FormBuilder, private loginService: LoginComponentService) {
 
-    this.bsRangeValue = [this.bsValue, this.maxDate];
-
   }
 
-  setLast7Days() {
-    const endDate = new Date();
-    const startDate = new Date();
-    startDate.setDate(endDate.getDate() - 6);
-    this.bsRangeValue = [startDate, endDate];
-    this.onDateRangeSelected();
-  }
-
-  onDateRangeSelected() {
-    this.startDate = this.formatDate(this.bsRangeValue[0]);
-    this.endDate = this.formatDate(this.bsRangeValue[1]);
-    this.approvedDocumentList(localStorage.getItem('loggedInUserId'))
-  }
-
-  formatDate(date: Date): string {
-    return this.datePipe.transform(date, 'yyyy-MM-dd')!;
-  }
-
-  formatExecutedData(date: string): string {
-    return this.datePipe.transform(date, 'dd-MM-yyyy')!;
-  }
-
-  ngOnInit(): void {
-
-
-    
+  ngOnInit(): void { 
     this.markAsReadFilesNotif();
-    this.setLast7Days();
-
     this.loggedUserId = localStorage.getItem('loggedInUserId');
     this.getRole = localStorage.getItem('role');
     if (this.getRole == "Admin") {
@@ -153,11 +93,6 @@ export class FileUploadNotificationComponent implements OnInit {
     } if (this.getRole == "Hod") {
       this.roleFlag = false;
     }
-
-
-
-
-    // this.getTableData();
 
   }
 
@@ -189,28 +124,6 @@ export class FileUploadNotificationComponent implements OnInit {
 
   }
 
-  public approvedDocumentList(loggedUserId: any): void {
-    // this.contactlist = [];
-    // this.isLoading = true; // Start loader
-    this.serialNumberArray = [];
-
-    this.loginService.approvedDocList(loggedUserId, this.startDate, this.endDate).subscribe({
-      next: (event: any) => {
-        if (event instanceof HttpResponse) {
-          const responseData = event.body.data;
-
-   
-        }
-      },
-      error: (err: any) => {
-        if (err.error && err.error.message) {
-          this.msg += " " + err.error.message;
-        }
-        this.isLoading = false; 
-      }
-    });
-  }
-
   getStatusText(statusCode: string): string {
     switch (statusCode) {
       case 'A':
@@ -222,268 +135,6 @@ export class FileUploadNotificationComponent implements OnInit {
       default:
         return statusCode; // Fallback to the original status if no match
     }
-  }
-
-
-  openModal(fileUrl: string, documentName: string) {
-
-    this.approvedDocumentName = documentName;
-    this.doc = fileUrl;
-
-  }
-  onFocus(): void {
-    if (!this.dataLoaded) {
-      this.loadInitialData();
-      this.dataLoaded = true;
-    }
-  }
-
-
-  loadInitialData(): void {
-    this.loginService.searchDocuments('').subscribe({
-      next: (event: any) => {
-        if (event instanceof HttpResponse) {
-
-          if (event.body && event.body.data && Array.isArray(event.body.data)) {
-            this.documentList = event.body.data.map((doc: any) => ({
-              displayText: `${doc.uniqueFileName} (${doc.docVersion})`,
-              refernceId: doc.refernceId,
-              department: doc.department,
-              plant: doc.plant,
-              fileName: doc.plant
-            }));
-          } else {
-            console.error('Unexpected response format:', event.body);
-            this.documentList = [];
-          }
-        }
-      },
-      error: (err: any) => {
-        if (err.error && err.error.message) {
-          this['msg'] += " " + err.error.message;
-        }
-      },
-    });
-  }
-
-  onSearch(): void {
-    this.loginService.searchDocuments(this.searchQuery).subscribe({
-      next: (event: any) => {
-        if (event instanceof HttpResponse) {
-          if (event.body && event.body.data && Array.isArray(event.body.data)) {
-            this.documentList = event.body.data.map((doc: any) => ({
-              displayText: `${doc.uniqueFileName} (${doc.docVersion})`,
-              refernceId: doc.refernceId,
-              department: doc.department,
-              plant: doc.plant,
-              fileName: doc.fileName
-            }));
-          } else {
-            console.error('Unexpected response format:', event.body);
-            this.documentList = [];
-          }
-        }
-      },
-      error: (err: any) => {
-        if (err.error && err.error.message) {
-          this['msg'] += " " + err.error.message;
-        }
-      },
-    });
-  }
-
-
-
-
-  selectDocument(doc: { displayText: string; refernceId: any; department: string; plant: string, fileName: string }): void {
-    if (!doc) return;
-    console.log(doc);
-    
-    this.documentId = doc.refernceId;
-    this.departmentId = doc.department;
-    this.plant = doc.plant;
-    this.selectedDocument = doc.displayText;
-    this.searchQuery = doc.displayText;
-    this.documentList = [];
-
-    if (this.documentId != null) {
-      this.requestFileFlag = false
-    }
-
-  }
-
-
-
-
-  onSubmit() {
-    if (this.loggedUserId && !this.loggedSuperUserId) {
-      this.generatedBy = this.loggedUserId;
-    } if (!this.loggedUserId && this.loggedSuperUserId) {
-      this.generatedBy = this.loggedSuperUserId;
-    }
-
-
-    const formData = new FormData();
-    if (this.files.length === 0) {
-      this.uploadDocumentFlag = true;
-      this.disableSubmitBtn = true;
-    } else {
-      for (const file of this.files) {
-        formData.append("fileName", file);
-      }
-    }
-    formData.append("documentId", this.documentId);
-    formData.append("generateBy", this.generatedBy);
-    formData.append("departmentName", this.departmentId);
-    formData.append("plantName", this.plant);
-    formData.append("documentApprovalStatus", "P");
-    formData.append("remarks", this.remarks);
-    console.log(formData);
-    
-    this.loginService.requestSubmit(formData).subscribe({
-      next: (event: any) => {
-        if (event instanceof HttpResponse) {
-          this.res = event.body;
-          if (this.res.message == "Success!!") {
-            this.successfulSubmitAlert();
-          }
-
-        }
-      },
-      error: (err: any) => {
-        if (err.error.message == null) {
-          this.unsuccessfulNullSubmitAlert();
-        }
-        if (err.error && err.error.message) {
-          this['msg'] += " " + err.error.message;
-          this.unsuccessfulSubmitAlert();
-        }
-      },
-    });
-
-  }
-
-
-  successfulSubmitAlert() {
-    Swal.fire({
-      position: "center",
-      icon: "success",
-      title: "Your request is being submitted successfully.",
-      showConfirmButton: false,
-      timer: 1500
-    }).then(() => {
-      window.location.reload();
-    });
-  }
-
-  unsuccessfulSubmitAlert() {
-    Swal.fire({
-      icon: "error",
-      title: "Oops...",
-      text: "Something went wrong!",
-    }).then(() => {
-      window.location.reload();
-    });
-  }
-
-  unsuccessfulNullSubmitAlert() {
-    Swal.fire({
-      icon: "error",
-      title: "Oops...",
-      text: "The form was not submitted properly!",
-    }).then(() => {
-    });
-  }
-
-
-  onFileDropped($event: any) {
-    this.prepareFilesList($event);
-
-  }
-
-  fileBrowseHandler(files: any) {
-
-
-
-    this.prepareFilesList(files.target.files);
-
-  }
-
-  deleteFile(index: number) {
-    if (this['files'][index].progress < 100) {
-      return;
-    }
-    this['files'].splice(index, 1);
-    this.calculateTotalFileSize(this['files']);
-  }
-
-  uploadFilesSimulator(index: number) {
-    setTimeout(() => {
-      if (index === this['files'].length) return;
-      const progressInterval = setInterval(() => {
-        if (this['files'][index].progress === 100) {
-          clearInterval(progressInterval);
-          this.uploadFilesSimulator(index + 1);
-        } else {
-          this['files'][index].progress += 5;
-        }
-      }, 50);
-    }, 50);
-
-  }
-
-  prepareFilesList(files: Array<any>) {
-
-    if (files != null) {
-      this.uploadDocumentFlag = false;
-      this.disableSubmitBtn = false;
-    }
-    for (const item of files) {
-      item.progress = 0;
-      this.files.push(item);
-
-      this.calculateTotalFileSize(this.files);
-    }
-    this.fileDropEl.nativeElement.value = "";
-    this.uploadFilesSimulator(0);
-
-  }
-
-  getBase64EncodedFileData(file: File): Observable<string> {
-    return new Observable(observer => {
-      const reader = new FileReader();
-
-      reader.onload = () => {
-        const { result } = reader;
-        const data = result as ArrayBuffer;
-        const base64Encoded = encode(data);
-
-        observer.next(base64Encoded);
-        observer.complete();
-      };
-
-      reader.onerror = () => {
-        observer.error(reader.error);
-      };
-
-      reader.readAsArrayBuffer(file);
-    });
-  }
-
-  calculateTotalFileSize(files: Array<any>) {
-    const fiftyMB = 2 * 1024 * 1024;
-    let totalSize = 0;
-
-    for (const file of files) {
-      totalSize += file.size;
-    }
-
-    if (totalSize <= fiftyMB) {
-      this['uploadDocumentSizeFlag'] = false;
-    } else {
-      this['uploadDocumentSizeFlag'] = true;
-    }
-
   }
 
   formatBytes(bytes: number, decimals = 2): string {
@@ -593,9 +244,6 @@ export class FileUploadNotificationComponent implements OnInit {
     return name.replace(/\./g, '/');
   }
 
-}
-function hideRequestFromButton() {
-  throw new Error('Function not implemented.');
 }
 
 
