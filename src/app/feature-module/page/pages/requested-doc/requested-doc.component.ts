@@ -217,6 +217,7 @@ export class RequestedDocComponent implements OnInit {
       // console.log(doucmentUrl, this.loggedUserRole, this.loggedUserName, this.loggedUserId, item);
     }
     
+    
   setFileUrl(fileUrl: any, fileName: any, fileSize: number, event: Event) {
     event.preventDefault(); // Prevents the modal from opening by default
   
