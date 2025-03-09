@@ -253,8 +253,7 @@ export class RequestedDocComponent implements OnInit {
     }, 10);
   }
   
-  
-  
+   
   // Function to show popup if file is too large
   fileSizePopup() {
     Swal.fire({
