@@ -197,7 +197,7 @@ export class RequestedDocComponent implements OnInit {
   getStatusText(statusCode: string): string {
     switch (statusCode) {
       case 'A':
-        return 'Approved';
+        return 'Approvedd';
       case 'R':
         return 'Rejected';
       case 'P':
@@ -298,176 +298,105 @@ export class RequestedDocComponent implements OnInit {
 
 
 
-  onSubmit() {
-    if (this.loggedUserId && !this.loggedSuperUserId) {
-      this.generatedBy = this.loggedUserId;
-    } if (!this.loggedUserId && this.loggedSuperUserId) {
-      this.generatedBy = this.loggedSuperUserId;
-    }
-
-
-    const formData = new FormData();
-    if (this.files.length === 0) {
-      this.uploadDocumentFlag = true;
-      this.disableSubmitBtn = true;
-    } else {
-      for (const file of this.files) {
-        formData.append("fileName", file);
-      }
-    }
-    formData.append("documentId", this.documentId);
-    formData.append("generateBy", this.generatedBy);
-    formData.append("departmentName", this.departmentId);
-    formData.append("plantName", this.plant);
-    formData.append("documentApprovalStatus", "P");
-    formData.append("remarks", this.remarks);
-    console.log(formData);
-    
-    this.loginService.requestSubmit(formData).subscribe({
-      next: (event: any) => {
-        if (event instanceof HttpResponse) {
-          this.res = event.body;
-          if (this.res.message == "Success!!") {
-            this.successfulSubmitAlert();
-          }
-
-        }
-      },
-      error: (err: any) => {
-        if (err.error.message == null) {
-          this.unsuccessfulNullSubmitAlert();
-        }
-        if (err.error && err.error.message) {
-          this['msg'] += " " + err.error.message;
-          this.unsuccessfulSubmitAlert();
-        }
-      },
-    });
-
-  }
-
-
-  successfulSubmitAlert() {
-    Swal.fire({
-      position: "center",
-      icon: "success",
-      title: "Your request is being submitted successfully.",
-      showConfirmButton: false,
-      timer: 1500
-    }).then(() => {
-      window.location.reload();
-    });
-  }
-
-  unsuccessfulSubmitAlert() {
-    Swal.fire({
-      icon: "error",
-      title: "Oops...",
-      text: "Something went wrong!",
-    }).then(() => {
-      window.location.reload();
-    });
-  }
-
-  unsuccessfulNullSubmitAlert() {
-    Swal.fire({
-      icon: "error",
-      title: "Oops...",
-      text: "The form was not submitted properly!",
-    }).then(() => {
-    });
-  }
-
-
-  onFileDropped($event: any) {
-    this.prepareFilesList($event);
-
-  }
-
-  fileBrowseHandler(files: any) {
 
 
 
-    this.prepareFilesList(files.target.files);
 
-  }
 
-  deleteFile(index: number) {
-    if (this['files'][index].progress < 100) {
-      return;
-    }
-    this['files'].splice(index, 1);
-    this.calculateTotalFileSize(this['files']);
-  }
 
-  uploadFilesSimulator(index: number) {
-    setTimeout(() => {
-      if (index === this['files'].length) return;
-      const progressInterval = setInterval(() => {
-        if (this['files'][index].progress === 100) {
-          clearInterval(progressInterval);
-          this.uploadFilesSimulator(index + 1);
-        } else {
-          this['files'][index].progress += 5;
-        }
-      }, 50);
-    }, 50);
 
-  }
 
-  prepareFilesList(files: Array<any>) {
 
-    if (files != null) {
-      this.uploadDocumentFlag = false;
-      this.disableSubmitBtn = false;
-    }
-    for (const item of files) {
-      item.progress = 0;
-      this.files.push(item);
 
-      this.calculateTotalFileSize(this.files);
-    }
-    this.fileDropEl.nativeElement.value = "";
-    this.uploadFilesSimulator(0);
+  // onFileDropped($event: any) {
+  //   this.prepareFilesList($event);
 
-  }
+  // }
 
-  getBase64EncodedFileData(file: File): Observable<string> {
-    return new Observable(observer => {
-      const reader = new FileReader();
+  // fileBrowseHandler(files: any) {
 
-      reader.onload = () => {
-        const { result } = reader;
-        const data = result as ArrayBuffer;
-        const base64Encoded = encode(data);
 
-        observer.next(base64Encoded);
-        observer.complete();
-      };
 
-      reader.onerror = () => {
-        observer.error(reader.error);
-      };
+  //   this.prepareFilesList(files.target.files);
 
-      reader.readAsArrayBuffer(file);
-    });
-  }
+  // }
 
-  calculateTotalFileSize(files: Array<any>) {
-    const fiftyMB = 2 * 1024 * 1024;
-    let totalSize = 0;
+  // deleteFile(index: number) {
+  //   if (this['files'][index].progress < 100) {
+  //     return;
+  //   }
+  //   this['files'].splice(index, 1);
+  //   this.calculateTotalFileSize(this['files']);
+  // }
 
-    for (const file of files) {
-      totalSize += file.size;
-    }
+  // uploadFilesSimulator(index: number) {
+  //   setTimeout(() => {
+  //     if (index === this['files'].length) return;
+  //     const progressInterval = setInterval(() => {
+  //       if (this['files'][index].progress === 100) {
+  //         clearInterval(progressInterval);
+  //         this.uploadFilesSimulator(index + 1);
+  //       } else {
+  //         this['files'][index].progress += 5;
+  //       }
+  //     }, 50);
+  //   }, 50);
 
-    if (totalSize <= fiftyMB) {
-      this['uploadDocumentSizeFlag'] = false;
-    } else {
-      this['uploadDocumentSizeFlag'] = true;
-    }
+  // }
 
-  }
+  // prepareFilesList(files: Array<any>) {
+
+  //   if (files != null) {
+  //     this.uploadDocumentFlag = false;
+  //     this.disableSubmitBtn = false;
+  //   }
+  //   for (const item of files) {
+  //     item.progress = 0;
+  //     this.files.push(item);
+
+  //     this.calculateTotalFileSize(this.files);
+  //   }
+  //   this.fileDropEl.nativeElement.value = "";
+  //   this.uploadFilesSimulator(0);
+
+  // }
+
+  // getBase64EncodedFileData(file: File): Observable<string> {
+  //   return new Observable(observer => {
+  //     const reader = new FileReader();
+
+  //     reader.onload = () => {
+  //       const { result } = reader;
+  //       const data = result as ArrayBuffer;
+  //       const base64Encoded = encode(data);
+
+  //       observer.next(base64Encoded);
+  //       observer.complete();
+  //     };
+
+  //     reader.onerror = () => {
+  //       observer.error(reader.error);
+  //     };
+
+  //     reader.readAsArrayBuffer(file);
+  //   });
+  // }
+
+  // calculateTotalFileSize(files: Array<any>) {
+  //   const fiftyMB = 2 * 1024 * 1024;
+  //   let totalSize = 0;
+
+  //   for (const file of files) {
+  //     totalSize += file.size;
+  //   }
+
+  //   if (totalSize <= fiftyMB) {
+  //     this['uploadDocumentSizeFlag'] = false;
+  //   } else {
+  //     this['uploadDocumentSizeFlag'] = true;
+  //   }
+
+  // }
 
   formatBytes(bytes: number, decimals = 2): string {
     if (bytes === 0) return "0 Bytes";
