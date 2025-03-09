@@ -167,12 +167,15 @@
               <td style="text-align: center;">{{ getDepartmentNames(client) }}</td>
               <td>
                 <div class="dropdown action-label">
-                  <a href="javascript:void(0);" class="btn btn-white btn-sm btn-rounded"
-                     aria-expanded="false"><i class="fa-regular fa-circle-dot text-success"
-                      [ngClass]="{
-                        'text-danger': client.isActive === false
-                      }"></i>
-                    {{ client.isActive }}</a>
+                  <a class="btn btn-white btn-sm btn-rounded" aria-expanded="false">
+                    <i class="fa-regular fa-circle-dot"
+                       [ngClass]="{
+                         'text-success': client.isActive,
+                         'text-danger': !client.isActive
+                       }">
+                    </i>
+                    {{ client.isActive ? 'Active' : 'Deactive' }}
+                  </a>
                 </div>
               </td>
               <td class="text-end">

@@ -1118,6 +1118,8 @@ export interface getpipeline {
 export interface getcontactlist {
   documentApprovalStatus: string;
   id: number;
+  fileName: string;
+  fileSize: number
   uniqueDocumentName: string;
   documentName: string;
   executerName: string;
