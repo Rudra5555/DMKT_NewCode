@@ -55,9 +55,9 @@
     @if (layoutMode === 'horizontal_mode') {
       <app-side-menu-two></app-side-menu-two>
     }
-    @if (layoutMode === 'twocolumn') {
+    <!-- @if (layoutMode === 'twocolumn') {
       <app-side-menu-three></app-side-menu-three>
-    }
+    } -->
     <router-outlet></router-outlet>
     <app-layout [ngClass]="{'d-none': page === 'job-view' ||  page === 'job-list' ||  page === 'coming-soon'}"></app-layout>
     <app-footer></app-footer>
