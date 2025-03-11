@@ -39,13 +39,13 @@ const routes: Routes = [
             (m) => m.UserManagementModule
           ),
       },
-      {
-        path: 'tickets',
-        loadChildren: () =>
-          import('./employee/tickets/tickets.module').then(
-            (m) => m.TicketsModule
-          ),
-      },
+      // {
+      //   path: 'tickets',
+      //   loadChildren: () =>
+      //     import('./employee/tickets/tickets.module').then(
+      //       (m) => m.TicketsModule
+      //     ),
+      // },
       // {
       //   path: 'sales',
       //   loadChildren: () =>
