@@ -525,7 +525,7 @@ successfulSubmitAlert() {
   Swal.fire({
     position: "center",
     icon: "success",
-    title: "New Department is added",
+    title: "New Sub-Area is added",
     showConfirmButton: false,
     timer: 1500
   }).then(() => {
