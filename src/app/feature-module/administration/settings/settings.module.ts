@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { SettingsRoutingModule } from './settings-routing.module';
 import { SettingsComponent } from './settings.component';
 import { ApprovalComponent } from './approval/approval.component';
-import { ChangePasswordComponent } from '../../auth/change-password/change-password.component';
+// import { ChangePasswordComponent } from '../../auth/change-password/change-password.component';
 import { CompanySettingsComponent } from './company-settings/company-settings.component';
 import { CronComponent } from './cron/cron.component';
 import { EmailSettingsComponent } from './email-settings/email-settings.component';
@@ -24,7 +24,7 @@ import { SharedModule } from 'src/app/shared/shared.module';
   declarations: [
     SettingsComponent,
     ApprovalComponent,
-    ChangePasswordComponent,
+    // ChangePasswordComponent,
     CompanySettingsComponent,
     CronComponent,
     EmailSettingsComponent,

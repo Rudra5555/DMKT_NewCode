@@ -235,11 +235,11 @@ const routes: Routes = [
       import('./auth/login/login.module').then((m) => m.LoginModule),
   },
  
-  {
-    path: 'register',
-    loadChildren: () =>
-      import('./auth/register/register.module').then((m) => m.RegisterModule),
-  },
+  // {
+  //   path: 'register',
+  //   loadChildren: () =>
+  //     import('./auth/register/register.module').then((m) => m.RegisterModule),
+  // },
  
   
  
