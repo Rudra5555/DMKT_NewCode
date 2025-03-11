@@ -250,18 +250,8 @@ const routes: Routes = [
         (m) => m.ForgotPasswordModule
       ),
   },
-  {
-    path: 'otp',
-    loadChildren: () =>
-      import('./auth/otp/otp.module').then((m) => m.OtpModule),
-  },
-  {
-    path: 'lock-screen',
-    loadChildren: () =>
-      import('./auth/lock-screen/lock-screen.module').then(
-        (m) => m.LockScreenModule
-      ),
-  },
+  
+ 
   {
     path: 'error-404',
     loadChildren: () =>
