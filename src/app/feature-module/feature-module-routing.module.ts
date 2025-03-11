@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { FeatureModuleComponent } from './feature-module.component';
-import { ChangePasswordComponent } from './auth/change-password/change-password.component';
+// import { ChangePasswordComponent } from './auth/change-password/change-password.component';
 
 const routes: Routes = [
   {
@@ -234,22 +234,13 @@ const routes: Routes = [
     loadChildren: () =>
       import('./auth/login/login.module').then((m) => m.LoginModule),
   },
-  {
-    path: 'change-password',
-    component: ChangePasswordComponent,
-  },
+ 
   {
     path: 'register',
     loadChildren: () =>
       import('./auth/register/register.module').then((m) => m.RegisterModule),
   },
-  {
-    path: 'forgot-password',
-    loadChildren: () =>
-      import('./auth/forgot-password/forgot-password.module').then(
-        (m) => m.ForgotPasswordModule
-      ),
-  },
+ 
   
  
   {

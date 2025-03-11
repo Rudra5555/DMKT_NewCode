@@ -1,8 +1,0 @@
-@if (page !== 'job-list' && page !== 'job-view') {
-  <div class="page-wrapper">
-    <router-outlet></router-outlet>
-  </div>
-}
-@if (page === 'job-list' || page === 'job-view') {
-  <router-outlet></router-outlet>
-}
