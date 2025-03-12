@@ -13,7 +13,7 @@ import { SettingsMenuComponent } from './common/settings-menu/settings-menu.comp
 import { RouterModule } from '@angular/router';
 import { LayoutComponent } from './common/layout/layout.component';
 import { FooterComponent } from './common/footer/footer/footer.component';
-import { HeaderModalComponent } from './common/headers/header-modal/header-modal.component';
+// import { HeaderModalComponent } from './common/headers/header-modal/header-modal.component';
 
 
 @NgModule({
@@ -22,7 +22,7 @@ import { HeaderModalComponent } from './common/headers/header-modal/header-modal
     SideMenuOneComponent,
     // SideMenuTwoComponent,
     HeaderOneComponent,
-    HeaderModalComponent,
+    // HeaderModalComponent,
     // SideMenuThreeComponent,
     SettingsMenuComponent,
     // HeaderTwoComponent,
