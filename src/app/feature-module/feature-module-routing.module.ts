@@ -243,20 +243,20 @@ const routes: Routes = [
  
   
  
-  {
-    path: 'error-404',
-    loadChildren: () =>
-      import('./page/error-pages/error404/error404.module').then(
-        (m) => m.Error404Module
-      ),
-  },
-  {
-    path: 'error-500',
-    loadChildren: () =>
-      import('./page/error-pages/error500/error500.module').then(
-        (m) => m.Error500Module
-      ),
-  },
+  // {
+  //   path: 'error-404',
+  //   loadChildren: () =>
+  //     import('./page/error-pages/error404/error404.module').then(
+  //       (m) => m.Error404Module
+  //     ),
+  // },
+  // {
+  //   path: 'error-500',
+  //   loadChildren: () =>
+  //     import('./page/error-pages/error500/error500.module').then(
+  //       (m) => m.Error500Module
+  //     ),
+  // },
   // {
   //   path: 'leads',
   //   loadChildren: () =>
