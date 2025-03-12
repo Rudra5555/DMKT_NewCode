@@ -206,13 +206,13 @@ const routes: Routes = [
       //   path: 'crm',
       //   loadChildren: () => import('./crm/crm.module').then((m) => m.CrmModule),
       // },
-      {
-        path: 'projects',
-        loadChildren: () =>
-          import('../feature-module/employee/projects/projects.module').then(
-            (m) => m.ProjectsModule
-          ),
-      },
+      // {
+      //   path: 'projects',
+      //   loadChildren: () =>
+      //     import('../feature-module/employee/projects/projects.module').then(
+      //       (m) => m.ProjectsModule
+      //     ),
+      // },
       // {
       //   path: 'goals',
       //   loadChildren: () =>
