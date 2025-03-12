@@ -137,11 +137,11 @@ const routes: Routes = [
       //       (m) => m.SettingsModule
       //     ),
       // },
-      {
-        path: 'profile',
-        loadChildren: () =>
-          import('./page/profile/profile.module').then((m) => m.ProfileModule),
-      },
+      // {
+      //   path: 'profile',
+      //   loadChildren: () =>
+      //     import('./page/profile/profile.module').then((m) => m.ProfileModule),
+      // },
       {
         path: 'subscriptions',
         loadChildren: () =>
