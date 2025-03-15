@@ -20,7 +20,6 @@ export class UserListComponent implements OnInit {
   public searchDataValue = '';
   dataSource!: MatTableDataSource<getClient>;
   public routes = routes;
-  // pagination variables
   public lastIndex = 0;
   public pageSize = 10;
   public totalData = 0;
@@ -37,22 +36,10 @@ export class UserListComponent implements OnInit {
   loggedInUser: any;
   adminRoleFlag: boolean = false;
   librarianRoleFlag: boolean = false;
-
   uniqueDepartments: string[] = [];
   uniquePlants: string[] = [];
-
   selectedPlant: string = '';
   selectedDepartment: string = '';
-
-// selectedDepartment: string = '';
-// selectedPlant: string = '';
-// filteredRecords: any[] = []; 
-// allRecords: any[] = [];
-// copyDataList:any
-
-  //** / pagination variables
-  // constructor(private data: DataService) {}
-
   constructor(
     private data: DataService,
     private formBuilder: FormBuilder,
@@ -62,33 +49,21 @@ export class UserListComponent implements OnInit {
     private idleService: IdleService
 
   ) {
-
-
-
   }
 
   ngOnInit(): void {
     this.getTableData();
     this.cdr.markForCheck();
 
-
     const client = this.idleService.getClientData();
-    console.log("Client Data:", client);
-
-   
     this.loggedInUser = localStorage.getItem('role')?.trim().toLowerCase();
-    console.log("Logged In User:", this.loggedInUser);
   
     this.adminRoleFlag = this.loggedInUser === 'admin';
     this.librarianRoleFlag = this.loggedInUser === 'librarian';
   
-    console.log("Admin Role Flag:", this.adminRoleFlag);
-    console.log("Librarian Role Flag:", this.librarianRoleFlag);
-  
     this.cdr.detectChanges();  // Force UI update
   }
 
-  
   private getTableData(): void {
     this.clientsData = [];
     this.serialNumberArray = [];
@@ -97,15 +72,10 @@ export class UserListComponent implements OnInit {
           next: (event: any) => {
             if (event instanceof HttpResponse) {
             const res=event.body
-            // console.log("User Data:", res);
-            // this.copyDataList=res.response;
 
             let dropdownData = this.getUniqueDropdownOptions(res);
             this.uniqueDepartments = dropdownData.uniqueDepartments;
             this.uniquePlants = dropdownData.uniquePlants;
-
-            // console.log("dropdown datas:::",dropdownData);
-
             this.totalData = res.response.length;
               
             res.response.map((res: getClient, index: number) => {
@@ -151,15 +121,10 @@ export class UserListComponent implements OnInit {
 
     this.clientsData = [];
     this.serialNumberArray = [];
-    // console.log("Selected Plant:", this.selectedPlant);
-    // console.log("Selected Department:", this.selectedDepartment);
-
        this.loginService.getFilterUserList(this.selectedDepartment,this.selectedPlant).subscribe({
           next: (event: any) => {
             if (event instanceof HttpResponse) {
             const res=event.body
-            // console.log("Filter User Data:", res);
-  
             this.totalData = res.response.length;
               
             res.response.map((res: getClient, index: number) => {
@@ -183,9 +148,6 @@ export class UserListComponent implements OnInit {
           }
         });
   }
-  
-  
-
 
   getPlantNames(client: getClient): string {
     return client.departmentNameList && Array.isArray(client.departmentNameList)
@@ -199,8 +161,6 @@ export class UserListComponent implements OnInit {
       : 'N/A';
   }
   
-  
-
   public sortData(sort: Sort) {
     const data = this.clientsData.slice();
 
@@ -271,21 +231,14 @@ export class UserListComponent implements OnInit {
     }
   }
 
-
   navigateWithClient(client: any) {
     if (!client) return;
-    console.log("Navigating to User Management Profile with Client Data:", client);
-    
-    console.log(client.userPicture);
-    
     this.idleService.setClientData(client);
-    console.log("Client data stored in IdleService.");
   }
 
 
   setSelectedClient(client: any) {
     this.selectedClient = { ...client }; // Store selected client data
-    console.log("Selected Client:", this.selectedClient);
   }
 
 }

@@ -8,21 +8,19 @@
         <h3 class="page-title">User Management</h3>
         <ul class="breadcrumb">
           <li class="breadcrumb-item">Dashboard</li>
-          <!-- <li class="breadcrumb-item active">User Management</li> -->
         </ul>
       </div>
       <div class="col-auto float-end ms-auto" *ngIf="librarianRoleFlag">
-        <a class="button btn btn-success" data-bs-toggle="modal" data-bs-target="#add_client_librarian" id="addUserLibrarian" >
+        <a class="button btn btn-success" data-bs-toggle="modal" data-bs-target="#add_client_librarian"
+          id="addUserLibrarian">
           <i class="la la-plus-circle"></i> Add User
         </a>
       </div>
-      
       <div class="col-auto float-end ms-auto" *ngIf="adminRoleFlag">
         <a class="button btn btn-success" data-bs-toggle="modal" data-bs-target="#add_client_admin" id="addUserAdmin">
           <i class="la la-plus-circle"></i> Add User
         </a>
       </div>
-      
     </div>
   </div>
   <!-- /Page Header -->
@@ -30,50 +28,19 @@
   <!-- Search Filter -->
   <div class="row filter-row">
 
-
-    <div class="col-sm-6 col-md-4"> 
+    <div class="col-sm-6 col-md-4">
       <div class="input-block mb-3 form-focus inputs">
         <mat-form-field class="example-full-width">
           <mat-label>Search</mat-label>
-          <input class="form-control floating datetimepicker" type="text" matInput 
-                 [(ngModel)]="searchDataValue" 
-                 [ngModelOptions]="{standalone: true}" 
-                 (ngModelChange)="searchData(searchDataValue)" 
-                  />
+          <input class="form-control floating datetimepicker" type="text" matInput [(ngModel)]="searchDataValue"
+            [ngModelOptions]="{standalone: true}" (ngModelChange)="searchData(searchDataValue)" />
         </mat-form-field>
       </div>
     </div>
-
-    
-    <!-- <div class="col-sm-6 col-md-3">
-      <div class="input-block mb-3 form-focus select-focus select">
-        <mat-select class="custom-mat-select floating-mat-select" placeholder="Select Plant">
-          <mat-option selected>Select Plant</mat-option>
-          <mat-option *ngFor="let plant of uniquePlants" [value]="plant">
-            {{ plant }}
-          </mat-option>
-        </mat-select>
-        <label class="focus-label">Plant</label>
-      </div>
-    </div>
     <div class="col-sm-6 col-md-3">
       <div class="input-block mb-3 form-focus select-focus select">
-        <mat-select class="custom-mat-select floating-mat-select" placeholder="Select Department">
-          <mat-option selected>Select Department</mat-option>
-          <mat-option *ngFor="let Department of uniqueDepartments" [value]="Department">
-            {{ Department }}
-          </mat-option>
-        </mat-select>
-        <label class="focus-label">Department</label>
-      </div>
-    </div>
-    <div class="col-sm-3 col-md-2">
-      <a class="btn btn-success w-100"> Search </a>
-    </div> -->
-
-    <div class="col-sm-6 col-md-3">
-      <div class="input-block mb-3 form-focus select-focus select">
-        <mat-select class="custom-mat-select floating-mat-select" placeholder="Select Plant" [(ngModel)]="selectedPlant">
+        <mat-select class="custom-mat-select floating-mat-select" placeholder="Select Plant"
+          [(ngModel)]="selectedPlant">
           <mat-option [value]="''">Select Plant</mat-option>
           <mat-option *ngFor="let plant of uniquePlants" [value]="plant">
             {{ plant }}
@@ -82,10 +49,11 @@
         <label class="focus-label">Plant</label>
       </div>
     </div>
-    
+
     <div class="col-sm-6 col-md-3">
       <div class="input-block mb-3 form-focus select-focus select">
-        <mat-select class="custom-mat-select floating-mat-select" placeholder="Select Department" [(ngModel)]="selectedDepartment">
+        <mat-select class="custom-mat-select floating-mat-select" placeholder="Select Department"
+          [(ngModel)]="selectedDepartment">
           <mat-option [value]="''">Select Department</mat-option>
           <mat-option *ngFor="let department of uniqueDepartments" [value]="department">
             {{ department }}
@@ -94,11 +62,11 @@
         <label class="focus-label">Department</label>
       </div>
     </div>
-    
+
     <div class="col-sm-3 col-md-2">
       <a class="btn btn-success w-100" (click)="applyFilter()"> Search </a>
     </div>
-    
+
   </div>
   <!-- Search Filter -->
 
@@ -128,7 +96,7 @@
             <tr>
               <th mat-sort-header="name">Employee Name</th>
               <th mat-sort-header="clientId">Employee ID</th>
-              
+
               <th mat-sort-header="email">Email ID</th>
               <th mat-sort-header="phone">Mobile</th>
               <th mat-sort-header="role" style="padding-left: 60px;">Employee Role</th>
@@ -138,38 +106,28 @@
               <th class="text-end">Action</th>
             </tr>
           </thead>
-          <tbody >
+          <tbody>
             @for (client of clientsData; track client; let i = $index) {
             <tr>
               <td>
-                <!-- <h2 class="table-avatar">
-                  <a [routerLink]="routes.userProfile" class="avatar"><img [src]="client.userPicture" alt="" /></a>
-                  <a [routerLink]="routes.userProfile">{{
-                    client.userName
-                    }}</a>
-                </h2> -->
                 <h2 class="table-avatar">
-                  <a [routerLink]="" class="avatar"><img [src]="client.userPicture || './assets/img/userIcon.png'" alt="" /></a>
+                  <a [routerLink]="" class="avatar"><img [src]="client.userPicture || './assets/img/userIcon.png'"
+                      alt="" /></a>
                   <a [routerLink]="routes.userProfile" (click)="navigateWithClient(client)">{{
                     client.userName
                     }}</a>
                 </h2>
               </td>
               <td>{{ client.userId }}</td>
-              <!-- <td>{{ client.company }}</td> -->
               <td>{{ client.emailId }}</td>
-              <td >{{ client.phoneNumber }}</td>
+              <td>{{ client.phoneNumber }}</td>
               <td style="padding-left: 65px;">{{ client.role }}</td>
-              <!-- <td>{{ client.plant }}</td> -->
-               <!-- <td>{{ client.departmentName? client.departmentName : 'N/A' }}</td>
-              <td>{{ client.plantName? client.plantName : 'N/A' }}</td> -->
               <td style="text-align: center;">{{ getPlantNames(client) }}</td>
               <td style="text-align: center;">{{ getDepartmentNames(client) }}</td>
               <td>
                 <div class="dropdown action-label">
                   <a class="btn btn-white btn-sm btn-rounded" aria-expanded="false">
-                    <i class="fa-regular fa-circle-dot"
-                       [ngClass]="{
+                    <i class="fa-regular fa-circle-dot" [ngClass]="{
                          'text-success': client.isActive,
                          'text-danger': !client.isActive
                        }">
@@ -183,18 +141,16 @@
                   <a class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i
                       class="material-icons">more_vert</i></a>
                   <div class="dropdown-menu dropdown-menu-right">
-                    <!-- <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#edit_client" (click)="setSelectedClient(client)"><i
-                        class="fa-solid fa-pencil m-r-5" style="color: rgb(8, 28, 247)"></i> Edit</a> -->
 
-                        <a *ngIf="adminRoleFlag" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#edit_client_admin" (click)="setSelectedClient(client)">
-                          <i class="fa-solid fa-pencil m-r-5" style="color: rgb(8, 28, 247)"></i> Edit
-                        </a>
-                        
-                        <!-- Edit Button for Librarian -->
-                        <a *ngIf="librarianRoleFlag" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#edit_client" (click)="setSelectedClient(client)">
-                          <i class="fa-solid fa-pencil m-r-5" style="color: rgb(8, 28, 247)"></i> Edit
-                        </a>
-                      
+                    <a *ngIf="adminRoleFlag" class="dropdown-item" data-bs-toggle="modal"
+                      data-bs-target="#edit_client_admin" (click)="setSelectedClient(client)">
+                      <i class="fa-solid fa-pencil m-r-5" style="color: rgb(8, 28, 247)"></i> Edit
+                    </a>
+
+                    <a *ngIf="librarianRoleFlag" class="dropdown-item" data-bs-toggle="modal"
+                      data-bs-target="#edit_client" (click)="setSelectedClient(client)">
+                      <i class="fa-solid fa-pencil m-r-5" style="color: rgb(8, 28, 247)"></i> Edit
+                    </a>
                   </div>
                 </div>
               </td>
