@@ -5,8 +5,6 @@ import { IDropdownSettings } from 'ng-multiselect-dropdown';
 import { LoginComponentService } from 'src/app/services/login-component.service';
 import { UploadDocumentComponentService } from 'src/app/services/upload-document-component.service';
 import Swal from 'sweetalert2';
-// import {  IDropdownSettings } from 'ng-multiselect-dropdown';
-
 
 @Component({
   selector: 'app-user-management-modal',
@@ -75,7 +73,6 @@ export class UserManagementModalComponent implements OnInit {
 
   this.addUserForm.get('plant')?.valueChanges.subscribe(value => {
     if (value != null) {
-      console.log("Plant selected: ", value);
       this.getAllPlantList(value, "plants");
       this.plantOption = value;
       if(this.plantOption == "CPP (1740MW)"){
@@ -84,63 +81,37 @@ export class UserManagementModalComponent implements OnInit {
         this.newPlant = false;
       }
     } else {
-      console.log("No plant selected or value is null.");
     }
   });
   this.addUserForm.get('department')?.valueChanges.subscribe(value => {
     const [deptName, deptAbbr] = value.split('~');
-    // this.getSubAreaList(deptName, "department");
     this.selectedDeptCatName = deptName;
-    // this.selectedDeptCatName = deptAbbr;
-    console.log("Selected department: ", deptName);
     
   });
   
   }
-
-
-
   getMainHeadList() {
 
       this.uploadDocument.allDataList("POWER O&M", "main-head").subscribe({
         next: (event: any) => {
           if (event instanceof HttpResponse) {
-            // this.plantList = event.body?.categoryList || [];
-            this.plantList = (event.body?.categoryList || []).filter((item: { catId: number; }) => item.catId !== 9);
-
-            console.log(this.plantList);
-            
+            this.plantList = (event.body?.categoryList || []).filter((item: { catId: number; }) => item.catId !== 9);          
           }
         },
         error: (err: any) => {
           console.error(err);
         }
-      });
-    
+      }); 
   }
 
   toggleButton() {
-    this.isHodChecked = this.addUserForm.get('HOD')?.value;
-    console.log("HOD checked: ", this.isHodChecked);
-    
+    this.isHodChecked = this.addUserForm.get('HOD')?.value; 
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['client'] && this.client && this.editUserForm) {
 
-      console.log("clienttt",this.client);
-      
-
       this.roles = this.client.accessRoles ? this.client.accessRoles.split(',') : [];
-      console.log("Parsed roles:", this.roles);
-
-    //   const departmentNames = this.client.departmentNameList
-    //   ? this.client.departmentNameList.map((dept: { departmentName: any; }) => dept.departmentName).join(', ')
-    //   : '';
-
-    // const plantNames = this.client.departmentNameList
-    //   ? this.client.departmentNameList.map((plant: { plantName: any; }) => plant.plantName).join(', ')
-    //   : '';
 
     const departmentNames = this.client.departmentNameList && Array.isArray(this.client.departmentNameList)
     ? this.client.departmentNameList.map((dept: { departmentName: any; }) => dept.departmentName || 'N/A').join(', ')
@@ -172,14 +143,10 @@ export class UserManagementModalComponent implements OnInit {
   getAllPlantList(selectedValue: string, plantHeader: string) {
 
     if (selectedValue != '' && plantHeader != null) {
-console.log("selectedValue",selectedValue);
-console.log("plantHeader",plantHeader);
       this.uploadDocument.allPlantList(selectedValue, plantHeader).subscribe({
         next: (event: any) => {
           if (event instanceof HttpResponse) {
             this.departmentList = event.body?.categoryList || [];
-            console.log("Updated departmentList: ", this.departmentList);
-            
           }
         },
         error: (err: any) => {
@@ -208,15 +175,11 @@ console.log("plantHeader",plantHeader);
         accessRoles: this.getSelectedRoles(),
         userPicture: this.files?.length ? this.files[0].base64 : null, 
       };
-  
-      console.log('Payload:', payload);
       
           this.loginService.addUser(payload).subscribe({
               next: (event: any) => {
                 if (event instanceof HttpResponse) {
                   const resp = event.body
-
-                  console.log("response =>>",resp);
                   this.successfulSubmitAlert();
                  
       
@@ -254,18 +217,13 @@ console.log("plantHeader",plantHeader);
         accessRoles: this.getSelectedRoles(),
         userPicture: this.files?.length ? this.files[0].base64 : null, 
       };
-  
-      console.log('Payload:', payload);
       
           this.loginService.addUser(payload).subscribe({
               next: (event: any) => {
                 if (event instanceof HttpResponse) {
                   const resp = event.body
-
-                  console.log("response =>>",resp);
                   this.successfulSubmitAlert();
                  
-      
                 }
               },
               error: (err: any) => {
@@ -297,17 +255,12 @@ console.log("plantHeader",plantHeader);
         accessRoles: this.getSelectedRolesEdit(),
         userPicture: this.files?.length ? this.files[0].base64 : null, 
       };
-  
-      console.log('Payload:', payload);
       
           this.loginService.addUser(payload).subscribe({
               next: (event: any) => {
                 if (event instanceof HttpResponse) {
                   const resp = event.body
-
-                  console.log("response =>>",resp);
                   this.successfulSubmitAlert();
-                 
       
                 }
               },
@@ -340,15 +293,11 @@ console.log("plantHeader",plantHeader);
         accessRoles: this.getSelectedRolesEdit(),
         userPicture: this.files?.length ? this.files[0].base64 : null, 
       };
-  
-      console.log('Payload:', payload);
       
           this.loginService.addUser(payload).subscribe({
               next: (event: any) => {
                 if (event instanceof HttpResponse) {
                   const resp = event.body
-
-                  console.log("response =>>",resp);
                   this.successfulSubmitAlert();
                  
       
@@ -374,8 +323,6 @@ console.log("plantHeader",plantHeader);
       showConfirmButton: false,
       timer: 1500
     }).then(() => {
-
-      // window.location.reload();
       window.location.href = window.location.href;
     });
   }
@@ -407,10 +354,8 @@ console.log("plantHeader",plantHeader);
 
 
   onItemSelect(item: any) {
-    //console.log(item);
   }
   onSelectAll(items: any) {
-    //console.log(items);
   }
   uploadFilesSimulator(index: number) {
     setTimeout(() => {
@@ -437,7 +382,6 @@ console.log("plantHeader",plantHeader);
 
 
   prepareFilesList(files: Array<any>) {
-    console.log("files",files);
     
     if (files != null) {
       this.uploadDocumentFlag = false;
@@ -449,8 +393,6 @@ console.log("plantHeader",plantHeader);
       this.calculateTotalFileSize(this.files);
     }
     this.uploadFilesSimulator(0);
-   // this.uploadFileForm.get('uploadFile')?.setValue(this.files);
-
   }
 
   convertToBase64(file: any): void {
@@ -458,21 +400,14 @@ console.log("plantHeader",plantHeader);
   
     reader.onload = () => {
       const base64String = reader.result as string;
-  
-      // Print the Base64 string to the console
-      console.log('Base64 String:', base64String);
-  
-      // You can store the base64String in the file object or use it as needed
-      file.base64 = base64String;  // Storing base64 in the file object (optional)
-  
-      // Optionally, handle the Base64 string further here (e.g., send it to an API)
+      file.base64 = base64String;
     };
   
     reader.onerror = (error) => {
       console.error('Error reading file:', error);
     };
   
-    reader.readAsDataURL(file);  // Convert the file to Base64 string
+    reader.readAsDataURL(file);
   }
 
   calculateTotalFileSize(files: Array<any>) {
@@ -496,7 +431,6 @@ console.log("plantHeader",plantHeader);
 
 }
 fileBrowseHandler(files: any) {
-  // console.log("upload agaiannn");
   this.prepareFilesList(files.target.files);
 }
 
@@ -509,7 +443,6 @@ deleteFile(index: number) {
   this.files.splice(index, 1);
 
   this.calculateTotalFileSize(this.files);
-  //this.uploadFileForm.get('uploadFile')?.setValue(this.files);
 }
 
 
@@ -532,13 +465,5 @@ addUser(){
     .join(','),
     isActive: formValues.IsActive, 
   };
-
-  // Print the payload
-  console.log('Payload:', payload);
-  
-
 }
-
-
-
 }

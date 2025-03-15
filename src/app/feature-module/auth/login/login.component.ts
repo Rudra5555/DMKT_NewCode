@@ -22,8 +22,6 @@ import * as CryptoJS from 'crypto-js';
 import Swal from 'sweetalert2';
 import { an } from '@fullcalendar/core/internal-common';
 
-
-
 const subject = new Subject<string>();
 
 interface returndata {
@@ -62,22 +60,12 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
     this.timestamp = Date.now().toString();
-
-
-
-
     localStorage.clear();
- 
-
       this.loginForm = this.formBuilder.group({
         emailId: ['', [Validators.required]],  
         password: ['', [Validators.required]],
       
-      });
-     
-      // // localStorage.setItem("Passeord", "password");\
-      // localStorage.removeItem('user_role');
-      
+      });    
   }
 
   lowercasePasswordValidator(control: AbstractControl): ValidationErrors | null {
@@ -89,18 +77,13 @@ export class LoginComponent implements OnInit {
     return null;
   }
 
-
-
-
 get formFields(){return this.loginForm.controls; }
 
 
 onClickSubmit(formData: any){
-  // alert("called 1st")
   if (this.loginForm.invalid) {
      this.loginForm.markAllAsTouched();
       return;
-    
   }
   
    let loginData={
@@ -108,45 +91,13 @@ onClickSubmit(formData: any){
     'password': this.loginForm.controls['password'].value
    }
   
-  
-  // }
   if(loginData){
     this.loginService.login(loginData).subscribe({
       next: (event: any) => {
         if (event instanceof HttpResponse) {
-          //  this.data = event.body
-          this.data={
-            "status": 200,
-            "response": {
-                "userName": "Librarian",
-                "userId":3,
-                "role": "Librarian",
-                "accessRoles": [
-                    "User",
-                    "Admin",
-                    "HOD"
-                ],
-                "title":"Rahul",
-                "displayName": "Das",
-                "departmentNameList": [
-                    {
-                        "departmentName": "OPERATION",
-                        "plantName": "CPP-2 (540MW)"
-                    },
-                    {
-                        "departmentName": "C&I",
-                        "plantName": "CPP-3 (1200MW)"
-                    }
-                ],
-                "userPicture": "1234567890",
-                "phoneNumber": "9678824924",
-                "emailId": "nitish@gmail.com"
-            },
-            "message": "success!!"
-        }
+           this.data = event.body
                    
-          if(this.data!=null){
-           
+          if(this.data!=null){   
             if(this.data.status ===417){
 
               this.errorFlg=true;
@@ -172,8 +123,7 @@ onClickSubmit(formData: any){
               this.getEmail = this.data.response.emailId;
               this.getPicture = this.data.response.userPicture;
               this.accessRoles = this.data.response.accessRoles;
-              console.log("Name",this.getDisplayName);
-              console.log("deptDetails",this.departmentDetails);
+              
               
 
               localStorage.setItem('role',this.getRoleData);
@@ -192,12 +142,10 @@ onClickSubmit(formData: any){
            if(this.getRoleData == "Admin"){
 
             const userId = this.data.response.userId;
-            // const userId = "2";
             const userName = this.data.response.userName; 
-            // const userName = "Admin"; 
             const secretKey = this.timestamp;
             const encryptedParam = CryptoJS.AES.encrypt(JSON.stringify(this.data.response.userId), secretKey).toString();
-            console.log("encrypted::",encryptedParam);
+            // console.log("encrypted::",encryptedParam);
             this.router.navigate([routes.employee],{queryParams : { param: encryptedParam }}) 
             localStorage.setItem("loggedUserName", userName);
             localStorage.setItem("loggedInUserId",userId);
@@ -210,7 +158,7 @@ onClickSubmit(formData: any){
             localStorage.setItem("loggedInUserId",userId);
             const secretKey = this.timestamp;
             const encryptedParam = CryptoJS.AES.encrypt(JSON.stringify(this.data.value), secretKey).toString();
-            console.log("encrypted::",encryptedParam);
+            // console.log("encrypted::",encryptedParam);
             this.router.navigate([routes.employee],{queryParams : { param: encryptedParam }})   
             localStorage.setItem("loggedUserName",this.data.response.userName);        
           }
@@ -226,16 +174,15 @@ onClickSubmit(formData: any){
            localStorage.setItem("loggedUserName",this.data.response.userName);
            const secretKey = this.timestamp;
            const encryptedParam = CryptoJS.AES.encrypt(JSON.stringify(this.data.response), secretKey).toString();
-           console.log("encrypted::",encryptedParam);     
+          //  console.log("encrypted::",encryptedParam);     
             this.router.navigate([routes.employee],{queryParams : { param: encryptedParam }})
           }
 
           if(this.getRoleData == "SuperUser"){
             this.router.navigate([routes.employee],{queryParams : this.data.response})
-            console.log("super user",this.getRoleData)
             const secretKey = this.timestamp;
             const encryptedParam = CryptoJS.AES.encrypt(JSON.stringify(this.data.response), secretKey).toString();
-            console.log("encrypted::",encryptedParam);
+            // console.log("encrypted::",encryptedParam);
 
             localStorage.setItem("loggedUserName",this.data.response.userName);
             const userId = this.data.response.userId;
@@ -256,16 +203,11 @@ onClickSubmit(formData: any){
            localStorage.setItem("loggedUserName",this.data.response.userName);
            const secretKey =  this.timestamp;
            const encryptedParam = CryptoJS.AES.encrypt(JSON.stringify(this.data.response), secretKey).toString();
-           console.log("encrypted::",encryptedParam);
-           
-  
+          //  console.log("encrypted::",encryptedParam);
+          
             this.router.navigate([routes.employee],{queryParams : { param: encryptedParam }})
           }
-      
-  
-          }
-
-         
+          }    
           const msg = JSON.stringify(event) + ": Successful!";
         }
       },
@@ -275,15 +217,10 @@ onClickSubmit(formData: any){
         if (err.error && err.error.message) {
           msg += " " + err.error.message;
         }
-  
-        this.message.push(msg);
-     
+        this.message.push(msg); 
       }
-    });
-  
-  
+    }); 
   }
-
 }
 
 sucessAlert(message:any){
@@ -292,7 +229,6 @@ Swal.fire({
   icon: "success"
 });
 }
-
   navigate() {
     this.router.navigate([routes.adminDashboard]);
   }
@@ -302,25 +238,6 @@ Swal.fire({
     this.password[index] = !this.password[index]
   }
 
-
-  test(){
-
-   // const Test1 = sessionStorage.getItem('Email');
-  //  //console.log("from Session"+Test1)
-
-  //  const test2 = localStorage.getItem('EmailId');
-  //  //console.log("from Session"+test2)
-
-   
-  }
-  // bottomCenter(message: string, tittle?: string) {
-  //   this.toaster.info(message, tittle || 'Kanakku', {
-  //     timeOut: 1000,
-  //     progressBar: true,
-  //     progressAnimation: 'increasing',
-  //     positionClass: 'toast-bottom-center',
-  //   });
-  // }
   resetErrFlag(){
     this.errorFlg=false;
   }

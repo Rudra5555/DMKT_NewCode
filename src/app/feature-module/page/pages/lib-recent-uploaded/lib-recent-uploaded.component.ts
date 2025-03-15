@@ -244,9 +244,6 @@ export class LibRecentUploadedComponent implements OnInit {
      this.filteredList = this.fullDataList.filter((item: getRecentDocument) => 
        item.fileName.toLowerCase().includes(filterValue)
      );
-   
-     console.log("Filtered List:", this.filteredList);
-   
      this.skip = 0;
      this.calculateTotalPages(this.filteredList.length, this.pageSize);
      this.paginateData(this.filteredList);

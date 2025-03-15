@@ -40,10 +40,7 @@ export class UserManagementProfileComponent implements OnInit {
       this.picture = storedClient.userPicture;
       this.sanitizedImage = this.sanitizer.bypassSecurityTrustUrl(this.picture);
       this.departmentNameList = storedClient.departmentNameList;
-
-      console.log('Received Client Data from IdleService:', storedClient);
-    } else {
-      console.log('No client data found');
+    } else { 
     }
     this.cdr.detectChanges();
   }

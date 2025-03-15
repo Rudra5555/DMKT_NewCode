@@ -40,8 +40,8 @@
 
   .files-list {
     width: 100%;
-    max-width: 450px; /* Allows it to shrink on smaller screens */
-    height: 200px; /* Increased height */
+    max-width: 450px;
+    height: 200px;
     padding: 2rem;
     text-align: center;
     border: dashed 2px hsl(120, 43%, 46%);
@@ -51,8 +51,8 @@
     position: relative;
     margin: 20px auto;
     transition: all 0.3s ease-in-out;
-    overflow: auto; /* Handles content overflow */
-    box-sizing: border-box; /* Ensures padding is included in height */
+    overflow: auto;
+    box-sizing: border-box;
   .submit{
     background-color: #215df3;
   }

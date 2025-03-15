@@ -56,7 +56,8 @@
           </div>
         </div>
         <div class="table-responsive">
-          <table matSort (matSortChange)="sortData($event)" class="table table-striped custom-table datatable contact-table">
+          <table matSort (matSortChange)="sortData($event)"
+            class="table table-striped custom-table datatable contact-table">
             <thead>
               <tr>
                 <th mat-sort-header="name">Document Name</th>
@@ -67,7 +68,7 @@
             </thead>
             <tbody style="text-align: center;">
               <div *ngIf="isLoading" class="spinner-border" style="align-items: center;margin-left: 250%;">
-               
+
               </div>
               <tr *ngFor="let item of readFileNotificationList; ">
                 <td>
@@ -76,28 +77,21 @@
                     </a>
                   </h2>
                 </td>
-
                 <td>
                   {{ item.executedByName }}
-
                 </td>
-
                 <td>
                   {{ item.executedOn }}
-
                 </td>
                 <td>
                   {{ getStatusText(item.status) }}
-                
                 </td>
               </tr>
-
               <tr *ngIf="!isLoading && readFileNotificationList.length==0">
                 <td colspan="6" style="text-align: center; color: red">
                   No Records Found!
                 </td>
               </tr>
-
             </tbody>
           </table>
         </div>
@@ -175,7 +169,5 @@
         </div>
       </div>
     </div>
-
   </div>
-
 </div>

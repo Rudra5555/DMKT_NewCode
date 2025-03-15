@@ -5,10 +5,8 @@ import { routes } from 'src/app/core/core.index';
 import { DataService } from 'src/app/core/services/data/data.service';
 import { apiResultFormat, getStatutoryDoc } from 'src/app/core/services/interface/models';
 import { pageSelection } from 'src/app/feature-module/employee/employees/departments/departments.component';
-
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { MatChipEditedEvent, MatChipInputEvent } from '@angular/material/chips';
-
 import { FormGroup, FormBuilder, Validators, ReactiveFormsModule } from "@angular/forms";
 import { clientsDatas, companiesList } from 'src/app/core/core.index';
 import { FileManagementService } from 'src/app/services/file-management.service';
@@ -16,7 +14,6 @@ import { HttpResponse } from '@angular/common/http';
 import { BehaviorSubject, flatMap, Observable, ReplaySubject, Subject } from 'rxjs';
 import { LoginComponentService } from 'src/app/services/login-component.service';
 import { encode } from 'base64-arraybuffer';
-
 import { NgxDocViewerModule, ViewerType } from 'ngx-doc-viewer';
 import Swal from 'sweetalert2';
 import { ThisReceiver } from '@angular/compiler';
@@ -98,24 +95,17 @@ export class StatutoryDocComponent implements OnInit {
   generatedBy: any;
   selectedFileUrl: any;
   subject = new BehaviorSubject('')
-
-  isLoading: boolean = false; 
-
-
-
+  isLoading: boolean = false;
 
   //** / pagination variables
   constructor(private data: DataService, private datePipe: DatePipe, _uploadService: FileManagementService, private formBuilder: FormBuilder, private loginService: LoginComponentService) {
-
     this.bsRangeValue = [this.bsValue, this.maxDate];
-
   }
 
   setLast7Days() {
     const endDate = new Date();
     const startDate = new Date();
     startDate.setDate(endDate.getDate() - 6);
-
     this.bsRangeValue = [startDate, endDate];
     this.onDateRangeSelected();
   }
@@ -123,41 +113,8 @@ export class StatutoryDocComponent implements OnInit {
   onDateRangeSelected() {
     this.startDate = this.formatDate(this.bsRangeValue[0]);
     this.endDate = this.formatDate(this.bsRangeValue[1]);
-
     this.getStatutoryFileList()
-
-   
-    // this.loginService.AllAdminFileList(startDate, endDate).subscribe({
-    //   next: (event: any) => {
-    //     if (event instanceof HttpResponse) {
-    //       this.res = event.body;
-    //       this.res = event.body.response;
-    //       console.log(this.res);
-          
-
-    //       this.res = event.body.response.filter((file: any) =>
-    //         !file.isHodDocument && file.isStatutory && !file.isRestrictedDocument
-    //       );
-    //       this.fileList = this.res;
-
-    //       console.log(this.fileList);
-          
-    // };
-    
-    //   },
-    //   error: (err: any) => {
-    //     if (err.error && err.error.message) {
-    //       this.msg += " " + err.error.message;
-    //     }
-    //   },
-    // });
-
-
   }
-
-
-
-
 
   formatDate(date: Date): string {
     return this.datePipe.transform(date, 'yyyy-MM-dd')!;
@@ -168,9 +125,7 @@ export class StatutoryDocComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
     this.setLast7Days();
-
     this.loggedUserId = localStorage.getItem('loggedInUserId');
     this.getRole = localStorage.getItem('role');
     if (this.getRole == "Admin") {
@@ -184,13 +139,10 @@ export class StatutoryDocComponent implements OnInit {
     } if (this.getRole == "Hod") {
       this.roleFlag = false;
     }
-
-    // this.getTableData();
-
   }
 
   getStatutoryFileList() {
-    this.isLoading = true; // Start loader
+    this.isLoading = true;
     this.contactlist = [];
     this.serialNumberArray = [];
   
@@ -201,10 +153,7 @@ export class StatutoryDocComponent implements OnInit {
   
           this.res = event.body.response.filter((file: any) =>
             !file.isHodDocument && file.isStatutory && !file.isRestrictedDocument
-          );
-  
-          console.log(this.res);
-  
+          ); 
           let filteredData = this.res;
           this.totalData = filteredData.length;
   
@@ -213,8 +162,6 @@ export class StatutoryDocComponent implements OnInit {
             if (index >= this.skip && serialNumber <= this.limit) {
               item.id = serialNumber;
               this.contactlist.push(item);
-              console.log(this.contactlist);
-  
               this.serialNumberArray.push(serialNumber);
             }
           });
@@ -229,12 +176,10 @@ export class StatutoryDocComponent implements OnInit {
         if (err.error && err.error.message) {
           this['msg'] += " " + err.error.message;
         }
-        this.isLoading = false; // Stop loader on error
+        this.isLoading = false;
       },
     });
   }
-
-
 
   getStatusText(statusCode: string): string {
     switch (statusCode) {
@@ -245,38 +190,23 @@ export class StatutoryDocComponent implements OnInit {
       case 'P':
         return 'Pending';
       default:
-        return statusCode; // Fallback to the original status if no match
+        return statusCode;
     }
   }
 
-
   openModal( documentName: string, documentID: string, depatment:string, plant:string) {
-
     this.statutoryDocumentName = documentName;
     this.statutoryDocumentId = documentID;
     this.departmentType = depatment;
     this.plantType =plant;
-console.log(this.statutoryDocumentName);
-console.log(this.statutoryDocumentId);
-console.log(this.departmentType);
-console.log(this.plantType);
-
-
   }
 
-
-
-
-
   onSubmit() {
-
-    
     if (this.loggedUserId && !this.loggedSuperUserId) {
       this.generatedBy = this.loggedUserId;
     } if (!this.loggedUserId && this.loggedSuperUserId) {
       this.generatedBy = this.loggedSuperUserId;
     }
-
 
     const formData = new FormData();
     if (this.files.length === 0) {
@@ -300,7 +230,6 @@ console.log(this.plantType);
           if (this.res.message == "Success!!") {
             this.successfulSubmitAlert();
           }
-
         }
       },
       error: (err: any) => {
@@ -313,9 +242,7 @@ console.log(this.plantType);
         }
       },
     });
-
   }
-
 
   successfulSubmitAlert() {
     Swal.fire({
@@ -351,15 +278,10 @@ console.log(this.plantType);
 
   onFileDropped($event: any) {
     this.prepareFilesList($event);
-
   }
 
   fileBrowseHandler(files: any) {
-
-
-
     this.prepareFilesList(files.target.files);
-
   }
 
   deleteFile(index: number) {
@@ -382,11 +304,9 @@ console.log(this.plantType);
         }
       }, 50);
     }, 50);
-
   }
 
   prepareFilesList(files: Array<any>) {
-
     if (files != null) {
       this.uploadDocumentFlag = false;
       this.disableSubmitBtn = false;
@@ -399,18 +319,15 @@ console.log(this.plantType);
     }
     this.fileDropEl.nativeElement.value = "";
     this.uploadFilesSimulator(0);
-
   }
 
   getBase64EncodedFileData(file: File): Observable<string> {
     return new Observable(observer => {
       const reader = new FileReader();
-
       reader.onload = () => {
         const { result } = reader;
         const data = result as ArrayBuffer;
         const base64Encoded = encode(data);
-
         observer.next(base64Encoded);
         observer.complete();
       };
@@ -426,7 +343,6 @@ console.log(this.plantType);
   calculateTotalFileSize(files: Array<any>) {
     const fiftyMB = 2 * 1024 * 1024;
     let totalSize = 0;
-
     for (const file of files) {
       totalSize += file.size;
     }
@@ -436,7 +352,6 @@ console.log(this.plantType);
     } else {
       this['uploadDocumentSizeFlag'] = true;
     }
-
   }
 
   formatBytes(bytes: number, decimals = 2): string {

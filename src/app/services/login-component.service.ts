@@ -6,30 +6,19 @@ import { catchError, Observable, of, throwError } from 'rxjs';
   providedIn: 'root'
 })
 export class LoginComponentService {
- 
-  // private baseUrl = 'http://localhost:8080';
-  // private serverBaseUrl = 'http://103.168.18.28:8080';
 
- private baseUrl = 'http://103.168.18.28:8080'; //dev server
-//  private baseUrl = 'http://10.101.71.204:8080'; //prod server
-
-//private baseUrl = 'http://10.101.71.204:9090';
+//  private baseUrl = 'http://103.168.18.28:8080'; //dev server
+ private baseUrl = 'http://10.101.71.204:8080'; //prod server
 
   constructor(private http: HttpClient) { }
 
-
-
   login(file: any): Observable<HttpEvent<any>> {
-   
       const req = new HttpRequest('POST', `${this.baseUrl}/auth/login`, file, {
         responseType: 'json'
       });
 
-  
       return this.http.request(req);
     }
-
-
 
     getPlantList(category: string): Observable<HttpEvent<any>> {
       const req = new HttpRequest('GET', `${this.baseUrl}/category/get-catwise-info/${category}/1`, {
@@ -38,15 +27,6 @@ export class LoginComponentService {
   
       return this.http.request(req);
     }
-
-
-    // allCategoryList(): Observable<HttpEvent<any>> {
-    //   const req = new HttpRequest('GET', `${this.baseUrl}/category/get-all-catefory`, {
-    //     responseType: 'json'
-    //   });
-    
-    //   return this.http.request(req);
-    // }
 
     allCategoryList(): Observable<HttpEvent<any>> {
       const req = new HttpRequest('GET', `${this.baseUrl}/category/get-all-catefory`, {
@@ -66,12 +46,10 @@ export class LoginComponentService {
 
 
 getDetailsByCateName(catName:any , catType:any): Observable<HttpEvent<any>> {
-  //console.log("from api call :",catName, catType);
-  
   const req = new HttpRequest('GET', `${this.baseUrl}/catinfo/getcategory/${catName}/${catType}`, {
     responseType: 'json'
   });
-    // console.log("plant list:::",req);
+
   return this.http.request(req);
     }
 
@@ -85,10 +63,8 @@ getFileList(categoryList: Map<any, any>,departmentName:any,subAreaName:any,sDate
   const req = new HttpRequest('GET', url, {
     responseType: 'json'
   });
-//console.log(req);
 
   return this.http.request(req);
-  
 }
 
 getMainHeadFileList(categoryList: Map<any, any>,departmentName:any,subAreaName:any,sDate:any,eDate:any): Observable<HttpEvent<any>> {
@@ -100,13 +76,9 @@ getMainHeadFileList(categoryList: Map<any, any>,departmentName:any,subAreaName:a
   const req = new HttpRequest('GET', url, {
     responseType: 'json'
   });
-//console.log(req);
 
   return this.http.request(req);
-  
 }
-
-
 
 getTotalFileCount(startDate:any , endDate:any): Observable<HttpEvent<any>> {
   const req = new HttpRequest('GET', `${this.baseUrl}/admin-dashboard-data/get-total-document-volume?startDate=${startDate}&endDate=${endDate}`, {
@@ -157,10 +129,6 @@ onDateRangeSelectedPie(startDate:any , endDate:any): Observable<HttpEvent<any>> 
     }
 
 onDateRangeSelectedBar(startDate:any , endDate:any): Observable<HttpEvent<any>> {
-
-  //console.log('Formatted Start Date for Pie:', startDate);
-  //console.log('Formatted End Date for Pie:', endDate);
-  
   const req = new HttpRequest('GET', `${this.baseUrl}/department-plot/get-plot/${startDate}/${endDate}`, {
     responseType: 'json'
   });
@@ -168,31 +136,16 @@ onDateRangeSelectedBar(startDate:any , endDate:any): Observable<HttpEvent<any>> 
   return this.http.request(req);
     }
 
-
-
-// getPlantList(category: string): Observable<HttpEvent<any>> {
-//   const req = new HttpRequest('GET', `${this.baseUrl}/category/get-catwise-info/${category}/1`, {
-//     responseType: 'json'
-//   });
-
-//   return this.http.request(req);
-// }
-
-
 userNotification(userId: any): Observable<HttpEvent<any>> {
   const req = new HttpRequest('GET', `${this.baseUrl}/workflow/get-user-access-notification/${userId}`, {
     responseType: 'json'
   });
-  //console.log(req);
-  return this.http.request(req);
- 
-  
+
+  return this.http.request(req); 
 }
 
 
 getNotifications(userId: any): Observable<any> {
-  //console.log("ID for Notifications:", userId);
-
   const req = new HttpRequest('GET', `${this.baseUrl}/workflow/get-panding-notification-assignto/${userId}`, {
     responseType: 'json'
   });
@@ -215,13 +168,11 @@ updateDocumentStatus(payload: any) {
 }
 
 searchDocuments(query: string): Observable<HttpEvent<any>> {
-
   const req = new HttpRequest('GET', `${this.baseUrl}/workflow/search-docs?fileName=${query}`, {
     responseType: 'json'
   });
 
-  return this.http.request(req);
-  
+  return this.http.request(req); 
 }
 
 requestSubmit(file: any): Observable<HttpEvent<any>> {
@@ -245,17 +196,15 @@ AllAdminFileList(startDate:any , endDate:any): Observable<HttpEvent<any>> {
 
 
 getFileLists(mainHead:any,plants:any,departmentName:any,subAreaName:any,sDate:any,eDate:any): Observable<HttpEvent<any>> {
-console.log( "from api call",mainHead,plants,departmentName,subAreaName,sDate,eDate);
-
+// console.log( "from api call",mainHead,plants,departmentName,subAreaName,sDate,eDate);
 
   const url = `${this.baseUrl}/document/get-all-document-by-name/${mainHead}/${plants}/${departmentName}/${subAreaName}?startDate=${sDate}&endDate=${eDate}`;
   
   const req = new HttpRequest('GET', url, {
     responseType: 'json'
   });
-//console.log(req);
-  return this.http.request(req);
-  
+
+  return this.http.request(req); 
 }
 
 getFileListsByFilter(mainHead:any,plants:any,departmentName:any,subAreaName:any,sDate:any,eDate:any,docTypeFilter:any): Observable<HttpEvent<any>> {
@@ -265,10 +214,8 @@ getFileListsByFilter(mainHead:any,plants:any,departmentName:any,subAreaName:any,
   const req = new HttpRequest('GET', url, {
     responseType: 'json'
   });
-//console.log(req);
 
   return this.http.request(req);
-  
 }
 
 getFileListforOther(mainHead:any,sDate:any,eDate:any): Observable<HttpEvent<any>> {
@@ -278,23 +225,16 @@ getFileListforOther(mainHead:any,sDate:any,eDate:any): Observable<HttpEvent<any>
   const req = new HttpRequest('GET', url, {
     responseType: 'json'
   });
-//console.log(req);
 
-  return this.http.request(req);
-  
+  return this.http.request(req); 
 }
-
 
 approvedDocList(userId: any,startDate:any , endDate:any): Observable<HttpEvent<any>> {
   const req = new HttpRequest('GET', `${this.baseUrl}/workflow/get-approval-docs/${userId}?startDate=${startDate}&endDate=${endDate}`, {
     responseType: 'json'
   });
-  //console.log(req);
   return this.http.request(req);
- 
-  
 }
-
 
 userUpload(file: FormData): Observable<HttpEvent<any>> {
   const req = new HttpRequest('POST', `${this.baseUrl}/doc-request/submit-request`, file, {
@@ -316,9 +256,8 @@ librarianVerifyDoc(userId: any): Observable<HttpEvent<any>> {
   const req = new HttpRequest('GET', `${this.baseUrl}/doc-request/view-request/${userId}`, {
     responseType: 'json'
   });
-  //console.log(req);
+
   return this.http.request(req);
-  
 }
 
 
@@ -330,16 +269,12 @@ upload(file: any): Observable<HttpEvent<any>> {
 
     return this.http.request(req);
   }
-  
-
-
 
   updateDocStatus(file: any): Observable<HttpEvent<any>> {
    
     const req = new HttpRequest('POST', `${this.baseUrl}/doc-request/update-doc-status`, file, {
       responseType: 'json'
     });
-
 
     return this.http.request(req);
   }
@@ -349,7 +284,6 @@ upload(file: any): Observable<HttpEvent<any>> {
       responseType: 'json'
     });
     return this.http.request(req);
-    
   }
 
   appAndRejFileList(startDate:any , endDate:any): Observable<HttpEvent<any>> {
@@ -416,10 +350,6 @@ getUserInfo(): Observable<HttpEvent<any>> {
   }
 
 getFilterUserList(dept:any,plant:any): Observable<HttpEvent<any>> {
-
-console.log("service dept",dept);
-console.log("service plant",plant);
-
   const req = new HttpRequest('GET', `${this.baseUrl}/user/get-all-user-info?dept=${dept}&plant=${plant}`, {
     responseType: 'json'
   });

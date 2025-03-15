@@ -1,6 +1,3 @@
-// import {Component, ViewChild} from '@angular/core';
-// import {MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
-// import {DataTablesModule} from 'angular-datatables';
 import { routes } from "src/app/core/helpers/routes/routes";
 import { Component, OnInit } from "@angular/core";
 import { FileManagementService } from "src/app/services/file-management.service";
@@ -103,15 +100,11 @@ export class ApprovedRejectDocListComponent implements OnInit {
   bsValue = new Date();
   bsRangeValue: Date[];
   maxDate = new Date();
-
-  // ***********
   workflowDocId: string | null = null;
   msg: any;
   res: any;
   startDate: any;
   endDate: any;
-  // ***********
-
   public lastIndex = 0;
   public pageSize = 10;
   public totalData = 0;
@@ -127,11 +120,8 @@ export class ApprovedRejectDocListComponent implements OnInit {
   elem = document.documentElement;
   isFilterDropdownOpen: boolean = false;
   public searchDataValue = '';
-
   public fullDataList:any;
   public filteredList:any;
-
-  // ******************
 
   constructor(
     private uploadService: FileManagementService,
@@ -156,8 +146,6 @@ export class ApprovedRejectDocListComponent implements OnInit {
     this.startDate = this.formatDate(this.bsRangeValue[0]);
     this.endDate = this.formatDate(this.bsRangeValue[1]);
     this.approveAndRejDocList()
-
-
   }
 
   formatDate(date: Date): string {
@@ -166,35 +154,24 @@ export class ApprovedRejectDocListComponent implements OnInit {
 
   ngOnInit(): void {
     this.setLast7Days();
-
     this.loggedUserId = localStorage.getItem("loggedInUserId");
   }
 
   public approveAndRejDocList(): void {
     this.isLoading = true;
-    this.contactlist = [];
-
-    console.log("start and end date",this.startDate, this.endDate);
-    
+    this.contactlist = []; 
     this.loginService
       .appAndRejFileList(this.startDate, this.endDate)
       .subscribe({
         next: (event: any) => {
           if (event instanceof HttpResponse) {
             this.res = event.body.data;
-
-            this.totalData=this.res.length;
-
-            console.log("A&R doc List::",this.res);
-            
+            this.totalData=this.res.length;        
             this.fullDataList = [...this.res]; 
             this.filteredList = [...this.res]; 
             this.paginateData(this.filteredList); 
-            this.calculateTotalPages(this.filteredList.length, this.pageSize);
-            
+            this.calculateTotalPages(this.filteredList.length, this.pageSize);    
             this.isLoading = false;
-         
-
           }
         },
         error: (err: any) => {
@@ -214,7 +191,7 @@ export class ApprovedRejectDocListComponent implements OnInit {
     return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i];
   }
 
-  // **************************************************************************
+  // *****************************
   public sortData(sort: Sort) {
     if (!sort.active || sort.direction === '') {
       return;
@@ -223,10 +200,8 @@ export class ApprovedRejectDocListComponent implements OnInit {
     this.filteredList = this.filteredList.sort((a: any, b: any) => {
       const aValue = (a as any)[sort.active];
       const bValue = (b as any)[sort.active];
-  
       return (aValue < bValue ? -1 : 1) * (sort.direction === 'asc' ? 1 : -1);
     });
-  
     this.paginateData(this.filteredList);
   }
   
@@ -237,7 +212,6 @@ export class ApprovedRejectDocListComponent implements OnInit {
     } else if (event === 'previous' && this.currentPage > 1) {
       this.currentPage--;
     }
-  
     this.skip = (this.currentPage - 1) * this.pageSize;
     this.paginateData(this.filteredList);
   }
@@ -245,37 +219,25 @@ export class ApprovedRejectDocListComponent implements OnInit {
 
   public moveToPage(pageNumber: number): void {
     if (pageNumber < 1 || pageNumber > this.totalPages) return;
-  
     this.currentPage = pageNumber;
     this.skip = (pageNumber - 1) * this.pageSize;
-  
     this.paginateData(this.filteredList);
   }
-  
-
 
   public searchData(value: string): void {
     const filterValue = value.trim().toLowerCase();
-  
     this.filteredList = this.fullDataList.filter((item: getApproveAndRejDoc) => 
       item.fileName.toLowerCase().includes(filterValue) 
     );
-  
-    console.log("Filtered List:", this.filteredList);
-  
     this.skip = 0;
     this.calculateTotalPages(this.filteredList.length, this.pageSize);
     this.paginateData(this.filteredList);
   }
-  
-
 
   private calculateTotalPages(totalData: number, pageSize: number): void {
     this.pageNumberArray = [];
     this.pageSelection = [];
-  
     this.totalPages = Math.ceil(totalData / pageSize);
-  
     for (let i = 1; i <= this.totalPages; i++) {
       const limit = pageSize * i;
       const skip = limit - pageSize;
@@ -296,11 +258,9 @@ export class ApprovedRejectDocListComponent implements OnInit {
         this.serialNumberArray.push(serialNumber);
       }
     });
-  
     this.dataSource = new MatTableDataSource<getApproveAndRejDoc>([...this.contactlist]);
   }
-  
-  
+   
   public changePageSize(newPageSize: number): void {
     this.pageSize = newPageSize; 
     this.currentPage = 1;
@@ -310,8 +270,6 @@ export class ApprovedRejectDocListComponent implements OnInit {
     this.paginateData(this.filteredList);
   }
   
-  
-
   openFilter() {
     this.filter = !this.filter;
   }

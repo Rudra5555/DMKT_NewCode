@@ -5,14 +5,6 @@ import { FileManagementService } from 'src/app/services/file-management.service'
 import { UploadDocumentComponentService } from 'src/app/services/upload-document-component.service';
 import Swal from 'sweetalert2';
 import { routes } from 'src/app/core/helpers/routes/routes';
-
-
-
-
-
-
-
-
 @Component({
   selector: 'app-upload-doc',
   templateUrl: './upload-doc.component.html',
@@ -61,8 +53,6 @@ docMap = new Map<number, string>();
 public newPlant: boolean = false;
 public invalidFileExtensionFlag: boolean = false;
  
-  
-
   constructor(
     private uploadService: FileManagementService,
     private formBuilder: FormBuilder,
@@ -82,7 +72,6 @@ public invalidFileExtensionFlag: boolean = false;
       isRestrictedDocument: ["", [Validators.required]],
       isHodDocument: ["", [Validators.required]],
     });
-
   }
 
   ngOnInit(): void {
@@ -111,10 +100,8 @@ public invalidFileExtensionFlag: boolean = false;
           this.newPlant = false;
         }
       } else {
-        console.log("No plant selected or value is null.");
       }
     });
-
 
     this.uploadFileForm.get('department')?.valueChanges.subscribe(value => {
       const [deptName, deptAbbr] = value.split('~');
@@ -163,7 +150,6 @@ public invalidFileExtensionFlag: boolean = false;
         }
       }, 50);
     }, 50);
-
   }
 
   prepareFilesList(files: Array<any>) {
@@ -212,11 +198,7 @@ for (const item of files) {
       this.uploadDocumentSizeFlag = true;
     }
 
-
   }
-
-
-
 
   formatBytes(bytes: number, decimals = 2): string {
     if (bytes === 0) return "0 Bytes";
@@ -249,9 +231,7 @@ for (const item of files) {
     }
     if (this.selectedCatName != "POWER O&M") {
       this.plantFlag = false;
-
     }
-
   }
 
   selectedDepartment(event: any) {
@@ -266,7 +246,6 @@ for (const item of files) {
       this.getSubAreaList(this.selectedDeptCatName, "department");
       
     } else {
-      console.log("selectedDeptCatName is null or undefined.");
     }
   }
 
@@ -303,8 +282,6 @@ for (const item of files) {
              this.files.length > 0);
   }
 
- 
-
   onSubmit(): void {
 
     if (this.uploadFileForm.controls['documentType']) {
@@ -314,7 +291,6 @@ for (const item of files) {
       this.subDocumentTypeOption = this.uploadFileForm.value.subDocumentType;
       
     }
-    // console.log("subDoct",this.subDocumentTypeOption);
     
     if (this.uploadFileForm.controls['storageLocation']) {
       this.storageLocationOption = this.uploadFileForm.value.storageLocation;
@@ -329,9 +305,7 @@ for (const item of files) {
 
     const formData = new FormData();
     for (const file of this.files) {
-
       // console.log("this selectedFiles",file);
-
       formData.append("file", file);
     }
 
@@ -344,8 +318,6 @@ for (const item of files) {
     }if(this.selectedSubAreaCatNameAbbr == null){
       this.selectedSubAreaCatNameAbbr = '';
     }
-
- 
 
     if (this.plantOption != null && this.selectedDeptCatName != null && this.selectedDeptCatNameAbbr != null && this.selectedSubAreaCatName != null && this.selectedSubAreaCatNameAbbr != null   &&  this.files.length > 0) {
      
@@ -367,14 +339,13 @@ for (const item of files) {
 
       
       };
-      console.log("payloaddddd:: ",modalData);
+      // console.log("payloaddddd:: ",modalData);
       formData.append("requestbody", JSON.stringify(modalData));
       this.buttonDisabled = true;
 
       this.uploadService.upload(formData).subscribe({
         next: (event: any) => {
-          console.log("event",event);
-          
+          // console.log("event",event);
           if (event instanceof HttpResponse) {
             this.buttonDisabled = false;
 
@@ -417,7 +388,7 @@ for (const item of files) {
         "hodRestricted": ishodRestricted
 
       };
-      console.log("hhhhhhhmmmmoodjdjshjsg1",modalData);
+      // console.log("modal Data",modalData);
       
 
       formData.append("requestbody", JSON.stringify(modalData));
@@ -459,7 +430,7 @@ for (const item of files) {
 return;
     }else 
     {
-      console.log("End of if and else");
+      // console.log("End of if and else");
       this.uploadFileForm.get('uploadFile')?.reset('');
       this.uploadFileForm.get('mainHead')?.reset('');
       this.uploadFileForm.get('plants')?.reset('');
@@ -476,16 +447,7 @@ return;
       
     }
 
-
-
-
   }
-
-
-
-
-
-
 
   getAllMainHeadData() {
     this.uploadDocument.allMainHeadList().subscribe({
@@ -500,7 +462,6 @@ return;
     });
   }
 
-
   getMainHeadList(selectedValue: string, mainHead: string) {
 
     if (selectedValue != '' && mainHead != null) {
@@ -509,8 +470,6 @@ return;
         next: (event: any) => {
           if (event instanceof HttpResponse) {
             this.plantList = event.body?.categoryList || [];
-            console.log(this.plantList);
-            
           }
         },
         error: (err: any) => {
@@ -527,7 +486,6 @@ return;
         next: (event: any) => {
           if (event instanceof HttpResponse) {
             this.departmentList = event.body?.categoryList || [];
-            console.log("yyyyyyyyyyy",this.departmentList);
             
           }
         },
@@ -558,9 +516,7 @@ return;
         next: (event: any) => {
           if (event instanceof HttpResponse) {
              this.docList = event.body;
-            console.log("resulttttttttt",this.docList);
             this.docList.forEach((item: any) => {
-              console.log("doc type Map", item.id, item.documentName);
               this.docMap.set(item.id, item.documentName);
            
             });
@@ -571,14 +527,6 @@ return;
         }
       });
       }
-
-
-
-  
-
-
-
-
 
   onDocumentTypeChange(docId: any) {
  
@@ -594,10 +542,6 @@ return;
           if (event instanceof HttpResponse) {
              this.subDocList = event.body;
              this.subDocListSize = this.subDocList.length
-            console.log("subDocccccccc",this.subDocList);
-           
-            // let subType = this.subDocList.id
-            // console.log(subType);
             
           }
         },

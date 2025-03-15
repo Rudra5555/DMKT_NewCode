@@ -4,19 +4,7 @@
     <div class="row align-items-center">
       <div class="col-md-4">
         <h3 class="page-title">Statutory Document List</h3>
-        <!-- <ul class="breadcrumb">
-          <li class="breadcrumb-item">
-            <a>Dashboard</a>
-          </li>
-          <li class="breadcrumb-item active" style="color: black;">Requested Document List</li>
-        </ul> -->
-
       </div>
-      <!-- <div class="col-md-12 modalButtons" *ngIf="!this.roleFlag">
-        <a href="javascript:void(0);" class="btn add-btn" data-bs-toggle="modal" data-bs-target="#add_contact"
-          id="modalButton"><i class="la la-plus-circle"></i>Request Document</a>
-      </div> -->
-
     </div>
 
     <hr />
@@ -35,13 +23,7 @@
               </div>
             </div>
           </div>
-
         </li>
-
-        <li>
-        </li>
-
-
         <li>
           <div class="search-set">
             <div class="search-input">
@@ -86,7 +68,6 @@
             <thead>
               <tr>
                 <th>Document Name</th>
-                <!-- <th>Document Extension</th> -->
                 <th>Department Name</th>
                 <th>Sub-Area</th>
                 <th>Storage Location</th>
@@ -98,8 +79,6 @@
 
             <tbody>
               <div *ngIf="isLoading" class="spinner-border" style="align-items: center;margin-left: 350%;">
-                <!-- <p>Loading...</p>  -->
-                <!-- <i class="fas fa-spinner fa-spin text-info align-items-center me-1"></i> -->
               </div>
               <tr *ngFor="let item of contactlist; ">
                 <td>
@@ -108,12 +87,6 @@
                     </a>
                   </h2>
                 </td>
-
-                <!-- <td>
-                  {{ item.extension }}
-
-                </td> -->
-
                 <td>
                   {{item.department? item.department : 'N/A'}}
 
@@ -129,12 +102,10 @@
                 </td>
                 <td>
                   {{item.documentSubType? item.documentSubType : 'N/A'}}
-
                 </td>
-                
                 <td class="text-center">
-
-                  <a class="dropdown-item" [href]="item.fileUrl" (click)="openModal( item.uniqueFileName, item.refernceId, item.department, item.plant )"
+                  <a class="dropdown-item" [href]="item.fileUrl"
+                    (click)="openModal( item.uniqueFileName, item.refernceId, item.department, item.plant )"
                     data-bs-toggle="modal" data-bs-target="#restricted">
                     <i class="fas fa-eye" style="color: rgb(0, 117, 234)"></i>
                   </a>
@@ -207,7 +178,6 @@
                 </li>
                 }
                 }
-
                 <li class="page-item" [ngClass]="{
                   disabled:
                     currentPage ===
@@ -224,58 +194,56 @@
         </div>
       </div>
     </div>
-
-
-
   </div>
 
   <div class="modal fade" id="restricted" tabindex="-1" aria-labelledby="rejectDocumentModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header" style="background: linear-gradient(to right, #f2f9fb 0%, #00820e 100%) !important;">
-          <h5 class="modal-title" id="rejectDocumentModalLabel" >Restricted Document</h5>
+          <h5 class="modal-title" id="rejectDocumentModalLabel">Restricted Document</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body text-center">
-   
-          <p class="restricted-message">This is a restricted document!! Do you want to raise a request for this document?</p>
+
+          <p class="restricted-message">This is a restricted document!! Do you want to raise a request for this
+            document?</p>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-          <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#add_contact">Raise Request</button>
+          <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#add_contact">Raise
+            Request</button>
         </div>
       </div>
     </div>
   </div>
-  
-  
-
 
 
   <!-- Add Contact -->
   <div class="modal custom-modal fade custom-modal-two modal-padding" id="add_contact" role="dialog">
-    <div class="modal-dialog modal-dialog-right modal-lg" role="document" >
+    <div class="modal-dialog modal-dialog-right modal-lg" role="document">
       <div class="modal-content" style="padding: 0px;">
-        <div class="modal-header d-flex justify-content-between align-items-center" style="background: linear-gradient(to right, #f2f9fb 0%, #00820e 100%) !important;">
+        <div class="modal-header d-flex justify-content-between align-items-center"
+          style="background: linear-gradient(to right, #f2f9fb 0%, #00820e 100%) !important;">
           <h3 style="margin: 0;  margin-top: -1%;
       padding-bottom: 4%;">Document Access Form</h3>
           <button type="button" id="closeModalBtn" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-    
+
 
         <div class="modal-body p-0" style="margin-top: 2%;">
-        
-           <div class="col-lg-12" id="modalMargin">
+
+          <div class="col-lg-12" id="modalMargin">
             <div class="input-block mb-3">
               <label class="col-form-label">Statutory Document <span class="text-danger">*</span>
               </label>
-     
-              <input  type="text"  id="statutoryDocument" class="form-control" [(ngModel)]="statutoryDocumentName" readonly>       
+
+              <input type="text" id="statutoryDocument" class="form-control" [(ngModel)]="statutoryDocumentName"
+                readonly>
             </div>
           </div>
-       
+
 
           <br>
 
@@ -299,25 +267,26 @@
                   <div class="card-header">
                     <h5 class="card-title">File Upload <span class="text-danger">*</span></h5>
                   </div>
-                  <div class="container" appDnd (fileDropped)="onFileDropped($event)" >
-                    <input type="file" #fileDropRef id="fileDropRef"   (change)="fileBrowseHandler($event)" />
+                  <div class="container" appDnd (fileDropped)="onFileDropped($event)">
+                    <input type="file" #fileDropRef id="fileDropRef" (change)="fileBrowseHandler($event)" />
                     <img src="assets/img/dnd/ic-upload-file.svg" alt="">
                     <h3>Drag and drop file here</h3>
                     <h3>or</h3>
                     <label for="fileDropRef">Browse for file</label>
                   </div>
                   <!-- File list section (hidden when no files are uploaded) -->
-                <div class="files-list" *ngIf="files && files.length > 0" style="overflow-y: auto;">
-                  <div class="single-file" *ngFor="let file of files; let i = index" style="overflow-y: auto;">
-                    <img src="assets/img/dnd/ic-file.svg" width="45px" alt="file">
-                    <div class="info">
-                      <h4 class="name">{{ file?.name }}</h4>
-                      <p class="size">{{ formatBytes(file?.size) }}</p>
-                      <app-progress [progress]="file?.progress"></app-progress>
+                  <div class="files-list" *ngIf="files && files.length > 0" style="overflow-y: auto;">
+                    <div class="single-file" *ngFor="let file of files; let i = index" style="overflow-y: auto;">
+                      <img src="assets/img/dnd/ic-file.svg" width="45px" alt="file">
+                      <div class="info">
+                        <h4 class="name">{{ file?.name }}</h4>
+                        <p class="size">{{ formatBytes(file?.size) }}</p>
+                        <app-progress [progress]="file?.progress"></app-progress>
+                      </div>
+                      <img src="assets/img/dnd/ic-delete-file.svg" class="delete" width="20px" alt="file"
+                        (click)="deleteFile(i)">
                     </div>
-                    <img src="assets/img/dnd/ic-delete-file.svg" class="delete" width="20px" alt="file" (click)="deleteFile(i)">
                   </div>
-                </div>
                 </div>
 
               </div>
@@ -338,9 +307,6 @@
             </div>
           </form>
         </div>
-
-
-
       </div>
     </div>
   </div>
@@ -372,7 +338,7 @@
             <span aria-hidden="true">×</span>
           </button>
         </div>
-        <div class="modal-body p-0" >
+        <div class="modal-body p-0">
           <div class="add-details-wizard">
             <ul id="progressbar" class="progress-bar-wizard">
               <li [ngClass]="{
@@ -995,12 +961,9 @@
             <button class="button btn-lights reset-btn" type="reset">Reset</button>
             <button class="btn btn-primary" type="submit">Save Notes</button>
           </div>
-
         </div>
       </div>
     </div>
-
-
   </div>
 
 </div>

@@ -8,17 +8,10 @@
           <li class="breadcrumb-item">
             <a>Dashboard</a>
           </li>
-
           <li class="breadcrumb-item active" style="color: black;">Requested Document List</li>
         </ul>
       </div>
-      <!-- <div class="col-md-12 modalButtons" *ngIf="!this.roleFlag">
-        <a href="javascript:void(0);" class="btn add-btn" data-bs-toggle="modal" data-bs-target="#add_contact"
-          id="modalButton"><i class="la la-plus-circle"></i>Request Document</a>
-      </div> -->
-
     </div>
-
     <hr />
 
     <div class="filter-section">
@@ -85,7 +78,6 @@
                 <th mat-sort-header="approvedBy">Approved By</th>
                 <th mat-sort-header="date">Approved D&T</th>
                 <th mat-sort-header="status">Status</th>
-                <!-- <th>Action</th> -->
                 <th style="color: rgb(22, 32, 138)">Download</th>
                 <th style="color: rgb(22, 32, 138)">View</th>
               </tr>
@@ -100,15 +92,11 @@
                     </a>
                   </h2>
                 </td>
-
                 <td>
                   {{ item.departmentName }}
-
                 </td>
-
                 <td>
                   {{ item.executerName }}
-
                 </td>
                 <td>
                   {{ formatExecutedData(item.executedOn) }}
@@ -140,14 +128,6 @@
                     <i class="fas fa-eye" style="color: rgb(0, 117, 234)"></i>
                   </a>
                 </td>
-                <!-- <td class="text-center">
-
-                  <a class="dropdown-item" [href]="item.fileUrl" (click)="openModal(item.fileUrl , item.documentName)"
-                    data-bs-toggle="modal" data-bs-target="#viewApprovedFiles">
-                    <i class="fas fa-eye" style="color: rgb(0, 117, 234)"></i>
-                  </a>
-
-                </td> -->
               </tr>
 
               <tr *ngIf="!isLoading && contactlist.length==0">
@@ -233,8 +213,6 @@
         </div>
       </div>
     </div>
-
-
 
     <div
     id="view_files"

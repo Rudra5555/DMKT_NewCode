@@ -66,11 +66,9 @@ export class StatutoryDocNotificationComponent implements OnInit {
   userName: string | undefined;
   res: any;
   files: any[] = [];
-
   resp: any;
   msg: any;
   respData: any;
- 
   loggedUserId: any;
 
   statutoryReadNotificationList:any;
@@ -83,8 +81,6 @@ export class StatutoryDocNotificationComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
-   
     this.StDocmarkAsReadNotif();
 
     this.loggedUserId = localStorage.getItem('loggedInUserId');

@@ -104,9 +104,6 @@ export class FileUploadNotificationComponent implements OnInit {
     const storedData = localStorage.getItem('fileUploadNotificationList');
     const readFileList = storedData ? JSON.parse(storedData) : [];
 
-    console.log("readfileLists*",readFileList);
-    
-
     this.totalData = readFileList.length;
 
     readFileList.map((item: getreadFileNotificationList, index: number) => {

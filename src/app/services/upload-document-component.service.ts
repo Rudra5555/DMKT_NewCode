@@ -6,49 +6,16 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class UploadDocumentComponentService {
-  // private baseUrl = 'http://localhost:8080';
-  // private serverBaseUrl = 'http://10.101.71.204:9090';
 
- private baseUrl = 'http://103.168.18.28:8080';//dev server
-// private baseUrl = 'http://10.101.71.204:8080'; //prod server
+//  private baseUrl = 'http://103.168.18.28:8080';//dev server
+private baseUrl = 'http://10.101.71.204:8080'; //prod server
 
   constructor(private http: HttpClient) { }
-
-
-
-  // login(file: any): Observable<HttpEvent<any>> {
-   
-  //     const req = new HttpRequest('POST', `${this.baseUrl}/auth/login`, file, {
-  //       responseType: 'json'
-  //     });
-  
-  //     return this.http.request(req);
-  //   }
-
-
-
-  //   getPlantList(category: string): Observable<HttpEvent<any>> {
-  //     const req = new HttpRequest('GET', `${this.baseUrl}/category/get-catwise-info/${category}/1`, {
-  //       responseType: 'json'
-  //     });
-    
-  //     return this.http.request(req);
-  //   }
-
-
-  //   allCategoryList(): Observable<HttpEvent<any>> {
-  //     const req = new HttpRequest('GET', `${this.baseUrl}/category/get-all-catefory`, {
-  //       responseType: 'json'
-  //     });
-    
-  //     return this.http.request(req);
-  //   }
 
    allMainHeadList(): Observable<HttpEvent<any>> {
       const req = new HttpRequest('GET', `${this.baseUrl}/category/main-head-dropdown`, {
         responseType: 'json'
       });
-        // console.log("main head list:::",req);
       return this.http.request(req);
     }
 
@@ -56,10 +23,8 @@ export class UploadDocumentComponentService {
       const req = new HttpRequest('GET', `${this.baseUrl}/category/cat-wise-dropdown/${getData}/${mainHead}`, {
         responseType: 'json'
       });
-        // console.log("plant list:::",req);
       return this.http.request(req);
     }
-
 
     allSubAreaList(getData: any, mainHead: any): Observable<HttpEvent<any>> {
       const req = new HttpRequest('GET', `${this.baseUrl}/category/cat-wise-dropdown/${getData}/${mainHead}`, {
@@ -69,13 +34,6 @@ export class UploadDocumentComponentService {
       return this.http.request(req);
     }
 
-    // docTypeList(deptId: any): Observable<HttpEvent<any>> {
-    //   const req = new HttpRequest('GET', `${this.baseUrl}/documentType/getDocumentTypesBy/${deptId}`, {
-    //     responseType: 'json'
-    //   });
-    //   return this.http.request(req);
-    // }
-
     docTypeListData(): Observable<HttpEvent<any>> {
       const req = new HttpRequest('GET', `${this.baseUrl}/documentType/getDocumentTypesAndSubTypes`, {
         responseType: 'json'
@@ -83,31 +41,20 @@ export class UploadDocumentComponentService {
       return this.http.request(req);
     }
 
-
-
     subDocTypeList(docId: any): Observable<HttpEvent<any>> {
       const req = new HttpRequest('GET', `${this.baseUrl}/documentType/getDocumentSubTypesBy/${docId}`, {
         responseType: 'json'
       });
-    
       return this.http.request(req);
     }
-
 
     allDataList(getData: any, mainHead: any): Observable<HttpEvent<any>> {
       const req = new HttpRequest('GET', `${this.baseUrl}/category/cat-wise-dropdown/${getData}/${mainHead}`, {
         responseType: 'json'
         
       });
-    
       return this.http.request(req);
     }
-
-
-
-
-
-
 
     allPlantDepartmentSubAreaList(getData: any, mainHead: string): Observable<HttpEvent<any>> {
       const req = new HttpRequest('GET', `${this.baseUrl}/category/cat-wise-dropdown/${getData}/Main Head`, {
@@ -117,9 +64,7 @@ export class UploadDocumentComponentService {
       return this.http.request(req);
     }
 
-    addDept(payload:any): Observable<HttpEvent<any>> {
-     
-      
+    addDept(payload:any): Observable<HttpEvent<any>> { 
       const req = new HttpRequest('POST', `${this.baseUrl}/department/add-new-department`, payload,{
         responseType: 'json'  
       });
@@ -128,9 +73,7 @@ export class UploadDocumentComponentService {
     }
 
 
-    addSubArea(payload:any): Observable<HttpEvent<any>> {
-      console.log(payload);
-      
+    addSubArea(payload:any): Observable<HttpEvent<any>> {  
       const req = new HttpRequest('POST', `${this.baseUrl}/instrument/save-new-subarea`,payload, {
         responseType: 'json'  
       });
@@ -153,7 +96,5 @@ export class UploadDocumentComponentService {
     
       return this.http.request(req);
         }
-
-
 
 }
