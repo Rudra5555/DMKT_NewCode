@@ -10,8 +10,6 @@ import { E } from '@angular/cdk/keycodes';
 import Swal from 'sweetalert2';
 import { DomSanitizer } from '@angular/platform-browser';
 
-
-
 interface data {
   id: number, hodName: string, docName: string, last_modified?: string, requestorName: string, documentId?: number;
 }
@@ -165,7 +163,6 @@ export class HeaderOneComponent implements OnInit {
   }
   ngOnInit(): void {
 
-    
     this.hodModalForm = this.fb.group({
       status: ['', Validators.required],
       expDate: ['', Validators.required],
@@ -177,18 +174,16 @@ export class HeaderOneComponent implements OnInit {
     this.loggedUserId = localStorage.getItem('loggedInUserId');
     this.picture = localStorage.getItem('PictureLog');
 
-    console.log("Picture URL (before checking):", this.picture);
+    // console.log("Picture URL (before checking):", this.picture);
     
-    // Ensure we catch null, undefined, empty strings, and invalid values
     if (!this.picture || this.picture === "null" || this.picture === "undefined" || this.picture.trim() === "" || this.picture === "1234567890") {
       this.picture = '/assets/img/userIcon.png';
       localStorage.setItem('PictureLog', this.picture);
-      console.log("Final Picture URL (after setting default):", this.picture);
+      // console.log("Final Picture URL (after setting default):", this.picture);
     }
     
     // Sanitize image
     this.sanitizedImage = this.sanitizer.bypassSecurityTrustUrl(this.picture);
-
 
     this.loginService.accessRole(this.loggedUserId).subscribe({
       next: (event: any) => {
@@ -206,20 +201,15 @@ export class HeaderOneComponent implements OnInit {
     });
 
 
-
-
     this.userNotificationBell(this.loggedUserId);
     this.userFileNotificationBell(this.loggedUserId);
 
     this.uname = localStorage.getItem("loggedUserName");
-    console.log(this.uname);
-
     this.userRole = localStorage.getItem('role');
     this.roleWiseTotification();
 
     // Fetch notifications
     if (this.loggedUserId) {
-      console.log("loggged lib;;;;", this.loggedUserId);
 
       this.loginService.getNotifications(this.loggedUserId).subscribe(
         (response: any) => {
@@ -239,7 +229,6 @@ export class HeaderOneComponent implements OnInit {
               hodName: notification.executerName || 'HOD',
               uploadImg: notification.uploadImg,
             }));
-            console.log("rrrrrrrr;;;", this.notificationData);
 
             this.notificationCount = this.notificationData.length;
           } else {
@@ -257,13 +246,10 @@ export class HeaderOneComponent implements OnInit {
     if (this.notificationCount != null) {
       this.notificationCount = this.notificationData.length;
     }
-
-
   }
 
 
   userNotificationBell(userId: any) {
-    
     if (!userId) {
       return;
     } else {
@@ -273,16 +259,11 @@ export class HeaderOneComponent implements OnInit {
         next: (event: any) => {
           if (event instanceof HttpResponse) {
             this.resp = event.body.data
-            // this.respData = this.resp;
             this.respData = this.resp.filter((notification: any) => !notification.markAsRead);  //markedAsRead = false
       
-      console.log("Filtered statutoryUnreadNotification", this.respData);
-
-      this.statutoryReadNotification = this.resp.filter((notification: any) => notification.markAsRead);  //markedAsRead = true
-          // console.log("send statutoryReadNotification read list", this.statutoryReadNotification);
+          this.statutoryReadNotification = this.resp.filter((notification: any) => notification.markAsRead);  //markedAsRead = true
           localStorage.setItem('statutoryReadNotificationList', JSON.stringify(this.statutoryReadNotification));
             
-
             this.userNotificationData = this.respData;
             this.userNotifyCount = this.userNotificationData.length;
 
@@ -294,9 +275,7 @@ export class HeaderOneComponent implements OnInit {
           }
         }
       });
-
     }
-
   }
 
   userFileNotificationBell(userId: any) {
@@ -309,15 +288,11 @@ export class HeaderOneComponent implements OnInit {
           if (event instanceof HttpResponse) {
             this.resp = event.body.data
             const notificTwoo = this.resp;
-            console.log("before filter::::",notificTwoo);
-            
+
              // Filter out only the notifications where markAsRead is false
         this.notificTwo = this.resp.filter((notification: any) => !notification.markAsRead); //markedAsRead = false
-        
-        console.log("Filtered notificTwo::::", this.notificTwo);
   
         this.readNotification = this.resp.filter((notification: any) => notification.markAsRead); //markedAsRead = true
-            // console.log("readNotification", this.readNotification);
         localStorage.setItem('fileUploadNotificationList', JSON.stringify(this.readNotification));
             
             this.userNotifyCountTwo = this.notificTwo.length;
@@ -329,11 +304,8 @@ export class HeaderOneComponent implements OnInit {
           }
         }
       });
-
     }
-
   }
-
 
 
   getApprovalStatus(status: string): string {
@@ -348,7 +320,6 @@ export class HeaderOneComponent implements OnInit {
         return status;
     }
   }
-
 
   getApprovalStatusUserModal(status: string): string {
     switch (status) {
@@ -366,13 +337,10 @@ export class HeaderOneComponent implements OnInit {
   onRoleChange(role: any) {
     this.selectedRole = role;
     this.selectedUserRole = role;
-    console.log('Selected Role:', this.selectedRole);
     localStorage.setItem('role', this.selectedRole);
     localStorage.getItem('role');
-    // this.router.navigate([routes.employee]);
-    // location.href = location.href;            //page reload code
     this.router.navigate([routes.employee]).then(() => {
-      location.href = location.href; // Reloads the page after navigation
+      location.href = location.href;
     });
   }
 
@@ -404,16 +372,10 @@ export class HeaderOneComponent implements OnInit {
     const status = this.hodModalForm.get('status')?.value;
     const reason = this.hodModalForm.get('reason')?.value;
 
-
-
-
     this.approverStatus = event.target.value;
-    console.log('Approver Status:', this.approverStatus);
-    
+
     if (this.approverStatus == "R") {
       this.expDateFlag = true;
-     
-      console.log(this.expDateFlag);
       
       this.reasonFlag = true;
     } if (this.approverStatus == "A") {
@@ -424,7 +386,6 @@ export class HeaderOneComponent implements OnInit {
       this.expDateFlag = false;
       this.reasonFlag = false;
     }
-    console.log('expDateFlag:', this.expDateFlag);
     this.cdr.detectChanges(); // Force UI update if needed
 
 
@@ -445,16 +406,12 @@ export class HeaderOneComponent implements OnInit {
     }
   }
 
-
-
   rejectReason(event: any) {
     const rejectReason = event.target.value
     if (rejectReason) {
       this.disableSubmitBtn = false;
     }
   }
-
-
 
   updateDocumentStatus(): void {
     if (!this.selectedHodItem) {
@@ -466,7 +423,6 @@ export class HeaderOneComponent implements OnInit {
     const status = this.hodModalForm.get('status')?.value;
     const reason = this.hodModalForm.get('reason')?.value;
     this.expDate = this.hodModalForm.get('expDate')?.value;
-    console.log('Form START:', this.expDate);
     
     if (this.expDate != '') {
       const date = new Date(this.expDate);
@@ -474,11 +430,9 @@ export class HeaderOneComponent implements OnInit {
       const month = String(date.getMonth() + 1).padStart(2, '0'); // Month is 0-indexed
       const year = date.getFullYear();
       this.formattedDate = `${day}-${month}-${year}`;
-      // console.log("FOrmated data :",this.formattedDate); // Output: 17 01 2025
     }
     else{
       this.formattedDate = '';
-      // console.log("F)))))rmated data :",this.formattedDate);
     }
   
     if (this.expDate) {
@@ -495,17 +449,13 @@ export class HeaderOneComponent implements OnInit {
         // Optionally, set an error in the form control or display an error message
         this.hodModalForm.get('expDate')?.setErrors({ invalidDate: true });
       } else {
-        console.log('The selected date is valid.');
       }
     }
-    console.log('Form  END:',   this.expDate);
-    // Validation checks
     if (!status) {
       console.error('No status selected');
       this.unsuccessfulSubmitAlert();
       return;
     }
-
 
 
     const payload = {
@@ -516,9 +466,6 @@ export class HeaderOneComponent implements OnInit {
       expDate: this.formattedDate,
       reason: reason
     };
-    console.log('Payload:', payload);
-    
-
 
     this.loginService.updateDocumentStatus(payload).subscribe((response: Object | null) => {
       if (response && (response as UpdateDocumentStatusResponse).status === 200) {
@@ -543,7 +490,6 @@ export class HeaderOneComponent implements OnInit {
           if (message == 'Error!!') {
             this.unsuccessfulSubmitAlert();
           }
-
         }
 
       } else {
@@ -576,8 +522,6 @@ export class HeaderOneComponent implements OnInit {
       showConfirmButton: false,
       timer: 1500
     }).then(() => {
-      // // window.location.reload();
-      // location.href = location.href;
     });
   }
 
@@ -589,16 +533,11 @@ export class HeaderOneComponent implements OnInit {
     });
   }
 
-
-
-
   onHodItemClick(requestorName: string): void {
 
     // Find the item based on requestorName or other unique identifiers
     const selectedItem = this.notificationData.find(item => item.requestorName === requestorName);
-    if (selectedItem) {
-      console.log('Selected item:', selectedItem);
-      
+    if (selectedItem) { 
       this.selectedHodItem = selectedItem;
     } else {
       console.error('Item not found for:', requestorName);
@@ -608,13 +547,10 @@ export class HeaderOneComponent implements OnInit {
 
   onItemClick(item: any): void {
     this.selectFileData = item;
-    console.log('Selected item:', this.selectFileData);
     this.validUpto = this.selectFileData.validUpto;
-    // console.log('Valid Upto:', validUpto);
     if (this.validUpto) {
       const dateObj = new Date(this.validUpto); // Convert string to Date object
       this.validUptoFormated = dateObj.toLocaleDateString('en-GB'); // Format date to DD-MM-YYYY
-      console.log('Valid Upto (Formatted):', this.validUptoFormated);
     }
     if (this.selectFileData.reason == null) {
       this.userReasonFlag = true;
@@ -622,13 +558,11 @@ export class HeaderOneComponent implements OnInit {
       this.userReasonFlag = false;
     }
 
-
      // Call API to mark as read
   this.loginService.markedAsReadStatutoryNotification(item.stepId).subscribe({
     next: (event: any) => {
       if (event instanceof HttpResponse) {
         const res = event.body.status
-        console.log("looollll,",res);
           if(res == 200){
       this.userNotificationBell(this.loggedUserId)
       }
@@ -639,12 +573,9 @@ export class HeaderOneComponent implements OnInit {
       console.error('Error marking as read:', error);
     }
   });
-
   }
 
   onFileNotificationClick(item:any ){
-console.log('Selected item workflowDocId:', item.workflowDocId);
-// console.log('Selected item onFileNotificationClick:', item);
 
 this.selectedFileUploadData = item;
 if (this.selectedFileUploadData.reason == null || this.selectedFileUploadData.reason == '') {
@@ -656,7 +587,6 @@ if (this.selectedFileUploadData.reason == null || this.selectedFileUploadData.re
   // Call API to mark as read
   this.loginService.markedAsReadFileNotification(item.workflowDocId).subscribe({
     next: (response: any) => {
-      console.log('Marked as read response:', response);
       if(response.status == 200){
      this.userFileNotificationBell(this.loggedUserId)
       }
@@ -665,11 +595,7 @@ if (this.selectedFileUploadData.reason == null || this.selectedFileUploadData.re
       console.error('Error marking as read:', error);
     }
   });
-
-  
-
   }
-
 
 
   public roleWiseTotification() {
@@ -705,8 +631,6 @@ if (this.selectedFileUploadData.reason == null || this.selectedFileUploadData.re
     }
   }
 
-
-
   public toggleSideBar(): void {
     this.sideBar.switchSideMenuPosition();
   }
@@ -721,8 +645,6 @@ if (this.selectedFileUploadData.reason == null || this.selectedFileUploadData.re
 
     this.router.navigate([routes.login])
   }
-
-
 
   navigation() {
     this.router.navigate([routes.search]);

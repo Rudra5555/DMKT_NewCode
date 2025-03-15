@@ -6,13 +6,10 @@ import { LoginComponentService } from 'src/app/services/login-component.service'
 import { HttpResponse } from '@angular/common/http';
 import { apiResultFormat, getSearchfileList } from 'src/app/core/services/interface/models';
 import { pageSelection } from 'src/app/feature-module/employee/employees/departments/departments.component';
-
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { DatePipe } from '@angular/common';
 import { MatTableDataSource } from '@angular/material/table';
-
-
 import { ViewerType } from 'ngx-doc-viewer';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { Sort } from '@angular/material/sort';
@@ -20,7 +17,6 @@ import { AES } from 'crypto-ts';
 import * as CryptoJS from 'crypto-js';
 
 declare let $: any;
-
 
 interface data{
   docName: string, docType: string, version: string, docSize: string, download?: string, view?: string;
@@ -58,7 +54,6 @@ export class UserDashboardComponent implements OnInit {
   public pageIndex = 0;
   public pageSize = 10;
   public limit: number = this.pageSize;
-
   public fileListTmp!: Array<data>;
   public modalFileListTmp!: Array<data>;
   public cardColorList!: ['card1', 'card2', 'card3'];
@@ -73,7 +68,6 @@ export class UserDashboardComponent implements OnInit {
   data: any[] = [];
   msg: string = '';
   allData: any[] = [];
-  // fileListSearch: any[] = [];
   mainHeadName: any;
   plantType: any;
   dataset = new MatTableDataSource<any>();
@@ -91,7 +85,6 @@ export class UserDashboardComponent implements OnInit {
   subAreaDataList: any[] = [];
   bsRangeValue: Date[] | undefined;
   timestamp: string ='';
-// ****************************************
 
   [x: string]: any;
   public searchDataValue = '';
@@ -100,13 +93,11 @@ export class UserDashboardComponent implements OnInit {
   isFilterDropdownOpen: boolean = false;
   bsValue = new Date();
   maxDate = new Date();
-  // pagination variables
   public lastIndex = 0;
   public totalData = 0;
   public serialNumberArray: Array<number> = [];
   public pageNumberArray: Array<number> = [];
   public pageSelection: Array<pageSelection> = [];
-
 
   dataSource!: MatTableDataSource<getSearchfileList>;
   public fileListSearch: Array<getSearchfileList> = [];
@@ -117,7 +108,6 @@ export class UserDashboardComponent implements OnInit {
     public editClientForm!: FormGroup ;
    public multipleFiles: File[] = [];
    public getRole:any;
-  //  public fileList:any;
    public bigId:any;
    public roleFlag: boolean = false;
 
@@ -126,31 +116,22 @@ export class UserDashboardComponent implements OnInit {
    subAreaNameOnHeader:any;
    mainHead:any;
    plants:any;
-
    doc: string = '';
    viewer: ViewerType = 'google';
    selectedType = 'xlsx';
-
    startDate:any;
    endDate:any;
-
    loggedUserRole:any;
-
    respData:any;
 
-  //  ****************************
   transformedMap: Map<string, any> = new Map();
 
   documentTypeSet = new Set<string>();
   documentTypeList:any;
-
   resultMap:any;
-
   valueObject:any;
   finalList:any;
-
   fileListOne:any;
-
   copyDataList:any;
   fileListRes:any;
 
@@ -158,24 +139,15 @@ export class UserDashboardComponent implements OnInit {
 
   // public dataset!: Array<data>;
   constructor(private formBuilder: FormBuilder, private router: Router, private loginService: LoginComponentService, private datePipe: DatePipe,private cdr: ChangeDetectorRef) {
-
-    
-
   }
 
 
   public getColor() {
-
     this.randomItem = this.colors[Math.floor(Math.random() * this.colors.length)];
   }
 
-  
-
-
-
   ngOnInit(): void {
     let userIdd = localStorage.getItem('loggedUserId');
-
 
     this.optionCategory = "department"
     this.getDataByCategory(this.optionCategory);
@@ -184,15 +156,11 @@ export class UserDashboardComponent implements OnInit {
     this.allCategoryListHead();
     this.uname = localStorage.getItem("loggedUserName");
 
-
-
     this.getAllFilesForm = this.formBuilder.group({
       searchKeyData: ["", [Validators.required]],
 
     });
     
-
-
   }
 
   getTopImage(departmentName: string): string {
@@ -238,25 +206,15 @@ export class UserDashboardComponent implements OnInit {
     this.searchTextVal = data;
     alert(this.searchTextVal)
   }
-
-
   public updateDb(file: any) {
     var getData = this.getAllFilesForm.value.dropDownData;
 
   }
-
-
-
   public onSubmit() {
-
-
     this.optionCategory = this.getAllFilesForm.controls['dropDownData'].value
 
     this.getDataByCategory(this.optionCategory)
-
-
   }
-
 
   public searchText(searchTxt: string) {
     var getData = this.getAllFilesForm.value.dropDownData;
@@ -267,8 +225,6 @@ export class UserDashboardComponent implements OnInit {
 
         return res.name.toLowerCase().includes(searchTxt.toLowerCase());
       });
-
-
     } else {
       this.modalMyData = this.modalFileListTmp;
     }
@@ -325,7 +281,7 @@ export class UserDashboardComponent implements OnInit {
       next: (event: any) => {
         if (event instanceof HttpResponse) {
           this.headList = event.body.categoryList.listCategoryInfoDtos
-          console.log("main head::,",this.headList);
+          // console.log("main head::,",this.headList);
           
         }
       },
@@ -360,15 +316,11 @@ export class UserDashboardComponent implements OnInit {
   // ************getting main head details***************
 
   getDetailsByCateName(catName: any, catId: any) {
-
-
-
     if (catId == 'main-head') {
       this.categoryList.set(catId, catName);
 
       this.mainHeadName = catName;
     }
-
 
     if (catId == "plants") {
       this.cardHide = false;
@@ -381,7 +333,7 @@ export class UserDashboardComponent implements OnInit {
       next: (event: any) => {
         if (event instanceof HttpResponse) {
           this.plantsList = event.body.categoryList.listCategoryInfoDtos;
-          console.log(this.plantsList);
+          // console.log(this.plantsList);
           
           this.backButtonList.push(this.headList)
         }
@@ -397,9 +349,6 @@ export class UserDashboardComponent implements OnInit {
   // **************getting Plants name*******************
 
   getDetailsByPlantsName(catName: any, catId: any) {
-    console.log("catName555",catName);
-console.log("catId555",catId);
-
     this.onClick();
 
     if (catId == 'plants') {
@@ -420,10 +369,7 @@ console.log("catId555",catId);
           if(this.plantsList.length==0){
             this.navigateToRoute(catName,catId);
           }
-          console.log(this.plantsList);
-          // this.subAreaList = event.body.categoryList
-          // console.log(this.subAreaList);
-          // let subArea = event.body.categoryList
+          // console.log(this.plantsList);
           if (event.body && Array.isArray(event.body.categoryList)) {
             this.data = event.body.categoryList;
           } else {
@@ -439,14 +385,11 @@ console.log("catId555",catId);
     });
   }
 
-  
-
   getDetailsByPlantsDataName(departmentName: string, subAreaName: string) {
     
     let endDate = new Date();
     let startDate = new Date();
     startDate.setDate(endDate.getDate() - 15);
-
     this.bsRangeValue = [startDate, endDate];
     const startDt = this.formatDate(this.bsRangeValue[0]);
     const endDt = this.formatDate(this.bsRangeValue[1]);
@@ -474,7 +417,7 @@ console.log("catId555",catId);
                 secretKey
               ).toString();
         
-              console.log("Encrypted fileList:", encryptedParam);
+              // console.log("Encrypted fileList:", encryptedParam);
         
               // Navigate to the route with the encrypted query parameter
               this.router.navigate([routes.filemanager], {
@@ -511,16 +454,7 @@ console.log("catId555",catId);
 
 
   navigateToRoute(catPlantName: any, catMainHeadId: any) {
-    // console.log("Main Head Name 55555", this.mainHeadName);
-    // console.log("Plant Name 55555", catPlantName);
-    // console.log("Main Head Id 55555", catMainHeadId);
-    
-    
-
-    
-    
     try {
-  
       const secretKey = this.timestamp; // Ensure this is defined and valid
   
       // Encrypt the parameters
@@ -541,7 +475,6 @@ console.log("catId555",catId);
     }
   }
   
-
   public sortData(sort: Sort) {
     const data = this.fileListSearch.slice();
     if (!sort.active || sort.direction === '') {
@@ -555,8 +488,6 @@ console.log("catId555",catId);
     }
   }
 
-
-
   public getMoreData(event: string): void {
     if (event === 'next') {
       this.currentPage++;
@@ -569,7 +500,6 @@ console.log("catId555",catId);
       this.pageIndex = this.currentPage - 1;
       this.limit -= this.pageSize;
       this.skip = this.pageSize * this.pageIndex;
-     
     }
   }
 
@@ -633,9 +563,6 @@ console.log("catId555",catId);
 
   }
 
-
-
-  
   public performSearch(): void {
     const searchValue = this.searchDataValue?.trim().toLowerCase() || ''; // Convert search value to lowercase
   
@@ -651,7 +578,7 @@ console.log("catId555",catId);
         this.dataSource.filter = searchValue; // Triggers the filterPredicate
         this.fileListSearch = this.dataSource.filteredData; // Get filtered data
   
-        console.log("Filtered local data:", this.fileListSearch);
+        // console.log("Filtered local data:", this.fileListSearch);
         // this.cdr.detectChanges();
       } else {
         console.warn('dataSource is undefined. Proceeding with server search.');
@@ -682,7 +609,7 @@ console.log("catId555",catId);
             // Apply the filter again
             this.dataSource.filter = searchValue;
   
-            console.log("Updated data source with server response:", this.fileListSearch);
+            // console.log("Updated data source with server response:", this.fileListSearch);
           }
         },
         error: (err: any) => {
@@ -692,25 +619,14 @@ console.log("catId555",catId);
         },
       });
     } 
-    
-    
-    
     else {
-      console.log("Enter a value");
     }
   }
   
-  
-  
-  
-
-
   transformApiResponseToMap(apiResponse: any[]): Map<string, any> {
     const resultMap = new Map<string, any>();
   
     apiResponse.forEach((item) => {
-
-
       const fileName = item.fileName;
       const documentType = item.documentType;
       const documentSubType = item.documentSubType;
@@ -761,10 +677,6 @@ console.log("catId555",catId);
 
     let selectedVersionDetails = selectedVersion;
     let version=selectedVersion.versionName;
-
-    // console.log("nhhhhhhnhnhnhmdhf:::",item);
-    
-  
         const fileName=item.fileName;
         const extension=item.extension;
         const documentType = item.documentType;
@@ -793,39 +705,23 @@ console.log("catId555",catId);
                       fileUrl,
                       versionName,
                       versionReleaseDate
-                    };
-                    
+                    };      
                   }
-             
               });
-  
-     
-       
-  
-        console.log("value object uuuuuuuuuuuNNNNNNNNN",this.valueObject);
+
+        // console.log("value object N",this.valueObject);
         
         this.transformedMap.set(fileNameAsKey, this.valueObject);
-  
         this.fileListSearch = Array.from(this.transformedMap.values());
-  
-       //tetsting
-        console.log("branch testing 1.1");
-  
   }
 
-  setFileUrl(fileUrl:any){
-    // alert("jiiii")
-    console.log(fileUrl);
-    
+  setFileUrl(fileUrl:any){ 
       this.doc=fileUrl;
-      
-    
     }
     
     buttonClose(){
       this.doc=''
     }
-  
   
   convertBytesToKB(bytes: number): string {
     return (bytes / 1024).toFixed(2) + ' KB';

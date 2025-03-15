@@ -6,13 +6,10 @@ import { DataService } from 'src/app/core/services/data/data.service';
 import { apiResultFormat, getfileList } from 'src/app/core/services/interface/models';
 import { pageSelection } from 'src/app/feature-module/employee/employees/departments/departments.component';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
-
 import { FormGroup, FormBuilder, Validators, ReactiveFormsModule } from "@angular/forms";
-
 import { FileManagementService } from 'src/app/services/file-management.service';
 import { HttpResponse } from '@angular/common/http';
 import { filter, flatMap, of, Subject, switchMap, takeUntil } from 'rxjs';
-
 import { NgxDocViewerModule, ViewerType } from 'ngx-doc-viewer';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { param } from 'jquery';
@@ -37,8 +34,6 @@ export class FileManagerComponent implements OnInit , OnDestroy {
   bsRangeValue: Date[] = [];
   maxDate = new Date();
   selectedDocType :any;
-
-  // pagination variables
   public lastIndex = 0;
   public pageSize = 10;
   public totalData = 0;
@@ -49,55 +44,44 @@ export class FileManagerComponent implements OnInit , OnDestroy {
   public currentPage = 1;
   public pageNumberArray: Array<number> = [];
   public pageSelection: Array<pageSelection> = [];
-public loggedUserName: any;
-
+  public loggedUserName: any;
   dataSource!: MatTableDataSource<getfileList>;
   public fileList: Array<getfileList> = [];
   public totalPages = 0;
   public message: any;
   public selectedFiles: any;
   public uploadFileForm!: FormGroup ;
-    public editClientForm!: FormGroup ;
-   public multipleFiles: File[] = [];
-   public getRole:any;
-  //  public fileList:any;
-   public bigId:any;
-   public roleFlag: boolean = false;
-public loggedUserId: any;
+  public editClientForm!: FormGroup ;
+  public multipleFiles: File[] = [];
+  public getRole:any;
+  public bigId:any;
+  public roleFlag: boolean = false;
+  public loggedUserId: any;
    departmentName:any;
    subAreaName: any;
    subAreaNameOnHeader:any;
-
    categoryList = new Map();
    mainHead:any;
    plants:any;
-
    docView: any;
-
    isLoading: boolean = false; 
    startDate:any;
    endDate:any;
-
    loggedUserRole:any;
    documentTypeDataList : any
    respData:any;
-
   private unsubscribe$ = new Subject<void>();
   transformedMap: Map<string, any> = new Map();
-
   documentTypeSet = new Set<string>();
   documentTypeList:any;
-
   resultMap:any;
-
   valueObject:any;
   finalList:any;
-
   fileListOne:any;
-
   copyDataList:any;
-  @ViewChild('view_files', { static: false }) viewFilesModal!: ElementRef;
-  //** / pagination variables
+
+  @ViewChild('view_files', { static: false }) viewFilesModal!: ElementRef
+
   constructor(private data: DataService, private cdr: ChangeDetectorRef,
     _uploadService: FileManagementService, private formBuilder: FormBuilder,
         private route: ActivatedRoute, private router: Router,
@@ -110,12 +94,8 @@ public loggedUserId: any;
       this.mainHead = params['mainHead'];
       this.plants = params['plants'];
       
-      
       this.subAreaNameOnHeader = this.capitalizeFirstLetter(params['subAreaName']);
-      
     });
-
-
   }
 
   setLast15Days() {
@@ -125,7 +105,6 @@ public loggedUserId: any;
 
     this.bsRangeValue = [startDate, endDate];
     this.onDateRangeSelected();
-   
   }
 
   onDateRangeSelected() {
@@ -144,68 +123,15 @@ public loggedUserId: any;
   ngOnInit(): void {
     
     this.getDocumentTypeList();
-    this.loggedUserRole=localStorage.getItem("role")
-    console.log("rolleee loginr=ed: ",this.loggedUserRole);
-    
-
-    
+    this.loggedUserRole=localStorage.getItem("role")  
     this.setLast15Days();
 
     this.route.queryParams.subscribe(params => {
       this.departmentName = params['DepartmentName'];
       this.subAreaName = params['subAreaName'];
       
-      this.subAreaNameOnHeader = this.capitalizeFirstLetter(params['subAreaName']);
-      
+      this.subAreaNameOnHeader = this.capitalizeFirstLetter(params['subAreaName']);  
     });
-
-
-
-
-
-
-    // this.route.queryParams.subscribe(params => {
-    //   if (params['fileList']) {
-    //     this.fileList = JSON.parse(decodeURIComponent(params['fileList']));
-    
-    //     const convertToKB = (bytes: number): number => {
-    //       return Math.round((bytes / 1024) );
-    //     };
-          
-    //     this.fileList = this.fileList.filter((item: any) => {
-    //       return item.listOfDocumentVersoinDtos.some((version: any) => {
-    //         if (this.loggedUserRole === 'User') {
-    //           return !version.hodDocument && !version.statutoryDocument && !version.restrictedDocument;
-    //         } else if (this.loggedUserRole === 'SuperUser') {
-    //           return (!version.hodDocument && !version.statutoryDocument && !version.restrictedDocument) || version.statutoryDocument;
-    //         } else if (this.loggedUserRole === 'HOD') {
-    //           return (!version.hodDocument && !version.statutoryDocument && !version.restrictedDocument) || version.hodDocument;
-    //         }
-    //         return false;
-    //       });
-    //     });
-        
-
-    //     this.fileList.forEach((item: any) => {
-    //       item.selectedVersion = this.getLatestVersion(item.listOfDocumentVersoinDtos);
-    //       item.listOfDocumentVersoinDtos.forEach((version: any) => {
-    //         version.fileSizeKB = convertToKB(parseInt(version.fileSize, 10));
-    //       });
-    //     });
-    
-    
-    //     if (this.fileList.length > 0 && this.fileList[0].selectedVersion) {
-    //       this.doc = this.fileList[0].selectedVersion.fileUrl;
-        
-    //     }
-    //   } else {
-
-    //       } 
-    //     }); 
-
-
-
-    
 
    this.getRole = localStorage.getItem('role');
    if(this.getRole == "Admin"){
@@ -225,7 +151,6 @@ public loggedUserId: any;
   }
 
     this.getFileListDetails()
-    // this.fileManagerTableData();
     this.uploadFileForm = this.formBuilder.group({
   
       uploadFile: ["", [Validators.required]],
@@ -249,9 +174,7 @@ public loggedUserId: any;
       next: (event: any) => {
         if (event instanceof HttpResponse) {
           this.respData = event.body.documentLists;
-          console.log("response:", this.respData);
-          
-  
+
           const convertToKB = (bytes: number): string => {
             return (bytes / 1024).toFixed(2);
           };
@@ -269,9 +192,8 @@ public loggedUserId: any;
               }
             });
           });
-          console.log("file list one",this.fileListOne);
+          // console.log("file list one",this.fileListOne);
           
-
           this.transformedMap = this.transformApiResponseToMap(this.fileListOne);
 
           this.fileList = Array.from(this.transformedMap.values());
@@ -283,7 +205,7 @@ public loggedUserId: any;
           // console.log("vgyvgscgshadfgavsdcha:^^^^",this.finalList);
           
   
-          console.log("response..............",this.transformedMap);
+          // console.log("response...",this.transformedMap);
           
           this.totalData = this.fileList.length;
 
@@ -304,16 +226,10 @@ public loggedUserId: any;
           });
   
           this.dataSource = new MatTableDataSource<getfileList>(this.fileList);
-          console.log("all get file",this.dataSource);
+     
           
           this.calculateTotalPages(this.fileList.length, this.pageSize);
   
-          // this.fileList.forEach((item: any) => {
-          //   item.selectedVersion = this.getLatestVersion(item.listOfDocumentVersoinDtos);
-          //   item.listOfDocumentVersoinDtos.forEach((version: any) => {
-          //     version.fileSizeKB = convertToKB(parseInt(version.fileSize, 10));
-          //   });
-          // });
           this.isLoading = false;
         }
       },
@@ -332,8 +248,6 @@ public loggedUserId: any;
     const resultMap = new Map<string, any>();
   
     apiResponse.forEach((item) => {
-
-      // let revObj = item.listOfDocumentVersoinDtos.slice().reverse();
 
       const fileName = item.fileName;
       const documentType = item.documentType;
@@ -369,19 +283,13 @@ public loggedUserId: any;
   
       resultMap.set(fileName, valueObject);
     });
-  
     return resultMap;
   }
   
-  
- 
   capitalizeFirstLetter(string: string): string {
     if (!string) return '';
     return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
   }
-
-
-
 
   public sortData(sort: Sort) {
     const data = this.fileList.slice();
@@ -401,7 +309,7 @@ public loggedUserId: any;
   public searchData(value: string): void {
     this.dataSource.filter = value.trim().toLowerCase();
     this.fileList = this.dataSource.filteredData;
-    console.log("get all file by filter",this.fileList);
+    // console.log("get all file by filter",this.fileList);
     
   }
 
@@ -482,15 +390,12 @@ selectFiles(_event: any): void {
 }
 
 
-
-
 getDocumentTypeList() {
-  // alert("hi")
   this.loginService.getDocumentType().subscribe({
     next: (event: any) => {
       if (event instanceof HttpResponse) {
         this.documentTypeDataList = event.body || [];
-        console.log("DOCUMENT TYPE:: ",this.documentTypeDataList);
+        // console.log("DOCUMENT TYPE:: ",this.documentTypeDataList);
 
       }
     },
@@ -512,14 +417,12 @@ onRemoveMultiple(event: File) {
 }
 
 upload(file: File): void {
-//console.log(file);
+
 if (file) {
   this['uploadService'].upload(file).subscribe({
     next: (event: any) => {
       if (event instanceof HttpResponse) {
         const msg = file.name + ": Successful!";
-        // this.message.push(msg);
-      //  this.fileInfos = this.uploadService.getFiles();
       }
     },
     error: (err: any) => {
@@ -528,15 +431,10 @@ if (file) {
       if (err.error && err.error.message) {
         msg += " " + err.error.message;
       }
-
-      // this.message.push(msg);
-     // this.fileInfos = this.uploadService.getFiles();
     }
   });
 }
 }
-
-
 
 
 uploadFiles(): void {
@@ -552,8 +450,6 @@ if (this.selectedFiles) {
 
 onSubmit(){
 console.warn('Your data has been submitted', this.uploadFileForm.value);
-
-
 
 let modalData = {
   'uploadFile': this.uploadFileForm.controls['uploadFile'].value,
@@ -582,17 +478,13 @@ if (modalData) {
   });
 }
 
-
 this.uploadFileForm.reset();
-
 }
 
 ngOnDestroy() {
   this['unsubscribe$'].next();
   this['unsubscribe$'].complete();
 }
-
-
 
 getLatestVersion(versions: any[]): any {
   return versions.reduce((latest, version) => {
@@ -605,10 +497,6 @@ onVersionChange(item: any,fileNameAsKey:any, selectedVersion: any) {
 
   let selectedVersionDetails = selectedVersion;
   let version=selectedVersion.versionName;
-
-
-  console.log("nhhhhhhnhnhnhmdhf:::",item);
-  
 
       const fileName=item.fileName;
       const extension=item.extension;
@@ -638,14 +526,9 @@ onVersionChange(item: any,fileNameAsKey:any, selectedVersion: any) {
                     fileUrl,
                     versionName,
                     versionReleaseDate
-                  };
-                  
+                  };              
                 }
-           
             });
-
-   
-     
 
       // console.log("value object uuuuuuuuuuuNNNNNNNNN",this.valueObject);
       
@@ -660,7 +543,7 @@ downloadDocument(doucmentUrl:any, item:any){
   this.loggedUserRole;
   this.loggedUserId = localStorage.getItem("loggedInUserId");
   this.loggedUserName = localStorage.getItem("loggedUserName");
-  console.log(doucmentUrl, this.loggedUserRole, this.loggedUserName, this.loggedUserId, item);
+  // console.log(doucmentUrl, this.loggedUserRole, this.loggedUserName, this.loggedUserId, item);
 }
 
 
@@ -680,13 +563,12 @@ setFileUrl(fileUrl: any, fileName: any, fileSize: number, event: Event) {
   } else {
     // Show popup if file is larger than 5MB
     this.fileSizePopup();
- 
   }
 }
 
 // Function to open modal for PDFs
 openModal(fileUrl: any) {
-  console.log("Opening modal for PDF:", fileUrl);
+  // console.log("Opening modal for PDF:", fileUrl);
   this.docView = this.sanitizer.bypassSecurityTrustResourceUrl(fileUrl);
   setTimeout(() => {
     const modalTrigger = document.getElementById('view_files');
@@ -698,8 +580,6 @@ openModal(fileUrl: any) {
     }
   }, 10);
 }
-
-
 
 // Function to show popup if file is too large
 fileSizePopup() {
@@ -748,7 +628,6 @@ fileSizePopup() {
     
   }
 
-
 onDocumentTypeChange(docType: any) {
   
   const filteredData = this.copyDataList.filter((item: any) => item.documentType === docType);
@@ -760,8 +639,5 @@ onDocumentTypeChange(docType: any) {
     this.fileList = this.copyDataList;
   }
   }
-
-  
- 
 }
 

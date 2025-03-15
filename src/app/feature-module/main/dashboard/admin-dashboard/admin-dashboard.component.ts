@@ -41,21 +41,15 @@ export class AdminDashboardComponent implements OnInit {
   resArray: any;
   dateArray: string[] = [];
   deptDataArray: any[] = [];
-
-  // fileList: any;
   fileList: any[] = [];
-
   fileCount: any;
   incCount: any;
   pieRes:any;
-
   public barChartLabels2: string[] = [];
   public barChartType: ChartType = 'bar';
-
   public userId: any;
   userName: string | undefined;
   noRecordFlag: boolean = false;
-
 
   constructor(private router: ActivatedRoute, private loginService: LoginComponentService, private datePipe: DatePipe) {
 
@@ -87,7 +81,6 @@ export class AdminDashboardComponent implements OnInit {
             this.incCount = this.res.totalIncrement
 
           }
-
         }
       },
       error: (err: any) => {
@@ -149,20 +142,6 @@ export class AdminDashboardComponent implements OnInit {
       next: (event: any) => {
         if (event instanceof HttpResponse) {
            this.pieRes = event.body.data;
-        //    this.pieRes =[
-        //     {
-        //         "dept": "OPERATION",
-        //         "userCount": 4
-        //     },
-        //     {
-        //         "dept": "MECHANICAL",
-        //         "userCount": 32
-        //     },
-        //     {
-        //         "dept": "ELECTRICAL",
-        //         "userCount": 12
-        //     }
-        // ]
 
            this.pieChartData = {
             labels: this.pieRes.map((deptData: any) => deptData.dept), 
@@ -251,8 +230,6 @@ export class AdminDashboardComponent implements OnInit {
         }
       },
     });
-
-
 
     const getSessionData = sessionStorage.getItem("Email");
     const getLocal = localStorage.getItem("EmailId");

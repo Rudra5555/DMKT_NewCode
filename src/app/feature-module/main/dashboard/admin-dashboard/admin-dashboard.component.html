@@ -32,7 +32,7 @@
           <span class="dash-widget-icon"><i class="fa-solid fa-user"></i></span>
           <div class="dash-widget-info" id="arrows">
             <h3 class="count">{{ fileCount }}</h3>
-             <!-- <span class="arrow up">
+            <!-- <span class="arrow up">
               <i class="fas fa-arrow-up"
                   style="height: 83px;font-size:24px;"></i>
                   <i id="downArrow" class=""
@@ -100,24 +100,8 @@
                 </canvas>
               </div>
             </div>
-            <!-- <div class="card-body abc">
-              <div class="chartjs-wrapper-demo custom-chart1">
-                <canvas 
-                  baseChart 
-                  [type]="'pie'" 
-                  [data]="pieChartData" 
-                  [options]="pieChartOptions">
-                </canvas>
-              </div>
-            </div> -->
-            
           </div>
         </div>
-
-
-
-
-
 
         <div class="col-md-6 text-center">
           <div class="card">
@@ -137,8 +121,6 @@
       </div>
     </div>
   </div>
-
-
 
   <div class="col-md-12 d-flex">
     <div class="card card-table flex-fill">
@@ -169,19 +151,13 @@
               </tr>
             </thead>
             <tbody>
-              <!-- <div *ngIf="isLoading" class="spinner-border" style="align-items: center;margin-left: 400%;">
-               
-              </div> -->
               <tr *ngFor="let item of fileList">
-                <!-- <td><a >{{item.fileName}}</a></td> -->
                 <td>
                   <div class="tooltip-container">
                     {{ item.fileName }}
-                    <!-- <span class="tooltip-text">{{ item.newUniqueFileName }}</span> -->
-                    <!-- -<span style="color: blue;">[{{ item.versionName }}-{{ item.versionReleaseDate }}]</span> -->
                   </div>
                 </td>
-                
+
                 <td>
                   {{item.department? item.department : 'N/A'}}
                 </td>

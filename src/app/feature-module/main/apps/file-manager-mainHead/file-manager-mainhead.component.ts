@@ -49,7 +49,6 @@ export class FileManagerMainheadComponent implements OnInit, OnDestroy {
   public pageNumberArray: Array<number> = [];
   public pageSelection: Array<pageSelection> = [];
 
-
   dataSource!: MatTableDataSource<getfileList>;
   public fileList: Array<getfileList> = [];
   public totalPages = 0;
@@ -88,22 +87,16 @@ export class FileManagerMainheadComponent implements OnInit, OnDestroy {
   transformedMap: Map<string, any> = new Map();
   documentTypeSet = new Set<string>();
   documentTypeList:any;
-
   resultMap:any;
-
   valueObject:any;
   finalList:any;
-
   fileListOne:any;
-
   copyDataList:any;
 
   private unsubscribe$ = new Subject<void>();
 
-
   //** / pagination variables
   constructor(private data: DataService, private cdr: ChangeDetectorRef,private sanitizer: DomSanitizer, _uploadService: FileManagementService, private formBuilder: FormBuilder, private route: ActivatedRoute, private router: Router, private datePipe: DatePipe, private loginService: LoginComponentService) {
-
 
     this.route.queryParams.subscribe(params => {
       this.catName = params['catName'];
@@ -115,15 +108,7 @@ export class FileManagerMainheadComponent implements OnInit, OnDestroy {
       this.plants = params['plants'];
       this.subAreaNameOnHeader = this.capitalizeFirstLetter(params['subAreaName']);
     });
-console.log("mainHead:: ",this.mainHead);
-
-
   }
-
- 
-
-
-
 
 
   ngOnInit(): void {
@@ -132,36 +117,19 @@ console.log("mainHead:: ",this.mainHead);
 
     this.setLast15Days();
 
-    // this.route.queryParams.subscribe(params => {
-    //   this.departmentName = params['DepartmentName'];
-    //   this.subAreaName = params['subAreaName'];
-
-    //   this.subAreaNameOnHeader = this.capitalizeFirstLetter(params['subAreaName']);
-
-    // });
-
-
     this.route.queryParams.subscribe((params) => {
       try {
-        // Retrieve encrypted query parameters
         const encryptedMainHeadName = params['mainHeadName'];
         const encryptedPlantName = params['plantName'];
-      
-  
-        // Define the same secret key used for encryption
         const secretKey = this.timestamp; // Ensure this matches the sender's key
   
         // Decrypt the parameters
-//this.decryptedMainHead = CryptoJS.AES.decrypt(encryptedMainHead, secretKey).toString(CryptoJS.enc.Utf8);
         this.decryptedMainHeadName = CryptoJS.AES.decrypt(encryptedMainHeadName, secretKey).toString(CryptoJS.enc.Utf8);
         this.decryptedPlantName = CryptoJS.AES.decrypt(encryptedPlantName, secretKey).toString(CryptoJS.enc.Utf8);
       } catch (error) {
         console.error("Error decrypting query parameters:", error);
       }
     });
-
-
-
 
     this.getRole = localStorage.getItem('role');
     if (this.getRole == "Admin") {
@@ -187,19 +155,15 @@ console.log("mainHead:: ",this.mainHead);
     });
 
     this.getFileListDetails();
-
   }
 
-  setLast15Days() {
-    console.log("setLast15Days");
-    
+  setLast15Days() {  
     const endDate = new Date();
     const startDate = new Date();
     startDate.setDate(endDate.getDate() - 15);
 
     this.bsRangeValue = [startDate, endDate];
     this.onDateRangeSelected();
-
   }
 
   onDateRangeSelected() {
@@ -207,27 +171,23 @@ console.log("mainHead:: ",this.mainHead);
     this.endDate = this.formatDate(this.bsRangeValue[1]);
 
     this.getFileListDetails()
-
   }
 
   formatDate(date: Date): string {
     return this.datePipe.transform(date, 'yyyy-MM-dd')!;
   }
 
- 
-
   getFileListDetails() {
     this.isLoading = true; 
     this.fileList = [];
     this.serialNumberArray = [];
-    console.log("api details:: ",this.decryptedMainHeadName, this.startDate, this.endDate);
+    // console.log("api details:: ",this.decryptedMainHeadName, this.startDate, this.endDate);
     
-
     this.loginService.getFileListforOther(this.decryptedMainHeadName, this.startDate, this.endDate).subscribe({
       next: (event: any) => {
         if (event instanceof HttpResponse) {
           this.respData = event.body.data;
-          console.log("RESP DATA:: ",this.respData);
+          // console.log("RESP DATA:: ",this.respData);
           
           const convertToKB = (bytes: number): number => {
             return Math.round(bytes / 1024);
@@ -257,7 +217,7 @@ console.log("mainHead:: ",this.mainHead);
           // console.log("vgyvgscgshadfgavsdcha:^^^^",this.finalList);
           
   
-          console.log("response..............",this.transformedMap);
+          // console.log("response..............",this.transformedMap);
           
           this.totalData = this.fileList.length;
 
@@ -278,18 +238,10 @@ console.log("mainHead:: ",this.mainHead);
           });
   
           this.dataSource = new MatTableDataSource<getfileList>(this.fileList);
-          console.log("all get file",this.dataSource);
+          // console.log("all get file",this.dataSource);
           
           this.calculateTotalPages(this.fileList.length, this.pageSize);
-  
-          // this.fileList.forEach((item: any) => {
-          //   item.selectedVersion = this.getLatestVersion(item.listOfDocumentVersoinDtos);
-          //   item.listOfDocumentVersoinDtos.forEach((version: any) => {
-          //     version.fileSizeKB = convertToKB(parseInt(version.fileSize, 10));
-          //   });
-          // });
           this.isLoading = false;
-
         }
       },
       error: (err: any) => {
@@ -304,8 +256,6 @@ console.log("mainHead:: ",this.mainHead);
     const resultMap = new Map<string, any>();
   
     apiResponse.forEach((item) => {
-
-      // let revObj = item.listOfDocumentVersoinDtos.slice().reverse();
 
       const fileName = item.fileName;
       const documentType = item.documentType;
@@ -350,25 +300,13 @@ console.log("mainHead:: ",this.mainHead);
     return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
   }
 
-
-  // getLatestVersion(versions: any[]): any {
-  //   return versions.reduce((latest, version) => {
-  //     return new Date(version.versionReleaseDate) > new Date(latest.versionReleaseDate) ? version : latest;
-  //   });
-  // }
-  
-  
   onVersionChange(item: any,fileNameAsKey:any, selectedVersion: any) {
   
     let selectedVersionDetails = selectedVersion;
     let version=selectedVersion.versionName;
-    // alert(fileName +JSON.stringify(selectedVersion))
-    // alert(fileName +version)/
-    // alert(JSON.stringify(selectedVersionDetails))
   
-    console.log("nhhhhhhnhnhnhmdhf:::",item);
+    // console.log("nhhhhhhnhnhnhmdhf:::",item);
     
-  
         const fileName=item.fileName;
         const extension=item.extension;
         const documentType = item.documentType;
@@ -397,31 +335,23 @@ console.log("mainHead:: ",this.mainHead);
                       fileUrl,
                       versionName,
                       versionReleaseDate
-                    };
-                    
-                  }
-             
+                    };              
+                  }     
               });
-  
-     
-       
-  
-        console.log("value object uuuuuuuuuuuNNNNNNNNN",this.valueObject);
+        // console.log("value object uuuuuuuuuuuNNNNNNNNN",this.valueObject);
         
         this.transformedMap.set(fileNameAsKey, this.valueObject);
   
         this.fileList = Array.from(this.transformedMap.values());
   
         // console.log("After::", JSON.stringify(this.transformedMap.get(fileNameAsMapKey)))
-        
-  
   }
   
   downloadDocument(doucmentUrl:any, item:any){
     this.loggedUserRole;
     this.loggedUserId = localStorage.getItem("loggedInUserId");
     this.loggedUserName = localStorage.getItem("loggedUserName");
-    console.log(doucmentUrl, this.loggedUserRole, this.loggedUserName, this.loggedUserId, item);
+    // console.log(doucmentUrl, this.loggedUserRole, this.loggedUserName, this.loggedUserId, item);
   }
   
 setFileUrl(fileUrl: any, fileName: any, fileSize: number, event: Event) {
@@ -440,26 +370,22 @@ setFileUrl(fileUrl: any, fileName: any, fileSize: number, event: Event) {
   } else {
     // Show popup if file is larger than 5MB
     this.fileSizePopup();
- 
   }
 }
 
 // Function to open modal for PDFs
 openModal(fileUrl: any) {
-  console.log("Opening modal for PDF:", fileUrl);
+  // console.log("Opening modal for PDF:", fileUrl);
   this.docView = this.sanitizer.bypassSecurityTrustResourceUrl(fileUrl);
   setTimeout(() => {
     const modalTrigger = document.getElementById('view_files');
     if (modalTrigger) {
       modalTrigger.classList.add('show');
       modalTrigger.style.display = 'block';
-      document.body.classList.add('modal-open');
-    
+      document.body.classList.add('modal-open');  
     }
   }, 10);
 }
-
-
 
 // Function to show popup if file is too large
 fileSizePopup() {
@@ -508,8 +434,6 @@ fileSizePopup() {
     
   }
 
-
-
     onDocumentTypeChange(docType: any) {
   
       const filteredData = this.copyDataList.filter((item: any) => item.documentType === docType);
@@ -521,9 +445,6 @@ fileSizePopup() {
         this.fileList = this.copyDataList;
       }
       }
-
-
-
 
 // ****************************************************
 
@@ -659,7 +580,7 @@ fileSizePopup() {
       next: (event: any) => {
         if (event instanceof HttpResponse) {
           this.documentTypeDataList = event.body || [];
-        console.log("DOCUMENT TYPE:: ",this.documentTypeDataList);
+        // console.log("DOCUMENT TYPE:: ",this.documentTypeDataList);
         }
       },
       error: (err: any) => {
@@ -667,8 +588,6 @@ fileSizePopup() {
       }
     });
   }
-
-
 
   uploadFiles(): void {
     this.message = [];
@@ -683,8 +602,6 @@ fileSizePopup() {
 
   onSubmit() {
     console.warn('Your data has been submitted', this.uploadFileForm.value);
-
-
 
     let modalData = {
       'uploadFile': this.uploadFileForm.controls['uploadFile'].value,
@@ -729,13 +646,6 @@ fileSizePopup() {
       return new Date(version.versionReleaseDate) > new Date(latest.versionReleaseDate) ? version : latest;
     });
   }
-
-  // onVersionChange(item: any, version: any) {
-  //   item.selectedVersion = version;
-  //   this.doc = version.fileUrl;
-  // }
-
-
 
   convertBytesToKB(bytes: number): string {
     return (bytes / 1024).toFixed(2) + ' KB';

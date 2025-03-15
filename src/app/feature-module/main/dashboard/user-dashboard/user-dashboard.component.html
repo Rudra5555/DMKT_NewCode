@@ -15,17 +15,10 @@
             (ngModelChange)="performSearch()" type="search" class="form-control searchBar"
             placeholder="Enter your search key..." />
 
-
-
-
-
-
           <button class="searchBar" id="mainHeadButton" class="button button-primary" (click)="getAllDtaForHide()"
             data-bs-toggle="modal" data-bs-target="#viewMainHeadOptions">
             Choose Main Heads
           </button>
-
-
 
         </div>
       </form>
@@ -38,153 +31,39 @@
     <div class="card-body" style="text-align: center;">{{mainHeadName}} - {{plantType}}</div>
   </div>
 
-
-
-  <!-- <div class="card-container" #autoScroll [hidden]="cardHide">
-   
-        <div class="row justify-content-center align-items-center ">
-      <div class="col-sm-3 col-6" *ngFor="let item of plantsList; let i = index">
-        
-
-        <div class="card">
-          <div class="ds-top">
-            <div *ngIf="item.departmentName == 'OPERATION'">
-              <img src="assets/img/areaImage1.JPG" width="500" height="500" />
-            </div>
-            <div *ngIf="item.departmentName == 'MECHANICAL'">
-              <img src="assets/img/DSC_5538.JPG" width="500" height="500" />
-            </div>
-            <div *ngIf="item.departmentName == 'ELECTRICAL'">
-              <img src="assets/img/DSC_0070.JPG" width="500" height="500" />
-            </div>
-            <div *ngIf="item.departmentName == 'C&I'">
-              <img src="assets/img/DSC_5538.JPG" width="500" height="500" />
-            </div>
-            <div *ngIf="item.departmentName == 'CIVIL'">
-              <img src="assets/img/DSC_0070.JPG" width="500" height="500" />
-            </div>
-            <div *ngIf="item.departmentName == 'CHP'">
-              <img src="assets/img/DSC_5538.JPG" width="500" height="500" />
-            </div>
-            <div *ngIf="item.departmentName == 'AHP'">
-              <img src="assets/img/DSC_5538.JPG" width="500" height="500" />
-            </div>
-            <div
-              *ngIf="!['OPERATION', 'MECHANICAL', 'ELECTRICAL', 'C&I', 'CIVIL', 'CHP', 'AHP'].includes(item.departmentName)">
-              <img src="assets/img/DSC_5538.JPG" width="500" height="500" />
-            </div>
-          </div>
-
-
-          <div class="avatar-holder">
-
-            <div *ngIf="item.departmentName == 'OPERATION'">
-              <img src="assets/img/Power-O&M.jpg" class="avtarImage" />
-            </div>
-
-            <div *ngIf="item.departmentName == 'ASH-DYKE'">
-              <img src="assets/img/Ash-Dyke.jpg" class="avtarImage" />
-            </div>
-
-
-            <div *ngIf="item.departmentName == 'OPERATION'">
-              <img src="assets/img/Power-O&M.jpg" class="avtarImage" />
-            </div>
-            <div *ngIf="item.departmentName == 'ELECTRICAL'">
-              <img src="assets/img/Power-Sale.jpg" class="avtarImage" />
-            </div>
-
-            <div *ngIf="item.departmentName == 'MECHANICAL'">
-              <img src="assets/img/Ash-Dyke.jpg" class="avtarImage" />
-            </div>
-            <div *ngIf="item.departmentName == 'C&I'">
-              <img src="assets/img/Plant-Infra.jpg" class="avtarImage" />
-            </div>
-            <div *ngIf="item.departmentName == 'CIVIL'">
-              <img src="assets/img/Coal-Commercial.jpg" class="avtarImage" />
-            </div>
-            <div *ngIf="item.departmentName == 'CHP'">
-              <img src="assets/img/Plant-Infra.jpg" class="avtarImage" />
-            </div>
-            <div *ngIf="item.departmentName == 'AHP'">
-              <img src="assets/img/Power-Sale.jpg" class="avtarImage" />
-            </div>
-
-            <div *ngIf="item.departmentName == 'ELECTRICAL'">
-              <img src="assets/img/Ash-Dyke.jpg" class="avtarImage" />
-            </div>
-
-            <div
-              *ngIf="!['OPERATION', 'MECHANICAL', 'ELECTRICAL', 'C&I', 'CIVIL', 'CHP', 'AHP', 'ASH-DYKE'].includes(item.departmentName)">
-              <img src="assets/img/Power-Sale.jpg" width="500" height="500" />
-            </div>
-
-          </div>
-          <div class="name">
-            <h5 style="font-weight: 600; margin-top: -20%; font-size: 14px">
-              {{ item.departmentName }}
-            </h5>
-            <h3 class="card-title">{{ item.fileCount }}</h3>
-            <div *ngFor="let sub of item.listOfSubAreaDtos">
-              <ol>
-
-                <li>
-                  <h5 class="subAreasName" (click)="getDetailsByPlantsDataName(item.departmentName,sub.subAreaName)">
-                    &#11166; {{ sub.subAreaName }}</h5>
-                </li>
-              </ol>
-            </div>
-          </div>
-
-        </div>
-      </div>
-    </div>
-    
-  </div> -->
-
-
-  <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 justify-content-center" #autoScroll [hidden]="cardHide">
+  <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 justify-content-center" #autoScroll
+    [hidden]="cardHide">
     <div class="col-md-3 d-flex justify-content-center" *ngFor="let item of plantsList; let i = index">
-    
+
       <div class="card">
         <div class="ds-top">
           <img [src]="getTopImage(item.departmentName)" alt="Top Image" class="top-img" />
         </div>
-      
+
         <div class="avatar-holder">
           <img [src]="getAvatarImage(item.departmentName)" alt="Avatar" class="avatar-img" />
         </div>
-      
+
         <h5 class="department-title">{{ item.departmentName }}</h5>
         <div class="name">
-          
+
           <ol>
             <li *ngFor="let sub of item.listOfSubAreaDtos">
-              <h5 class="subAreasName" [ngStyle]="{'font-size': getFontSize(item.listOfSubAreaDtos.length)}" (click)="getDetailsByPlantsDataName(item.departmentName,sub.subAreaName)">
+              <h5 class="subAreasName" [ngStyle]="{'font-size': getFontSize(item.listOfSubAreaDtos.length)}"
+                (click)="getDetailsByPlantsDataName(item.departmentName,sub.subAreaName)">
                 ➤ {{ sub.subAreaName }}
               </h5>
             </li>
           </ol>
         </div>
       </div>
-      
+
     </div>
   </div>
-  
-  
-  
-
-
-
 </body>
 <!-- <app-footer></app-footer> -->
 
-
-
-
-
 <!-- Main Head Modal -->
-
 <div class="modal firstModal custom-modal fade" id="viewMainHeadOptions" role="dialog">
   <div class="modal-dialog modal-dialog-right modal-lg" role="document">
     <div class="modal-content">
@@ -230,12 +109,12 @@
                   </div>
                   <div class="clickable-div" *ngIf="item.name == 'PLANNING'">
                     <img src="assets/img/Power-Sale.jpg" />
-                  </div>     
+                  </div>
 
-                <div class="clickable-div" *ngIf="item.name == 'COAL COMMERCIAL'">
-                  <img src="assets/img/Coal-Commercial.jpg" />
-                </div>
-              </a>
+                  <div class="clickable-div" *ngIf="item.name == 'COAL COMMERCIAL'">
+                    <img src="assets/img/Coal-Commercial.jpg" />
+                  </div>
+                </a>
 
                 <div *ngIf="item.name == 'OPERATION'">
                   <img src="assets/img/Power-O&M.jpg" />
@@ -262,8 +141,6 @@
                   <img src="assets/img/Ash-Dyke.jpg" />
                 </div>
 
-
-
               </section>
               <div class="mainHeadNames" *ngIf="item.name == 'POWER O&M'">Power O&M</div>
               <div class="mainHeadNames" *ngIf="item.name == 'POWER SALE'">Power Sale</div>
@@ -281,9 +158,6 @@
 </div>
 
 <!-- Main Head Modal Section End -->
-
-
-
 
 
 <!-- plantModal -->
@@ -315,10 +189,9 @@
             <div class="row">
               <div class="" *ngFor="let item of plantsList">
                 <div *ngIf="item.name == 'CPP-1'">
-                  <!-- <button class="btn-custom btn-green" id='cpp2btn' (click)="navigateToRoute(item.name, item.catType)"
-                    (click)="onClick()"> CPP-1(270MW) </button> -->
-                    <button class="btn-custom btn-green" id='cpp2btn' (click)="getDetailsByPlantsName(item.name, item.catType)"
-                    (click)="onClick()"> CPP-1(270MW) </button>
+                  <button class="btn-custom btn-green" id='cpp2btn'
+                    (click)="getDetailsByPlantsName(item.name, item.catType)" (click)="onClick()"> CPP-1(270MW)
+                  </button>
                 </div>
                 <div *ngIf="item.name == 'CPP-2 (540MW)'">
                   <button class="btn-custom btn-green" id='cpp2btn'
@@ -333,11 +206,8 @@
                   <button class="btn-custom btn-green" (click)="navigateToRoute(item.name, item.catType)"
                     (click)="onClick()">CPP(1740MW)</button>
                 </div>
-
               </div>
             </div>
-
-
           </div>
         </div>
       </div>
@@ -348,7 +218,6 @@
 
 
 <!-- FILE SEARCH FUNCTION BY DOCUMENT NAME -->
-
 <div class="cardHeader" [hidden]="documentNameSearch">
   <div class="card-body" style="text-align: center;
   font-weight: 600;
@@ -392,12 +261,9 @@
             <th style="color: rgb(22, 32, 138)" mat-sort-header="storage">
               Storage Location
             </th>
-            <th style="color: rgb(22, 32, 138)" mat-sort-header="ver" >
+            <th style="color: rgb(22, 32, 138)" mat-sort-header="ver">
               Versions
             </th>
-            <!-- <th style="color: rgb(22, 32, 138)" mat-sort-header="size">
-              Document Size
-            </th> -->
             <th style="color: rgb(22, 32, 138)">Download</th>
             <th style="color: rgb(22, 32, 138)">View</th>
           </tr>
@@ -425,7 +291,7 @@
               {{item.storageLocation? item.storageLocation : 'N/A'}}
             </td>
 
-            <td >
+            <td>
               <mat-select class="custom-mat-select select wider-select" id="versionSelect" placeholder="Select Version"
                 (selectionChange)="onVersionChange(item, item.fileName, $event.value)">
                 <mat-option *ngFor="let version of item.listOfDocumentVersoinDtos" [value]="version">
@@ -440,14 +306,12 @@
               <a class="dropdown-item" [href]="item.fileUrl" target="_blank">
                 <i class="fa-solid fa-download" style="color: rgb(0, 117, 234)"></i>
               </a>
-              <!-- {{item.fileUrl}} -->
             </td>
             <td class="text-center">
               <a class="dropdown-item" [href]="item.fileUrl" target="_blank" data-bs-toggle="modal"
                 data-bs-target="#view_files" (click)="setFileUrl(item.fileUrl)">
                 <i class="fas fa-eye" style="color: rgb(0, 117, 234)"></i>
               </a>
-              <!-- {{item.fileUrl}} -->
             </td>
           </tr>
           <tr *ngIf=" fileListSearch.length == 0">
@@ -460,10 +324,7 @@
     </div>
     <div class="table_footer">
       <div class="col-sm-12 col-md-5">
-
       </div>
-
-
     </div>
   </div>
 
@@ -479,35 +340,7 @@
         <div class="modal-body">
           <form>
             <div class="row">
-              <!-- <iframe src="http://localhost:8080/document/show-pdf/Scope of Work_Digital Library0a1ee6ec-b60f-41da-ac55-31003c08c239"
-                  width="800" height="600"> </iframe> -->
-              <!-- <iframe src="D:\Client project\pdf documents for demo/scope"
-                  width="800" height="600"> </iframe> -->
-              <!-- <iframe src="http://103.168.18.28:8080/document/show-file/POWER O&M.C&I.TURBINE.CPP-2.318.C72-EN.pdf"
-                  width="800" target="_blank" height="600"> </iframe> -->
-
-              <!-- <iframe
-            src="http://103.168.18.28:8080/document/show-file/POWER O&M.C&I.TURBINE.CPP-2.32.Copy of Estimated_Time.xlsx"
-            width="800" 
-            height="600"
-            frameborder="0"
-          >
-            ...This is an embedded file...
-          </iframe> -->
-
-              <!-- <ngx-doc-viewer [url]="doc" [viewer]="viewer" style="width:100%;height:80vh;"></ngx-doc-viewer> -->
-
               <ngx-doc-viewer [url]="doc" [viewer]="viewer" style="width: 100%; height: 80vh"></ngx-doc-viewer>
-
-              <!-- <iframe src="https://sharecad.org/cadframe/load?url=http://www.cadsofttools.com/dwgviewer/floorplan.dwg" scrolling="yes"></iframe>
-             -->
-
-
-              <!-- <iframe src="http://localhost:4200/assets/files/anteen.dwg" scrolling="yes"></iframe> -->
-
-              <!-- <iframe src="https://sharecad.org/cadframe/load?url=http://www.cadsofttools.com/dwgviewer/floorplan.dwg" scrolling="yes" width="100%" height="600"></iframe> -->
-
-
             </div>
           </form>
         </div>
