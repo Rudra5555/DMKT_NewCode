@@ -14,13 +14,25 @@
             [(ngModel)]="searchDataValue" formControlName="searchKeyData" (keydown.enter)="$event.preventDefault()"
             (ngModelChange)="performSearch()" type="search" class="form-control searchBar"
             placeholder="Enter your search key..." />
-
+            
           <button class="searchBar" id="mainHeadButton" class="button button-primary" (click)="getAllDtaForHide()"
             data-bs-toggle="modal" data-bs-target="#viewMainHeadOptions">
             Choose Main Heads
           </button>
 
+          <div class="btn-group" style="margin-left:-12%;position: absolute;margin-top: 75.5%;
+          width: 2%;height: 54px;">
+            <button type="button" class="btn btn-success dropdown-toggle"
+                data-bs-toggle="dropdown" aria-expanded="false">
+                Quick Guide
+            </button>
+            <ul class="dropdown-menu" >
+              <li><a class="dropdown-item"  [href]="getManualLink(loggedUserRole)"  target="_blank" style="color:  #0084ce ">{{loggedUserRole}} Manual</a></li>
+            </ul>
         </div>
+         
+        </div>
+        
       </form>
       <img src="assets/img/banner-edit.jpg" class="backgroundImage" />
     </div>

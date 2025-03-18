@@ -1149,3 +1149,21 @@ mat-lable {
 .name ol li:nth-child(n+15) h5.subAreasName { 
   font-size: 0.7rem; /* Further reduce for 15+ items */
 }
+.btn.show, .btn:first-child:active, :not(.btn-check) + .btn:active {
+  background-color: #0084ce !important;
+
+  color: #ffffff !important;
+}
+
+.dropdown-item.active, .dropdown-item:active {
+  background-color:#4caf50 !important;
+}
+.dropdown-item:hover, 
+.dropdown-item:focus {
+  color: inherit !important;  /* Keeps the default text color */
+  background-color: transparent !important; /* Removes background change */
+  text-decoration: none !important; /* Ensures no underline appears */
+}
+.blueScheme a {
+  color: #0084ce !important;
+}

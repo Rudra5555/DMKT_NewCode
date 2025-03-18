@@ -147,7 +147,7 @@ export class UserDashboardComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    let userIdd = localStorage.getItem('loggedUserId');
+    this.loggedUserRole = localStorage.getItem('role');
 
     this.optionCategory = "department"
     this.getDataByCategory(this.optionCategory);
@@ -161,6 +161,23 @@ export class UserDashboardComponent implements OnInit {
 
     });
     
+  }
+
+  getManualLink(role: string): string {
+    switch (role) {
+      case 'Admin':
+        return 'assets/files/all role functions.docx';
+      case 'User':
+        return 'assets/files/file-example_DEMO TEST.pdf';
+      case 'Librarian':
+        return 'assets/files/Matrix of Digital Library.xlsx';
+      case 'SuperUser':
+        return 'assets/files/file-example_DEMO TEST.pdf';
+      case 'HOD':
+        return 'assets/files/Matrix of Digital Library.xlsx';
+      default:
+        return 'javascript:void(0);'; // Default case if role is not matched
+    }
   }
 
   getTopImage(departmentName: string): string {
