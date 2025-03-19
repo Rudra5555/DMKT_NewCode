@@ -1,60 +1,17 @@
 
-<!-- <img src="assets/img/l.jpg" id="loginImage" alt="library"> -->
 <img src="assets/img/loginImage.JPG" id="loginImage" alt="library">
-
-
 
 <!DOCTYPE html>
 
 <html lang="en">
 <head>
-<!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
-<!-- Design by foolishdeveloper.com -->
 
-
-  <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"> -->
-  <!-- <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet"> -->
-  <!--Stylesheet-->
 
 </head>
 
 <body>
  
-  <!-- <div class="background">
-      
-      <div class="shape"></div>
-      <div class="shape"></div>
-  </div> -->
-  
-  
-  <!-- <form [formGroup]="loginForm"  >
-      <div class="account-logo">
-          <img src="assets/img/library-DM-&-KT-2.png" id="logo" alt="Dreams Technologies">
-        </div>
-      <div class="loginForm">
-      <h3>Login Here</h3>
-      <div class="input-block mb-4">
-        <label class="col-form-label">User Name</label>
-        <input class="form-control" placeholder="Email or Phone" formControlName="emailId" type="text" id="emailId" value="emailId" >
-      </div>
-      <div class="input-block mb-4">
-        <div class="row align-items-center">
 
-          <div class="col">
-            <label class="col-form-label" >Password</label>
-          </div>
-        
-        </div>
-        <div class="position-relative">
-          <input class="form-control" placeholder="Email or Phone" formControlName="password"  id="password" >
-        </div>
-      </div>
-
-      <div class="input-block mb-4 text-center">
-          <button  type="button" (click)="onClickSubmit(loginForm)">Log In</button>
-      </div>     
-  </div>
-    </form> -->
 
 
     
@@ -66,7 +23,7 @@
         <h3>Login Here</h3>
     
         <div class="input-block mb-4">
-          <label class="col-form-label">User Name or Email</label>
+          <label class="col-form-label">User Name</label>
           <input class="form-control" placeholder="User Name" formControlName="emailId" type="text" id="emailId">
           <div *ngIf="formFields['emailId'].invalid && formFields['emailId'].touched" class="text-danger">
             <small *ngIf="formFields['emailId'].errors?.['required']"  style="color: crimson;">User Name is required.</small>
