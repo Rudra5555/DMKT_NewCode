@@ -34,6 +34,7 @@ export class FileManagerComponent implements OnInit , OnDestroy {
   bsRangeValue: Date[] = [];
   maxDate = new Date();
   selectedDocType :any;
+  getFileName:any;
   public lastIndex = 0;
   public pageSize = 10;
   public totalData = 0;
@@ -549,7 +550,7 @@ downloadDocument(doucmentUrl:any, item:any){
 
 setFileUrl(fileUrl: any, fileName: any, fileSize: number, event: Event) {
   event.preventDefault(); // Prevents the modal from opening by default
-
+this.getFileName = fileName;
   const fileExtension = fileName.split('.').pop()?.toLowerCase();
   const maxSize = 5 * 1024 * 1024; // 5 MB in bytes
 

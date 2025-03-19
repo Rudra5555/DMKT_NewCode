@@ -7,7 +7,7 @@ import { HttpResponse } from '@angular/common/http';
 import { apiResultFormat, getSearchfileList } from 'src/app/core/services/interface/models';
 import { pageSelection } from 'src/app/feature-module/employee/employees/departments/departments.component';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { bootstrapApplication } from '@angular/platform-browser';
+import { bootstrapApplication, DomSanitizer } from '@angular/platform-browser';
 import { DatePipe } from '@angular/common';
 import { MatTableDataSource } from '@angular/material/table';
 import { ViewerType } from 'ngx-doc-viewer';
@@ -15,6 +15,7 @@ import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { Sort } from '@angular/material/sort';
 import { AES } from 'crypto-ts';
 import * as CryptoJS from 'crypto-js';
+import Swal from 'sweetalert2';
 
 declare let $: any;
 
@@ -61,6 +62,7 @@ export class UserDashboardComponent implements OnInit {
   public routes = routes;
   public currentPage = 1;
   cardHide: boolean = true;
+  getFileName: any;
   documentNameSearch: boolean = true;
   optionArr: any;
   backButtonList: any = []
@@ -72,7 +74,7 @@ export class UserDashboardComponent implements OnInit {
   plantType: any;
   dataset = new MatTableDataSource<any>();
 
-  colors = ['#fc0859', '#ff6a00', '#00ff00', '#00ab52', '#0800a7', '#ff00ff', '#dcfe00', '#00c39f'];
+  // colors = ['#fc0859', '#ff6a00', '#00ff00', '#00ab52', '#0800a7', '#ff00ff', '#dcfe00', '#00c39f'];
   searchKeyData: string = ''; 
   materials: any;
   randomItem!: string;
@@ -116,7 +118,7 @@ export class UserDashboardComponent implements OnInit {
    subAreaNameOnHeader:any;
    mainHead:any;
    plants:any;
-   doc: string = '';
+   docView: any ;
    viewer: ViewerType = 'google';
    selectedType = 'xlsx';
    startDate:any;
@@ -138,13 +140,13 @@ export class UserDashboardComponent implements OnInit {
 
 
   // public dataset!: Array<data>;
-  constructor(private formBuilder: FormBuilder, private router: Router, private loginService: LoginComponentService, private datePipe: DatePipe,private cdr: ChangeDetectorRef) {
+  constructor(private formBuilder: FormBuilder, private router: Router, private loginService: LoginComponentService, private datePipe: DatePipe,private cdr: ChangeDetectorRef,private sanitizer: DomSanitizer) {
   }
 
 
-  public getColor() {
-    this.randomItem = this.colors[Math.floor(Math.random() * this.colors.length)];
-  }
+  // public getColor() {
+  //   this.randomItem = this.colors[Math.floor(Math.random() * this.colors.length)];
+  // }
 
   ngOnInit(): void {
     this.loggedUserRole = localStorage.getItem('role');
@@ -732,14 +734,94 @@ export class UserDashboardComponent implements OnInit {
         this.fileListSearch = Array.from(this.transformedMap.values());
   }
 
-  setFileUrl(fileUrl:any){ 
-      this.doc=fileUrl;
-    }
+  // setFileUrl(fileUrl:any){ 
+  //     this.doc=fileUrl;
+  //   }
     
-    buttonClose(){
-      this.doc=''
-    }
+  //   buttonClose(){
+  //     this.doc=''
+  //   }
   
+  setFileUrl(fileUrl: any, fileName: any, fileSize: number, event: Event) {
+    event.preventDefault(); // Prevents the modal from opening by default
+  this.getFileName = fileName;
+    const fileExtension = fileName.split('.').pop()?.toLowerCase();
+    const maxSize = 5 * 1024 * 1024; // 5 MB in bytes
+  
+    if (fileExtension === 'pdf' && fileSize <= maxSize) {
+      // Open modal for PDF within size limit
+      this.openModal(fileUrl);
+    } else if (fileExtension !== 'pdf') {
+      // Show popup for non-PDF files
+      this.fileExtensionPopup();
+     
+    } else {
+      // Show popup if file is larger than 5MB
+      this.fileSizePopup();
+    }
+  }
+  
+  // Function to open modal for PDFs
+  openModal(fileUrl: any) {
+    // console.log("Opening modal for PDF:", fileUrl);
+    this.docView = this.sanitizer.bypassSecurityTrustResourceUrl(fileUrl);
+    setTimeout(() => {
+      const modalTrigger = document.getElementById('view_files');
+      if (modalTrigger) {
+        modalTrigger.classList.add('show');
+        modalTrigger.style.display = 'block';
+        document.body.classList.add('modal-open');
+      
+      }
+    }, 10);
+  }
+  
+  // Function to show popup if file is too large
+  fileSizePopup() {
+    Swal.fire({
+      title: "File size too large",
+      text: "The file is larger than 5 MB and cannot be viewed. It will be downloaded instead.",
+      icon: "warning",
+    });
+  }
+  
+    unsuccessfulSubmitAlert() {
+      Swal.fire({
+        title: "File Size is too large to view, Please download to view the file",
+        icon: "warning",
+        showClass: {
+          popup: `animate__animated animate__fadeInUp animate__faster`
+        },
+        hideClass: {
+          popup: `animate__animated animate__fadeOutDown animate__faster`
+        }
+      });
+    }
+    fileExtensionPopup() {
+      Swal.fire({
+        title: "Only PDF files can be viewed",
+        text: "This file type cannot be previewed. It will be downloaded instead.",
+        icon: "warning",
+        showClass: {
+          popup: `animate__animated animate__fadeInUp animate__faster`
+        },
+        hideClass: {
+          popup: `animate__animated animate__fadeOutDown animate__faster`
+        }
+      });
+    }
+    buttonClose(){
+      const modalElement = document.getElementById('view_files'); // Get modal element
+      if (modalElement) {
+        modalElement.classList.remove('show'); // Remove Bootstrap's "show" class
+        modalElement.style.display = 'none'; // Hide modal
+        document.body.classList.remove('modal-open'); // Remove background overlay
+      }
+    
+      this.docView =  this.docView = this.sanitizer.bypassSecurityTrustResourceUrl('');;
+      this.cdr.detectChanges();
+      
+    }
   convertBytesToKB(bytes: number): string {
     return (bytes / 1024).toFixed(2) + ' KB';
   }

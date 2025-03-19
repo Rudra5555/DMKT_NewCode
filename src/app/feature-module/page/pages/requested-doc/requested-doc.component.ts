@@ -40,6 +40,7 @@ export class RequestedDocComponent implements OnInit {
   public lastIndex = 0;
   public pageSize = 10;
   public totalData = 0;
+  getFileName: any;
   public skip = 0;
   public limit: number = this.pageSize;
   public pageIndex = 0;
@@ -199,7 +200,7 @@ export class RequestedDocComponent implements OnInit {
     
   setFileUrl(fileUrl: any, fileName: any, fileSize: number, event: Event) {
     event.preventDefault(); // Prevents the modal from opening by default
-  
+  this.getFileName = fileName;
     const fileExtension = fileName.split('.').pop()?.toLowerCase();
     const maxSize = 5 * 1024 * 1024; // 5 MB in bytes
   

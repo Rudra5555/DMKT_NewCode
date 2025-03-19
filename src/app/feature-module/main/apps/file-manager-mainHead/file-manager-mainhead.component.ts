@@ -92,6 +92,7 @@ export class FileManagerMainheadComponent implements OnInit, OnDestroy {
   finalList:any;
   fileListOne:any;
   copyDataList:any;
+  getFileName: any;
 
   private unsubscribe$ = new Subject<void>();
 
@@ -356,7 +357,7 @@ export class FileManagerMainheadComponent implements OnInit, OnDestroy {
   
 setFileUrl(fileUrl: any, fileName: any, fileSize: number, event: Event) {
   event.preventDefault(); // Prevents the modal from opening by default
-
+  this.getFileName = fileName;
   const fileExtension = fileName.split('.').pop()?.toLowerCase();
   const maxSize = 5 * 1024 * 1024; // 5 MB in bytes
 

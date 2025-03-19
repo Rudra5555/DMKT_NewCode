@@ -78,13 +78,13 @@
                   </h2>
                 </td>
                 <td>
-                  {{ item.executedByName }}
+                  {{ item.executedByName? item.executedByName : 'N/A' }}
                 </td>
                 <td>
-                  {{ item.executedOn }}
+                  {{ item.executedOn? item.executedOn : 'N/A' }}
                 </td>
                 <td>
-                  {{ getStatusText(item.status) }}
+                  {{ getStatusText(item.status)? getStatusText(item.status) : 'N/A' }}
                 </td>
               </tr>
               <tr *ngIf="!isLoading && readFileNotificationList.length==0">

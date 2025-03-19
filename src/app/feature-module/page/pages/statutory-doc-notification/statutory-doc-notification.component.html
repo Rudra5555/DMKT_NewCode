@@ -89,7 +89,7 @@
 
                 </td>
                 <td>
-                  {{ item.departmentName}}
+                  {{ item.departmentName? item.departmentName : 'N/A' }}
                 </td>
                 <td>
                   {{ item.remarks}}
