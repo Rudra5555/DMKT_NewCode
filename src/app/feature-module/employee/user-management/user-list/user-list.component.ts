@@ -41,7 +41,6 @@ export class UserListComponent implements OnInit {
   selectedPlant: string = '';
   selectedDepartment: string = '';
   isLoading: boolean = false; 
-
   public fullDataList:any;
   public filteredList:any;
   public res:any;
@@ -86,7 +85,6 @@ export class UserListComponent implements OnInit {
             this.uniquePlants = dropdownData.uniquePlants;
 
             this.totalData=this.res.length;
-          
             this.fullDataList = [...this.res];
             this.filteredList = [...this.res];
             this.paginateData(this.filteredList);
@@ -134,13 +132,11 @@ export class UserListComponent implements OnInit {
             this.res=event.body.response
            
             this.totalData=this.res.length;
-          
             this.fullDataList = [...this.res];
             this.filteredList = [...this.res];
             this.paginateData(this.filteredList);
             this.calculateTotalPages(this.filteredList.length, this.pageSize);
       
-
             this.isLoading = false;
             }
           },
@@ -209,15 +205,16 @@ export class UserListComponent implements OnInit {
    
      // 🔹 Search within full dataset
      this.filteredList = this.fullDataList.filter((item: getClient) => 
-       item.userName.toLowerCase().includes(filterValue)
+       item.userName.toLowerCase().includes(filterValue)||
+       item.userId.toLowerCase().includes(filterValue)||
+       item.phoneNumber.toLowerCase().includes(filterValue)||
+       item.role.toLowerCase().includes(filterValue)
      );
      this.skip = 0;
      this.calculateTotalPages(this.filteredList.length, this.pageSize);
      this.paginateData(this.filteredList);
    }
    
- 
- 
    private calculateTotalPages(totalData: number, pageSize: number): void {
      this.pageNumberArray = [];
      this.pageSelection = [];
