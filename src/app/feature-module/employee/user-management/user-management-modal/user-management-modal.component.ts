@@ -319,7 +319,7 @@ export class UserManagementModalComponent implements OnInit {
     Swal.fire({
       position: "center",
       icon: "success",
-      title: "Your document was uploaded successfully",
+      title: "*Employee details uploaded successfully.*",
       showConfirmButton: false,
       timer: 1500
     }).then(() => {
