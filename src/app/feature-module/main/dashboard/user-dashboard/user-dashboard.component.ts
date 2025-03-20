@@ -168,15 +168,15 @@ export class UserDashboardComponent implements OnInit {
   getManualLink(role: string): string {
     switch (role) {
       case 'Admin':
-        return 'assets/files/all role functions.docx';
+        return 'assets/files/KCDQuickGuide.pdf';
       case 'User':
-        return 'assets/files/file-example_DEMO TEST.pdf';
+        return 'assets/files/KCDQuickGuide.pdf';
       case 'Librarian':
-        return 'assets/files/Matrix of Digital Library.xlsx';
+        return 'assets/files/KCDQuickGuide.pdf';
       case 'SuperUser':
-        return 'assets/files/file-example_DEMO TEST.pdf';
+        return 'assets/files/KCDQuickGuide.pdf';
       case 'HOD':
-        return 'assets/files/Matrix of Digital Library.xlsx';
+        return 'assets/files/KCDQuickGuide.pdf';
       default:
         return 'javascript:void(0);'; // Default case if role is not matched
     }
