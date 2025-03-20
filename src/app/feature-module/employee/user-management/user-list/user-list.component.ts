@@ -40,6 +40,12 @@ export class UserListComponent implements OnInit {
   uniquePlants: string[] = [];
   selectedPlant: string = '';
   selectedDepartment: string = '';
+  isLoading: boolean = false; 
+
+  public fullDataList:any;
+  public filteredList:any;
+  public res:any;
+
   constructor(
     private data: DataService,
     private formBuilder: FormBuilder,
@@ -67,34 +73,33 @@ export class UserListComponent implements OnInit {
   private getTableData(): void {
     this.clientsData = [];
     this.serialNumberArray = [];
+    this.isLoading = true;
 
        this.loginService.getUserInfo().subscribe({
           next: (event: any) => {
             if (event instanceof HttpResponse) {
-            const res=event.body
+            const respData=event.body
+            this.res=event.body.response
 
-            let dropdownData = this.getUniqueDropdownOptions(res);
+            let dropdownData = this.getUniqueDropdownOptions(respData);
             this.uniqueDepartments = dropdownData.uniqueDepartments;
             this.uniquePlants = dropdownData.uniquePlants;
-            this.totalData = res.response.length;
-              
-            res.response.map((res: getClient, index: number) => {
-              const serialNumber = index + 1;
-              if (index >= this.skip && serialNumber <= this.limit) {
-                res.id = serialNumber;
-                this.clientsData.push(res);
-                this.serialNumberArray.push(serialNumber);
-              }
-            });
-            this.dataSource = new MatTableDataSource<getClient>(this.clientsData);
-            this.cdr.detectChanges();
-            this.calculateTotalPages(this.totalData, this.pageSize);
+
+            this.totalData=this.res.length;
+          
+            this.fullDataList = [...this.res];
+            this.filteredList = [...this.res];
+            this.paginateData(this.filteredList);
+            this.calculateTotalPages(this.filteredList.length, this.pageSize);
+
+            this.isLoading = false;
 
             }
           },
           error: (err: any) => {
             if (err.error && err.error.message) {
               this.msg += " " + err.error.message;
+              this.isLoading = false;
             }
           }
         });
@@ -121,29 +126,28 @@ export class UserListComponent implements OnInit {
 
     this.clientsData = [];
     this.serialNumberArray = [];
+    this.isLoading = true;
+
        this.loginService.getFilterUserList(this.selectedDepartment,this.selectedPlant).subscribe({
           next: (event: any) => {
             if (event instanceof HttpResponse) {
-            const res=event.body
-            this.totalData = res.response.length;
-              
-            res.response.map((res: getClient, index: number) => {
-              const serialNumber = index + 1;
-              if (index >= this.skip && serialNumber <= this.limit) {
-                res.id = serialNumber;
-                this.clientsData.push(res);
-                this.serialNumberArray.push(serialNumber);
-              }
-            });
-            this.dataSource = new MatTableDataSource<getClient>(this.clientsData);
-            this.cdr.detectChanges();
-            this.calculateTotalPages(this.totalData, this.pageSize);
+            this.res=event.body.response
+           
+            this.totalData=this.res.length;
+          
+            this.fullDataList = [...this.res];
+            this.filteredList = [...this.res];
+            this.paginateData(this.filteredList);
+            this.calculateTotalPages(this.filteredList.length, this.pageSize);
+      
 
+            this.isLoading = false;
             }
           },
           error: (err: any) => {
             if (err.error && err.error.message) {
               this.msg += " " + err.error.message;
+              this.isLoading = false;
             }
           }
         });
@@ -161,75 +165,98 @@ export class UserListComponent implements OnInit {
       : 'N/A';
   }
   
-  public sortData(sort: Sort) {
-    const data = this.clientsData.slice();
-
-    /* eslint-disable @typescript-eslint/no-explicit-any */
-    if (!sort.active || sort.direction === '') {
-      this.clientsData = data;
-    } else {
-      this.clientsData = data.sort((a: any, b: any) => {
-        const aValue = (a as any)[sort.active];
-        const bValue = (b as any)[sort.active];
-        return (aValue < bValue ? -1 : 1) * (sort.direction === 'asc' ? 1 : -1);
-      });
-    }
-  }
-
-  public searchData(value: string): void {
-    this.dataSource.filter = value.trim().toLowerCase();
-    this.clientsData = this.dataSource.filteredData;
-  }
-
-  public getMoreData(event: string): void {
-    if (event === 'next') {
-      this.currentPage++;
-      this.pageIndex = this.currentPage - 1;
-      this.limit += this.pageSize;
-      this.skip = this.pageSize * this.pageIndex;
-      this.getTableData();
-    } else if (event === 'previous') {
-      this.currentPage--;
-      this.pageIndex = this.currentPage - 1;
-      this.limit -= this.pageSize;
-      this.skip = this.pageSize * this.pageIndex;
-      this.getTableData();
-    }
-  }
-
-  public moveToPage(pageNumber: number): void {
-    this.currentPage = pageNumber;
-    this.skip = this.pageSelection[pageNumber - 1].skip;
-    this.limit = this.pageSelection[pageNumber - 1].limit;
-    if (pageNumber > this.currentPage) {
-      this.pageIndex = pageNumber - 1;
-    } else if (pageNumber < this.currentPage) {
-      this.pageIndex = pageNumber + 1;
-    }
-    this.getTableData();
-  }
-
-  public changePageSize(): void {
-    this.pageSelection = [];
-    this.limit = this.pageSize;
-    this.skip = 0;
-    this.currentPage = 1;
-    this.getTableData();
-  }
-
-  private calculateTotalPages(totalData: number, pageSize: number): void {
-    this.pageNumberArray = [];
-    this.totalPages = totalData / pageSize;
-    if (this.totalPages % 1 !== 0) {
-      this.totalPages = Math.trunc(this.totalPages + 1);
-    }
-    for (let i = 1; i <= this.totalPages; i++) {
-      const limit = pageSize * i;
-      const skip = limit - pageSize;
-      this.pageNumberArray.push(i);
-      this.pageSelection.push({ skip: skip, limit: limit });
-    }
-  }
+ public sortData(sort: Sort) {
+     if (!sort.active || sort.direction === '') {
+       return;
+     }
+   
+     this.filteredList = this.filteredList.sort((a: any, b: any) => {
+       const aValue = (a as any)[sort.active];
+       const bValue = (b as any)[sort.active];
+   
+       return (aValue < bValue ? -1 : 1) * (sort.direction === 'asc' ? 1 : -1);
+     });
+   
+     this.paginateData(this.filteredList);
+   }
+   
+ 
+   public getMoreData(event: string): void {
+     if (event === 'next' && this.currentPage < this.totalPages) {
+       this.currentPage++;
+     } else if (event === 'previous' && this.currentPage > 1) {
+       this.currentPage--;
+     }
+   
+     this.skip = (this.currentPage - 1) * this.pageSize;
+     this.paginateData(this.filteredList);
+   }
+   
+ 
+   public moveToPage(pageNumber: number): void {
+     if (pageNumber < 1 || pageNumber > this.totalPages) return;
+   
+     this.currentPage = pageNumber;
+     this.skip = (pageNumber - 1) * this.pageSize;
+   
+     this.paginateData(this.filteredList);
+   }
+   
+ 
+ 
+   public searchData(value: string): void {
+     const filterValue = value.trim().toLowerCase();
+   
+     // 🔹 Search within full dataset
+     this.filteredList = this.fullDataList.filter((item: getClient) => 
+       item.userName.toLowerCase().includes(filterValue)
+     );
+     this.skip = 0;
+     this.calculateTotalPages(this.filteredList.length, this.pageSize);
+     this.paginateData(this.filteredList);
+   }
+   
+ 
+ 
+   private calculateTotalPages(totalData: number, pageSize: number): void {
+     this.pageNumberArray = [];
+     this.pageSelection = [];
+   
+     this.totalPages = Math.ceil(totalData / pageSize);
+   
+     for (let i = 1; i <= this.totalPages; i++) {
+       const limit = pageSize * i;
+       const skip = limit - pageSize;
+       this.pageNumberArray.push(i);
+       this.pageSelection.push({ skip: skip, limit: limit });
+     }
+   }
+ 
+   private paginateData(data: getClient[]): void {
+     this.clientsData = [];
+     this.serialNumberArray = [];
+   
+     data.forEach((item, index) => {
+       const serialNumber = index + 1;
+       if (index >= this.skip && index < this.skip + this.pageSize) {
+         item.id = serialNumber;
+         this.clientsData.push(item);
+         this.serialNumberArray.push(serialNumber);
+       }
+     });
+   
+     this.dataSource = new MatTableDataSource<getClient>([...this.clientsData]);
+   }
+ 
+   
+   public changePageSize(newPageSize: number): void {
+     this.pageSize = newPageSize; 
+     this.currentPage = 1;
+     this.skip = 0;
+   
+     this.calculateTotalPages(this.filteredList.length, this.pageSize);
+     this.paginateData(this.filteredList); 
+   }
 
   navigateWithClient(client: any) {
     if (!client) return;
