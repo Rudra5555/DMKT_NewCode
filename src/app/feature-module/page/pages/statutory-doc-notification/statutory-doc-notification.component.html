@@ -42,8 +42,7 @@
               <div class="dataTables_length">
                 <label class="col-form-label" for="">
                   Show
-                  <select [(ngModel)]="pageSize" (ngModelChange)="changePageSize()"
-                    class="form-control form-control-sm">
+                  <select [(ngModel)]="pageSize" (ngModelChange)="changePageSize($event)" class="form-control form-control-sm">
                     <option value="10">10</option>
                     <option value="25">25</option>
                     <option value="50">50</option>
@@ -112,7 +111,7 @@
           <div class="col-sm-12 col-md-5">
             <div class="dataTables_info">
               Showing {{ serialNumberArray[0] }} to
-              {{ serialNumberArray[serialNumberArray.length - 2] }} of
+              {{ serialNumberArray[serialNumberArray.length - 1] }} of
               {{ totalData }} entries
             </div>
           </div>

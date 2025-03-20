@@ -72,6 +72,8 @@ export class StatutoryDocNotificationComponent implements OnInit {
   loggedUserId: any;
 
   statutoryReadNotificationList:any;
+  public fullDataList:any;
+  public filteredList:any;
 
   //** / pagination variables
   constructor(private data: DataService, private datePipe: DatePipe, _uploadService: FileManagementService, private formBuilder: FormBuilder, private loginService: LoginComponentService) {
@@ -101,24 +103,19 @@ export class StatutoryDocNotificationComponent implements OnInit {
 
   public StDocmarkAsReadNotif(){
     this.readNotificationList = [];
-    this.serialNumberArray = [];
     this.isLoading = true;
+
     const storedData = localStorage.getItem('statutoryReadNotificationList');
-    const statutoryReadNotificationList = storedData ? JSON.parse(storedData) : [];
+    this.statutoryReadNotificationList = storedData ? JSON.parse(storedData) : [];
 
-    this.totalData = statutoryReadNotificationList.length;
+    this.totalData=this.statutoryReadNotificationList.length;
+    
+    this.fullDataList = [...this.statutoryReadNotificationList];
+    this.filteredList = [...this.statutoryReadNotificationList];
+    this.paginateData(this.filteredList);
+    this.calculateTotalPages(this.filteredList.length, this.pageSize);
 
-    statutoryReadNotificationList.map((item: getReadNotificationList, index: number) => {
-      const serialNumber = index + 1;
-      if (index >= this.skip && serialNumber <= this.limit) {
-        item.id = serialNumber;
-        this.readNotificationList.push(item);
-        this.serialNumberArray.push(serialNumber);
-      }
-    });
 
-    this.dataSource = new MatTableDataSource<getReadNotificationList>(this.readNotificationList);
-    this.calculateTotalPages(statutoryReadNotificationList.length, this.pageSize);
     this.isLoading = false; 
 
   }
@@ -135,72 +132,101 @@ export class StatutoryDocNotificationComponent implements OnInit {
     }
   }
 
-  public sortData(sort: Sort) {
-    const data = this.readNotificationList.slice();
-    if (!sort.active || sort.direction === '') {
-      this.readNotificationList = data;
-    } else {
-      this.readNotificationList = data.sort((a: any, b: any) => {
+ public sortData(sort: Sort) {
+      if (!sort.active || sort.direction === '') {
+        return;
+      }
+    
+      this.filteredList = this.filteredList.sort((a: any, b: any) => {
         const aValue = (a as any)[sort.active];
         const bValue = (b as any)[sort.active];
+    
         return (aValue < bValue ? -1 : 1) * (sort.direction === 'asc' ? 1 : -1);
       });
+    
+      this.paginateData(this.filteredList);
     }
-  }
-
-  public searchData(value: string): void {
-    this.dataSource.filter = value.trim().toLowerCase();
-    this.readNotificationList = this.dataSource.filteredData;
-  }
-
-  public getMoreData(event: string): void {
-   
-    if (event === 'next') {
-      this.currentPage++;
-      this.pageIndex = this.currentPage - 1;
-      this.limit += this.pageSize;
-      this.skip = this.pageSize * this.pageIndex;
-      this.StDocmarkAsReadNotif();
-    } else if (event === 'previous') {
-      this.currentPage--;
-      this.pageIndex = this.currentPage - 1;
-      this.limit -= this.pageSize;
-      this.skip = this.pageSize * this.pageIndex;
-      this.StDocmarkAsReadNotif();
+    
+  
+    public getMoreData(event: string): void {
+      if (event === 'next' && this.currentPage < this.totalPages) {
+        this.currentPage++;
+      } else if (event === 'previous' && this.currentPage > 1) {
+        this.currentPage--;
+      }
+    
+      this.skip = (this.currentPage - 1) * this.pageSize;
+      this.paginateData(this.filteredList);
     }
-  }
-
-  public moveToPage(pageNumber: number): void {
-    this.currentPage = pageNumber;
-    this.skip = this.pageSelection[pageNumber - 1].skip;
-    this.limit = this.pageSelection[pageNumber - 1].limit;
-    if (pageNumber > this.currentPage) {
-      this.pageIndex = pageNumber - 1;
-    } else if (pageNumber < this.currentPage) {
-      this.pageIndex = pageNumber + 1;
+    
+  
+    public moveToPage(pageNumber: number): void {
+      if (pageNumber < 1 || pageNumber > this.totalPages) return;
+    
+      this.currentPage = pageNumber;
+      this.skip = (pageNumber - 1) * this.pageSize;
+    
+      this.paginateData(this.filteredList);
     }
-    this.StDocmarkAsReadNotif();
-  }
-  private calculateTotalPages(totalData: number, pageSize: number): void {
-    this.pageNumberArray = [];
-    this.totalPages = totalData / pageSize;
-    if (this.totalPages % 1 !== 0) {
-      this.totalPages = Math.trunc(this.totalPages + 1);
+    
+  
+  
+    public searchData(value: string): void {
+      const filterValue = value.trim().toLowerCase();
+    
+      // 🔹 Search within full dataset
+      this.filteredList = this.fullDataList.filter((item: getReadNotificationList) => 
+        item.documentName.toLowerCase().includes(filterValue)||
+        item.departmentName.toLowerCase().includes(filterValue)||
+        item.executerName.toLowerCase().includes(filterValue)
+      );
+      this.skip = 0;
+      this.calculateTotalPages(this.filteredList.length, this.pageSize);
+      this.paginateData(this.filteredList);
     }
-    for (let i = 1; i <= this.totalPages; i++) {
-      const limit = pageSize * i;
-      const skip = limit - pageSize;
-      this.pageNumberArray.push(i);
-      this.pageSelection.push({ skip: skip, limit: limit });
+    
+  
+  
+    private calculateTotalPages(totalData: number, pageSize: number): void {
+      this.pageNumberArray = [];
+      this.pageSelection = [];
+    
+      this.totalPages = Math.ceil(totalData / pageSize);
+    
+      for (let i = 1; i <= this.totalPages; i++) {
+        const limit = pageSize * i;
+        const skip = limit - pageSize;
+        this.pageNumberArray.push(i);
+        this.pageSelection.push({ skip: skip, limit: limit });
+      }
     }
-  }
-  public changePageSize(): void {
-    this.pageSelection = [];
-    this.limit = this.pageSize;
-    this.skip = 0;
-    this.currentPage = 1;
-    this.StDocmarkAsReadNotif();
-  }
+  
+    private paginateData(data: getReadNotificationList[]): void {
+      this.readNotificationList = [];
+      this.serialNumberArray = [];
+    
+      data.forEach((item, index) => {
+        const serialNumber = index + 1;
+        if (index >= this.skip && index < this.skip + this.pageSize) {
+          item.id = serialNumber;
+          this.readNotificationList.push(item);
+          this.serialNumberArray.push(serialNumber);
+        }
+      });
+    
+      this.dataSource = new MatTableDataSource<getReadNotificationList>([...this.readNotificationList]);
+    }
+  
+    
+    public changePageSize(newPageSize: number): void {
+      this.pageSize = newPageSize; 
+      this.currentPage = 1;
+      this.skip = 0;
+    
+      this.calculateTotalPages(this.filteredList.length, this.pageSize);
+      this.paginateData(this.filteredList); 
+    }
+    
   openFilter() {
     this.filter = !this.filter;
   }

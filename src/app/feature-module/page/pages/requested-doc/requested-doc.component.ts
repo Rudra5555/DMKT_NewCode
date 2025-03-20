@@ -94,8 +94,9 @@ export class RequestedDocComponent implements OnInit {
   generatedBy: any;
   selectedFileUrl: any;
   subject = new BehaviorSubject('')
-
-
+  public filteredList:any;
+  public fullDataList:any;
+  public filteredApprovedData:any;
   //** / pagination variables
   constructor(private data: DataService,private cdr: ChangeDetectorRef,private sanitizer: DomSanitizer, private datePipe: DatePipe, _uploadService: FileManagementService, private formBuilder: FormBuilder, private loginService: LoginComponentService) {
 
@@ -147,28 +148,23 @@ export class RequestedDocComponent implements OnInit {
   public approvedDocumentList(loggedUserId: any): void {
     this.contactlist = [];
     this.isLoading = true; // Start loader
-    this.serialNumberArray = [];
+   
 
     this.loginService.approvedDocList(loggedUserId, this.startDate, this.endDate).subscribe({
       next: (event: any) => {
         if (event instanceof HttpResponse) {
           const responseData = event.body.data;
          
-          const filteredData = responseData.filter((item: getcontactlist) => item.documentApprovalStatus === 'A');
+          this.filteredApprovedData = responseData.filter((item: getcontactlist) => item.documentApprovalStatus === 'A');
 
-          this.totalData = filteredData.length;
-          filteredData.map((item: getcontactlist, index: number) => {
-            const serialNumber = index + 1;
-            if (index >= this.skip && serialNumber <= this.limit) {
-              item.id = serialNumber;
-              this.contactlist.push(item);
-              this.serialNumberArray.push(serialNumber);
-            }
-          });
-
-          this.dataSource = new MatTableDataSource<getcontactlist>(this.contactlist);
-          this.calculateTotalPages(filteredData.length, this.pageSize);
-          this.isLoading = false; 
+          this.totalData=this.filteredApprovedData.length;
+          
+          this.fullDataList = [...this.filteredApprovedData];
+          this.filteredList = [...this.filteredApprovedData];
+          this.paginateData(this.filteredList);
+          this.calculateTotalPages(this.filteredList.length, this.pageSize);
+          
+        this.isLoading = false; 
         }
       },
       error: (err: any) => {
@@ -365,71 +361,100 @@ export class RequestedDocComponent implements OnInit {
   }
 
 
-  public sortData(sort: Sort) {
-    const data = this.contactlist.slice();
-    if (!sort.active || sort.direction === '') {
-      this.contactlist = data;
-    } else {
-      this.contactlist = data.sort((a: any, b: any) => {
+ public sortData(sort: Sort) {
+      if (!sort.active || sort.direction === '') {
+        return;
+      }
+    
+      this.filteredList = this.filteredList.sort((a: any, b: any) => {
         const aValue = (a as any)[sort.active];
         const bValue = (b as any)[sort.active];
+    
         return (aValue < bValue ? -1 : 1) * (sort.direction === 'asc' ? 1 : -1);
       });
+    
+      this.paginateData(this.filteredList);
     }
-  }
+    
+  
+    public getMoreData(event: string): void {
+      if (event === 'next' && this.currentPage < this.totalPages) {
+        this.currentPage++;
+      } else if (event === 'previous' && this.currentPage > 1) {
+        this.currentPage--;
+      }
+    
+      this.skip = (this.currentPage - 1) * this.pageSize;
+      this.paginateData(this.filteredList);
+    }
+    
+  
+    public moveToPage(pageNumber: number): void {
+      if (pageNumber < 1 || pageNumber > this.totalPages) return;
+    
+      this.currentPage = pageNumber;
+      this.skip = (pageNumber - 1) * this.pageSize;
+    
+      this.paginateData(this.filteredList);
+    }
+    
+  
+  
+    public searchData(value: string): void {
+      const filterValue = value.trim().toLowerCase();
+    
+      // 🔹 Search within full dataset
+      this.filteredList = this.fullDataList.filter((item: getcontactlist) => 
+        item.uniqueDocumentName.toLowerCase().includes(filterValue)
+      );
+      this.skip = 0;
+      this.calculateTotalPages(this.filteredList.length, this.pageSize);
+      this.paginateData(this.filteredList);
+    }
+    
+  
+  
+    private calculateTotalPages(totalData: number, pageSize: number): void {
+      this.pageNumberArray = [];
+      this.pageSelection = [];
+    
+      this.totalPages = Math.ceil(totalData / pageSize);
+    
+      for (let i = 1; i <= this.totalPages; i++) {
+        const limit = pageSize * i;
+        const skip = limit - pageSize;
+        this.pageNumberArray.push(i);
+        this.pageSelection.push({ skip: skip, limit: limit });
+      }
+    }
+  
+    private paginateData(data: getcontactlist[]): void {
+      this.contactlist = [];
+      this.serialNumberArray = [];
+    
+      data.forEach((item, index) => {
+        const serialNumber = index + 1;
+        if (index >= this.skip && index < this.skip + this.pageSize) {
+          item.id = serialNumber;
+          this.contactlist.push(item);
+          this.serialNumberArray.push(serialNumber);
+        }
+      });
+    
+      this.dataSource = new MatTableDataSource<getcontactlist>([...this.contactlist]);
+    }
+  
+    
+    public changePageSize(newPageSize: number): void {
+      this.pageSize = newPageSize; 
+      this.currentPage = 1;
+      this.skip = 0;
+    
+      this.calculateTotalPages(this.filteredList.length, this.pageSize);
+      this.paginateData(this.filteredList); 
+    }
 
-  public searchData(value: string): void {
-    this.dataSource.filter = value.trim().toLowerCase();
-    this.contactlist = this.dataSource.filteredData;
-  }
 
-  public getMoreData(event: string): void {
-    if (event === 'next') {
-      this.currentPage++;
-      this.pageIndex = this.currentPage - 1;
-      this.limit += this.pageSize;
-      this.skip = this.pageSize * this.pageIndex;
-      this.approvedDocumentList(this.loggedUserId);
-    } else if (event === 'previous') {
-      this.currentPage--;
-      this.pageIndex = this.currentPage - 1;
-      this.limit -= this.pageSize;
-      this.skip = this.pageSize * this.pageIndex;
-      this.approvedDocumentList(this.loggedUserId);
-    }
-  }
-
-  public moveToPage(pageNumber: number): void {
-    this.currentPage = pageNumber;
-    this.skip = this.pageSelection[pageNumber - 1].skip;
-    this.limit = this.pageSelection[pageNumber - 1].limit;
-    if (pageNumber > this.currentPage) {
-      this.pageIndex = pageNumber - 1;
-    } else if (pageNumber < this.currentPage) {
-      this.pageIndex = pageNumber + 1;
-    }
-    this.approvedDocumentList(this.loggedUserId);
-  }
-  private calculateTotalPages(totalData: number, pageSize: number): void {
-    this.pageNumberArray = [];
-    this.totalPages = totalData / pageSize;
-    if (this.totalPages % 1 !== 0) {
-      this.totalPages = Math.trunc(this.totalPages + 1);
-    }
-    for (let i = 1; i <= this.totalPages; i++) {
-      const limit = pageSize * i;
-      const skip = limit - pageSize;
-      this.pageNumberArray.push(i);
-      this.pageSelection.push({ skip: skip, limit: limit });
-    }
-  }
-  public changePageSize(): void {
-    this.pageSelection = [];
-    this.limit = this.pageSize;
-    this.skip = 0;
-    this.currentPage = 1;
-    this.approvedDocumentList(this.loggedUserId);
-  }
   openFilter() {
     this.filter = !this.filter;
   }
