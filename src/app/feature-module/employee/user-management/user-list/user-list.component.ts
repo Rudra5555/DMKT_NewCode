@@ -206,8 +206,8 @@ export class UserListComponent implements OnInit {
      // 🔹 Search within full dataset
      this.filteredList = this.fullDataList.filter((item: getClient) => 
        item.userName.toLowerCase().includes(filterValue)||
-       item.userId.toLowerCase().includes(filterValue)||
        item.phoneNumber.toLowerCase().includes(filterValue)||
+       item.emailId.toLowerCase().includes(filterValue)||
        item.role.toLowerCase().includes(filterValue)
      );
      this.skip = 0;
