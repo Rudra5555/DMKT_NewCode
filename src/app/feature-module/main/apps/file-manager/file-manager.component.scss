@@ -354,3 +354,56 @@ div#filterDoc {
   visibility: visible; 
   opacity: 1; 
 }
+
+// ****************************
+.table-responsive {
+  max-height: 430px; /* Adjust as needed */
+  overflow-y: auto;
+  position: relative;
+}
+
+.custom-table thead th {
+  position: sticky;
+  top: 0;
+  background-color: #fff; /* Matches table background */
+  z-index: 2;
+  box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.4); /* Optional shadow for better visibility */
+}
+
+.card .card-body {
+  padding: 16px;
+  height: 450px;
+}
+
+.filter-section {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.abc {
+  display: flex;
+  align-items: center;
+}
+
+.abc label {
+  display: flex;
+  align-items: center;
+}
+
+.abc select {
+  width: auto;
+  margin: 0 5px; /* Adjust spacing between "Show", dropdown, and "Entries" */
+  
+}
+
+ul {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.mb-0 {
+  margin-bottom: 0 !important;
+}

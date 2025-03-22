@@ -80,6 +80,10 @@ export class FileManagerComponent implements OnInit , OnDestroy {
   finalList:any;
   fileListOne:any;
   copyDataList:any;
+  filterRes:any;
+  public fullDataList:any;
+  public filteredList:any;
+  public firstRes:any;
 
   @ViewChild('view_files', { static: false }) viewFilesModal!: ElementRef
 
@@ -169,7 +173,6 @@ export class FileManagerComponent implements OnInit , OnDestroy {
   getFileListDetails() {
     this.isLoading = true; 
     this.fileList = [];
-    this.serialNumberArray = [];
   
     this.loginService.getFileLists(this.mainHead, this.plants, this.departmentName, this.subAreaName, this.startDate, this.endDate).subscribe({
       next: (event: any) => {
@@ -193,22 +196,6 @@ export class FileManagerComponent implements OnInit , OnDestroy {
               }
             });
           });
-          // console.log("file list one",this.fileListOne);
-          
-          this.transformedMap = this.transformApiResponseToMap(this.fileListOne);
-
-          this.fileList = Array.from(this.transformedMap.values());
-          // console.log("file list",JSON.stringify( this.fileList));
-          
-          //copy data
-          this.copyDataList = Array.from(this.transformedMap.values());
-
-          // console.log("vgyvgscgshadfgavsdcha:^^^^",this.finalList);
-          
-  
-          // console.log("response...",this.transformedMap);
-          
-          this.totalData = this.fileList.length;
 
           this.fileListOne.forEach((item: any) => {
             if (item.documentType) {
@@ -217,20 +204,21 @@ export class FileManagerComponent implements OnInit , OnDestroy {
           });
           
           this.documentTypeList = Array.from(this.documentTypeSet);
-  
-          this.fileList.map((item: getfileList, index: number) => {
-            const serialNumber = index + 1;
-            if (index >= this.skip && serialNumber <= this.limit) {
-              item.id = serialNumber;
-              this.serialNumberArray.push(serialNumber);
-            }
-          });
-  
-          this.dataSource = new MatTableDataSource<getfileList>(this.fileList);
-     
+
+          // console.log("file list one",this.fileListOne);
           
-          this.calculateTotalPages(this.fileList.length, this.pageSize);
-  
+          this.transformedMap = this.transformApiResponseToMap(this.fileListOne);
+
+          // this.fileList = Array.from(this.transformedMap.values());
+          // console.log("file list",JSON.stringify( this.fileList));
+          this.firstRes = Array.from(this.transformedMap.values());
+          this.totalData = this.firstRes.length;
+          
+          this.fullDataList = [...this.firstRes];
+          this.filteredList = [...this.firstRes];
+          this.paginateData(this.filteredList);
+          this.calculateTotalPages(this.filteredList.length, this.pageSize);
+          
           this.isLoading = false;
         }
       },
@@ -242,7 +230,6 @@ export class FileManagerComponent implements OnInit , OnDestroy {
       },
     });
   }
-
 
 
   transformApiResponseToMap(apiResponse: any[]): Map<string, any> {
@@ -292,75 +279,101 @@ export class FileManagerComponent implements OnInit , OnDestroy {
     return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
   }
 
-  public sortData(sort: Sort) {
-    const data = this.fileList.slice();
-
-    /* eslint-disable @typescript-eslint/no-explicit-any */
-    if (!sort.active || sort.direction === '') {
-      this.fileList = data;
-    } else {
-      this.fileList = data.sort((a: any, b: any) => {
+  // *********************************
+ public sortData(sort: Sort) {
+      if (!sort.active || sort.direction === '') {
+        return;
+      }
+    
+      this.filteredList = this.filteredList.sort((a: any, b: any) => {
         const aValue = (a as any)[sort.active];
         const bValue = (b as any)[sort.active];
+    
         return (aValue < bValue ? -1 : 1) * (sort.direction === 'asc' ? 1 : -1);
       });
-    }
-  }
-
-  public searchData(value: string): void {
-    this.dataSource.filter = value.trim().toLowerCase();
-    this.fileList = this.dataSource.filteredData;
-    // console.log("get all file by filter",this.fileList);
     
-  }
+      this.paginateData(this.filteredList);
+    }
+    
+  
+    public getMoreData(event: string): void {
+      if (event === 'next' && this.currentPage < this.totalPages) {
+        this.currentPage++;
+      } else if (event === 'previous' && this.currentPage > 1) {
+        this.currentPage--;
+      }
+    
+      this.skip = (this.currentPage - 1) * this.pageSize;
+      this.paginateData(this.filteredList);
+    }
+    
+  
+    public moveToPage(pageNumber: number): void {
+      if (pageNumber < 1 || pageNumber > this.totalPages) return;
+    
+      this.currentPage = pageNumber;
+      this.skip = (pageNumber - 1) * this.pageSize;
+    
+      this.paginateData(this.filteredList);
+    }
+    
+  
+  
+    public searchData(value: string): void {
+      const filterValue = value.trim().toLowerCase();
+    
+      // 🔹 Search within full dataset
+      this.filteredList = this.fullDataList.filter((item: getfileList) => 
+        item.fileName.toLowerCase().includes(filterValue)
+      );
+      this.skip = 0;
+      this.calculateTotalPages(this.filteredList.length, this.pageSize);
+      this.paginateData(this.filteredList);
+    }
+    
+  
+  
+    private calculateTotalPages(totalData: number, pageSize: number): void {
+      this.pageNumberArray = [];
+      this.pageSelection = [];
+    
+      this.totalPages = Math.ceil(totalData / pageSize);
+    
+      for (let i = 1; i <= this.totalPages; i++) {
+        const limit = pageSize * i;
+        const skip = limit - pageSize;
+        this.pageNumberArray.push(i);
+        this.pageSelection.push({ skip: skip, limit: limit });
+      }
+    }
+  
+    private paginateData(data: getfileList[]): void {
+      this.fileList = [];
+      this.serialNumberArray = [];
+    
+      data.forEach((item, index) => {
+        const serialNumber = index + 1;
+        if (index >= this.skip && index < this.skip + this.pageSize) {
+          item.id = serialNumber;
+          this.fileList.push(item);
+          this.serialNumberArray.push(serialNumber);
+        }
+      });
+    
+      this.dataSource = new MatTableDataSource<getfileList>([...this.fileList]);
+    }
+  
+    
+    public changePageSize(newPageSize: number): void {
+      this.pageSize = newPageSize; 
+      this.currentPage = 1;
+      this.skip = 0;
+    
+      this.calculateTotalPages(this.filteredList.length, this.pageSize);
+      this.paginateData(this.filteredList); 
+    }
 
-  public getMoreData(event: string): void {
-    if (event === 'next') {
-      this.currentPage++;
-      this.pageIndex = this.currentPage - 1;
-      this.limit += this.pageSize;
-      this.skip = this.pageSize * this.pageIndex;
-      this.getFileListDetails()
-    } else if (event === 'previous') {
-      this.currentPage--;
-      this.pageIndex = this.currentPage - 1;
-      this.limit -= this.pageSize;
-      this.skip = this.pageSize * this.pageIndex;
-      this.getFileListDetails()
-    }
-  }
-
-  public moveToPage(pageNumber: number): void {
-    this.currentPage = pageNumber;
-    this.skip = this.pageSelection[pageNumber - 1].skip;
-    this.limit = this.pageSelection[pageNumber - 1].limit;
-    if (pageNumber > this.currentPage) {
-      this.pageIndex = pageNumber - 1;
-    } else if (pageNumber < this.currentPage) {
-      this.pageIndex = pageNumber + 1;
-    }
-    this.getFileListDetails()
-  }
-  private calculateTotalPages(totalData: number, pageSize: number): void {
-    this.pageNumberArray = [];
-    this.totalPages = totalData / pageSize;
-    if (this.totalPages % 1 !== 0) {
-      this.totalPages = Math.trunc(this.totalPages + 1);
-    }
-    for (let i = 1; i <= this.totalPages; i++) {
-      const limit = pageSize * i;
-      const skip = limit - pageSize;
-      this.pageNumberArray.push(i);
-      this.pageSelection.push({ skip: skip, limit: limit });
-    }
-  }
-  public changePageSize(): void {
-    this.pageSelection = [];
-    this.limit = this.pageSize;
-    this.skip = 0;
-    this.currentPage = 1;
-    this.getFileListDetails()
-  }
+  // **********************************
   openFilter() {
     this.filter = !this.filter;
   }
@@ -631,13 +644,23 @@ fileSizePopup() {
 
 onDocumentTypeChange(docType: any) {
   
-  const filteredData = this.copyDataList.filter((item: any) => item.documentType === docType);
+  const filteredData = this.fullDataList.filter((item: any) => item.documentType === docType);
 
   if(filteredData!='' ){
-    this.fileList = this.copyDataList.filter((item: any) => item.documentType === docType);
+    this.filterRes = this.fullDataList.filter((item: any) => item.documentType === docType);
+
+    // this.fullDataList = [...this.filterRes];
+    this.filteredList = [...this.filterRes];
+    this.paginateData(this.filteredList);
+    this.calculateTotalPages(this.filteredList.length, this.pageSize);
   }
   else{
-    this.fileList = this.copyDataList;
+    this.filterRes = this.fullDataList;
+
+    this.fullDataList = [...this.filterRes];
+    this.filteredList = [...this.filterRes];
+    this.paginateData(this.filteredList);
+    this.calculateTotalPages(this.filteredList.length, this.pageSize);
   }
   }
 }
