@@ -36,7 +36,6 @@ export class DepartmentComponent implements OnInit{
     bsRangeValue: Date[] = [];
     maxDate = new Date();
     isLoading: boolean = false; 
-    // pagination variables
     public noRecordFlag: boolean = false;
     public lastIndex = 0;
     public pageSize = 10;
@@ -54,8 +53,7 @@ export class DepartmentComponent implements OnInit{
     public message: any;
     public selectedFiles: any;
     public uploadFileForm!: FormGroup ;
-      public editClientForm!: FormGroup ;
-    //  public multipleFiles: File[] = [];
+    public editClientForm!: FormGroup ;
     public reasonFlag: boolean = false;
     public requestFileFlag: boolean = false;
     public uploadDocumentFlag: boolean = false;
@@ -77,8 +75,6 @@ export class DepartmentComponent implements OnInit{
     public plantList: any[] = [];
     public disableSubmitBtn:boolean= false;
     public selectedCatName: any;
-    //  public uploadDocumentFlag: boolean = false;
-    //  public uploadDocumentSizeFlag: boolean = false;
      public documentTypeFlag: boolean = false;
      public fileNames: string[] = [];
      files: any[] = [];
@@ -107,11 +103,10 @@ export class DepartmentComponent implements OnInit{
      selectedFileUrl:any;
      allDeptList:any;
      selectedPlant:any;
+     public fullDataList:any;
+     public filteredList:any;
   
     
-  
-  
-  
     //** / pagination variables
     constructor(private data: DataService,private datePipe: DatePipe,private uploadDocument: UploadDocumentComponentService, _uploadService: FileManagementService, private formBuilder: FormBuilder, private loginService : LoginComponentService) {
    
@@ -171,8 +166,6 @@ export class DepartmentComponent implements OnInit{
       next: (event: any) => {
         if (event instanceof HttpResponse) {
           this.plantList = event.body?.categoryList || [];
-          //  this.plantList = (event.body?.categoryList || []).filter((item: { catId: number; }) => item.catId !== 9);
-          console.log(this.plantList);
           
         }
       },
@@ -196,10 +189,6 @@ export class DepartmentComponent implements OnInit{
       if(this.selectedPlant == "CPP-1"){
         this.plantId = 9;
       }
-      // const [deptName, deptAbbr] = event.split('~'); // for automation user this code
-     
-    console.log('Selected Plant:', this.plantId);
-    // You can perform any action here, like sending it to a service or storing in a variable.
   }
 
 
@@ -211,24 +200,28 @@ export class DepartmentComponent implements OnInit{
     this.uploadDocument.getDeptList(this.startDate, this.endDate).subscribe({
       next: (event: any) => {
         if (event instanceof HttpResponse) {
-          const respData = event.body.data;
-
-          console.log("mrmrmrmrmrmr",respData);
+          this.res = event.body.data;
           
-  
-          this.totalData = respData.length;
+          // this.totalData = respData.length;
 
-          respData.map((item: getDeptList, index: number) => {
-          const serialNumber = index + 1;
-          if (index >= this.skip && serialNumber <= this.limit) {
-            item.id = serialNumber;
-            this.contactlist.push(item);
-            this.serialNumberArray.push(serialNumber);
-          }
-        });
+        //   respData.map((item: getDeptList, index: number) => {
+        //   const serialNumber = index + 1;
+        //   if (index >= this.skip && serialNumber <= this.limit) {
+        //     item.id = serialNumber;
+        //     this.contactlist.push(item);
+        //     this.serialNumberArray.push(serialNumber);
+        //   }
+        // });
 
-        this.dataSource = new MatTableDataSource<getDeptList>(this.contactlist);
-        this.calculateTotalPages(respData.length, this.pageSize);
+        // this.dataSource = new MatTableDataSource<getDeptList>(this.contactlist);
+        // this.calculateTotalPages(respData.length, this.pageSize);
+
+        this.totalData=this.res.length;
+          
+        this.fullDataList = [...this.res];
+        this.filteredList = [...this.res];
+        this.paginateData(this.filteredList);
+        this.calculateTotalPages(this.filteredList.length, this.pageSize);
           
         this.isLoading = false; 
   
@@ -264,7 +257,6 @@ openModal(fileUrl: string , documentName : string) {
     this.loginService.searchDocuments('').subscribe({
       next: (event: any) => {
         if (event instanceof HttpResponse) {
-          //console.log('API Response:', event.body);  
   
           if (event.body && event.body.data && Array.isArray(event.body.data)) {
             this.documentList = event.body.data.map((doc: any) => ({
@@ -292,7 +284,6 @@ openModal(fileUrl: string , documentName : string) {
     this.loginService.searchDocuments(this.searchQuery).subscribe({
       next: (event: any) => {
         if (event instanceof HttpResponse) {
-          //console.log('API Response:', event.body); 
   
           if (event.body && event.body.data && Array.isArray(event.body.data)) {
             this.documentList = event.body.data.map((doc: any) => ({
@@ -317,13 +308,8 @@ openModal(fileUrl: string , documentName : string) {
   }
   
 
-
-
-
-
   onSubmit(): void {
     if (this.uploadFileForm.invalid) {
-      console.log('Form is invalid');
       this.uploadFileForm.markAllAsTouched();
       this.unsuccessfulSubmitAlert();
       return;
@@ -336,13 +322,12 @@ openModal(fileUrl: string , documentName : string) {
       plantId: this.plantId,
       headId: '1',
     };
-    console.log(payload);
     
 
     this.uploadDocument.addDept(payload).subscribe({
       next: (event: any) => {
         if (event instanceof HttpResponse) {
-          const res = event.body;
+          const resData = event.body;
           this.uploadFileForm.get('mainHead')?.reset('');
           this.uploadFileForm.get('plants')?.reset('');
           this.uploadFileForm.get('department')?.reset('');
@@ -356,76 +341,103 @@ openModal(fileUrl: string , documentName : string) {
       }
     });
   
-    console.log('Payload:', payload);
   }
   
-  public sortData(sort: Sort) {
-    const data = this.contactlist.slice();
+   public sortData(sort: Sort) {
+       if (!sort.active || sort.direction === '') {
+         return;
+       }
+     
+       this.filteredList = this.filteredList.sort((a: any, b: any) => {
+         const aValue = (a as any)[sort.active];
+         const bValue = (b as any)[sort.active];
+     
+         return (aValue < bValue ? -1 : 1) * (sort.direction === 'asc' ? 1 : -1);
+       });
+     
+       this.paginateData(this.filteredList);
+     }
+     
+   
+     public getMoreData(event: string): void {
+       if (event === 'next' && this.currentPage < this.totalPages) {
+         this.currentPage++;
+       } else if (event === 'previous' && this.currentPage > 1) {
+         this.currentPage--;
+       }
+     
+       this.skip = (this.currentPage - 1) * this.pageSize;
+       this.paginateData(this.filteredList);
+     }
+     
+   
+     public moveToPage(pageNumber: number): void {
+       if (pageNumber < 1 || pageNumber > this.totalPages) return;
+     
+       this.currentPage = pageNumber;
+       this.skip = (pageNumber - 1) * this.pageSize;
+     
+       this.paginateData(this.filteredList);
+     }
+     
+   
+   
+     public searchData(value: string): void {
+       const filterValue = value.trim().toLowerCase();
+     
+       // 🔹 Search within full dataset
+       this.filteredList = this.fullDataList.filter((item: getDeptList) => 
+        item.headName.toLowerCase().includes(filterValue)||
+        item.departmentName.toLowerCase().includes(filterValue)||
+        item.plant.toLowerCase().includes(filterValue)
+       );
+       this.skip = 0;
+       this.calculateTotalPages(this.filteredList.length, this.pageSize);
+       this.paginateData(this.filteredList);
+     }
+     
+   
+   
+     private calculateTotalPages(totalData: number, pageSize: number): void {
+       this.pageNumberArray = [];
+       this.pageSelection = [];
+     
+       this.totalPages = Math.ceil(totalData / pageSize);
+     
+       for (let i = 1; i <= this.totalPages; i++) {
+         const limit = pageSize * i;
+         const skip = limit - pageSize;
+         this.pageNumberArray.push(i);
+         this.pageSelection.push({ skip: skip, limit: limit });
+       }
+     }
+   
+     private paginateData(data: getDeptList[]): void {
+       this.contactlist = [];
+       this.serialNumberArray = [];
+     
+       data.forEach((item, index) => {
+         const serialNumber = index + 1;
+         if (index >= this.skip && index < this.skip + this.pageSize) {
+           item.id = serialNumber;
+           this.contactlist.push(item);
+           this.serialNumberArray.push(serialNumber);
+         }
+       });
+     
+       this.dataSource = new MatTableDataSource<getDeptList>([...this.contactlist]);
+     }
+   
+     
+     public changePageSize(newPageSize: number): void {
+       this.pageSize = newPageSize; 
+       this.currentPage = 1;
+       this.skip = 0;
+     
+       this.calculateTotalPages(this.filteredList.length, this.pageSize);
+       this.paginateData(this.filteredList); 
+     }
 
-    /* eslint-disable @typescript-eslint/no-explicit-any */
-    if (!sort.active || sort.direction === '') {
-      this.contactlist = data;
-    } else {
-      this.contactlist = data.sort((a: any, b: any) => {
-        const aValue = (a as any)[sort.active];
-        const bValue = (b as any)[sort.active];
-        return (aValue < bValue ? -1 : 1) * (sort.direction === 'asc' ? 1 : -1);
-      });
-    }
-  }
-
-  public searchData(value: string): void {
-    this.dataSource.filter = value.trim().toLowerCase();
-    this.contactlist = this.dataSource.filteredData;
-  }
-
-  public getMoreData(event: string): void {
-    if (event === 'next') {
-      this.currentPage++;
-      this.pageIndex = this.currentPage - 1;
-      this.limit += this.pageSize;
-      this.skip = this.pageSize * this.pageIndex;
-      this.getDeptFileList()
-    } else if (event === 'previous') {
-      this.currentPage--;
-      this.pageIndex = this.currentPage - 1;
-      this.limit -= this.pageSize;
-      this.skip = this.pageSize * this.pageIndex;
-      this.getDeptFileList()
-    }
-  }
-
-  public moveToPage(pageNumber: number): void {
-    this.currentPage = pageNumber;
-    this.skip = this.pageSelection[pageNumber - 1].skip;
-    this.limit = this.pageSelection[pageNumber - 1].limit;
-    if (pageNumber > this.currentPage) {
-      this.pageIndex = pageNumber - 1;
-    } else if (pageNumber < this.currentPage) {
-      this.pageIndex = pageNumber + 1;
-    }
-    this.getDeptFileList()
-  }
-  private calculateTotalPages(totalData: number, pageSize: number): void {
-    this.pageNumberArray = [];
-    this.totalPages = totalData / pageSize;
-    if (this.totalPages % 1 !== 0) {
-      this.totalPages = Math.trunc(this.totalPages + 1);
-    }
-    for (let i = 1; i <= this.totalPages; i++) {
-      const limit = pageSize * i;
-      const skip = limit - pageSize;
-      this.pageNumberArray.push(i);
-      this.pageSelection.push({ skip: skip, limit: limit });
-    }
-  }
-  public changePageSize(): void {
-    this.pageSelection = [];
-    this.limit = this.pageSize;
-    this.skip = 0;
-    this.currentPage = 1;
-    this.getDeptFileList()
-  }
   openFilter() {
     this.filter = !this.filter;
   }

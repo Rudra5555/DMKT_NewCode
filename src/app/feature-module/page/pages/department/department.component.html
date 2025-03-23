@@ -1,26 +1,18 @@
 <div class="content container-fluid" style="height: 120vh;">
   <!-- Page Header -->
-  <div class="page-header">
     <div class="row align-items-center">
-      <div class="col-md-4">
-        <h3 class="page-title">Add Department</h3>
-       
-       
-      </div>
+      <h3 class="page-title">Add Department</h3>
       <div class="col-md-12 modalButtons" >
         <a href="javascript:void(0);" class="btn add-btn btn-success" data-bs-toggle="modal" data-bs-target="#add_department"
           id="modalButton"><i class="la la-plus-circle"></i>Add</a>
       </div>
-    
   </div>
-
   <hr />
   
   <div class="filter-section">
     <ul>
       <li>
         
-
         <div class="filter-section">
           <div class="col-xl-12">
             <div class="daterange-picker d-flex centered-div">
@@ -55,12 +47,12 @@
   <div class="row" >
     <div class="col-md-12">
       <div class="table_header">
-        <div class="row">
+        <div class="row" style="margin-top: -3%;">
           <div class="col-sm-12 col-md-6">
             <div class="dataTables_length">
               <label class="col-form-label" for="">
                 Show
-                <select [(ngModel)]="pageSize" (ngModelChange)="changePageSize()" class="form-control form-control-sm">
+                <select [(ngModel)]="pageSize" (ngModelChange)="changePageSize($event)" class="form-control form-control-sm">
                   <option value="10">10</option>
                   <option value="25">25</option>
                   <option value="50">50</option>
@@ -72,8 +64,11 @@
           </div>
         </div>
       </div>
-      <div class="table-responsive" style=" overflow-y: auto;
-    height: 500px;">
+
+      <div class="col-md-12 d-flex">
+      <div class="card card-table flex-fill">
+      <div class="card-body">
+      <div class="table-responsive" style=" overflow-y: auto; height: 490px;">
         <table matSort (matSortChange)="sortData($event)"
         class="table table-striped custom-table datatable contact-table text-center">
         <thead >
@@ -81,16 +76,11 @@
             <th>Main Head</th>
             <th>Plant Name</th>
             <th>Department Name</th>
-          <th>Department Abbriviation</th>
-              <!-- <th>Storage Location</th>
-            <th>Document Type</th>
-            <th class="text-end">Action</th> -->
+            <th>Department Abbriviation</th>
           </tr>
         </thead>
         <tbody>
           <div *ngIf="isLoading" class="spinner-border" style="align-items: center;margin-left: 260%;">
-            <!-- <p>Loading...</p>  -->
-            <!-- <i class="fas fa-spinner fa-spin text-info align-items-center me-1"></i> -->
           </div>
           <tr *ngFor="let item of contactlist; ">
             <td>
@@ -123,11 +113,14 @@
         </tbody>
       </table>
       </div>
+      </div>
+      </div>
+      </div>
       <div class="table_footer"  >
         <div class="col-sm-12 col-md-5">
           <div class="dataTables_info">
             Showing {{ serialNumberArray[0] }} to
-            {{ serialNumberArray[serialNumberArray.length - 2] }} of
+            {{ serialNumberArray[serialNumberArray.length - 1] }} of
             {{ totalData }} entries
           </div>
         </div>
@@ -197,11 +190,6 @@
       </div>
     </div>
   </div>
-
-
-</div>
-
-
 
 
 <div class="modal firstModal custom-modal fade" id="add_department" role="dialog">

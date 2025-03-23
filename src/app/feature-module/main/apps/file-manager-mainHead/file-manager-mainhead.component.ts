@@ -160,7 +160,7 @@ export class FileManagerMainheadComponent implements OnInit, OnDestroy {
       docType: ["", [Validators.required]],
     });
 
-    this.getFileListDetails();
+    // this.getFileListDetails();
   }
 
   setLast15Days() {  
@@ -197,19 +197,23 @@ export class FileManagerMainheadComponent implements OnInit, OnDestroy {
             return Math.round(bytes / 1024);
           };
 
-          this.fileListOne = this.respData.filter((item: any) => {
-            return item.listOfDocumentVersoinDtos.some((version: any) => {
+           this.fileListOne = this.respData.map((item: any) => {
+            const filteredVersions = item.listOfDocumentVersoinDtos.filter((version: any) => {
               if (this.loggedUserRole === 'User') {
-                return !version.hodDocument && !version.statutoryDocument && !version.restrictedDocument;
+              return !version.hodDocument && !version.statutoryDocument && !version.restrictedDocument;
               } else if (this.loggedUserRole === 'SuperUser') {
-                return (!version.hodDocument && !version.statutoryDocument && !version.restrictedDocument) || version.statutoryDocument;
+              return (!version.hodDocument && !version.statutoryDocument && !version.restrictedDocument) || version.statutoryDocument;
               } else if (this.loggedUserRole === 'HOD') {
-                return (!version.hodDocument && !version.statutoryDocument && !version.restrictedDocument) || version.hodDocument;
-              }else if (this.loggedUserRole === 'Librarian' || this.loggedUserRole === 'Admin') {
-                return true; 
+              return (!version.hodDocument && !version.statutoryDocument && !version.restrictedDocument) || version.hodDocument;
+              } else if (this.loggedUserRole === 'Librarian' || this.loggedUserRole === 'Admin') {
+                return true;
               }
-            });
-          });
+              return false;
+              });
+                    
+             return filteredVersions.length > 0 ? { ...item, listOfDocumentVersoinDtos: filteredVersions } : null;
+             })
+            .filter((item: null) => item !== null);
 
           this.fileListOne.forEach((item: any) => {
             if (item.documentType) {
