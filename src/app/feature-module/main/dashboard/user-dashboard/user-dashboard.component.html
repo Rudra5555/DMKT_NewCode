@@ -243,9 +243,9 @@
       <div class="row">
         <div class="col-sm-8 col-md-5">
           <div class="dataTables_length">
-            <label class="col-form-label" for="">
+            <label class="col-form-label d-flex align-items-center mb-0">
               Show
-              <select [(ngModel)]="pageSize" class="form-control form-control-sm" id="changePageDataNumber">
+              <select [(ngModel)]="pageSize" (ngModelChange)="changePageSize($event)" class="form-control form-control-sm mx-2">
                 <option value="10">10</option>
                 <option value="25">25</option>
                 <option value="50">50</option>
@@ -319,12 +319,7 @@
                 <i class="fa-solid fa-download" style="color: rgb(0, 117, 234)"></i>
               </a>
             </td>
-            <!-- <td class="text-center">
-              <a class="dropdown-item" [href]="item.fileUrl" target="_blank" data-bs-toggle="modal"
-                data-bs-target="#view_files" (click)="setFileUrl(item.fileUrl)">
-                <i class="fas fa-eye" style="color: rgb(0, 117, 234)"></i>
-              </a>
-            </td> -->
+         
             <td class="text-center">
               <a class="dropdown-item" [href]="item.fileUrl" target="_blank"
                 (click)="setFileUrl(item.fileUrl, item.fileName , +item.fileSize, $event)">
@@ -340,11 +335,82 @@
         </tbody>
       </table>
     </div>
-    <div class="table_footer">
+   
+    <div class="table_footer" style="height: 200px;" >
       <div class="col-sm-12 col-md-5">
+        <div class="dataTables_info">
+          Showing {{ serialNumberArray[0] }} to
+          {{ serialNumberArray[serialNumberArray.length - 1] }} of
+          {{ totalData }} entries
+        </div>
+      </div>
+  
+      <div class="col-sm-12 col-md-7">
+        <div class="pagination_section">
+          <ul class="pagination" style="gap:unset;">
+            <li class="page-item" [ngClass]="{
+                disabled: currentPage === 1
+              }">
+              <a (click)="getMoreData('previous')" class="page-link" href="javascript:void(0);" tabindex="-1"><i
+                  class="fa fa-angle-double-left"></i></a>
+            </li>
+  
+            @for (item of pageNumberArray; track item; let i = $index) {
+            <li class="page-item" [class.active]="item === currentPage" [ngClass]="
+                  (pageNumberArray[currentPage - 2] > item &&
+                    item !== 1 &&
+                    pageNumberArray.length > 6) ||
+                  (pageNumberArray[currentPage] < item &&
+                    item !== 1 &&
+                    pageNumberArray.length > 6 &&
+                    pageNumberArray.length !== item)
+                    ? 'hide-page-no'
+                    : 'show-page-no'
+                ">
+              <a (click)="moveToPage(item)" class="page-link" href="javascript:void(0);">
+                {{ item }}
+              </a>
+            </li>
+            @if (
+            i === 0 && pageNumberArray.length > 6 && currentPage > 2
+            ) {
+            <li class="page-item" [hidden]="currentPage === 1" (click)="moveToPage(currentPage - 2)"
+              (keydown.enter)="moveToPage(currentPage - 2)" tabindex="0">
+              <a class="page-link" href="javascript:void(0);"> ... </a>
+            </li>
+            }
+            @if (
+            i === pageNumberArray.length - 2 &&
+            pageNumberArray.length > 6
+            ) {
+            <li [hidden]="
+                  currentPage >=
+                    pageNumberArray[pageNumberArray.length - 2] ||
+                  totalData < serialNumberArray[serialNumberArray.length - 1]
+                " class="page-item" (click)="moveToPage(currentPage + 2)"
+              (keydown.enter)="moveToPage(currentPage + 2)" tabindex="0">
+              <a class="page-link" href="javascript:void(0);"> ... </a>
+            </li>
+            }
+            }
+  
+            <li class="page-item" [ngClass]="{
+                disabled:
+                  currentPage ===
+                    pageNumberArray[pageNumberArray.length - 1] ||
+                    fileListSearch.length === 0
+              }">
+              <a (click)="getMoreData('next')" class="page-link" href="javascript:void(0);"><i
+                  class=" fa fa-angle-double-right"></i>
+              </a>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
+
   </div>
+  
 
   <!-- <div id="view_files" #view_files class="modal custom-modal fade" role="dialog">
     <div class="modal-dialog modal-dialog-centered modal-xl">

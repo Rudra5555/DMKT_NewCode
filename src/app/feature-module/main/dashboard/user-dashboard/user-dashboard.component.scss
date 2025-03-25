@@ -1167,3 +1167,25 @@ mat-lable {
 .blueScheme a {
   color: #0084ce !important;
 }
+
+// ******************************
+
+.table-responsive {
+  max-height: 430px; /* Adjust as needed */
+  overflow-y: auto;
+  position: relative;
+}
+
+.custom-table thead th {
+  position: sticky;
+  top: 0;
+  background-color: #fff; /* Matches table background */
+  z-index: 2;
+  box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.4); /* Optional shadow for better visibility */
+}
+
+.card .card-body {
+  padding: 16px;
+  height: 450px;
+}
+

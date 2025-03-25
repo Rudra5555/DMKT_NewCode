@@ -17,10 +17,13 @@ import { routes } from 'src/app/core/core.index';
 import { LoginComponentService } from 'src/app/services/login-component.service';
 import { Subject, from } from 'rxjs';
 
-import { AES } from 'crypto-ts';
+import { AES } from 'crypto-js';
 import * as CryptoJS from 'crypto-js';
 import Swal from 'sweetalert2';
 import { an } from '@fullcalendar/core/internal-common';
+// import crypto from 'crypto-js';
+// import CryptoJS from 'crypto-js';
+
 
 const subject = new Subject<string>();
 
@@ -55,7 +58,6 @@ export class LoginComponent implements OnInit {
   constructor(private router: Router,private loginService : LoginComponentService,private dataService : DataService ,private formBuilder: FormBuilder) {}
 
 
-  
 
 
   ngOnInit(): void {
@@ -65,7 +67,55 @@ export class LoginComponent implements OnInit {
         emailId: ['', [Validators.required]],  
         password: ['', [Validators.required]],
       
-      });    
+      }); 
+
+
+      // const secretKey = 'U2FsdGVkX1+YWc7um66C+IC8EUyQ4HMuJ2k6boVos+aOEzARzYCMAqNkLZ2xyV4Utije7gqw4d4etLafwtq20+hunp434ayPfolYK6xBYhAkrPeS7pVOsPccTg8+3YHKnCbWa+myLa5TJcYhrC6V7pq0eOh/vQ1MU7+4oE9v/UEWC1VnsePPKGtSLMSKcwypTldGYraJUoxXyukEhOaGQQ=='; // Use a strong key
+
+   
+      // const str = {
+      //     "status": 200,
+      //     "response": {
+      //         "userName": "User",
+      //         "userId":1,
+      //         "role": "User",
+      //         "accessRoles": [
+      //             "User",
+      //             "Admin",
+      //             "HOD"
+      //         ],
+      //         "title":"Biplob",
+      //         "displayName": "Das",
+      //         "departmentNameList": [
+      //             {
+      //                 "departmentName": "OPERATION",
+      //                 "plantName": "CPP-2 (540MW)"
+      //             },
+      //             {
+      //                 "departmentName": "C&I",
+      //                 "plantName": "CPP-3 (1200MW)"
+      //             }
+      //         ],
+      //         "userPicture": "1234567890",
+      //         "phoneNumber": "9678824924",
+      //         "emailId": "nitish@gmail.com"
+      //     },
+      //     "message": "success!!"
+      // };
+      
+     
+      // const encryptedData = CryptoJS.AES.encrypt(JSON.stringify({ str }), secretKey).toString();
+      // console.log('Encrypted:', encryptedData);
+      
+  
+      // const decryptedBytes = CryptoJS.AES.decrypt(encryptedData, secretKey);
+      // const decryptedData = decryptedBytes.toString(CryptoJS.enc.Utf8);
+      // console.log('Decrypted:', decryptedData);
+      
+      // const parsedData = JSON.parse(decryptedData);
+      // console.log('Original String:', parsedData.str);
+
+
   }
 
   lowercasePasswordValidator(control: AbstractControl): ValidationErrors | null {
@@ -96,7 +146,7 @@ onClickSubmit(formData: any){
       next: (event: any) => {
         if (event instanceof HttpResponse) {
            this.data = event.body
-                   
+
           if(this.data!=null){   
             if(this.data.status ===417){
 

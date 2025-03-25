@@ -47,7 +47,7 @@ export class UserDashboardComponent implements OnInit {
   public uname: any
   public flag: boolean = false;
   public visible: boolean = false;
-  public fileList: any
+  public fileListUK: any
   public modalFileList: any;
   public myData: any;
   public modalMyData: any;
@@ -137,7 +137,8 @@ export class UserDashboardComponent implements OnInit {
   copyDataList:any;
   fileListRes:any;
 
-
+  public fullDataList:any;
+  public filteredList:any;
 
   // public dataset!: Array<data>;
   constructor(private formBuilder: FormBuilder, private router: Router, private loginService: LoginComponentService, private datePipe: DatePipe,private cdr: ChangeDetectorRef,private sanitizer: DomSanitizer) {
@@ -425,14 +426,14 @@ export class UserDashboardComponent implements OnInit {
         if (event instanceof HttpResponse) {
           try {
             if (event.body?.documentLists) {
-              this.fileList = event.body.documentLists;
+              this.fileListUK = event.body.documentLists;
         
               // Use the timestamp as the secret key
               const secretKey = this.timestamp;
         
               // Encrypt the fileList using AES encryption
               const encryptedParam = CryptoJS.AES.encrypt(
-                JSON.stringify(this.fileList),
+                JSON.stringify(this.fileListUK),
                 secretKey
               ).toString();
         
@@ -494,65 +495,7 @@ export class UserDashboardComponent implements OnInit {
     }
   }
   
-  public sortData(sort: Sort) {
-    const data = this.fileListSearch.slice();
-    if (!sort.active || sort.direction === '') {
-      this.fileListSearch = data;
-    } else {
-      this.fileListSearch = data.sort((a: any, b: any) => {
-        const aValue = (a as any)[sort.active];
-        const bValue = (b as any)[sort.active];
-        return (aValue < bValue ? -1 : 1) * (sort.direction === 'asc' ? 1 : -1);
-      });
-    }
-  }
-
-  public getMoreData(event: string): void {
-    if (event === 'next') {
-      this.currentPage++;
-      this.pageIndex = this.currentPage - 1;
-      this.limit += this.pageSize;
-      this.skip = this.pageSize * this.pageIndex;
-
-    } else if (event === 'previous') {
-      this.currentPage--;
-      this.pageIndex = this.currentPage - 1;
-      this.limit -= this.pageSize;
-      this.skip = this.pageSize * this.pageIndex;
-    }
-  }
-
-  public moveToPage(pageNumber: number): void {
-    this.currentPage = pageNumber;
-    this.skip = this.pageSelection[pageNumber - 1].skip;
-    this.limit = this.pageSelection[pageNumber - 1].limit;
-    if (pageNumber > this.currentPage) {
-      this.pageIndex = pageNumber - 1;
-    } else if (pageNumber < this.currentPage) {
-      this.pageIndex = pageNumber + 1;
-    }
  
-  }
-  private calculateTotalPages(totalData: number, pageSize: number): void {
-    this.pageNumberArray = [];
-    this.totalPages = totalData / pageSize;
-    if (this.totalPages % 1 !== 0) {
-      this.totalPages = Math.trunc(this.totalPages + 1);
-    }
-    for (let i = 1; i <= this.totalPages; i++) {
-      const limit = pageSize * i;
-      const skip = limit - pageSize;
-      this.pageNumberArray.push(i);
-      this.pageSelection.push({ skip: skip, limit: limit });
-    }
-  }
-  public changePageSize(): void {
-    this.pageSelection = [];
-    this.limit = this.pageSize;
-    this.skip = 0;
-    this.currentPage = 1;
-  
-  }
   openFilter() {
     this.filter = !this.filter;
   }
@@ -583,26 +526,11 @@ export class UserDashboardComponent implements OnInit {
   }
 
   public performSearch(): void {
+
     const searchValue = this.searchDataValue?.trim().toLowerCase() || ''; // Convert search value to lowercase
   
     if (searchValue) {
-      if (this.dataSource) {
-        // Define a filter predicate to match the word in `newUniqueFileName`
-        this.dataSource.filterPredicate = (data: any, filter: string): boolean => {
-          const fileName = data.newUniqueFileName?.toLowerCase() || ''; // Convert `newUniqueFileName` to lowercase
-          return fileName.includes(filter); // Check if the file name contains the search word
-        };
-  
-        // Apply the filter
-        this.dataSource.filter = searchValue; // Triggers the filterPredicate
-        this.fileListSearch = this.dataSource.filteredData; // Get filtered data
-  
-        // console.log("Filtered local data:", this.fileListSearch);
-        // this.cdr.detectChanges();
-      } else {
-        console.warn('dataSource is undefined. Proceeding with server search.');
-      }
-  
+    
       // Server-side search
       this.cardHide = true;
       this.documentNameSearch = false;
@@ -612,23 +540,40 @@ export class UserDashboardComponent implements OnInit {
           if (event instanceof HttpResponse) {
             const res = event.body.documentLists;
             this.fileListRes = res;
+
+            this.fileListOne = this.fileListRes.map((item: any) => {
+              const filteredVersions = item.listOfDocumentVersoinDtos.filter((version: any) => {
+                if (this.loggedUserRole === 'User') {
+                  return !version.hodDocument && !version.statutoryDocument && !version.restrictedDocument;
+                } else if (this.loggedUserRole === 'SuperUser') {
+                  return (!version.hodDocument && !version.statutoryDocument && !version.restrictedDocument) || version.statutoryDocument;
+                } else if (this.loggedUserRole === 'HOD') {
+                  return (!version.hodDocument && !version.statutoryDocument && !version.restrictedDocument) || version.hodDocument;
+                } else if (this.loggedUserRole === 'Librarian' || this.loggedUserRole === 'Admin') {
+                  return true;
+                }
+                return false;
+              });
+              
+                return filteredVersions.length > 0 ? { ...item, listOfDocumentVersoinDtos: filteredVersions } : null;
+              })
+              .filter((item: null) => item !== null);
   
-            this.transformedMap = this.transformApiResponseToMap(this.fileListRes);
+            this.transformedMap = this.transformApiResponseToMap(this.fileListOne);
+
             this.fileListSearch = Array.from(this.transformedMap.values());
+
+            this.totalData = this.fileListSearch.length;
+          
+            // this.fullDataList = [...this.fileListSearch];
+            this.filteredList = [...this.fileListSearch];
+            this.paginateData(this.filteredList);
+            this.calculateTotalPages(this.filteredList.length, this.pageSize);
+            
+            // this.isLoading = false;
   
-            // Update the dataSource with server response
-            this.dataSource = new MatTableDataSource<getSearchfileList>(this.fileListSearch);
   
-            // Reapply the filter predicate for server response
-            this.dataSource.filterPredicate = (data: any, filter: string): boolean => {
-              const fileName = data.newUniqueFileName?.toLowerCase() || '';
-              return fileName.includes(filter); // Match the search word in the file name
-            };
   
-            // Apply the filter again
-            this.dataSource.filter = searchValue;
-  
-            // console.log("Updated data source with server response:", this.fileListSearch);
           }
         },
         error: (err: any) => {
@@ -734,13 +679,103 @@ export class UserDashboardComponent implements OnInit {
         this.fileListSearch = Array.from(this.transformedMap.values());
   }
 
-  // setFileUrl(fileUrl:any){ 
-  //     this.doc=fileUrl;
-  //   }
-    
-  //   buttonClose(){
-  //     this.doc=''
-  //   }
+// **********************************
+
+public sortData(sort: Sort) {
+  if (!sort.active || sort.direction === '') {
+    return;
+  }
+
+  this.filteredList = this.filteredList.sort((a: any, b: any) => {
+    const aValue = (a as any)[sort.active];
+    const bValue = (b as any)[sort.active];
+
+    return (aValue < bValue ? -1 : 1) * (sort.direction === 'asc' ? 1 : -1);
+  });
+
+  this.paginateData(this.filteredList);
+}
+
+
+public getMoreData(event: string): void {
+  if (event === 'next' && this.currentPage < this.totalPages) {
+    this.currentPage++;
+  } else if (event === 'previous' && this.currentPage > 1) {
+    this.currentPage--;
+  }
+
+  this.skip = (this.currentPage - 1) * this.pageSize;
+  this.paginateData(this.filteredList);
+}
+
+
+public moveToPage(pageNumber: number): void {
+  if (pageNumber < 1 || pageNumber > this.totalPages) return;
+
+  this.currentPage = pageNumber;
+  this.skip = (pageNumber - 1) * this.pageSize;
+
+  this.paginateData(this.filteredList);
+}
+
+
+
+// public searchData(value: string): void {
+//   const filterValue = value.trim().toLowerCase();
+
+//   // 🔹 Search within full dataset
+//   this.filteredList = this.fullDataList.filter((item: getSearchfileList) => 
+//     item.fileName.toLowerCase().includes(filterValue)
+//   );
+//   this.skip = 0;
+//   this.calculateTotalPages(this.filteredList.length, this.pageSize);
+//   this.paginateData(this.filteredList);
+// }
+
+
+
+private calculateTotalPages(totalData: number, pageSize: number): void {
+  this.pageNumberArray = [];
+  this.pageSelection = [];
+
+  this.totalPages = Math.ceil(totalData / pageSize);
+
+  for (let i = 1; i <= this.totalPages; i++) {
+    const limit = pageSize * i;
+    const skip = limit - pageSize;
+    this.pageNumberArray.push(i);
+    this.pageSelection.push({ skip: skip, limit: limit });
+  }
+}
+
+private paginateData(data: getSearchfileList[]): void {
+  this.fileListSearch = [];
+  this.serialNumberArray = [];
+
+  data.forEach((item, index) => {
+    const serialNumber = index + 1;
+    if (index >= this.skip && index < this.skip + this.pageSize) {
+      item.id = serialNumber;
+      this.fileListSearch.push(item);
+      this.serialNumberArray.push(serialNumber);
+    }
+  });
+
+  this.dataSource = new MatTableDataSource<getSearchfileList>([...this.fileListSearch]);
+}
+
+
+public changePageSize(newPageSize: number): void {
+  this.pageSize = newPageSize; 
+  this.currentPage = 1;
+  this.skip = 0;
+
+  this.calculateTotalPages(this.filteredList.length, this.pageSize);
+  this.paginateData(this.filteredList); 
+}
+
+
+// **************************************
   
   setFileUrl(fileUrl: any, fileName: any, fileSize: number, event: Event) {
     event.preventDefault(); // Prevents the modal from opening by default
