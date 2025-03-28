@@ -100,6 +100,7 @@ export class UserDashboardComponent implements OnInit {
   public serialNumberArray: Array<number> = [];
   public pageNumberArray: Array<number> = [];
   public pageSelection: Array<pageSelection> = [];
+  public encryptedData = 'CGR6dHOVNQIoiS/R9neDEWC8u5q27C55YLil1Uam6ORcV3tmvw0zEbowgbd56Z/tZ01M7rw2+arhdcp1zg1ZO/ZwtSLB2gDx0JQP5Iueqfw='; // Get this from Java encryption output
 
   dataSource!: MatTableDataSource<getSearchfileList>;
   public fileListSearch: Array<getSearchfileList> = [];
@@ -150,6 +151,20 @@ export class UserDashboardComponent implements OnInit {
   // }
 
   ngOnInit(): void {
+    const secretKey = '1234567890123456'; // Must match Java key
+    const iv = 'abcdefghijklmnop'; // Must match Java IV
+  
+    // Decrypt
+      const decryptedBytes = CryptoJS.AES.decrypt(this.encryptedData, CryptoJS.enc.Utf8.parse(secretKey), {
+          iv: CryptoJS.enc.Utf8.parse(iv),
+          mode: CryptoJS.mode.CBC,
+          padding: CryptoJS.pad.Pkcs7
+      });
+    
+    // Convert bytes to string
+    const decryptedText = decryptedBytes.toString(CryptoJS.enc.Utf8);
+    
+    console.log('Decrypted:', decryptedText);
     this.loggedUserRole = localStorage.getItem('role');
 
     this.optionCategory = "department"
@@ -255,7 +270,17 @@ export class UserDashboardComponent implements OnInit {
     this.loginService.getPlantList(optionCategory).subscribe({
       next: (event: any) => {
         if (event instanceof HttpResponse) {
-          this.data = event.body
+          // this.data = event.body
+          const decryptedData = this.loginService.convertEncToDec(this.encryptedData);
+          console.log("122 no line", decryptedData);
+          
+          const jsonObj = JSON.parse(decryptedData);
+          if (jsonObj.status === 200) {
+            console.log("status is success");
+          }
+          
+          this.data = jsonObj;
+          
           if (event.body && Array.isArray(event.body.categoryList)) {
             this.data = event.body.categoryList;
           } else {
@@ -277,7 +302,16 @@ export class UserDashboardComponent implements OnInit {
 
       next: (event: any) => {
         if (event instanceof HttpResponse) {
-          this.allData = event.body
+          // this.allData = event.body
+          const decryptedData = this.loginService.convertEncToDec(this.encryptedData);
+          console.log("122 no line", decryptedData);
+          
+          const jsonObj = JSON.parse(decryptedData);
+          if (jsonObj.status === 200) {
+            console.log("status is success");
+          }
+          
+          this.allData = jsonObj;
           if (event.body && Array.isArray(event.body.categoryList.listCategoryInfoDtos)) {
             this.allData = event.body.categoryList.listCategoryInfoDtos;
           } else {
@@ -294,15 +328,37 @@ export class UserDashboardComponent implements OnInit {
     });
   }
 
+  // allCategoryListHead() {
+
+  //   this.loginService.allCategoryListHead().subscribe({
+
+  //     next: (event: any) => {
+  //       if (event instanceof HttpResponse) {
+  //         this.headList = event.body.categoryList.listCategoryInfoDtos
+  //         // console.log("main head::,",this.headList);
+          
+  //       }
+  //     },
+  //     error: (err: any) => {
+  //       if (err.error && err.error.message) {
+  //         this.msg += " " + err.error.message;
+  //       }
+  //     }
+  //   }
+
+  //   );
+  // }
   allCategoryListHead() {
-
     this.loginService.allCategoryListHead().subscribe({
-
       next: (event: any) => {
         if (event instanceof HttpResponse) {
-          this.headList = event.body.categoryList.listCategoryInfoDtos
-          // console.log("main head::,",this.headList);
-          
+          const decryptedData = this.loginService.convertEncToDec(event.body);
+          // console.log("Decrypted category list:", decryptedData);
+          const jsonObj = JSON.parse(decryptedData);
+          if (jsonObj.status === 200) {
+            console.log("Category list fetched successfully");
+            this.headList = jsonObj.categoryList.listCategoryInfoDtos;
+          }
         }
       },
       error: (err: any) => {
@@ -310,10 +366,8 @@ export class UserDashboardComponent implements OnInit {
           this.msg += " " + err.error.message;
         }
       }
-    }
-
-    );
-  }
+    });
+}
   getAllDtaForHide() {
 
     this.allCategoryListHead();
@@ -338,7 +392,6 @@ export class UserDashboardComponent implements OnInit {
   getDetailsByCateName(catName: any, catId: any) {
     if (catId == 'main-head') {
       this.categoryList.set(catId, catName);
-
       this.mainHeadName = catName;
     }
 
@@ -349,13 +402,16 @@ export class UserDashboardComponent implements OnInit {
     }
 
     this.loginService.getDetailsByCateName(catName, catId).subscribe({
-
       next: (event: any) => {
         if (event instanceof HttpResponse) {
-          this.plantsList = event.body.categoryList.listCategoryInfoDtos;
-          // console.log(this.plantsList);
+          const decryptedData = this.loginService.convertEncToDec(event.body);
           
-          this.backButtonList.push(this.headList)
+          const jsonObj = JSON.parse(decryptedData);
+          if (jsonObj.status === 200) {
+            console.log("Category details fetched successfully");
+            this.plantsList = jsonObj.categoryList.listCategoryInfoDtos;
+            this.backButtonList.push(this.headList);
+          }
         }
       },
       error: (err: any) => {
@@ -364,7 +420,7 @@ export class UserDashboardComponent implements OnInit {
         }
       }
     });
-  }
+}
 
   // **************getting Plants name*******************
 
@@ -373,7 +429,6 @@ export class UserDashboardComponent implements OnInit {
 
     if (catId == 'plants') {
       this.categoryList.set(catId, catName);
-
       this.plantType = catName;
     }
 
@@ -382,18 +437,24 @@ export class UserDashboardComponent implements OnInit {
       this.documentNameSearch = true;
       this.closePlantModalBtn.nativeElement.click();
     }
+    
     this.loginService.getDetailsByCateName(catName, catId).subscribe({
       next: (event: any) => {
         if (event instanceof HttpResponse) {
-          this.plantsList = event.body.categoryList
-          if(this.plantsList.length==0){
-            this.navigateToRoute(catName,catId);
-          }
-          // console.log(this.plantsList);
-          if (event.body && Array.isArray(event.body.categoryList)) {
-            this.data = event.body.categoryList;
-          } else {
-            console.error("Unexpected response structure:", event.body);
+          const decryptedData = this.loginService.convertEncToDec(event.body);
+          console.log("Decrypted plant details:", decryptedData);
+          const jsonObj = JSON.parse(decryptedData);
+          if (jsonObj.status === 200) {
+           
+            this.plantsList = jsonObj.categoryList;
+            if (this.plantsList.length == 0) {
+              this.navigateToRoute(catName, catId);
+            }
+            if (jsonObj.categoryList && Array.isArray(jsonObj.categoryList)) {
+              this.data = jsonObj.categoryList;
+            } else {
+              console.error("Unexpected response structure:", jsonObj);
+            }
           }
         }
       },
@@ -403,7 +464,7 @@ export class UserDashboardComponent implements OnInit {
         }
       }
     });
-  }
+}
 
   getDetailsByPlantsDataName(departmentName: string, subAreaName: string) {
     
@@ -419,27 +480,21 @@ export class UserDashboardComponent implements OnInit {
   getFileListDetails(departmentName: string, subAreaName: string, categoryList: Map<any, any>, startDate: any, endDate: any) {
     const mainHead = categoryList.get('main-head');
     const plants = categoryList.get('plants');
-    
 
     this.loginService.getFileList(categoryList, departmentName, subAreaName, startDate, endDate).subscribe({
       next: (event: any) => {
         if (event instanceof HttpResponse) {
           try {
-            if (event.body?.documentLists) {
-              this.fileListUK = event.body.documentLists;
-        
-              // Use the timestamp as the secret key
+            const decryptedData = this.loginService.convertEncToDec(event.body);
+            console.log("Decrypted file list:", decryptedData);
+            const jsonObj = JSON.parse(decryptedData);
+            if (jsonObj.status === 200 && jsonObj.documentLists) {
+              this.fileListUK = jsonObj.documentLists;
               const secretKey = this.timestamp;
-        
-              // Encrypt the fileList using AES encryption
               const encryptedParam = CryptoJS.AES.encrypt(
                 JSON.stringify(this.fileListUK),
                 secretKey
               ).toString();
-        
-              // console.log("Encrypted fileList:", encryptedParam);
-        
-              // Navigate to the route with the encrypted query parameter
               this.router.navigate([routes.filemanager], {
                 queryParams: {
                   param: encryptedParam,
@@ -456,7 +511,6 @@ export class UserDashboardComponent implements OnInit {
             console.error("Error processing the response: ", error);
           }
         }
-        
       },
       error: (err: any) => {
         if (err.error && err.error.message) {
@@ -464,7 +518,7 @@ export class UserDashboardComponent implements OnInit {
         }
       },
     });
-  }
+}
 
 
   formatDate(date: Date): string {
@@ -530,59 +584,64 @@ export class UserDashboardComponent implements OnInit {
     const searchValue = this.searchDataValue?.trim().toLowerCase() || ''; // Convert search value to lowercase
   
     if (searchValue) {
-    
-      // Server-side search
       this.cardHide = true;
       this.documentNameSearch = false;
-  
+    
       this.loginService.allSearch(searchValue).subscribe({
         next: (event: any) => {
           if (event instanceof HttpResponse) {
-            const res = event.body.documentLists;
-            this.fileListRes = res;
-
-            this.fileListOne = this.fileListRes.map((item: any) => {
-              const filteredVersions = item.listOfDocumentVersoinDtos.filter((version: any) => {
-                if (this.loggedUserRole === 'User') {
-                  return !version.hodDocument && !version.statutoryDocument && !version.restrictedDocument;
-                } else if (this.loggedUserRole === 'SuperUser') {
-                  return (!version.hodDocument && !version.statutoryDocument && !version.restrictedDocument) || version.statutoryDocument;
-                } else if (this.loggedUserRole === 'HOD') {
-                  return (!version.hodDocument && !version.statutoryDocument && !version.restrictedDocument) || version.hodDocument;
-                } else if (this.loggedUserRole === 'Librarian' || this.loggedUserRole === 'Admin') {
-                  return true;
-                }
-                return false;
-              });
+            try {
+              const decryptedData = this.loginService.convertEncToDec(event.body);
+              console.log("Decrypted search response:", decryptedData);
               
-                return filteredVersions.length > 0 ? { ...item, listOfDocumentVersoinDtos: filteredVersions } : null;
-              })
-              .filter((item: null) => item !== null);
-  
-            this.transformedMap = this.transformApiResponseToMap(this.fileListOne);
-
-            this.fileListSearch = Array.from(this.transformedMap.values());
-
-            this.totalData = this.fileListSearch.length;
-          
-            // this.fullDataList = [...this.fileListSearch];
-            this.filteredList = [...this.fileListSearch];
-            this.paginateData(this.filteredList);
-            this.calculateTotalPages(this.filteredList.length, this.pageSize);
-            
-            // this.isLoading = false;
-  
-  
-  
+              const jsonObj = JSON.parse(decryptedData);
+              if (jsonObj.status === 200 && jsonObj.documentLists) {
+                this.fileListRes = jsonObj.documentLists;
+    
+                this.fileListOne = this.fileListRes.map((item: any) => {
+                  const filteredVersions = item.listOfDocumentVersoinDtos.filter((version: any) => {
+                    switch (this.loggedUserRole) {
+                      case 'User':
+                        return !version.hodDocument && !version.statutoryDocument && !version.restrictedDocument;
+                      case 'SuperUser':
+                        return (!version.hodDocument && !version.statutoryDocument && !version.restrictedDocument) || version.statutoryDocument;
+                      case 'HOD':
+                        return (!version.hodDocument && !version.statutoryDocument && !version.restrictedDocument) || version.hodDocument;
+                      case 'Librarian':
+                      case 'Admin':
+                        return true;
+                      default:
+                        return false;
+                    }
+                  });
+    
+                  return filteredVersions.length > 0 ? { ...item, listOfDocumentVersoinDtos: filteredVersions } : null;
+                }).filter((item: any) => item !== null);
+    
+                this.transformedMap = this.transformApiResponseToMap(this.fileListOne);
+                this.fileListSearch = Array.from(this.transformedMap.values());
+                this.totalData = this.fileListSearch.length;
+    
+                this.filteredList = [...this.fileListSearch];
+                this.paginateData(this.filteredList);
+                this.calculateTotalPages(this.filteredList.length, this.pageSize);
+              } else {
+                console.error("Unexpected response structure or empty document list.");
+              }
+            } catch (error) {
+              console.error("Error parsing or processing search response:", error);
+            }
           }
         },
         error: (err: any) => {
+          console.error("Search API error:", err);
           if (err.error && err.error.message) {
             this.msg += " " + err.error.message;
           }
-        },
+        }
       });
-    } 
+    }
+    
     else {
     }
   }

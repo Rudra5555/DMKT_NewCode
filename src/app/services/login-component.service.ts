@@ -16,7 +16,7 @@ export class LoginComponentService {
 
   constructor(private http: HttpClient) { }
 
-  convertEncToDEc(encryptedData:string):any{
+  convertEncToDec(encryptedData:string):any{
 
     const decryptedBytes = CryptoJS.AES.decrypt(encryptedData, CryptoJS.enc.Utf8.parse(this.secretKey), {
           iv: CryptoJS.enc.Utf8.parse(this.iv),
