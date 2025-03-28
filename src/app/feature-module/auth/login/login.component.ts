@@ -55,6 +55,8 @@ export class LoginComponent implements OnInit {
   toaster: any;
   timestamp: string ='';
   modalMessage: string = '';
+  public encryptedData = 'CGR6dHOVNQIoiS/R9neDEWC8u5q27C55YLil1Uam6ORcV3tmvw0zEbowgbd56Z/tZ01M7rw2+arhdcp1zg1ZO/ZwtSLB2gDx0JQP5Iueqfw='; // Get this from Java encryption output
+
   constructor(private router: Router,private loginService : LoginComponentService,private dataService : DataService ,private formBuilder: FormBuilder) {}
 
 
@@ -70,50 +72,24 @@ export class LoginComponent implements OnInit {
       }); 
 
 
-      // const secretKey = 'U2FsdGVkX1+YWc7um66C+IC8EUyQ4HMuJ2k6boVos+aOEzARzYCMAqNkLZ2xyV4Utije7gqw4d4etLafwtq20+hunp434ayPfolYK6xBYhAkrPeS7pVOsPccTg8+3YHKnCbWa+myLa5TJcYhrC6V7pq0eOh/vQ1MU7+4oE9v/UEWC1VnsePPKGtSLMSKcwypTldGYraJUoxXyukEhOaGQQ=='; // Use a strong key
+      
 
-   
-      // const str = {
-      //     "status": 200,
-      //     "response": {
-      //         "userName": "User",
-      //         "userId":1,
-      //         "role": "User",
-      //         "accessRoles": [
-      //             "User",
-      //             "Admin",
-      //             "HOD"
-      //         ],
-      //         "title":"Biplob",
-      //         "displayName": "Das",
-      //         "departmentNameList": [
-      //             {
-      //                 "departmentName": "OPERATION",
-      //                 "plantName": "CPP-2 (540MW)"
-      //             },
-      //             {
-      //                 "departmentName": "C&I",
-      //                 "plantName": "CPP-3 (1200MW)"
-      //             }
-      //         ],
-      //         "userPicture": "1234567890",
-      //         "phoneNumber": "9678824924",
-      //         "emailId": "nitish@gmail.com"
-      //     },
-      //     "message": "success!!"
-      // };
-      
-     
-      // const encryptedData = CryptoJS.AES.encrypt(JSON.stringify({ str }), secretKey).toString();
-      // console.log('Encrypted:', encryptedData);
-      
-  
-      // const decryptedBytes = CryptoJS.AES.decrypt(encryptedData, secretKey);
-      // const decryptedData = decryptedBytes.toString(CryptoJS.enc.Utf8);
-      // console.log('Decrypted:', decryptedData);
-      
-      // const parsedData = JSON.parse(decryptedData);
-      // console.log('Original String:', parsedData.str);
+  const secretKey = '1234567890123456'; // Must match Java key
+  const iv = 'abcdefghijklmnop'; // Must match Java IV
+
+ 
+
+// Decrypt
+  const decryptedBytes = CryptoJS.AES.decrypt(this.encryptedData, CryptoJS.enc.Utf8.parse(secretKey), {
+      iv: CryptoJS.enc.Utf8.parse(iv),
+      mode: CryptoJS.mode.CBC,
+      padding: CryptoJS.pad.Pkcs7
+  });
+
+// Convert bytes to string
+const decryptedText = decryptedBytes.toString(CryptoJS.enc.Utf8);
+
+console.log('Decrypted:', decryptedText);
 
 
   }
@@ -142,6 +118,18 @@ onClickSubmit(formData: any){
    }
   
   if(loginData){
+
+    
+    const decryptedData=this.loginService.convertEncToDEc(this.encryptedData)
+    console.log("122 no line",decryptedData);
+
+    const jsonObj=JSON.parse(decryptedData);
+    if(jsonObj.status=200){
+      console.log("status is success");
+      
+    }
+
+
     this.loginService.login(loginData).subscribe({
       next: (event: any) => {
         if (event instanceof HttpResponse) {

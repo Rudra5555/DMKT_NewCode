@@ -1,6 +1,7 @@
 import { HttpClient, HttpEvent, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, Observable, of, throwError } from 'rxjs';
+import * as CryptoJS from 'crypto-js';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +11,25 @@ export class LoginComponentService {
 //  private baseUrl = 'http://103.168.18.28:8080'; //dev server
  private baseUrl = 'http://10.101.71.204:8080'; //prod server
 
+  private secretKey = '1234567890123456'; // Must match Java key
+  private iv = 'abcdefghijklmnop'; // Must match Java IV
+
   constructor(private http: HttpClient) { }
+
+  convertEncToDEc(encryptedData:string):any{
+
+    const decryptedBytes = CryptoJS.AES.decrypt(encryptedData, CryptoJS.enc.Utf8.parse(this.secretKey), {
+          iv: CryptoJS.enc.Utf8.parse(this.iv),
+          mode: CryptoJS.mode.CBC,
+          padding: CryptoJS.pad.Pkcs7
+      });
+    
+    // Convert bytes to string
+    const decryptedText = decryptedBytes.toString(CryptoJS.enc.Utf8);
+
+    return decryptedText;
+  }
+
 
   login(file: any): Observable<HttpEvent<any>> {
       const req = new HttpRequest('POST', `${this.baseUrl}/auth/login`, file, {
