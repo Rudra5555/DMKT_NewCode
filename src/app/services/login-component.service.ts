@@ -289,7 +289,7 @@ upload(file: any): Observable<HttpEvent<any>> {
     return this.http.request(req);
   }
 
-  updateDocStatus(file: any): Observable<HttpEvent<any>> {
+  updateDocStatus(file: any): Observable<HttpEvent<any>> { // response is done
    
     const req = new HttpRequest('POST', `${this.baseUrl}/doc-request/update-doc-status`, file, {
       responseType: 'json'

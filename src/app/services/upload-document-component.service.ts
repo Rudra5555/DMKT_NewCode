@@ -92,7 +92,7 @@ convertEncToDec(encryptedData:string):any{
     }
 
 
-    addSubArea(payload:any): Observable<HttpEvent<any>> {  
+    addSubArea(payload:any): Observable<HttpEvent<any>> {   //done
       const req = new HttpRequest('POST', `${this.baseUrl}/instrument/save-new-subarea`,payload, {
         responseType: 'json'  
       });
@@ -100,7 +100,7 @@ convertEncToDec(encryptedData:string):any{
       return this.http.request(req);
     }
 
-    getSubArea(startDate:any , endDate:any): Observable<HttpEvent<any>> {
+    getSubArea(startDate:any , endDate:any): Observable<HttpEvent<any>> {  //done
       const req = new HttpRequest('GET', `${this.baseUrl}/instrument/get-all-subarea?startDate=${startDate}&endDate=${endDate}`, {
         responseType: 'json'
       });
@@ -108,7 +108,7 @@ convertEncToDec(encryptedData:string):any{
       return this.http.request(req);
         }
 
-    getDeptList(startDate:any , endDate:any): Observable<HttpEvent<any>> {
+    getDeptList(startDate:any , endDate:any): Observable<HttpEvent<any>> {  //done
       const req = new HttpRequest('GET', `${this.baseUrl}/department/get-new-department?startDate=${startDate}&endDate=${endDate}`, {
         responseType: 'json'
       });

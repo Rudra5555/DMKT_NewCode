@@ -347,50 +347,53 @@ openModal(fileUrl: string , documentName : string) {
     this.uploadFileForm.get('subArea')?.reset('');
 
 }
-  onSubmit(): void {
-    
-    if (this.uploadFileForm.invalid) {
-      this.uploadFileForm.markAllAsTouched();
-      this.unsuccessfulSubmitAlert();
-      return;
-    }
-  
-    const formData = this.uploadFileForm.value;
+onSubmit(): void {
+  if (this.uploadFileForm.invalid) {
+    this.uploadFileForm.markAllAsTouched();
+    this.unsuccessfulSubmitAlert();
+    return;
+  }
 
-    const selectedDepartment = this.departmentList.find(
-      (item) => item.catName === formData.department
-    ); 
+  const formData = this.uploadFileForm.value;
 
-    const departmentId = selectedDepartment?.catId;
-  
-    const payload = {
-      subAreaName: formData.subArea,
-      abbreviation: formData.subAreaAbbr,
-      departmentId: departmentId,
-      plantId: this.plantId,
-      headId: "1"
-      
-    };
-    
-    this.uploadDocument.addSubArea(payload).subscribe({
-      next: (event: any) => {
-        if (event instanceof HttpResponse) {
-          const resData = event.body;
+  const selectedDepartment = this.departmentList.find(
+    (item) => item.catName === formData.department
+  ); 
+
+  const departmentId = selectedDepartment?.catId;
+
+  const payload = {
+    subAreaName: formData.subArea,
+    abbreviation: formData.subAreaAbbr,
+    departmentId: departmentId,
+    plantId: this.plantId,
+    headId: "1"
+  };
+
+  this.uploadDocument.addSubArea(payload).subscribe({
+    next: (event: any) => {
+      if (event instanceof HttpResponse) {
+        const decryptedData = this.uploadDocument.convertEncToDec(event.body);
+        if (decryptedData) {
+          const resData = JSON.parse(decryptedData);
+
           this.uploadFileForm.get('mainHead')?.reset('');
           this.uploadFileForm.get('plants')?.reset('');
           this.uploadFileForm.get('department')?.reset('');
           this.uploadFileForm.get('subAreaAbbr')?.reset('');
           this.uploadFileForm.get('subArea')?.reset('');
-          
+
           this.successfulSubmitAlert();
         }
-      },
-      error: (err: any) => {
-        console.error(err);
-        this.unsuccessfulSubmitAlert();
       }
-    });
-  }
+    },
+    error: (err: any) => {
+      console.error("Error submitting form:", err);
+      this.unsuccessfulSubmitAlert();
+    }
+  });
+}
+
 
   public sortData(sort: Sort) {
         if (!sort.active || sort.direction === '') {

@@ -198,46 +198,34 @@ export class DepartmentComponent implements OnInit{
     this.isLoading = true; // Start loader
     this.contactlist = [];
     this.serialNumberArray = [];
-
+  
     this.uploadDocument.getDeptList(this.startDate, this.endDate).subscribe({
       next: (event: any) => {
         if (event instanceof HttpResponse) {
-          this.res = event.body.data;
-          
-          // this.totalData = respData.length;
-
-        //   respData.map((item: getDeptList, index: number) => {
-        //   const serialNumber = index + 1;
-        //   if (index >= this.skip && serialNumber <= this.limit) {
-        //     item.id = serialNumber;
-        //     this.contactlist.push(item);
-        //     this.serialNumberArray.push(serialNumber);
-        //   }
-        // });
-
-        // this.dataSource = new MatTableDataSource<getDeptList>(this.contactlist);
-        // this.calculateTotalPages(respData.length, this.pageSize);
-
-        this.totalData=this.res.length;
-          
-        this.fullDataList = [...this.res];
-        this.filteredList = [...this.res];
-        this.paginateData(this.filteredList);
-        this.calculateTotalPages(this.filteredList.length, this.pageSize);
-          
-        this.isLoading = false; 
+          const decryptedData = this.uploadDocument.convertEncToDec(event.body);
+          if (decryptedData) {
+            const res = JSON.parse(decryptedData);
+            this.res = res?.data || [];
   
+            this.totalData = this.res.length;
+            this.fullDataList = [...this.res];
+            this.filteredList = [...this.res];
+            this.paginateData(this.filteredList);
+            this.calculateTotalPages(this.filteredList.length, this.pageSize);
+          }
         }
+        this.isLoading = false;
       },
       error: (err: any) => {
+        console.error("Error fetching department file list:", err);
         if (err.error && err.error.message) {
-          this['msg'] += " " + err.error.message;
+          this.msg += " " + err.error.message;
         }
-        this.isLoading = false; 
+        this.isLoading = false;
       },
     });
   }
-
+  
 
 
 

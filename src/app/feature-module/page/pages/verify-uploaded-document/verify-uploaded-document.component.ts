@@ -242,25 +242,31 @@ export class VerifyUploadedDocumentComponent implements OnInit {
         executedBy: this.loggedUserId,
         reason: this.remarks,
       };
-
+  
       this.loginService.updateDocStatus(docStatus).subscribe({
         next: (event: any) => {
           if (event instanceof HttpResponse) {
-            let updatedDoc = event.body.data;
-            console.log("Updated Document:", updatedDoc);
-            
-            let index = this.fileList.findIndex(
-              (doc: any) => doc.workflowDocId === updatedDoc.workflowDocId
-            );
-
-            if (index !== -1) {
-              this.fileList[index] = updatedDoc;
+            const decryptedData = this.uploadDocument.convertEncToDec(event.body);
+            if (decryptedData) {
+              const res = JSON.parse(decryptedData);
+              let updatedDoc = res?.data;
+  
+              console.log("Updated Document:", updatedDoc);
+  
+              let index = this.fileList.findIndex(
+                (doc: any) => doc.workflowDocId === updatedDoc.workflowDocId
+              );
+  
+              if (index !== -1) {
+                this.fileList[index] = updatedDoc;
+              }
+  
+              this.successfulSubmitAlert();
+              this.rejectForm.reset();
+              this.remarks = "";
+  
+              this.getFileListDetails();
             }
-            this.successfulSubmitAlert();
-            this.rejectForm.reset();
-            this.remarks = "";
-
-            this.getFileListDetails();
           }
         },
         error: (err: any) => {
@@ -272,6 +278,7 @@ export class VerifyUploadedDocumentComponent implements OnInit {
       this.unsuccessfulSubmitAlert();
     }
   }
+  
 
   onFileDropped($event: any) {
     this.prepareFilesList($event);
