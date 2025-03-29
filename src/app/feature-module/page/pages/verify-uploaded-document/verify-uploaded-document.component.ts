@@ -214,21 +214,24 @@ export class VerifyUploadedDocumentComponent implements OnInit {
     this.loginService.librarianVerifyDoc(this.loggedUserId).subscribe({
       next: (event: any) => {
         if (event instanceof HttpResponse) {
-          this.respData = event.body.data;
-          this.fileList = this.respData;
-          this.totalData = this.fileList.length;
-          this.originalFileList = this.fileList;
-          this.isLoading = false;
+          const decryptedData = this.uploadDocument.convertEncToDec(event.body);
+          if (decryptedData) {
+            const res = JSON.parse(decryptedData);
+            this.respData = res?.data || [];
+            this.fileList = this.respData;
+            this.totalData = this.fileList.length;
+            this.originalFileList = [...this.fileList];
+          }
         }
+        this.isLoading = false;
       },
       error: (err: any) => {
-        if (err.error && err.error.message) {
-
-        }
+        console.error("Error fetching file list details:", err);
         this.isLoading = false;
       },
     });
   }
+  
 
   submitRemarks() {
     if (this.rejectForm.valid) {
@@ -244,6 +247,8 @@ export class VerifyUploadedDocumentComponent implements OnInit {
         next: (event: any) => {
           if (event instanceof HttpResponse) {
             let updatedDoc = event.body.data;
+            console.log("Updated Document:", updatedDoc);
+            
             let index = this.fileList.findIndex(
               (doc: any) => doc.workflowDocId === updatedDoc.workflowDocId
             );
@@ -667,77 +672,99 @@ export class VerifyUploadedDocumentComponent implements OnInit {
     this.uploadDocument.allMainHeadList().subscribe({
       next: (event: any) => {
         if (event instanceof HttpResponse) {
-          this.mainHeadList = event.body?.categoryList || [];
+          const decryptedData = this.uploadDocument.convertEncToDec(event.body);
+          if (decryptedData) {
+            const res = JSON.parse(decryptedData);
+            this.mainHeadList = res?.categoryList || [];
+          }
         }
       },
       error: (err: any) => {
-        console.error(err);
+        console.error("Error fetching main head data:", err);
       },
     });
   }
-
+  
   getMainHeadList(selectedValue: string, mainHead: string) {
-    if (selectedValue != "" && mainHead != null) {
+    if (selectedValue !== "" && mainHead !== null) {
       this.uploadDocument.allDataList(selectedValue, mainHead).subscribe({
         next: (event: any) => {
           if (event instanceof HttpResponse) {
-            this.plantList = event.body?.categoryList || [];
+            const decryptedData = this.uploadDocument.convertEncToDec(event.body);
+            if (decryptedData) {
+              const res = JSON.parse(decryptedData);
+              this.plantList = res?.categoryList || [];
+            }
           }
         },
         error: (err: any) => {
-          console.error(err);
+          console.error("Error fetching main head list:", err);
         },
       });
     }
   }
+  
 
   getAllPlantList(selectedValue: string, plantHeader: string) {
-    if (selectedValue != "" && plantHeader != null) {
+    if (selectedValue !== "" && plantHeader !== null) {
       this.uploadDocument.allPlantList(selectedValue, plantHeader).subscribe({
         next: (event: any) => {
           if (event instanceof HttpResponse) {
-            this.departmentList = event.body?.categoryList || [];
+            const decryptedData = this.uploadDocument.convertEncToDec(event.body);
+            if (decryptedData) {
+              const res = JSON.parse(decryptedData);
+              this.departmentList = res?.categoryList || [];
+            }
           }
         },
         error: (err: any) => {
-          console.error(err);
+          console.error("Error fetching plant list:", err);
         },
       });
     }
   }
+  
 
   getSubAreaList(selectedValue: string, departmentHeader: string) {
-    if (selectedValue != "" && departmentHeader != null) {
-      this.uploadDocument
-        .allSubAreaList(selectedValue, departmentHeader)
-        .subscribe({
-          next: (event: any) => {
-            if (event instanceof HttpResponse) {
-              this.subAreaList = event.body?.categoryList || [];
+    if (selectedValue !== "" && departmentHeader !== null) {
+      this.uploadDocument.allSubAreaList(selectedValue, departmentHeader).subscribe({
+        next: (event: any) => {
+          if (event instanceof HttpResponse) {
+            const decryptedData = this.uploadDocument.convertEncToDec(event.body);
+            if (decryptedData) {
+              const res = JSON.parse(decryptedData);
+              this.subAreaList = res?.categoryList || [];
             }
-          },
-          error: (err: any) => {
-            console.error(err);
-          },
-        });
+          }
+        },
+        error: (err: any) => {
+          console.error("Error fetching sub-area list:", err);
+        },
+      });
     }
   }
+  
   getDocTypeList() {
     this.uploadDocument.docTypeListData().subscribe({
       next: (event: any) => {
         if (event instanceof HttpResponse) {
-          this.docList = event.body;
-
-          this.docList.forEach((item: any) => {
-            this.docMap.set(item.id, item.documentName);
-          });
+          const decryptedData = this.uploadDocument.convertEncToDec(event.body);
+          if (decryptedData) {
+            const res = JSON.parse(decryptedData);
+            this.docList = res || [];
+  
+            this.docList.forEach((item: any) => {
+              this.docMap.set(item.id, item.documentName);
+            });
+          }
         }
       },
       error: (err: any) => {
-        console.error(err);
+        console.error("Error fetching document type list:", err);
       },
     });
   }
+  
 
   onDocumentTypeChange(docId: any) {
     if (docId) {
@@ -746,20 +773,25 @@ export class VerifyUploadedDocumentComponent implements OnInit {
   }
 
   getSubDocTypeList(docId: any) {
-    if (docId != "") {
+    if (docId !== "") {
       this.uploadDocument.subDocTypeList(docId).subscribe({
         next: (event: any) => {
           if (event instanceof HttpResponse) {
-            this.subDocList = event.body;
-            this.subDocListSize = this.subDocList.length;
+            const decryptedData = this.uploadDocument.convertEncToDec(event.body);
+            if (decryptedData) {
+              const res = JSON.parse(decryptedData);
+              this.subDocList = res || [];
+              this.subDocListSize = this.subDocList.length;
+            }
           }
         },
         error: (err: any) => {
-          console.error(err);
+          console.error("Error fetching sub-document type list:", err);
         },
       });
     }
   }
+  
 
   successfulSubmitAlert() {
     Swal.fire({

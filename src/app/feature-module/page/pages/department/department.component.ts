@@ -161,20 +161,22 @@ export class DepartmentComponent implements OnInit{
   }
 
   getMainHeadList() {
-
     this.uploadDocument.allDataList("POWER O&M", "main-head").subscribe({
       next: (event: any) => {
         if (event instanceof HttpResponse) {
-          this.plantList = event.body?.categoryList || [];
-          
+          const decryptedData = this.uploadDocument.convertEncToDec(event.body);
+          if (decryptedData) {
+            const res = JSON.parse(decryptedData);
+            this.plantList = res?.categoryList || [];
+          }
         }
       },
       error: (err: any) => {
-        console.error(err);
+        console.error('Error fetching main head list:', err);
       }
     });
+  }
   
-}
 
 
   onPlantSelect(event: any) {

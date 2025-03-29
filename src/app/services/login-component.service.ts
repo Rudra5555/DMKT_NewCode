@@ -271,7 +271,7 @@ getDocumentType(): Observable<HttpEvent<any>> {
   return this.http.request(req);
 }
 
-librarianVerifyDoc(userId: any): Observable<HttpEvent<any>> {
+librarianVerifyDoc(userId: any): Observable<HttpEvent<any>> { //done
   const req = new HttpRequest('GET', `${this.baseUrl}/doc-request/view-request/${userId}`, {
     responseType: 'json'
   });

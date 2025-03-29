@@ -177,18 +177,22 @@ export class SubAreaComponent implements OnInit{
   }
 
   getMainHeadList() {
-
     this.uploadDocument.allDataList("POWER O&M", "main-head").subscribe({
       next: (event: any) => {
         if (event instanceof HttpResponse) {
-          this.plantList = event.body?.categoryList || [];     
+          const decryptedData = this.uploadDocument.convertEncToDec(event.body);
+          if (decryptedData) {
+            const res = JSON.parse(decryptedData);
+            this.plantList = res?.categoryList || [];
+          }
         }
       },
       error: (err: any) => {
-        console.error(err);
+        console.error("Error fetching main head list:", err);
       }
     });
-}
+  }
+  
 
 
   getAllPlantList(selectedValue: string, plantHeader: string) {
@@ -242,21 +246,24 @@ export class SubAreaComponent implements OnInit{
     this.isLoading = true; // Start loader
     this.contactlist = [];
     this.serialNumberArray = [];
-
+  
     this.uploadDocument.getSubArea(this.startDate, this.endDate).subscribe({
       next: (event: any) => {
         if (event instanceof HttpResponse) {
-          this.res = event.body.data;
-
-          this.totalData=this.res.length;
-          this.fullDataList = [...this.res];
-          this.filteredList = [...this.res];
-          this.paginateData(this.filteredList);
-          this.calculateTotalPages(this.filteredList.length, this.pageSize);
+          const decryptedData = this.uploadDocument.convertEncToDec(event.body);
+          if (decryptedData) {
+            const res = JSON.parse(decryptedData);
             
-          this.isLoading = false;
-
+            this.res = res.data;
+            this.totalData = this.res.length;
+            this.fullDataList = [...this.res];
+            this.filteredList = [...this.res];
+  
+            this.paginateData(this.filteredList);
+            this.calculateTotalPages(this.filteredList.length, this.pageSize);
+          }
         }
+        this.isLoading = false;
       },
       error: (err: any) => {
         if (err.error && err.error.message) {
@@ -266,6 +273,7 @@ export class SubAreaComponent implements OnInit{
       },
     });
   }
+  
 
 
 openModal(fileUrl: string , documentName : string) {

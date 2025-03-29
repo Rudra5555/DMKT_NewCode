@@ -13,7 +13,7 @@ export class FileManagementService {
 
   constructor(private http: HttpClient) { }
 
-  upload(file: any): Observable<HttpEvent<any>> {
+  upload(file: any): Observable<HttpEvent<any>> {    
     const req = new HttpRequest('POST', `${this.baseUrl}/upload/multiple-doc-upload`, file, {
       responseType: 'json'
     });
