@@ -527,9 +527,77 @@ export class HeaderOneComponent implements OnInit {
       reason: reason
     };
 
-    this.loginService.updateDocumentStatus(payload).subscribe((response: Object | null) => {
-      if (response && (response as UpdateDocumentStatusResponse).status === 200) {
-        const typedResponse = response as UpdateDocumentStatusResponse; // Type assertion
+    console.log("payload data",payload);
+    
+
+      // this.loginService.updateDocumentStatus(payload).subscribe({
+      //             next: (event: any) => {
+      //               if (event instanceof HttpResponse) {
+
+      //                 console.log("event body",event.body);
+                      
+      //                 const decryptedData = this.loginService.convertEncToDec(event.body);
+      //                 const response = JSON.parse(decryptedData);
+
+      //                 console.log("after dec",response);
+                      
+
+      //                 if (response && (response as UpdateDocumentStatusResponse).status === 200) {
+      //                   const typedResponse = response as UpdateDocumentStatusResponse; // Type assertion
+      //                   const message = typedResponse.message; // Extract the message from the response
+                
+                
+                
+      //                   if (message && message !== 'Error!!') {
+      //                     if (message == "Success!!") {
+      //                       this.successfulSubmitAlert();
+      //                     }
+                
+      //                     // Remove the approved/rejected notification from the notification list
+      //                     this.notificationData = this.notificationData.filter(item => item.documentId !== this.selectedHodItem?.documentId);
+      //                     // Update the notification count
+      //                     this.notificationCount = this.notificationData.length;
+      //                     this.selectedHodItem = null;
+      //                   } else {
+      //                     // Handle the error message from the backend
+      //                     console.error('Error updating document status:', message);
+      //                     if (message == 'Error!!') {
+      //                       this.unsuccessfulSubmitAlert();
+      //                     }
+      //                   }
+                
+      //                 } else {
+      //                   // Handle unexpected status codes
+      //                   const errorMessage = (response as UpdateDocumentStatusResponse)?.message || 'Unknown error';
+      //                   console.error('Unexpected response:', errorMessage);
+      //                   this.snackBar.open('Unexpected response: ' + errorMessage, 'Close', {
+      //                     duration: 3000,
+      //                     horizontalPosition: 'center',
+      //                     verticalPosition: 'bottom'
+      //                   });
+      //                 }
+                     
+          
+      //               }
+      //             },
+      //             error: (err: any) => {
+      //               console.error('Error updating document status:', err);
+      //               this.snackBar.open('Error updating document status: ' + err.message, 'Close', {
+      //                 duration: 3000,
+      //                 horizontalPosition: 'center',
+      //                 verticalPosition: 'bottom'
+      //               });
+      //             }
+      //           });
+
+
+
+    this.loginService.updateDocumentStatus(payload).subscribe((response:any) => {
+      const decryptedData = this.loginService.convertEncToDec(response);
+      const respData = JSON.parse(decryptedData);
+      
+      if (respData && (respData as UpdateDocumentStatusResponse).status === 200) {
+        const typedResponse = respData as UpdateDocumentStatusResponse; // Type assertion
         const message = typedResponse.message; // Extract the message from the response
 
 
@@ -554,7 +622,7 @@ export class HeaderOneComponent implements OnInit {
 
       } else {
         // Handle unexpected status codes
-        const errorMessage = (response as UpdateDocumentStatusResponse)?.message || 'Unknown error';
+        const errorMessage = (respData as UpdateDocumentStatusResponse)?.message || 'Unknown error';
         console.error('Unexpected response:', errorMessage);
         this.snackBar.open('Unexpected response: ' + errorMessage, 'Close', {
           duration: 3000,
