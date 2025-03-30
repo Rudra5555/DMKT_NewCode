@@ -91,18 +91,22 @@ export class UserManagementModalComponent implements OnInit {
   
   }
   getMainHeadList() {
-
-      this.uploadDocument.allDataList("POWER O&M", "main-head").subscribe({
-        next: (event: any) => {
-          if (event instanceof HttpResponse) {
-            this.plantList = (event.body?.categoryList || []).filter((item: { catId: number; }) => item.catId !== 9);          
+    this.uploadDocument.allDataList("POWER O&M", "main-head").subscribe({
+      next: (event: any) => {
+        if (event instanceof HttpResponse) {
+          const decryptedData = this.uploadDocument.convertEncToDec(event.body);
+          if (decryptedData) {
+            const res = JSON.parse(decryptedData);
+            this.plantList = (res?.categoryList || []).filter((item: { catId: number }) => item.catId !== 9);
           }
-        },
-        error: (err: any) => {
-          console.error(err);
         }
-      }); 
+      },
+      error: (err: any) => {
+        console.error(err);
+      }
+    });
   }
+  
 
   toggleButton() {
     this.isHodChecked = this.addUserForm.get('HOD')?.value; 

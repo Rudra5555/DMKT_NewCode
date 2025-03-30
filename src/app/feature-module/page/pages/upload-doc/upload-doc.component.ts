@@ -4,6 +4,7 @@ import { HttpResponse } from '@angular/common/http';
 import { FileManagementService } from 'src/app/services/file-management.service';
 import { UploadDocumentComponentService } from 'src/app/services/upload-document-component.service';
 import Swal from 'sweetalert2';
+import * as CryptoJS from 'crypto-js';
 import { routes } from 'src/app/core/helpers/routes/routes';
 @Component({
   selector: 'app-upload-doc',
@@ -22,6 +23,8 @@ export class UploadDocComponent implements OnInit {
   public mainHeadList: any[] = [];
   public selectedCatName: any;
   public plantOption: any;
+  public encryptedData = 'CGR6dHOVNQIoiS/R9neDEWC8u5q27C55YLil1Uam6ORcV3tmvw0zEbowgbd56Z/tZ01M7rw2+arhdcp1zg1ZO/ZwtSLB2gDx0JQP5Iueqfw='; // Get this from Java encryption output
+
   public selectedDeptCatName: any;
   public selectedSubAreaCatName: any;
   public documentTypeOption: any;
@@ -52,6 +55,7 @@ export class UploadDocComponent implements OnInit {
 docMap = new Map<number, string>();
 public newPlant: boolean = false;
 public invalidFileExtensionFlag: boolean = false;
+
  
   constructor(
     private uploadService: FileManagementService,
@@ -75,6 +79,12 @@ public invalidFileExtensionFlag: boolean = false;
   }
 
   ngOnInit(): void {
+
+ 
+
+
+
+
     this.getDocTypeList();
 
     this.uploadFileForm.get('mainHead')?.valueChanges.subscribe(value => {
@@ -116,6 +126,24 @@ public invalidFileExtensionFlag: boolean = false;
       this.selectedSubAreaCatNameAbbr = subAreaAbbr;
     });
     this.getAllMainHeadData();
+
+
+
+
+    const secretKey = '1234567890123456'; // Must match Java key
+    const iv = 'abcdefghijklmnop'; // Must match Java IV
+  
+   
+  
+  // Decrypt
+    const decryptedBytes = CryptoJS.AES.decrypt(this.encryptedData, CryptoJS.enc.Utf8.parse(secretKey), {
+        iv: CryptoJS.enc.Utf8.parse(iv),
+        mode: CryptoJS.mode.CBC,
+        padding: CryptoJS.pad.Pkcs7
+    });
+  
+  // Convert bytes to string
+  const decryptedText = decryptedBytes.toString(CryptoJS.enc.Utf8);
   }
 
   onFileDropped($event: any) {
@@ -450,58 +478,109 @@ return;
   }
 
   getAllMainHeadData() {
+    
     this.uploadDocument.allMainHeadList().subscribe({
       next: (event: any) => {
         if (event instanceof HttpResponse) {
-          this.mainHeadList = event.body?.categoryList || [];
+          try {
+            const decryptedData = this.uploadDocument.convertEncToDec(event.body);
+            console.log("Decrypted main head data:", decryptedData);
+  
+            const jsonObj = JSON.parse(decryptedData);
+            if (jsonObj.status === 200 && jsonObj.categoryList) {
+              this.mainHeadList = jsonObj.categoryList;
+              console.log("Main head list:", this.mainHeadList);
+              
+            } else {
+              console.warn("No valid category list found in response.");
+              this.mainHeadList = [];
+            }
+          } catch (error) {
+            console.error("Error processing main head data:", error);
+            this.mainHeadList = [];
+          }
         }
       },
       error: (err: any) => {
-        console.error(err);
+        console.error("Error fetching main head data:", err);
       }
     });
   }
+  
 
   getMainHeadList(selectedValue: string, mainHead: string) {
-
-    if (selectedValue != '' && mainHead != null) {
-
+    if (selectedValue !== '' && mainHead !== null) {
       this.uploadDocument.allDataList(selectedValue, mainHead).subscribe({
         next: (event: any) => {
           if (event instanceof HttpResponse) {
-            this.plantList = event.body?.categoryList || [];
+            try {
+              const decryptedData = this.uploadDocument.convertEncToDec(event.body);
+              // console.log("Decrypted main head list:", decryptedData);
+  
+              const jsonObj = JSON.parse(decryptedData);
+              if (jsonObj.status === 200 && jsonObj.categoryList) {
+                this.plantList = jsonObj.categoryList;
+                // console.log("Main head plant list:", this.plantList);
+              } else {
+                console.warn("No valid category list found in response.");
+                this.plantList = [];
+              }
+            } catch (error) {
+              console.error("Error processing main head list data:", error);
+              this.plantList = [];
+            }
           }
         },
         error: (err: any) => {
-          console.error(err);
+          console.error("Error fetching main head list data:", err);
         }
       });
     }
   }
+  
 
   getAllPlantList(selectedValue: string, plantHeader: string) {
-
-    if (selectedValue != '' && plantHeader != null) {
+    if (selectedValue !== '' && plantHeader !== null) {
       this.uploadDocument.allPlantList(selectedValue, plantHeader).subscribe({
         next: (event: any) => {
           if (event instanceof HttpResponse) {
-            this.departmentList = event.body?.categoryList || [];
-            
+            try {
+              const decryptedData = this.uploadDocument.convertEncToDec(event.body);
+              // console.log("Decrypted plant list:", decryptedData);
+  
+              const jsonObj = JSON.parse(decryptedData);
+              if (jsonObj.status === 200 && jsonObj.categoryList) {
+                this.departmentList = jsonObj.categoryList;
+                // console.log("Plant department list:", this.departmentList);
+              } else {
+                console.warn("No valid category list found in response.");
+                this.departmentList = [];
+              }
+            } catch (error) {
+              console.error("Error processing plant list data:", error);
+              this.departmentList = [];
+            }
           }
         },
         error: (err: any) => {
-          console.error(err);
+          console.error("Error fetching plant list data:", err);
         }
       });
     }
   }
+  
 
   getSubAreaList(selectedValue: string, departmentHeader: string) {
     if (selectedValue != '' && departmentHeader != null) {
       this.uploadDocument.allSubAreaList(selectedValue, departmentHeader).subscribe({
         next: (event: any) => {
           if (event instanceof HttpResponse) {
-            this.subAreaList = event.body?.categoryList || [];
+            let temp=event.body;
+          
+          const decryptedData = this.uploadDocument.convertEncToDec(temp);
+          
+          const res = JSON.parse(decryptedData);
+            this.subAreaList = res?.categoryList || [];
           }
         },
         error: (err: any) => {
@@ -515,7 +594,12 @@ return;
       this.uploadDocument.docTypeListData().subscribe({
         next: (event: any) => {
           if (event instanceof HttpResponse) {
-             this.docList = event.body;
+            let temp=event.body;
+          
+          const decryptedData = this.uploadDocument.convertEncToDec(temp);
+          
+          const res = JSON.parse(decryptedData);
+             this.docList = res;
             this.docList.forEach((item: any) => {
               this.docMap.set(item.id, item.documentName);
            
@@ -536,13 +620,15 @@ return;
   }
 
   getSubDocTypeList(docId: any) {
-    if (docId != '') {
+    if (docId !== '') {
       this.uploadDocument.subDocTypeList(docId).subscribe({
         next: (event: any) => {
           if (event instanceof HttpResponse) {
-             this.subDocList = event.body;
-             this.subDocListSize = this.subDocList.length
-            
+            const decryptedData = this.uploadDocument.convertEncToDec(event.body);
+            if (decryptedData) {
+              this.subDocList = JSON.parse(decryptedData);
+              this.subDocListSize = this.subDocList.length;
+            }
           }
         },
         error: (err: any) => {
@@ -551,6 +637,7 @@ return;
       });
     }
   }
+  
 
 
   successfulSubmitAlert() {

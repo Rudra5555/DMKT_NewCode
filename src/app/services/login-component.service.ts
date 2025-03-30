@@ -286,7 +286,6 @@ getDocumentType(): Observable<HttpEvent<any>> {
   return this.http.request(req);
 }
 
-// (done)
 librarianVerifyDoc(userId: any): Observable<HttpEvent<any>> {
   const req = new HttpRequest('GET', `${this.baseUrl}/doc-request/view-request/${userId}`, {
     responseType: 'json'
@@ -305,7 +304,6 @@ upload(file: any): Observable<HttpEvent<any>> {
     return this.http.request(req);
   }
 
-  // (after getting response done)
   updateDocStatus(file: any): Observable<HttpEvent<any>> {
    
     const req = new HttpRequest('POST', `${this.baseUrl}/doc-request/update-doc-status`, file, {
