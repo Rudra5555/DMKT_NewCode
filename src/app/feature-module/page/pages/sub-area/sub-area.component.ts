@@ -196,21 +196,24 @@ export class SubAreaComponent implements OnInit{
 
 
   getAllPlantList(selectedValue: string, plantHeader: string) {
-
-    if (selectedValue != '' && plantHeader != null) {
+    if (selectedValue !== '' && plantHeader !== null) {
       this.uploadDocument.allPlantList(selectedValue, plantHeader).subscribe({
         next: (event: any) => {
           if (event instanceof HttpResponse) {
-            this.departmentList = event.body?.categoryList || [];
-            
+            const decryptedData = this.uploadDocument.convertEncToDec(event.body);
+            if (decryptedData) {
+              const res = JSON.parse(decryptedData);
+              this.departmentList = res?.categoryList || [];
+            }
           }
         },
         error: (err: any) => {
-          console.error(err);
+          console.error("Error fetching plant list:", err);
         }
       });
     }
   }
+  
 
   selectedDepartment(event: any) {
     const [catName, abbreviation] = event.value.split('~');
@@ -226,21 +229,24 @@ export class SubAreaComponent implements OnInit{
     }
   }
   getSubAreaList(selectedValue: string, departmentHeader: string) {
-    if (selectedValue != '' && departmentHeader != null) {
+    if (selectedValue !== '' && departmentHeader !== null) {
       this.uploadDocument.allSubAreaList(selectedValue, departmentHeader).subscribe({
         next: (event: any) => {
           if (event instanceof HttpResponse) {
-            this.subAreaList = event.body?.categoryList || [];
-            
-            
+            const decryptedData = this.uploadDocument.convertEncToDec(event.body);
+            if (decryptedData) {
+              const res = JSON.parse(decryptedData);
+              this.subAreaList = res?.categoryList || [];
+            }
           }
         },
         error: (err: any) => {
-          console.error(err);
+          console.error("Error fetching sub-area list:", err);
         }
       });
     }
   }
+  
 
   allSubAreaList() {
     this.isLoading = true; // Start loader
