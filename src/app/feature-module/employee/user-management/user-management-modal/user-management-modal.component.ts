@@ -145,20 +145,24 @@ export class UserManagementModalComponent implements OnInit {
   
 
   getAllPlantList(selectedValue: string, plantHeader: string) {
-
-    if (selectedValue != '' && plantHeader != null) {
+    if (selectedValue !== '' && plantHeader !== null) {
       this.uploadDocument.allPlantList(selectedValue, plantHeader).subscribe({
         next: (event: any) => {
           if (event instanceof HttpResponse) {
-            this.departmentList = event.body?.categoryList || [];
+            const decryptedData = this.uploadDocument.convertEncToDec(event.body);
+            if (decryptedData) {
+              const res = JSON.parse(decryptedData);
+              this.departmentList = res?.categoryList || [];
+            }
           }
         },
         error: (err: any) => {
-          console.error(err);
+          console.error("Error fetching plant list:", err);
         }
-      });
-    }
-  }
+      });
+    }
+  }
+  
 
   submitAddUserForm() {
   
