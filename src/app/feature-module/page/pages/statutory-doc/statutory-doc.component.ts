@@ -207,45 +207,55 @@ export class StatutoryDocComponent implements OnInit {
   onSubmit() {
     if (this.loggedUserId && !this.loggedSuperUserId) {
       this.generatedBy = this.loggedUserId;
-    } if (!this.loggedUserId && this.loggedSuperUserId) {
+    } else if (!this.loggedUserId && this.loggedSuperUserId) {
       this.generatedBy = this.loggedSuperUserId;
     }
-
+  
     const formData = new FormData();
+    
     if (this.files.length === 0) {
       this.uploadDocumentFlag = true;
       this.disableSubmitBtn = true;
-    } else {
-      for (const file of this.files) {
-        formData.append("fileName", file);
-      }
+      return; // Exit early to avoid unnecessary API calls
+    } 
+  
+    for (const file of this.files) {
+      formData.append("fileName", file);
     }
-    formData.append("documentId",  this.statutoryDocumentId);
+    
+    formData.append("documentId", this.statutoryDocumentId);
     formData.append("generateBy", this.generatedBy);
     formData.append("departmentName", this.departmentType);
     formData.append("plantName", this.plantType);
     formData.append("documentApprovalStatus", "P");
     formData.append("remarks", this.remarks);
+  
     this.loginService.requestSubmit(formData).subscribe({
       next: (event: any) => {
         if (event instanceof HttpResponse) {
-          this.res = event.body;
-          if (this.res.message == "Success!!") {
-            this.successfulSubmitAlert();
+          const decryptedData = this.loginService.convertEncToDec(event.body);
+          if (decryptedData) {
+            this.res = JSON.parse(decryptedData);
+            if (this.res.message === "Success!!") {
+              this.successfulSubmitAlert();
+            }
           }
         }
       },
       error: (err: any) => {
-        if (err.error.message == null) {
+        const errorMessage = err?.error?.message || "Unknown error occurred.";
+        console.error("Submission error:", errorMessage);
+        
+        if (!err.error?.message) {
           this.unsuccessfulNullSubmitAlert();
-        }
-        if (err.error && err.error.message) {
-          this['msg'] += " " + err.error.message;
+        } else {
+          this.msg += " " + errorMessage;
           this.unsuccessfulSubmitAlert();
         }
-      },
+      }
     });
   }
+  
 
   successfulSubmitAlert() {
     Swal.fire({
