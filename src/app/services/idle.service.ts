@@ -9,9 +9,9 @@ import { throttle } from 'rxjs/operators';
 })
 export class IdleService {
   private idleSubject = new Subject<boolean>();
-  private timeout = 9000; //seconds
+  private timeout = 600; //seconds
   private lastActivity?: Date;
-  private idleCheckInterval = 9000; //seconds
+  private idleCheckInterval = 600; //seconds
   private idleSubscription?: Subscription; 
   private clientData: any; 
 
