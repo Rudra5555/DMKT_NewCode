@@ -257,9 +257,11 @@ openModal(fileUrl: string , documentName : string) {
     this.loginService.searchDocuments('').subscribe({
       next: (event: any) => {
         if (event instanceof HttpResponse) {
+          const decryptedData = this.loginService.convertEncToDec(event.body);
+          const res = JSON.parse(decryptedData);
   
-          if (event.body && event.body.data && Array.isArray(event.body.data)) {
-            this.documentList = event.body.data.map((doc: any) => ({
+          if (res && res.data && Array.isArray(res.data)) {
+            this.documentList = res.data.map((doc: any) => ({
               displayText: `${doc.uniqueFileName} (${doc.docVersion})`,
               refernceId: doc.refernceId,
               department: doc.department,  
@@ -267,7 +269,7 @@ openModal(fileUrl: string , documentName : string) {
               fileName : doc.plant           
             }));
           } else {
-            console.error('Unexpected response format:', event.body);
+            console.error('Unexpected response format:', res);
             this.documentList = [];
           }
         }
@@ -284,9 +286,12 @@ openModal(fileUrl: string , documentName : string) {
     this.loginService.searchDocuments(this.searchQuery).subscribe({
       next: (event: any) => {
         if (event instanceof HttpResponse) {
+          const decryptedData = this.loginService.convertEncToDec(event.body);
+          const res = JSON.parse(decryptedData);
+
   
-          if (event.body && event.body.data && Array.isArray(event.body.data)) {
-            this.documentList = event.body.data.map((doc: any) => ({
+          if (res && res.data && Array.isArray(res.data)) {
+            this.documentList = res.data.map((doc: any) => ({
               displayText: `${doc.uniqueFileName} (${doc.docVersion})`,
               refernceId: doc.refernceId,
               department: doc.department, 
@@ -294,7 +299,7 @@ openModal(fileUrl: string , documentName : string) {
               fileName : doc.fileName             
             }));
           } else {
-            console.error('Unexpected response format:', event.body);
+            console.error('Unexpected response format:', res);
             this.documentList = [];
           }
         }

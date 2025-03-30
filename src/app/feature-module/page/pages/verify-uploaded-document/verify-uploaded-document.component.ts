@@ -214,7 +214,10 @@ export class VerifyUploadedDocumentComponent implements OnInit {
     this.loginService.librarianVerifyDoc(this.loggedUserId).subscribe({
       next: (event: any) => {
         if (event instanceof HttpResponse) {
-          this.respData = event.body.data;
+          const decryptedData = this.loginService.convertEncToDec(event.body);  
+          const res = JSON.parse(decryptedData);
+
+          this.respData = res.data;
           this.fileList = this.respData;
           this.totalData = this.fileList.length;
           this.originalFileList = this.fileList;
@@ -243,7 +246,10 @@ export class VerifyUploadedDocumentComponent implements OnInit {
       this.loginService.updateDocStatus(docStatus).subscribe({
         next: (event: any) => {
           if (event instanceof HttpResponse) {
-            let updatedDoc = event.body.data;
+            const decryptedData = this.loginService.convertEncToDec(event.body);
+            const res = JSON.parse(decryptedData);
+
+            let updatedDoc = res.data;
             let index = this.fileList.findIndex(
               (doc: any) => doc.workflowDocId === updatedDoc.workflowDocId
             );
@@ -524,7 +530,10 @@ export class VerifyUploadedDocumentComponent implements OnInit {
             this.loginService.updateDocStatus(docStatus).subscribe({
               next: (event: any) => {
                 if (event instanceof HttpResponse) {
-                  let updatedDoc = event.body.data;
+                  const decryptedData = this.loginService.convertEncToDec(event.body);
+                  const res = JSON.parse(decryptedData);
+
+                  let updatedDoc = res.data;
 
                   let index = this.fileList.findIndex(
                     (doc: any) => doc.workflowDocId === updatedDoc.workflowDocId
@@ -607,7 +616,10 @@ export class VerifyUploadedDocumentComponent implements OnInit {
             this.loginService.updateDocStatus(docStatus).subscribe({
               next: (event: any) => {
                 if (event instanceof HttpResponse) {
-                  let updatedDoc = event.body.data;
+                  const decryptedData = this.loginService.convertEncToDec(event.body);
+                  const res = JSON.parse(decryptedData);
+
+                  let updatedDoc = res.data;
 
                   let index = this.fileList.findIndex(
                     (doc: any) => doc.workflowDocId === updatedDoc.workflowDocId

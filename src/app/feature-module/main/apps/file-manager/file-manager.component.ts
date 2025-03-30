@@ -84,6 +84,7 @@ export class FileManagerComponent implements OnInit , OnDestroy {
   public fullDataList:any;
   public filteredList:any;
   public firstRes:any;
+  temp:any;
 
   @ViewChild('view_files', { static: false }) viewFilesModal!: ElementRef
 
@@ -177,9 +178,16 @@ export class FileManagerComponent implements OnInit , OnDestroy {
     this.loginService.getFileLists(this.mainHead, this.plants, this.departmentName, this.subAreaName, this.startDate, this.endDate).subscribe({
       next: (event: any) => {
         if (event instanceof HttpResponse) {
-          this.respData = event.body.documentLists;
 
-          console.log("before felter:::",this.respData);
+          this.temp=event.body;
+          
+          const decryptedData = this.loginService.convertEncToDec(this.temp);
+          
+          const res = JSON.parse(decryptedData);
+
+          this.respData = res.documentLists;
+
+          // console.log("before felter:::",this.respData);
           
 
           const convertToKB = (bytes: number): string => {
@@ -205,7 +213,7 @@ export class FileManagerComponent implements OnInit , OnDestroy {
           .filter((item: null) => item !== null);
 
 
-          console.log("after felter:::",this.fileListOne);
+          // console.log("after felter:::",this.fileListOne);
 
           this.fileListOne.forEach((item: any) => {
             if (item.documentType) {
@@ -418,7 +426,17 @@ getDocumentTypeList() {
   this.loginService.getDocumentType().subscribe({
     next: (event: any) => {
       if (event instanceof HttpResponse) {
-        this.documentTypeDataList = event.body || [];
+
+        // this.temp2=event.body;
+          
+        const decryptedData = this.loginService.convertEncToDec(event.body);
+        
+        const res = JSON.parse(decryptedData);
+
+        this.documentTypeDataList = res || [];
+
+        console.log("documentTypeDataList",this.documentTypeDataList);
+        
         // console.log("DOCUMENT TYPE:: ",this.documentTypeDataList);
 
       }

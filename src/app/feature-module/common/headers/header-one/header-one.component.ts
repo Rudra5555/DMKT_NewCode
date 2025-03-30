@@ -188,7 +188,10 @@ export class HeaderOneComponent implements OnInit {
     this.loginService.accessRole(this.loggedUserId).subscribe({
       next: (event: any) => {
         if (event instanceof HttpResponse) {
-          this.resp = event.body.response
+          const decryptedData = this.loginService.convertEncToDec(event.body);
+          const res = JSON.parse(decryptedData);
+
+          this.resp = res.response
           this.roles = this.resp;
           // localStorage.setItem('Arole', this.roles);
         }
@@ -211,34 +214,85 @@ export class HeaderOneComponent implements OnInit {
     // Fetch notifications
     if (this.loggedUserId) {
 
-      this.loginService.getNotifications(this.loggedUserId).subscribe(
-        (response: any) => {
-          if (response.body && response.body.status === 200) {
-            this.notificationData = response.body.data.map((notification: any) => ({
-              id: notification.documentId,
-              stepId: notification.stepId,
-              documentId: notification.documentId,
-              docName: notification.documentName,
-              RequestedDocumentName: notification.documentName,
-              requestorName: notification.requesterName,
-              RequesterName: notification.requesterName,
-              UniqueDocumentName: notification.uniqueDocumentName,
-              plantName: notification.plantName,
-              DepartmentName: notification.departmentName,
-              DocumentType: notification.documentType,
-              hodName: notification.executerName || 'HOD',
-              uploadImg: notification.uploadImg,
-            }));
+      // this.loginService.getNotifications(this.loggedUserId).subscribe(
+      //   (event: any) => {
 
-            this.notificationCount = this.notificationData.length;
-          } else {
+      //     console.log("header one enc response",event);
+          
+      //     const decryptedData = this.loginService.convertEncToDec(event.body);
+      //     const res = JSON.parse(decryptedData);
+      //     console.log("header one dyc response",res);
+
+      //     if (res.body && res.body.status === 200) {
+      //       this.notificationData = res.body.data.map((notification: any) => ({
+      //         id: notification.documentId,
+      //         stepId: notification.stepId,
+      //         documentId: notification.documentId,
+      //         docName: notification.documentName,
+      //         RequestedDocumentName: notification.documentName,
+      //         requestorName: notification.requesterName,
+      //         RequesterName: notification.requesterName,
+      //         UniqueDocumentName: notification.uniqueDocumentName,
+      //         plantName: notification.plantName,
+      //         DepartmentName: notification.departmentName,
+      //         DocumentType: notification.documentType,
+      //         hodName: notification.executerName || 'HOD',
+      //         uploadImg: notification.uploadImg,
+      //       }));
+
+      //       this.notificationCount = this.notificationData.length;
+      //     } else {
+      //     }
+      //   },
+      //   (error) => {
+      //     console.error('Failed to fetch notifications:', error);
+      //   }
+      // );
+      // **************
+      this.loginService.getNotifications(this.loggedUserId).subscribe({
+        
+        next: (event: any) => {
+          if (event instanceof HttpResponse) {
+           
+            console.log("header one enc response",event);
+          
+            const decryptedData = this.loginService.convertEncToDec(event.body);
+            const res = JSON.parse(decryptedData);
+            console.log("header one dyc response",res);
+  
+            if (res && res.status === 200) {
+              this.notificationData = res.data.map((notification: any) => ({
+                id: notification.documentId,
+                stepId: notification.stepId,
+                documentId: notification.documentId,
+                docName: notification.documentName,
+                RequestedDocumentName: notification.documentName,
+                requestorName: notification.requesterName,
+                RequesterName: notification.requesterName,
+                UniqueDocumentName: notification.uniqueDocumentName,
+                plantName: notification.plantName,
+                DepartmentName: notification.departmentName,
+                DocumentType: notification.documentType,
+                hodName: notification.executerName || 'HOD',
+                uploadImg: notification.uploadImg,
+              }));
+  
+              this.notificationCount = this.notificationData.length;
+            } else {
+            }
+
+
           }
         },
-        (error) => {
-          console.error('Failed to fetch notifications:', error);
+        error: (err: any) => {
+          if (err.error && err.error.message) {
+            this.msg += " " + err.error.message;
+          }
         }
-      );
-    } else {
+      });
+      // ************
+    }
+    else {
     }
 
     this.notificationData = this.hodNotify
@@ -258,7 +312,10 @@ export class HeaderOneComponent implements OnInit {
         
         next: (event: any) => {
           if (event instanceof HttpResponse) {
-            this.resp = event.body.data
+            const decryptedData = this.loginService.convertEncToDec(event.body);
+            const res = JSON.parse(decryptedData);
+
+            this.resp = res.data
             this.respData = this.resp.filter((notification: any) => !notification.markAsRead);  //markedAsRead = false
       
           this.statutoryReadNotification = this.resp.filter((notification: any) => notification.markAsRead);  //markedAsRead = true
@@ -286,7 +343,10 @@ export class HeaderOneComponent implements OnInit {
       this.loginService.notificTwo(userId).subscribe({
         next: (event: any) => {
           if (event instanceof HttpResponse) {
-            this.resp = event.body.data
+            const decryptedData = this.loginService.convertEncToDec(event.body);
+            const res = JSON.parse(decryptedData);
+
+            this.resp = res.data
             const notificTwoo = this.resp;
 
              // Filter out only the notifications where markAsRead is false
@@ -562,7 +622,10 @@ export class HeaderOneComponent implements OnInit {
   this.loginService.markedAsReadStatutoryNotification(item.stepId).subscribe({
     next: (event: any) => {
       if (event instanceof HttpResponse) {
-        const res = event.body.status
+        const decryptedData = this.loginService.convertEncToDec(event.body);
+        const resData = JSON.parse(decryptedData);
+        const res =resData.status
+
           if(res == 200){
       this.userNotificationBell(this.loggedUserId)
       }
@@ -587,7 +650,10 @@ if (this.selectedFileUploadData.reason == null || this.selectedFileUploadData.re
   // Call API to mark as read
   this.loginService.markedAsReadFileNotification(item.workflowDocId).subscribe({
     next: (response: any) => {
-      if(response.status == 200){
+      const decryptedData = this.loginService.convertEncToDec(response);
+      const res = JSON.parse(decryptedData);
+
+      if(res.status == 200){
      this.userFileNotificationBell(this.loggedUserId)
       }
     },

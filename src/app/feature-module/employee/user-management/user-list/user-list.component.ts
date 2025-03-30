@@ -77,8 +77,11 @@ export class UserListComponent implements OnInit {
        this.loginService.getUserInfo().subscribe({
           next: (event: any) => {
             if (event instanceof HttpResponse) {
-            const respData=event.body
-            this.res=event.body.response
+            const decryptedData = this.loginService.convertEncToDec(event.body);
+            const resData = JSON.parse(decryptedData);
+
+            const respData=resData
+            this.res=resData.response
 
             let dropdownData = this.getUniqueDropdownOptions(respData);
             this.uniqueDepartments = dropdownData.uniqueDepartments;
@@ -129,7 +132,10 @@ export class UserListComponent implements OnInit {
        this.loginService.getFilterUserList(this.selectedDepartment,this.selectedPlant).subscribe({
           next: (event: any) => {
             if (event instanceof HttpResponse) {
-            this.res=event.body.response
+              const decryptedData = this.loginService.convertEncToDec(event.body);
+              const resData = JSON.parse(decryptedData);
+
+            this.res=resData.response
            
             this.totalData=this.res.length;
             this.fullDataList = [...this.res];

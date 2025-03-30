@@ -149,9 +149,12 @@ export class StatutoryDocComponent implements OnInit {
     this.loginService.AllAdminFileList(this.startDate, this.endDate).subscribe({
       next: (event: any) => {
         if (event instanceof HttpResponse) {
-          this.res = event.body.response;
+          const decryptedData = this.loginService.convertEncToDec(event.body);
+          const res = JSON.parse(decryptedData);
+
+          this.res = res.response;
   
-          this.res = event.body.response.filter((file: any) =>
+          this.res = res.response.filter((file: any) =>
             !file.isHodDocument && file.isStatutory && !file.isRestrictedDocument
           ); 
           let filteredData = this.res;

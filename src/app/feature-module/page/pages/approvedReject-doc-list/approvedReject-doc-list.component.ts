@@ -165,7 +165,10 @@ export class ApprovedRejectDocListComponent implements OnInit {
       .subscribe({
         next: (event: any) => {
           if (event instanceof HttpResponse) {
-            this.res = event.body.data;
+            const decryptedData = this.loginService.convertEncToDec(event.body);
+            const res = JSON.parse(decryptedData);
+
+            this.res = res.data;
             this.totalData=this.res.length;        
             this.fullDataList = [...this.res]; 
             this.filteredList = [...this.res]; 

@@ -169,7 +169,10 @@ this.count++;
     this.loginService.libUploadDocNotific().subscribe({
       next: (event: any) => {
         if (event instanceof HttpResponse) {
-          this.respData = event.body;
+          const decryptedData = this.loginService.convertEncToDec(event.body);
+          const res = JSON.parse(decryptedData);
+          
+          this.respData = res;
           this.notifiCount = this.respData.data;
   
         console.log("ppppppp",this.notifiCount);

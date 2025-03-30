@@ -190,7 +190,10 @@ export class FileManagerMainheadComponent implements OnInit, OnDestroy {
     this.loginService.getFileListforOther(this.decryptedMainHeadName, this.startDate, this.endDate).subscribe({
       next: (event: any) => {
         if (event instanceof HttpResponse) {
-          this.respData = event.body.data;
+          const decryptedData = this.loginService.convertEncToDec(event.body);
+          
+          const res = JSON.parse(decryptedData);
+          this.respData = res.data;
           // console.log("RESP DATA:: ",this.respData);
           
           const convertToKB = (bytes: number): number => {
@@ -615,7 +618,12 @@ public changePageSize(newPageSize: number): void {
     this.loginService.getDocumentType().subscribe({
       next: (event: any) => {
         if (event instanceof HttpResponse) {
-          this.documentTypeDataList = event.body || [];
+          const decryptedData = this.loginService.convertEncToDec(event.body);
+        
+          const res = JSON.parse(decryptedData);
+  
+          this.documentTypeDataList = res || [];
+       
         // console.log("DOCUMENT TYPE:: ",this.documentTypeDataList);
         }
       },

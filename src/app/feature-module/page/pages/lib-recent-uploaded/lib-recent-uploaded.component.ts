@@ -165,7 +165,10 @@ export class LibRecentUploadedComponent implements OnInit {
     this.loginService.AllAdminFileList(this.startDate, this.endDate).subscribe({
       next: (event: any) => {
         if (event instanceof HttpResponse) {
-          this.res = event.body.response;
+          const decryptedData = this.loginService.convertEncToDec(event.body);
+          const res = JSON.parse(decryptedData);
+
+          this.res = res.response;
 
           this.totalData=this.res.length;
           

@@ -153,7 +153,10 @@ export class RequestedDocComponent implements OnInit {
     this.loginService.approvedDocList(loggedUserId, this.startDate, this.endDate).subscribe({
       next: (event: any) => {
         if (event instanceof HttpResponse) {
-          const responseData = event.body.data;
+          const decryptedData = this.loginService.convertEncToDec(event.body);
+          const res = JSON.parse(decryptedData);
+
+          const responseData = res.data;
          
           this.filteredApprovedData = responseData.filter((item: getcontactlist) => item.documentApprovalStatus === 'A');
 
@@ -287,9 +290,11 @@ export class RequestedDocComponent implements OnInit {
     this.loginService.searchDocuments('').subscribe({
       next: (event: any) => {
         if (event instanceof HttpResponse) {
+          const decryptedData = this.loginService.convertEncToDec(event.body);
+          const res = JSON.parse(decryptedData);
 
-          if (event.body && event.body.data && Array.isArray(event.body.data)) {
-            this.documentList = event.body.data.map((doc: any) => ({
+          if (res && res.data && Array.isArray(res.data)) {
+            this.documentList = res.data.map((doc: any) => ({
               displayText: `${doc.uniqueFileName} (${doc.docVersion})`,
               refernceId: doc.refernceId,
               department: doc.department,
@@ -297,7 +302,7 @@ export class RequestedDocComponent implements OnInit {
               fileName: doc.plant
             }));
           } else {
-            console.error('Unexpected response format:', event.body);
+            console.error('Unexpected response format:', res);
             this.documentList = [];
           }
         }
@@ -314,8 +319,11 @@ export class RequestedDocComponent implements OnInit {
     this.loginService.searchDocuments(this.searchQuery).subscribe({
       next: (event: any) => {
         if (event instanceof HttpResponse) {
-          if (event.body && event.body.data && Array.isArray(event.body.data)) {
-            this.documentList = event.body.data.map((doc: any) => ({
+          const decryptedData = this.loginService.convertEncToDec(event.body);
+          const res = JSON.parse(decryptedData);
+
+          if (res && res.data && Array.isArray(res.data)) {
+            this.documentList = res.data.map((doc: any) => ({
               displayText: `${doc.uniqueFileName} (${doc.docVersion})`,
               refernceId: doc.refernceId,
               department: doc.department,
@@ -323,7 +331,7 @@ export class RequestedDocComponent implements OnInit {
               fileName: doc.fileName
             }));
           } else {
-            console.error('Unexpected response format:', event.body);
+            console.error('Unexpected response format:', res);
             this.documentList = [];
           }
         }

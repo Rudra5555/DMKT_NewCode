@@ -74,7 +74,10 @@ export class AdminDashboardComponent implements OnInit {
     this.loginService.getTotalFileCount(startDate, endDate).subscribe({
       next: (event: any) => {
         if (event instanceof HttpResponse) {
-          this.res = event.body.data;
+          const decryptedData = this.loginService.convertEncToDec(event.body);
+          const res = JSON.parse(decryptedData);
+          this.res = res.data;
+
           if (this.res != null) {
 
             this.fileCount = this.res.totalFileCount
@@ -95,9 +98,12 @@ export class AdminDashboardComponent implements OnInit {
     this.loginService.AllAdminFileList(startDate, endDate).subscribe({
       next: (event: any) => {
         if (event instanceof HttpResponse) {
-          this.res = event.body;
+          const decryptedData = this.loginService.convertEncToDec(event.body);
+          const res = JSON.parse(decryptedData);
 
-          this.res = event.body.response;
+          this.res = res;
+
+          this.res = res.response;
           this.fileList = this.res;
         }
       },
@@ -112,7 +118,10 @@ export class AdminDashboardComponent implements OnInit {
     this.loginService.onDateRangeSelectedBar(startDate, endDate).subscribe({
       next: (event: any) => {
         if (event instanceof HttpResponse) {
-          this.res = event.body;
+          const decryptedData = this.loginService.convertEncToDec(event.body);
+          const resData = JSON.parse(decryptedData);
+
+          this.res = resData;
           this.resArray = this.res.data;
           this.dateArray = this.resArray[0].dateList || [];
           this.deptDataArray = this.resArray[0].listOfDepartmentDataListDto || [];
@@ -141,7 +150,10 @@ export class AdminDashboardComponent implements OnInit {
     this.loginService.onDateRangeSelectedPie(startDate, endDate).subscribe({
       next: (event: any) => {
         if (event instanceof HttpResponse) {
-           this.pieRes = event.body.data;
+          const decryptedData = this.loginService.convertEncToDec(event.body);
+          const res = JSON.parse(decryptedData);
+
+           this.pieRes = res.data;
 
            this.pieChartData = {
             labels: this.pieRes.map((deptData: any) => deptData.dept), 
@@ -177,7 +189,10 @@ export class AdminDashboardComponent implements OnInit {
     this.loginService.getTotalActiveUser().subscribe({
       next: (event: any) => {
         if (event instanceof HttpResponse) {
-          this.totalActiveUser = event.body.data.activeUserCount;
+          const decryptedData = this.loginService.convertEncToDec(event.body);
+          const res = JSON.parse(decryptedData);
+
+          this.totalActiveUser = res.data.activeUserCount;
 
         }
       },
@@ -191,7 +206,10 @@ export class AdminDashboardComponent implements OnInit {
     this.loginService.getTotalBlockUser().subscribe({
       next: (event: any) => {
         if (event instanceof HttpResponse) {
-          this.totalBlockUser = event.body.data.totalBlockedUserCount;
+          const decryptedData = this.loginService.convertEncToDec(event.body);
+          const res = JSON.parse(decryptedData);
+
+          this.totalBlockUser = res.data.totalBlockedUserCount;
 
         }
       },
@@ -205,7 +223,9 @@ export class AdminDashboardComponent implements OnInit {
     this.loginService.getTotalActiveHods().subscribe({
       next: (event: any) => {
         if (event instanceof HttpResponse) {
-          this.totalActiveHod = event.body.data.totalActiveHodCount;
+          const decryptedData = this.loginService.convertEncToDec(event.body);
+          const res = JSON.parse(decryptedData);
+          this.totalActiveHod = res.data.totalActiveHodCount;
 
         }
       },
@@ -219,7 +239,10 @@ export class AdminDashboardComponent implements OnInit {
     this.loginService.getTotalDepartment().subscribe({
       next: (event: any) => {
         if (event instanceof HttpResponse) {
-          this.totalDepartment = event.body.data.totalNumberOfDepartment;
+          const decryptedData = this.loginService.convertEncToDec(event.body);
+          const res = JSON.parse(decryptedData);
+
+          this.totalDepartment = res.data.totalNumberOfDepartment;
 
 
         }
