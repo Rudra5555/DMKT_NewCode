@@ -194,7 +194,7 @@ export class FileManagerMainheadComponent implements OnInit, OnDestroy {
           
           const res = JSON.parse(decryptedData);
           this.respData = res.data;
-          // console.log("RESP DATA:: ",this.respData);
+
           
           const convertToKB = (bytes: number): number => {
             return Math.round(bytes / 1024);
@@ -226,12 +226,11 @@ export class FileManagerMainheadComponent implements OnInit, OnDestroy {
           
           this.documentTypeList = Array.from(this.documentTypeSet);
 
-          // console.log("file list one",this.fileListOne);
+   
           
           this.transformedMap = this.transformApiResponseToMap(this.fileListOne);
 
-          // this.fileList = Array.from(this.transformedMap.values());
-          // console.log("file list",JSON.stringify( this.fileList));
+
           this.firstRes = Array.from(this.transformedMap.values());
           this.totalData = this.firstRes.length;
 
@@ -304,7 +303,7 @@ export class FileManagerMainheadComponent implements OnInit, OnDestroy {
     let selectedVersionDetails = selectedVersion;
     let version=selectedVersion.versionName;
   
-    // console.log("nhhhhhhnhnhnhmdhf:::",item);
+
     
         const fileName=item.fileName;
         const extension=item.extension;
@@ -337,20 +336,20 @@ export class FileManagerMainheadComponent implements OnInit, OnDestroy {
                     };              
                   }     
               });
-        // console.log("value object uuuuuuuuuuuNNNNNNNNN",this.valueObject);
+
         
         this.transformedMap.set(fileNameAsKey, this.valueObject);
   
         this.fileList = Array.from(this.transformedMap.values());
   
-        // console.log("After::", JSON.stringify(this.transformedMap.get(fileNameAsMapKey)))
+ 
   }
   
   downloadDocument(doucmentUrl:any, item:any){
     this.loggedUserRole;
     this.loggedUserId = localStorage.getItem("loggedInUserId");
     this.loggedUserName = localStorage.getItem("loggedUserName");
-    // console.log(doucmentUrl, this.loggedUserRole, this.loggedUserName, this.loggedUserId, item);
+
   }
   
 setFileUrl(fileUrl: any, fileName: any, fileSize: number, event: Event) {
@@ -374,7 +373,7 @@ setFileUrl(fileUrl: any, fileName: any, fileSize: number, event: Event) {
 
 // Function to open modal for PDFs
 openModal(fileUrl: any) {
-  // console.log("Opening modal for PDF:", fileUrl);
+
   this.docView = this.sanitizer.bypassSecurityTrustResourceUrl(fileUrl);
   setTimeout(() => {
     const modalTrigger = document.getElementById('view_files');
@@ -623,8 +622,7 @@ public changePageSize(newPageSize: number): void {
           const res = JSON.parse(decryptedData);
   
           this.documentTypeDataList = res || [];
-       
-        // console.log("DOCUMENT TYPE:: ",this.documentTypeDataList);
+
         }
       },
       error: (err: any) => {

@@ -310,7 +310,7 @@ export class UserDashboardComponent implements OnInit {
           const res = JSON.parse(decryptedData);
 
           this.headList = res.categoryList.listCategoryInfoDtos
-          // console.log("main head::,",this.headList);
+   
           
         }
       },

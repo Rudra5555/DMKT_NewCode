@@ -484,12 +484,12 @@ return;
         if (event instanceof HttpResponse) {
           try {
             const decryptedData = this.uploadDocument.convertEncToDec(event.body);
-            console.log("Decrypted main head data:", decryptedData);
+          
   
             const jsonObj = JSON.parse(decryptedData);
             if (jsonObj.status === 200 && jsonObj.categoryList) {
               this.mainHeadList = jsonObj.categoryList;
-              console.log("Main head list:", this.mainHeadList);
+              // console.log("Main head list:", this.mainHeadList);
               
             } else {
               console.warn("No valid category list found in response.");
