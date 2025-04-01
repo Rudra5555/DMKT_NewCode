@@ -82,6 +82,8 @@ export class UserListComponent implements OnInit {
 
             const respData=resData
             this.res=resData.response
+          
+            
 
             let dropdownData = this.getUniqueDropdownOptions(respData);
             this.uniqueDepartments = dropdownData.uniqueDepartments;
@@ -136,6 +138,8 @@ export class UserListComponent implements OnInit {
               const resData = JSON.parse(decryptedData);
 
             this.res=resData.response
+      
+            
            
             this.totalData=this.res.length;
             this.fullDataList = [...this.res];

@@ -183,6 +183,7 @@ export class UserManagementModalComponent implements OnInit {
         accessRoles: this.getSelectedRoles(),
         userPicture: this.files?.length ? this.files[0].base64 : null, 
       };
+   
       
           this.loginService.addUser(payload).subscribe({
               next: (event: any) => {
@@ -225,6 +226,7 @@ export class UserManagementModalComponent implements OnInit {
         accessRoles: this.getSelectedRoles(),
         userPicture: this.files?.length ? this.files[0].base64 : null, 
       };
+   
       
           this.loginService.addUser(payload).subscribe({
               next: (event: any) => {

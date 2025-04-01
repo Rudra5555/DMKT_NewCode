@@ -174,12 +174,11 @@ export class HeaderOneComponent implements OnInit {
     this.loggedUserId = localStorage.getItem('loggedInUserId');
     this.picture = localStorage.getItem('PictureLog');
 
-    // console.log("Picture URL (before checking):", this.picture);
     
     if (!this.picture || this.picture === "null" || this.picture === "undefined" || this.picture.trim() === "" || this.picture === "1234567890") {
       this.picture = '/assets/img/userIcon.png';
       localStorage.setItem('PictureLog', this.picture);
-      // console.log("Final Picture URL (after setting default):", this.picture);
+    
     }
     
     // Sanitize image
@@ -214,52 +213,17 @@ export class HeaderOneComponent implements OnInit {
     // Fetch notifications
     if (this.loggedUserId) {
 
-      // this.loginService.getNotifications(this.loggedUserId).subscribe(
-      //   (event: any) => {
-
-      //     console.log("header one enc response",event);
-          
-      //     const decryptedData = this.loginService.convertEncToDec(event.body);
-      //     const res = JSON.parse(decryptedData);
-      //     console.log("header one dyc response",res);
-
-      //     if (res.body && res.body.status === 200) {
-      //       this.notificationData = res.body.data.map((notification: any) => ({
-      //         id: notification.documentId,
-      //         stepId: notification.stepId,
-      //         documentId: notification.documentId,
-      //         docName: notification.documentName,
-      //         RequestedDocumentName: notification.documentName,
-      //         requestorName: notification.requesterName,
-      //         RequesterName: notification.requesterName,
-      //         UniqueDocumentName: notification.uniqueDocumentName,
-      //         plantName: notification.plantName,
-      //         DepartmentName: notification.departmentName,
-      //         DocumentType: notification.documentType,
-      //         hodName: notification.executerName || 'HOD',
-      //         uploadImg: notification.uploadImg,
-      //       }));
-
-      //       this.notificationCount = this.notificationData.length;
-      //     } else {
-      //     }
-      //   },
-      //   (error) => {
-      //     console.error('Failed to fetch notifications:', error);
-      //   }
-      // );
-      // **************
+      // ************
       this.loginService.getNotifications(this.loggedUserId).subscribe({
         
         next: (event: any) => {
           if (event instanceof HttpResponse) {
            
-            console.log("header one enc response",event);
+       
           
             const decryptedData = this.loginService.convertEncToDec(event.body);
             const res = JSON.parse(decryptedData);
-            console.log("header one dyc response",res);
-  
+           
             if (res && res.status === 200) {
               this.notificationData = res.data.map((notification: any) => ({
                 id: notification.documentId,
@@ -450,7 +414,7 @@ export class HeaderOneComponent implements OnInit {
 
 
     if (status == 'R' && reason == '') {
-      // console.error('Provide the reason for the rejection!');
+    
       
       this.rejectReasonFlag = true;
       this.disableSubmitBtn = true;

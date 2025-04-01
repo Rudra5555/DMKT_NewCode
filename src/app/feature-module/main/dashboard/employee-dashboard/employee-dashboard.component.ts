@@ -53,25 +53,23 @@ export class EmployeeDashboardComponent implements OnInit {
     this.randomItem = this.colors[Math.floor(Math.random() * this.colors.length)];
   }
   getFileList() {
-
     this.loginService.getFileList().subscribe({
       next: (event: any) => {
         if (event instanceof HttpResponse) {
-          this.data = event.body
+          const decryptedData = this.loginService.convertEncToDec(event.body);
+          if (decryptedData) {
+            this.data = JSON.parse(decryptedData);
+          }
         }
       },
-
-
-
       error: (err: any) => {
-        if (err.error && err.error.message) {
-
-          this.msg += " " + err.error.message;
-        }
+        const errorMessage = err?.error?.message || "Unknown error occurred.";
+        console.error("Error fetching file list:", errorMessage);
+        this.msg += " " + errorMessage;
       }
     });
   }
-
+  
   ngOnInit(): void {
     this.getFileList()
     this.uname = localStorage.getItem("ami");
