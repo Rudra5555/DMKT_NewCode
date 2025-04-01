@@ -209,6 +209,8 @@ export class UserManagementModalComponent implements OnInit {
   submitAddUserFormLibrarian() {
   
     if (this.addUserForm.valid) {
+      
+      
       const payload = {
         userName: this.addUserForm.value.userName,
         phoneNumber: this.addUserForm.value.userPhone,
@@ -225,12 +227,22 @@ export class UserManagementModalComponent implements OnInit {
         accessRoles: this.getSelectedRoles(),
         userPicture: this.files?.length ? this.files[0].base64 : null, 
       };
-      
+
           this.loginService.addUser(payload).subscribe({
               next: (event: any) => {
                 if (event instanceof HttpResponse) {
-                  const resp = event.body
-                  this.successfulSubmitAlert();
+                  const decryptedData = this.loginService.convertEncToDec(event.body);
+                  const res = JSON.parse(decryptedData);
+
+                  const resp = res
+
+                  console.log("response after submit",resp);
+                  if(resp.status==200){
+                    this.successfulSubmitAlert();
+                  }
+                 else{
+                  
+                 }
                  
                 }
               },
