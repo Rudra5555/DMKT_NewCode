@@ -61,13 +61,11 @@ export class EmployeeProfileComponent implements OnInit {
     this.picture = localStorage.getItem("PictureLog") || '/assets/img/userIcon.png';
     this.sanitizedImage = this.sanitizer.bypassSecurityTrustUrl(this.picture);
 
-console.log("Picture",this.picture);
 
     const storedData = localStorage.getItem('deptDetails');
     this.departmentNameList = storedData ? JSON.parse(storedData) : [];
     
-    console.log("deptDetails",this.departmentNameList);
-    console.log("Name",this.firstName);
+ 
     
 
     

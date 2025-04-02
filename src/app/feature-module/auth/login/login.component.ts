@@ -89,7 +89,7 @@ export class LoginComponent implements OnInit {
 // Convert bytes to string
 const decryptedText = decryptedBytes.toString(CryptoJS.enc.Utf8);
 
-console.log('Decrypted:', decryptedText);
+// console.log('Decrypted:', decryptedText);
 
 
   }
@@ -128,11 +128,11 @@ onClickSubmit(formData: any){
         if (event instanceof HttpResponse) {
          
           const decryptedData = this.loginService.convertEncToDec(this.encryptedData);
-          console.log("122 no line", decryptedData);
+          // console.log("122 no line", decryptedData);
           
           const jsonObj = JSON.parse(decryptedData);
           if (jsonObj.status === 200) {
-            console.log("status is success");
+            // console.log("status is success");
           }
           
           // this.data = jsonObj;

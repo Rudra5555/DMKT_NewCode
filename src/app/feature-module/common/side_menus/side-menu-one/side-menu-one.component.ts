@@ -43,58 +43,16 @@ export class SideMenuOneComponent implements OnDestroy,OnInit{
     private loginService : LoginComponentService
    
   ) {
-    //this.userRole = sessionStorage.getItem('user_role')
-   
-  //  //console.log("Role form side menu session:" , this.userRole)
-    // //console.log("Role form side menu local :" , testtt)
-
-
-
+    
     router.events.subscribe((event: object) => {
       if (event instanceof NavigationEnd) {
         const splitVal = event.url.split('/');
         this.base = splitVal[1];
         this.page = splitVal[2];
         this.last = splitVal[3];
-        // //console.log('base',this.base)
-        // //console.log('page',this.page)
-        // //console.log('last',this.last)
       }
     });
 
-
-  
-
-    // get sidebar data as observable because data is controlled for design to expand submenus
- //   let testytt = adminData.getUserRole();
- //   //console.log("testtt =======",testytt)
-    // if(this.roleData != "Admin"){
-    //   this.data.getSideBarData.subscribe((res: Array<SideBar>) => {
-    //     this.side_bar_data = res;
-    //   });
-    //   alert("admin role::"+this.roleData)
-    // }
-    // if(this.roleData != "Librarian"){
-    //   this.data.getSideBarData1.subscribe((res: Array<SideBar>) => {
-    //     this.side_bar_data = res;
-    //   });
-    // }
-    // if(this.roleData != "User"){
-    //   this.data.getSideBarData2.subscribe((res: Array<SideBar>) => {
-    //     this.side_bar_data = res;
-    //   });
-    // }
-    // if(this.roleData != "SuperUser"){
-    //   this.data.getSideBarData3.subscribe((res: Array<SideBar>) => {
-    //     this.side_bar_data = res;
-    //   });
-    // }
- 
-   
-    // this.data.getSideBarData.subscribe((res: Array<SideBar>) => {
-    //   this.side_bar_data = res;
-    //  // //console.log("responsessssss :",res)
-    // });
     this.common.base.subscribe((res: string) => {
       this.base = res;
     });
@@ -175,7 +133,7 @@ this.count++;
           this.respData = res;
           this.notifiCount = this.respData.data;
   
-        console.log("ppppppp",this.notifiCount);
+        // console.log("ppppppp",this.notifiCount);
         
   
         }
@@ -262,48 +220,8 @@ this.count++;
   }
 
    
-  //  ngAfterContentInit() {
-  //   this.sub = this.data.send_data.subscribe(role=>{
-  //     //console.log("data pass from onesssss :",   role)
-  //     this.test(role)
-
-  //    })
-   // //console.log("data ::", this.childProperty)
   }
 
-//   test(a:any)
-//   {
-//     this.roleData = a;
-//    // //console.log("aaaaaaaaaaaaaaaaa=",this.roleData)
-  
-//     if(this.roleData == "Admin"){
-     
-//       this.data.getSideBarData.subscribe((res: Array<SideBar>) => {
-//         this.side_bar_data = res;
-//         // alert("from side menu")
-//       });
-//      // alert("admin role::"+this.roleData)
-//     }
-  
-//  if(this.roleData == "Librarian"){
-//       this.data.getSideBarData1.subscribe((res: Array<SideBar>) => {
-//         this.side_bar_data = res;
-//         // alert("from side menu")
-//       });
-//     }
-//     if(this.roleData == "User"){
-//       this.data.getSideBarData2.subscribe((res: Array<SideBar>) => {
-//         this.side_bar_data = res;
-//       });
-//     }
-//     if(this.roleData == "SuperUser"){
-//       this.data.getSideBarData3.subscribe((res: Array<SideBar>) => {
-//         this.side_bar_data = res;
-//       });
-//     }
-
-
-//   }
 
 
 

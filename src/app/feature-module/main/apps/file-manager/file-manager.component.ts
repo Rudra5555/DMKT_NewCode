@@ -435,7 +435,7 @@ getDocumentTypeList() {
 
         this.documentTypeDataList = res || [];
 
-        console.log("documentTypeDataList",this.documentTypeDataList);
+        // console.log("documentTypeDataList",this.documentTypeDataList);
         
         // console.log("DOCUMENT TYPE:: ",this.documentTypeDataList);
 

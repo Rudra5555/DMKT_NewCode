@@ -238,7 +238,7 @@ export class UserManagementModalComponent implements OnInit {
 
                   const resp = res
 
-                  console.log("response after submit",resp);
+                  // console.log("response after submit",resp);
                   if(resp.status==200){
                     this.successfulSubmitAlert();
                   }
