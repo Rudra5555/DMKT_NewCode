@@ -114,7 +114,7 @@ onClickSubmit(formData: any){
           }
                 
           this.data = jsonObj;
-          
+          console.log("DecResData",this.data);
   
           if(this.data!=null){   
             if(this.data.status ===417){
