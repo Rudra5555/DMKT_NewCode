@@ -55,7 +55,7 @@ export class LoginComponent implements OnInit {
   toaster: any;
   timestamp: string ='';
   modalMessage: string = '';
-  public encryptedData = 'CGR6dHOVNQIoiS/R9neDEWC8u5q27C55YLil1Uam6ORcV3tmvw0zEbowgbd56Z/tZ01M7rw2+arhdcp1zg1ZO/ZwtSLB2gDx0JQP5Iueqfw='; // Get this from Java encryption output
+  
 
   constructor(private router: Router,private loginService : LoginComponentService,private dataService : DataService ,private formBuilder: FormBuilder) {}
 
@@ -70,26 +70,6 @@ export class LoginComponent implements OnInit {
         password: ['', [Validators.required]],
       
       }); 
-
-
-      
-
-  const secretKey = '1234567890123456'; // Must match Java key
-  const iv = 'abcdefghijklmnop'; // Must match Java IV
-
- 
-
-// Decrypt
-  const decryptedBytes = CryptoJS.AES.decrypt(this.encryptedData, CryptoJS.enc.Utf8.parse(secretKey), {
-      iv: CryptoJS.enc.Utf8.parse(iv),
-      mode: CryptoJS.mode.CBC,
-      padding: CryptoJS.pad.Pkcs7
-  });
-
-// Convert bytes to string
-const decryptedText = decryptedBytes.toString(CryptoJS.enc.Utf8);
-
-// console.log('Decrypted:', decryptedText);
 
 
   }
@@ -127,13 +107,14 @@ onClickSubmit(formData: any){
       next: (event: any) => {
         if (event instanceof HttpResponse) {
          
-          const decryptedData = this.loginService.convertEncToDec(this.encryptedData);
+          const decryptedData = this.loginService.convertEncToDec(event.body);
           
           const jsonObj = JSON.parse(decryptedData);
           if (jsonObj.status === 200) {
           }
                 
           this.data = jsonObj;
+          
   
           if(this.data!=null){   
             if(this.data.status ===417){
