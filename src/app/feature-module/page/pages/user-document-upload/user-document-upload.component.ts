@@ -24,7 +24,7 @@ export class UserDocumentUpload implements OnInit{
   public invalidFileExtensionFlag: boolean = false;
   public uploadDocumentSizeFlag: boolean = false;
   loggedUserId:any;
-
+  public buttonDisabled: boolean = false;
   constructor(
     private formBuilder: FormBuilder, private loginService : LoginComponentService
   ) {
@@ -170,11 +170,11 @@ onSubmit(): void {
   formData.append("requesterId", requesterId.toString());
   if (this.uploadFileForm.valid) {
       this.uploadFileForm.markAllAsTouched();
-
+      this.buttonDisabled = true;
       this.loginService.userUpload(formData).subscribe({
           next: (event: any) => {
               if (event instanceof HttpResponse) {
-              
+                this.buttonDisabled = false;
                   this.uploadFileForm.reset();
                   this.clearFileInput();
                   this.successfulSubmitAlert();
