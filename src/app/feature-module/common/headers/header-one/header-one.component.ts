@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, DestroyRef, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SideBarService } from 'src/app/core/services/side-bar/side-bar.service';
 import { NavigationEnd, Router } from '@angular/router';
@@ -9,6 +9,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { E } from '@angular/cdk/keycodes';
 import Swal from 'sweetalert2';
 import { DomSanitizer } from '@angular/platform-browser';
+import { interval, Subscription, switchMap } from 'rxjs';
 
 interface data {
   id: number, hodName: string, docName: string, last_modified?: string, requestorName: string, documentId?: number;
@@ -63,7 +64,7 @@ interface ApiResponse {
   templateUrl: './header-one.component.html',
   styleUrls: ['./header-one.component.scss'],
 })
-export class HeaderOneComponent implements OnInit {
+export class HeaderOneComponent implements OnInit,OnDestroy  {
   public base = '';
   public page = '';
   public routes = routes;
@@ -98,6 +99,7 @@ export class HeaderOneComponent implements OnInit {
   selectedRole: string = '';
   resp: any;
   msg: any;
+  private schedulerSub!: Subscription;
   respData: any;
   notificTwo: any;
   selectFileData: any;
@@ -120,6 +122,9 @@ export class HeaderOneComponent implements OnInit {
   expDate: any;
   picture: any;
   sanitizedImage: any;
+  count: any = 0;
+  refreshSub: any;
+  subscription: Subscription | undefined;
  
   constructor(
     private sideBar: SideBarService,private cdr: ChangeDetectorRef,private sanitizer: DomSanitizer,
@@ -161,6 +166,7 @@ export class HeaderOneComponent implements OnInit {
 
 
   }
+ 
   ngOnInit(): void {
 
     this.hodModalForm = this.fb.group({
@@ -205,6 +211,62 @@ export class HeaderOneComponent implements OnInit {
 
     this.userNotificationBell(this.loggedUserId);
     this.userFileNotificationBell(this.loggedUserId);
+    // this.schedulerSub = interval(100).subscribe(() => {
+    //   // this.count = this.count +1;
+     
+    //   // console.log("Scheduler running every 100ms :"+this.count);
+      
+    // });
+
+
+
+
+
+       // Poll every 10 seconds    
+      //  this.subscription = interval(10000).pipe(
+      //   switchMap(() =>    this.loginService.notificTwo(this.loggedUserId))
+      // ).subscribe({
+        
+      //   next: (event: any) => {
+      //     if (event instanceof HttpResponse) {
+           
+       
+          
+      //       const decryptedData = this.loginService.convertEncToDec(event.body);
+      //       const res = JSON.parse(decryptedData);
+      //      console.log("res prod data ::",res);
+           
+       
+
+      //     }
+      //   },
+      //   error: (err: any) => {
+      //     if (err.error && err.error.message) {
+      //       this.msg += " " + err.error.message;
+      //     }
+      //   }
+      // });
+
+
+
+      
+
+
+    // }
+  
+    // ngOnDestroy(): void {
+    //   if (this.subscription) {
+    //     this.subscription.unsubscribe();
+    //   }
+
+    // this.refreshSub = interval(30000).subscribe(() => {
+    //   window.location.reload();
+    // });
+  
+
+
+
+    
 
     this.uname = localStorage.getItem("loggedUserName");
     this.userRole = localStorage.getItem('role');
@@ -265,8 +327,14 @@ export class HeaderOneComponent implements OnInit {
       this.notificationCount = this.notificationData.length;
     }
   }
-
-
+  // ngOnDestroy(): void {
+  //   this.schedulerSub.unsubscribe();
+  // }
+  ngOnDestroy(): void {
+    if (this.refreshSub) {
+      this.refreshSub.unsubscribe();
+    }
+  }
   userNotificationBell(userId: any) {
     if (!userId) {
       return;
@@ -305,6 +373,7 @@ export class HeaderOneComponent implements OnInit {
       return;
     } else {
       this.loginService.notificTwo(userId).subscribe({
+        
         next: (event: any) => {
           if (event instanceof HttpResponse) {
             const decryptedData = this.loginService.convertEncToDec(event.body);

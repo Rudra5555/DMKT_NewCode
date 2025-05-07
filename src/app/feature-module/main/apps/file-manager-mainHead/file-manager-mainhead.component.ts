@@ -32,6 +32,7 @@ export class FileManagerMainheadComponent implements OnInit, OnDestroy {
   [x: string]: any;
   public searchDataValue = '';
   public routes = routes
+  tempFileList: any[] = [];
   public filter = false;
   elem = document.documentElement
   isFilterDropdownOpen: boolean = false;
@@ -340,7 +341,10 @@ export class FileManagerMainheadComponent implements OnInit, OnDestroy {
         
         this.transformedMap.set(fileNameAsKey, this.valueObject);
   
-        this.fileList = Array.from(this.transformedMap.values());
+        // this.fileList = Array.from(this.transformedMap.values());
+        this.tempFileList = Array.from(this.transformedMap.values());
+        this.paginateData(this.tempFileList);
+     
   
  
   }

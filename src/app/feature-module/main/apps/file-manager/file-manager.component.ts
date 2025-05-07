@@ -35,6 +35,7 @@ export class FileManagerComponent implements OnInit , OnDestroy {
   maxDate = new Date();
   selectedDocType :any;
   getFileName:any;
+  tempFileList:any;
   public lastIndex = 0;
   public pageSize = 10;
   public totalData = 0;
@@ -576,8 +577,10 @@ onVersionChange(item: any,fileNameAsKey:any, selectedVersion: any) {
       
       this.transformedMap.set(fileNameAsKey, this.valueObject);
 
-      this.fileList = Array.from(this.transformedMap.values());
-
+      // this.fileList = Array.from(this.transformedMap.values()); // we are going to call this.fileList for pagination 
+     
+      this.tempFileList = Array.from(this.transformedMap.values());
+      this.paginateData(this.tempFileList);
    
 }
 
