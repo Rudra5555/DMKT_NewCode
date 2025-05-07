@@ -210,20 +210,35 @@ export class UserListComponent implements OnInit {
    
  
  
-   public searchData(value: string): void {
-     const filterValue = value.trim().toLowerCase();
+  //  public searchData(value: string): void {
+  //    const filterValue = value.trim().toLowerCase();
    
-     // 🔹 Search within full dataset
-     this.filteredList = this.fullDataList.filter((item: getClient) => 
-       item.userName.toLowerCase().includes(filterValue)||
-       item.phoneNumber.toLowerCase().includes(filterValue)||
-       item.emailId.toLowerCase().includes(filterValue)||
-       item.role.toLowerCase().includes(filterValue)
-     );
-     this.skip = 0;
-     this.calculateTotalPages(this.filteredList.length, this.pageSize);
-     this.paginateData(this.filteredList);
-   }
+  //    // 🔹 Search within full dataset
+  //    this.filteredList = this.fullDataList.filter((item: getClient) => 
+  //      item.userName.toLowerCase().includes(filterValue)||
+  //      item.phoneNumber.toLowerCase().includes(filterValue)||
+  //      item.emailId.toLowerCase().includes(filterValue)||
+  //      item.role.toLowerCase().includes(filterValue)
+  //    );
+  //    this.skip = 0;
+  //    this.calculateTotalPages(this.filteredList.length, this.pageSize);
+  //    this.paginateData(this.filteredList);
+  //  }
+  public searchData(value: string): void {
+    const filterValue = value.trim().toLowerCase();
+  
+    this.filteredList = this.fullDataList.filter((item: getClient) => 
+      (item.userName?.toString().toLowerCase() || '').includes(filterValue) ||
+      (item.phoneNumber?.toString().toLowerCase() || '').includes(filterValue) ||
+      (item.emailId?.toString().toLowerCase() || '').includes(filterValue) ||
+      (item.role?.toString().toLowerCase() || '').includes(filterValue)
+    );
+  
+    this.skip = 0;
+    this.calculateTotalPages(this.filteredList.length, this.pageSize);
+    this.paginateData(this.filteredList);
+  }
+  
    
    private calculateTotalPages(totalData: number, pageSize: number): void {
      this.pageNumberArray = [];
