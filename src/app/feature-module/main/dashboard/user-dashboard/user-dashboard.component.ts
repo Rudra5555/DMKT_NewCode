@@ -7,7 +7,7 @@ import { HttpResponse } from '@angular/common/http';
 import { apiResultFormat, getSearchfileList } from 'src/app/core/services/interface/models';
 import { pageSelection } from 'src/app/feature-module/employee/employees/departments/departments.component';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { bootstrapApplication, DomSanitizer } from '@angular/platform-browser';
+import { bootstrapApplication, DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { DatePipe } from '@angular/common';
 import { MatTableDataSource } from '@angular/material/table';
 import { ViewerType } from 'ngx-doc-viewer';
@@ -118,7 +118,7 @@ export class UserDashboardComponent implements OnInit {
    subAreaNameOnHeader:any;
    mainHead:any;
    plants:any;
-   docView: any ;
+   docView: SafeResourceUrl | null = null;
    viewer: ViewerType = 'google';
    selectedType = 'xlsx';
    startDate:any;
@@ -163,6 +163,10 @@ export class UserDashboardComponent implements OnInit {
       searchKeyData: ["", [Validators.required]],
 
     });
+
+    // const rawUrl = 'https://example.com/path-to-doc'; // Replace with your real URL
+    // this.docView = this.sanitizer.bypassSecurityTrustResourceUrl(rawUrl);
+  
     
   }
 
@@ -817,19 +821,36 @@ public changePageSize(newPageSize: number): void {
   }
   
   // Function to open modal for PDFs
-  openModal(fileUrl: any) {
-    // console.log("Opening modal for PDF:", fileUrl);
+  // openModal(fileUrl: any) {
+  //   // console.log("Opening modal for PDF:", fileUrl);
+  //   this.docView = this.sanitizer.bypassSecurityTrustResourceUrl(fileUrl);
+  //   setTimeout(() => {
+  //     const modalTrigger = document.getElementById('view_files');
+  //     if (modalTrigger) {
+  //       modalTrigger.classList.add('show');
+  //       modalTrigger.style.display = 'block';
+  //       document.body.classList.add('modal-open');
+      
+  //     }
+  //   }, 10);
+  // }
+
+  openModal(fileUrl: string) {
+    if (!fileUrl) return;
+  
     this.docView = this.sanitizer.bypassSecurityTrustResourceUrl(fileUrl);
+  
     setTimeout(() => {
       const modalTrigger = document.getElementById('view_files');
       if (modalTrigger) {
         modalTrigger.classList.add('show');
         modalTrigger.style.display = 'block';
         document.body.classList.add('modal-open');
-      
       }
     }, 10);
   }
+  
+
   
   // Function to show popup if file is too large
   fileSizePopup() {
