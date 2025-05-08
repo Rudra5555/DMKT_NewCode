@@ -244,6 +244,8 @@ export class HeaderOneComponent implements OnInit,OnDestroy  {
           localStorage.setItem('fileUploadNotificationList', JSON.stringify(this.readNotification));
               
               this.userNotifyCountTwo = this.notificTwo.length;
+              console.log("User Notify Count Two:", this.userNotifyCountTwo);
+              
             
           
           //   const decryptedData = this.loginService.convertEncToDec(event.body);
