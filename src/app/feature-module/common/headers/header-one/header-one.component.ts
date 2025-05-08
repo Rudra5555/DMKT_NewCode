@@ -235,10 +235,14 @@ export class HeaderOneComponent implements OnInit,OnDestroy  {
               const res = JSON.parse(decryptedData);
   
               this.resp = res.data
-              const notificTwoo = this.resp;
+              console.log("total resp:", this.resp);
+              
+              // const notificTwoo = this.resp;
   
                // Filter out only the notifications where markAsRead is false
           this.notificTwo = this.resp.filter((notification: any) => !notification.markAsRead); //markedAsRead = false
+          console.log("filter data notificTwo:", this.notificTwo);
+          
     
           this.readNotification = this.resp.filter((notification: any) => notification.markAsRead); //markedAsRead = true
           localStorage.setItem('fileUploadNotificationList', JSON.stringify(this.readNotification));
