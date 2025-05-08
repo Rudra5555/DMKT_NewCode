@@ -17,8 +17,12 @@
     <div class="card shadow-lg rounded overflow-hidden">
         <!-- Header Section -->
         <div class="card-header bg-light d-flex align-items-center">
-            <img [src]="sanitizedImage || 'assets/img/userIcon.png'" alt="Profile Picture"
-                class="rounded-circle border me-3" width="60" height="60">
+            <!-- <img [src]="sanitizedImage || './assets/img/userIcon.png'" alt="Profile Picture"
+                class="rounded-circle border me-3" width="60" height="60"> -->
+                <img [src]="sanitizedImage"
+                         alt="Profile Picture"
+                    class="rounded-circle border me-3"
+                    width="60" height="60">
             <div>
                 <h5 class="mb-1 text-dark">{{ userName }}</h5>
                 <small class="text-muted">Employee ID: <strong>{{ id }}</strong></small>

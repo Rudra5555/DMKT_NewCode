@@ -222,30 +222,44 @@ export class HeaderOneComponent implements OnInit,OnDestroy  {
 
 
 
-       // Poll every 10 seconds    
-      //  this.subscription = interval(10000).pipe(
-      //   switchMap(() =>    this.loginService.notificTwo(this.loggedUserId))
-      // ).subscribe({
+      // Poll every 10 seconds    
+      this.subscription = interval(10000).pipe(
+        switchMap(() =>    this.loginService.notificTwo(this.loggedUserId))
+      ).subscribe({
         
-      //   next: (event: any) => {
-      //     if (event instanceof HttpResponse) {
+        next: (event: any) => {
+          if (event instanceof HttpResponse) {
            
-       
+            
+              const decryptedData = this.loginService.convertEncToDec(event.body);
+              const res = JSON.parse(decryptedData);
+  
+              this.resp = res.data
+              const notificTwoo = this.resp;
+  
+               // Filter out only the notifications where markAsRead is false
+          this.notificTwo = this.resp.filter((notification: any) => !notification.markAsRead); //markedAsRead = false
+    
+          this.readNotification = this.resp.filter((notification: any) => notification.markAsRead); //markedAsRead = true
+          localStorage.setItem('fileUploadNotificationList', JSON.stringify(this.readNotification));
+              
+              this.userNotifyCountTwo = this.notificTwo.length;
+            
           
-      //       const decryptedData = this.loginService.convertEncToDec(event.body);
-      //       const res = JSON.parse(decryptedData);
-      //      console.log("res prod data ::",res);
+          //   const decryptedData = this.loginService.convertEncToDec(event.body);
+          //   const res = JSON.parse(decryptedData);
+          //  console.log("res prod data ::",res);
            
        
 
-      //     }
-      //   },
-      //   error: (err: any) => {
-      //     if (err.error && err.error.message) {
-      //       this.msg += " " + err.error.message;
-      //     }
-      //   }
-      // });
+          }
+        },
+        error: (err: any) => {
+          if (err.error && err.error.message) {
+            this.msg += " " + err.error.message;
+          }
+        }
+      });
 
 
 

@@ -22,6 +22,7 @@ export class UserManagementProfileComponent implements OnInit {
   sanitizedImage: SafeUrl = '';
   departmentNameList: any;
   plantNameList: any;
+  profileImage: SafeUrl | string = 'assets/img/userIcon.png';
 
   constructor(
     private sanitizer: DomSanitizer,
@@ -40,9 +41,20 @@ export class UserManagementProfileComponent implements OnInit {
       this.picture = storedClient.userPicture;
       this.sanitizedImage = this.sanitizer.bypassSecurityTrustUrl(this.picture);
       this.departmentNameList = storedClient.departmentNameList;
-    } else { 
+    } 
+   
+    const imageUrl = './assets/img/userIcon.png';
+    console.log('Image URL:',  this.picture );
+    if(  this.picture== null || this.picture === undefined || this.picture === '') {
+      this.sanitizedImage = this.sanitizer.bypassSecurityTrustUrl(imageUrl);
+      console.log("testing image");
+      
     }
+    // console.log('Image URL:', this.sanitizedImage);
+    
+  // this.profileImage = this.sanitizer.bypassSecurityTrustUrl(imageUrl);
     this.cdr.detectChanges();
+
   }
 
  
