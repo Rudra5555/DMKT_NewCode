@@ -42,12 +42,12 @@ export class UserManagementModalComponent implements OnInit {
 
 
   this.addUserForm = this.formBuilder.group({
-    userName: ["", [Validators.required]],
-    userPhone: ["", [Validators.required]],
-    userEmail: ["", [Validators.required, Validators.email]],
+    userName: ["", []],
+    userPhone: ["", []],
+    userEmail: ["", []],
     department: ["", []],
     mainRole: ["", []],
-    plant: ["", [Validators.required]],
+    plant: ["", []],
     Admin: [false],
     User: [false],
     SuperUser: [false],
@@ -57,11 +57,11 @@ export class UserManagementModalComponent implements OnInit {
   });
 
   this.editUserForm = this.formBuilder.group({
-    userName: ["", [Validators.required]],
-    userPhone: ["", [Validators.required]],
-    userEmail: ["", [Validators.required, Validators.email]],
+    userName: ["", []],
+    userPhone: ["", []],
+    userEmail: ["", []],
     department: ["", []],
-    plant: ["", [Validators.required]],
+    plant: ["", []],
     mainRole: ["", []],
     Admin: [false],
     User: [false],
