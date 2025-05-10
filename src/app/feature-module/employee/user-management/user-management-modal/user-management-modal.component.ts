@@ -183,6 +183,7 @@ export class UserManagementModalComponent implements OnInit {
         accessRoles: this.getSelectedRoles(),
         userPicture: this.files?.length ? this.files[0].base64 : null, 
       };
+   console.log("User modal payload",payload);
    
       
           this.loginService.addUser(payload).subscribe({
