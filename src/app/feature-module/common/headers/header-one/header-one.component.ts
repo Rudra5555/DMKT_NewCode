@@ -305,7 +305,7 @@ export class HeaderOneComponent implements OnInit,OnDestroy  {
           
             const decryptedData = this.loginService.convertEncToDec(event.body);
             const res = JSON.parse(decryptedData);
-            console.log("res data HOD data:", res);
+            // console.log("res data HOD data:", res);
             
            
             if (res && res.status === 200) {
@@ -406,10 +406,12 @@ export class HeaderOneComponent implements OnInit,OnDestroy  {
 
              // Filter out only the notifications where markAsRead is false
         this.notificTwo = this.resp.filter((notification: any) => !notification.markAsRead); //markedAsRead = false
+       
+        
   
         this.readNotification = this.resp.filter((notification: any) => notification.markAsRead); //markedAsRead = true
         localStorage.setItem('fileUploadNotificationList', JSON.stringify(this.readNotification));
-            
+        // console.log("filter data notificTwo:", JSON.stringify( this.readNotification));
             this.userNotifyCountTwo = this.notificTwo.length;
           }
         },
@@ -423,7 +425,11 @@ export class HeaderOneComponent implements OnInit,OnDestroy  {
   }
 
 
-  getApprovalStatus(status: string): string {
+  getApprovalStatus(status: string | null | undefined): string {
+    if (!status || status.trim() === '') {
+      return 'Pending';
+    }
+  
     switch (status) {
       case 'P':
         return 'Pending';
@@ -435,9 +441,14 @@ export class HeaderOneComponent implements OnInit,OnDestroy  {
         return status;
     }
   }
+  
 
-  getApprovalStatusUserModal(status: string): string {
+  getApprovalStatusUserModal(status: string | null | undefined): string {
+    if (!status || status.trim() === '') {
+      return 'Pending';
+    }
     switch (status) {
+     
       case 'P':
         return 'Pending';
       case 'R':
@@ -708,21 +719,43 @@ if (this.selectedFileUploadData.reason == null || this.selectedFileUploadData.re
 }
 
   // Call API to mark as read
+  // this.loginService.markedAsReadFileNotification(item.workflowDocId).subscribe({
+  //   next: (response: any) => {
+  //     const decryptedData = this.loginService.convertEncToDec(response);
+  //     const res = JSON.parse(decryptedData);
+
+  //     if(res.status == 200){
+  //    this.userFileNotificationBell(this.loggedUserId)
+  //     }
+  //   },
+  //   error: (error: any) => {
+  //     console.error('Error marking as read:', error);
+  //   }
+  // });
+  // }
   this.loginService.markedAsReadFileNotification(item.workflowDocId).subscribe({
     next: (response: any) => {
       const decryptedData = this.loginService.convertEncToDec(response);
-      const res = JSON.parse(decryptedData);
-
-      if(res.status == 200){
-     this.userFileNotificationBell(this.loggedUserId)
+      
+      try {
+        if (decryptedData) {
+          const res = JSON.parse(decryptedData);
+          
+          if (res.status == 200) {
+            this.userFileNotificationBell(this.loggedUserId);
+          }
+        } else {
+          // console.warn('Decrypted data is empty or null');
+        }
+      } catch (e) {
+        console.error('JSON parsing failed:', decryptedData, e);
       }
     },
     error: (error: any) => {
       console.error('Error marking as read:', error);
     }
   });
-  }
-
+}
 
   public roleWiseTotification() {
 
