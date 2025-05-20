@@ -79,14 +79,21 @@
                 </td>
 
                 <td>
-                  {{ item.executerName}}
+                  {{ item.executerName? item.executerName : 'N/A'}}
 
                 </td>
 
-                <td>
+                <!-- <td>
                   {{ item.validUpto | date:'dd-MM-yyyy' }}
 
+                </td> -->
+                <td>
+                  <ng-container *ngIf="item.validUpto; else noDate">
+                    {{ item.validUpto | date:'dd-MM-yyyy' }}
+                  </ng-container>
+                  <ng-template #noDate>N/A</ng-template>
                 </td>
+
                 <td>
                   {{ item.departmentName? item.departmentName : 'N/A' }}
                 </td>

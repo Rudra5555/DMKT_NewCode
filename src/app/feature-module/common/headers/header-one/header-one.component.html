@@ -286,7 +286,7 @@
 											</td>
 											<td rowspan="2"
 												style="padding: 8px;text-align: center; vertical-align: middle;">{{
-												selectFileData?.plantName }}</td>
+												selectFileData?.plantName || 'N/A'}}</td>
 										</tr>
 										<tr></tr>
 										<tr>
@@ -296,7 +296,7 @@
 											</td>
 											<td rowspan="2"
 												style="padding: 8px;text-align: center; vertical-align: middle;">{{
-												selectFileData?.executerName}}</td>
+												selectFileData?.executerName || 'N/A'}}</td>
 										</tr>
 										<tr></tr>
 										<tr>
@@ -305,7 +305,7 @@
 												<strong>Expiration Date:</strong>
 											</td>
 											<td rowspan="2"
-												style="padding: 8px;text-align: center; vertical-align: middle;">{{validUptoFormated}}</td>
+												style="padding: 8px;text-align: center; vertical-align: middle;">{{validUptoFormated || 'N/A'}}</td>
 												
 										<tr></tr>
 										<tr>
@@ -315,7 +315,7 @@
 											</td>
 											<td rowspan="2"
 												style="padding: 8px;text-align: center; vertical-align: middle;">{{
-												selectFileData?.departmentName }}</td>
+												selectFileData?.departmentName || 'N/A'}}</td>
 										</tr>
 										<tr></tr>
 										<tr>

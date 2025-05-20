@@ -122,7 +122,9 @@ export class FileManagerMainheadComponent implements OnInit, OnDestroy {
     this.getDocumentTypeList();
     this.loggedUserRole = localStorage.getItem("role")
 
-    this.setLast15Days();
+ 
+
+
 
     this.route.queryParams.subscribe((params) => {
       try {
@@ -133,6 +135,8 @@ export class FileManagerMainheadComponent implements OnInit, OnDestroy {
         // Decrypt the parameters
         this.decryptedMainHeadName = CryptoJS.AES.decrypt(encryptedMainHeadName, secretKey).toString(CryptoJS.enc.Utf8);
         this.decryptedPlantName = CryptoJS.AES.decrypt(encryptedPlantName, secretKey).toString(CryptoJS.enc.Utf8);
+     
+      this.setLast15Days();
       } catch (error) {
         console.error("Error decrypting query parameters:", error);
       }
@@ -164,20 +168,51 @@ export class FileManagerMainheadComponent implements OnInit, OnDestroy {
     // this.getFileListDetails();
   }
 
-  setLast15Days() {  
+  setLast15Days(): void {
+  try {
     const endDate = new Date();
     const startDate = new Date();
     startDate.setDate(endDate.getDate() - 15);
 
+  
+
+    // Defensive check: Ensure both dates are valid
+    if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
+      console.error("Invalid date(s) generated");
+      return;
+    }
+
     this.bsRangeValue = [startDate, endDate];
-    this.onDateRangeSelected();
+
+    // Ensure this method exists and is callable
+    if (typeof this.onDateRangeSelected === 'function') {
+      this.onDateRangeSelected();
+    } else {
+      console.error("onDateRangeSelected() is not a function");
+    }
+
+  } catch (error) {
+    console.error("Error in setLast15Days():", error);
   }
+}
+
+
+  // setLast15Days() {  
+  //   const endDate = new Date();
+  //   const startDate = new Date();
+  //   startDate.setDate(endDate.getDate() - 15);
+
+  //   this.bsRangeValue = [startDate, endDate];
+  //   this.onDateRangeSelected();
+  // }
 
   onDateRangeSelected() {
+
     this.startDate = this.formatDate(this.bsRangeValue[0]);
     this.endDate = this.formatDate(this.bsRangeValue[1]);
 
-    this.getFileListDetails()
+    this.getFileListDetails();
+    
   }
 
   formatDate(date: Date): string {
@@ -185,8 +220,10 @@ export class FileManagerMainheadComponent implements OnInit, OnDestroy {
   }
 
   getFileListDetails() {
+  
     this.isLoading = true; 
     this.fileList = [];
+  
     
     this.loginService.getFileListforOther(this.decryptedMainHeadName, this.startDate, this.endDate).subscribe({
       next: (event: any) => {
