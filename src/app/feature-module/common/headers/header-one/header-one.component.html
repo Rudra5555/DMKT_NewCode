@@ -71,7 +71,7 @@
 		</li> -->
 
 		<!-- User/SuperUser bell icon -->
-		<li class="nav-item dropdown" [hidden]="roleFlagStatutory">
+		<!-- <li class="nav-item dropdown" [hidden]="roleFlagStatutory">
 			<a href="javascript:void(0);" class="dropdown-toggle nav-link" data-bs-toggle="dropdown">
 				<i class="fa-regular fa-bell me-1" style="color:white"></i>
 				 <span class="badge rounded-pill">{{userNotifyCount}}</span>
@@ -82,7 +82,7 @@
 				</div>
 				<div class="noti-content">
 					<ul class="notification-list" *ngFor="let item of respData;">
-						<li class="notification-message" (click)="onItemClick(item)">
+						<li class="notification-message" (click)="onHODItemClick(item)">
 							<a data-bs-toggle="modal" data-bs-target="#notificationModal">
 								<div class="chat-block d-flex">
 									<span class="avatar flex-shrink-0">
@@ -110,7 +110,7 @@
 				<div class="topnav-dropdown-footer">
 				</div>
 			</div>
-		</li>
+		</li> -->
 
 
 		<li class="nav-item dropdown" [hidden]="roleFlag">
@@ -165,7 +165,7 @@
 		</div>
 		<div class="noti-content">
 			<ul class="notification-list" *ngFor="let item of notificationData;">
-				<li class="notification-message" (click)="onHodItemClick(item.requestorName)">
+				<li class="notification-message" (click)="onItemClick(item)">
 					<a data-bs-toggle="modal" data-bs-target="#notificationModalLib1">
 						<div class="chat-block d-flex">
 							<span class="avatar flex-shrink-0">
@@ -585,7 +585,7 @@
 
 
 <!-- Modal for Librarian Start -->
-<div id="notificationModalLib1" class="modal custom-modal fade" role="dialog">
+<div id="notificationModalLib1" #notificationModalLib1  class="modal custom-modal fade" role="dialog">
 	<div class="modal-dialog modal-dialog-centered modal-md" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -603,34 +603,44 @@
 									<table style=" width: 100%; ">
 										<tr>
 											<td style="text-align: left;width: 27%;margin-right: 24px;padding: 4px;">
-												<ng-container *ngIf="selectedHodItem?.DocumentType">
-													<img src="assets/img/{{ selectedHodItem.DocumentType }}.png"
+												<!-- <ng-container *ngIf="selectFileData?.DocumentType">
+													<img src="assets/img/{{selectFileData.DocumentType}}.png"
 														style="max-width: 30%; padding-bottom: 5%;">
-												</ng-container>
-											<td><strong>{{ selectedHodItem?.RequestedDocumentName }}</strong></td>
+												</ng-container> -->
+												<ng-container *ngIf="extensionImage">
+													
+													<img 
+													src="assets/img/{{extensionImage}}.png"
+														style="max-width: 30%; padding-bottom: 5%;"
+														 >
+													</ng-container>
+
+
+												</td>
+											<td><strong>{{ selectFileData?.RequestedDocumentName }}</strong></td>
 										</tr>
 										<tr>
 											<td style="width: 30%;padding: 8px; "><strong>Requester Name:</strong></td>
 
-											<td style="padding: 8px;">{{ selectedHodItem?.RequesterName }}</td>
+											<td style="padding: 8px;">{{ selectFileData?.RequesterName }}</td>
 										</tr>
 										<tr>
 											<td style="width: 50%;padding: 8px;"><strong>Document Name:</strong>
 											</td>
 											<td style="padding: 8px;">
 												<div class="tooltip-container">
-													{{ selectedHodItem?.RequestedDocumentName }}
-													<span class="tooltip-text">{{ selectedHodItem?.UniqueDocumentName }}</span>
+													{{ selectFileData?.RequestedDocumentName }}
+													<span class="tooltip-text">{{ selectFileData?.UniqueDocumentName }}</span>
 												  </div>
 											</td>
 										</tr>
 										<tr>
 											<td style="padding: 8px;"><strong>Plant Name:</strong></td>
-											<td style="padding: 8px;">{{ selectedHodItem?.plantName }}</td>
+											<td style="padding: 8px;">{{ selectFileData?.plantName || 'N/A' }}</td>
 										</tr>
 										<tr>
 											<td style="padding: 8px;"><strong>Department Name:</strong></td>
-											<td style="padding: 8px;">{{ selectedHodItem?.DepartmentName }}</td>
+											<td style="padding: 8px;">{{ selectFileData?.DepartmentName || 'N/A' }}</td>
 										</tr>
 										<tr>
 											<td style="padding: 8px;"><strong>Attachment:</strong></td>

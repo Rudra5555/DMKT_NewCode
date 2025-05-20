@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, DestroyRef, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, DestroyRef, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SideBarService } from 'src/app/core/services/side-bar/side-bar.service';
 import { NavigationEnd, Router } from '@angular/router';
@@ -125,6 +125,10 @@ export class HeaderOneComponent implements OnInit,OnDestroy  {
   count: any = 0;
   refreshSub: any;
   subscription: Subscription | undefined;
+   public extensionImage: any;
+
+
+ @ViewChild('notificationModalLib1', { static: false }) modalElementRef!: ElementRef;
  
   constructor(
     private sideBar: SideBarService,private cdr: ChangeDetectorRef,private sanitizer: DomSanitizer,
@@ -539,6 +543,30 @@ export class HeaderOneComponent implements OnInit,OnDestroy  {
     }
   }
 
+
+  ngAfterViewInit(): void {
+    const modalEl = this.modalElementRef.nativeElement;
+    modalEl.addEventListener('hidden.bs.modal', () => {
+      this.resetModalForm();
+    });
+  }
+    resetModalForm(): void {
+    this.hodModalForm.reset();
+    this.reason = '';
+    this.reasonFlag = false;
+    this.expDateFlag = false;
+    this.rejectReasonFlag = false;
+  }
+
+resetHodModalForm() {
+  this.hodModalForm.reset();
+  this.reason = '';
+  this.reasonFlag = false;
+  this.rejectReasonFlag = false;
+  this.expDateFlag = false;
+  this.disableSubmitBtn = false;
+}
+
   updateDocumentStatus(): void {
     if (!this.selectedHodItem) {
       console.error('No document selected');
@@ -677,7 +705,11 @@ export class HeaderOneComponent implements OnInit,OnDestroy  {
 
 
   onItemClick(item: any): void {
+      
     this.selectFileData = item;
+    
+     this.extensionImage = this.selectFileData.DocumentType;
+   
     this.validUpto = this.selectFileData.validUpto;
     if (this.validUpto) {
       const dateObj = new Date(this.validUpto); // Convert string to Date object
@@ -708,6 +740,8 @@ export class HeaderOneComponent implements OnInit,OnDestroy  {
     }
   });
   }
+
+
 
   onFileNotificationClick(item:any ){
 
