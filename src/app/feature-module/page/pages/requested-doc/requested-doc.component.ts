@@ -122,9 +122,24 @@ export class RequestedDocComponent implements OnInit {
     return this.datePipe.transform(date, 'yyyy-MM-dd')!;
   }
 
-  formatExecutedData(date: string): string {
-    return this.datePipe.transform(date, 'dd-MM-yyyy')!;
-  }
+  // formatExecutedData(date: string): string {
+  //   return this.datePipe.transform(date, 'dd-MM-yyyy')!;
+  // }
+formatExecutedData(dateStr: string): string {
+  if (!dateStr) return '';
+
+  // Input format: "21/05/25, 12:00 am"
+  const [datePart] = dateStr.split(',');
+  const [yy, mm, dd] = datePart.split('/').map(part => parseInt(part, 10));
+
+  const fullYear = 2000 + yy; // Assumes 21 => 2021
+
+  // Reconstruct as DD-MM-YYYY
+  const formattedDate = `${dd.toString().padStart(2, '0')}-${mm.toString().padStart(2, '0')}-${fullYear}`;
+  return formattedDate;
+}
+
+
 
   ngOnInit(): void {
 
@@ -159,6 +174,8 @@ export class RequestedDocComponent implements OnInit {
           const responseData = res.data;
          
           this.filteredApprovedData = responseData.filter((item: getcontactlist) => item.documentApprovalStatus === 'A');
+          console.log("Filtered Approved Data:", this.filteredApprovedData);
+          
 
           this.totalData=this.filteredApprovedData.length;
           
@@ -182,7 +199,7 @@ export class RequestedDocComponent implements OnInit {
   getStatusText(statusCode: string): string {
     switch (statusCode) {
       case 'A':
-        return 'Approvedd';
+        return 'Approved';
       case 'R':
         return 'Rejected';
       case 'P':
@@ -445,6 +462,8 @@ export class RequestedDocComponent implements OnInit {
         if (index >= this.skip && index < this.skip + this.pageSize) {
           item.id = serialNumber;
           this.contactlist.push(item);
+          
+          
           this.serialNumberArray.push(serialNumber);
         }
       });

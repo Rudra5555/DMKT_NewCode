@@ -11,8 +11,9 @@ import Swal from 'sweetalert2';
 import { DomSanitizer } from '@angular/platform-browser';
 import { interval, Subscription, switchMap } from 'rxjs';
 
+
 interface data {
-  id: number, hodName: string, docName: string, last_modified?: string, requestorName: string, documentId?: number;
+  id: number, hodName: string, docName: string, last_modified?: string, requestorName: string, documentId?: number, stepId: any;
 }
 
 interface modalUserData {
@@ -245,7 +246,7 @@ export class HeaderOneComponent implements OnInit,OnDestroy  {
   
                // Filter out only the notifications where markAsRead is false
           this.notificTwo = this.resp.filter((notification: any) => !notification.markAsRead); //markedAsRead = false
-          // console.log("filter data notificTwo:", this.notificTwo);
+       
           
     
           this.readNotification = this.resp.filter((notification: any) => notification.markAsRead); //markedAsRead = true
@@ -328,6 +329,7 @@ export class HeaderOneComponent implements OnInit,OnDestroy  {
                 hodName: notification.executerName || 'HOD',
                 uploadImg: notification.uploadImg,
               }));
+
   
               this.notificationCount = this.notificationData.length;
             } else {
@@ -375,6 +377,8 @@ export class HeaderOneComponent implements OnInit,OnDestroy  {
 
             this.resp = res.data
             this.respData = this.resp.filter((notification: any) => !notification.markAsRead);  //markedAsRead = false
+           
+             
       
           this.statutoryReadNotification = this.resp.filter((notification: any) => notification.markAsRead);  //markedAsRead = true
           localStorage.setItem('statutoryReadNotificationList', JSON.stringify(this.statutoryReadNotification));
@@ -556,6 +560,7 @@ export class HeaderOneComponent implements OnInit,OnDestroy  {
     this.reasonFlag = false;
     this.expDateFlag = false;
     this.rejectReasonFlag = false;
+    // this.selectedHodItem = null;
   }
 
 resetHodModalForm() {
@@ -568,6 +573,8 @@ resetHodModalForm() {
 }
 
   updateDocumentStatus(): void {
+
+    
     if (!this.selectedHodItem) {
       console.error('No document selected');
       return;
@@ -620,6 +627,7 @@ resetHodModalForm() {
       expDate: this.formattedDate,
       reason: reason
     };
+
 
 
 
@@ -692,16 +700,31 @@ resetHodModalForm() {
     });
   }
 
-  onHodItemClick(requestorName: string): void {
+  // onHodItemClick(requestorName: any): void {
 
-    // Find the item based on requestorName or other unique identifiers
-    const selectedItem = this.notificationData.find(item => item.requestorName === requestorName);
-    if (selectedItem) { 
-      this.selectedHodItem = selectedItem;
-    } else {
-      console.error('Item not found for:', requestorName);
-    }
+  //   // Find the item based on requestorName or other unique identifiers
+  //   const selectedItem = this.notificationData.find(item => item.requestorName === requestorName);
+  //   if (selectedItem) { 
+  //     this.selectedHodItem = selectedItem;
+  //   } else {
+  //     console.error('Item not found for:', requestorName);
+  //   }
+  // }
+
+onHodItemClick(requestorName: any, stepId: any): void {
+  
+
+  const selectedItem = this.notificationData.find(
+    item => item.requestorName === requestorName && item.stepId === stepId
+  );
+
+  if (selectedItem) {
+    this.selectedHodItem = selectedItem;
+  } else {
+    console.error('No matching notification found for:', requestorName, 'and stepId:', stepId);
   }
+}
+
 
 
   onItemClick(item: any): void {
@@ -722,23 +745,40 @@ resetHodModalForm() {
     }
 
      // Call API to mark as read
-  this.loginService.markedAsReadStatutoryNotification(item.stepId).subscribe({
-    next: (event: any) => {
-      if (event instanceof HttpResponse) {
-        const decryptedData = this.loginService.convertEncToDec(event.body);
-        const resData = JSON.parse(decryptedData);
-        const res =resData.status
+  // this.loginService.markedAsReadStatutoryNotification(item.stepId).subscribe({
+  //   next: (event: any) => {
+  //     if (event instanceof HttpResponse) {
+  //       const decryptedData = this.loginService.convertEncToDec(event.body);
+  //       const resData = JSON.parse(decryptedData);
+  //       const res =resData.status
 
-          if(res == 200){
-      this.userNotificationBell(this.loggedUserId)
-      }
+  //         if(res == 200){
+  //     this.userNotificationBell(this.loggedUserId)
+  //     }
         
+  //     }
+  //   },
+  //   error: (error: any) => {
+  //     console.error('Error marking as read:', error);
+  //   }
+  // });
+   if (item.documentApprovalStatus !== 'P') {
+    this.loginService.markedAsReadStatutoryNotification(item.stepId).subscribe({
+      next: (event: any) => {
+        if (event instanceof HttpResponse) {
+          const decryptedData = this.loginService.convertEncToDec(event.body);
+          const resData = JSON.parse(decryptedData);
+
+          if (resData.status === 200) {
+            this.userNotificationBell(this.loggedUserId);
+          }
+        }
+      },
+      error: (error: any) => {
+        console.error('Error marking as read:', error);
       }
-    },
-    error: (error: any) => {
-      console.error('Error marking as read:', error);
-    }
-  });
+    });
+  }
   }
 
 
@@ -767,7 +807,12 @@ if (this.selectedFileUploadData.reason == null || this.selectedFileUploadData.re
   //   }
   // });
   // }
-  this.loginService.markedAsReadFileNotification(item.workflowDocId).subscribe({
+
+  
+
+    if (item.status !== null && item.status !== '' && item.status !== 'P')
+    {
+    this.loginService.markedAsReadFileNotification(item.workflowDocId).subscribe({
     next: (response: any) => {
       const decryptedData = this.loginService.convertEncToDec(response);
       
@@ -789,6 +834,11 @@ if (this.selectedFileUploadData.reason == null || this.selectedFileUploadData.re
       console.error('Error marking as read:', error);
     }
   });
+  }
+
+
+
+  
 }
 
   public roleWiseTotification() {

@@ -84,6 +84,7 @@
               <div *ngIf="isLoading" class="spinner-border" style="align-items: center;margin-left: 250%;">
               </div>
               <tr *ngFor="let item of contactlist; ">
+             
                 <td>
                   <h2 class="table-avatar d-flex">
                     <a class="profile-split d-flex flex-column">{{ replaceDotsWithSlashes(item.uniqueDocumentName) }}
@@ -91,7 +92,7 @@
                   </h2>
                 </td>
                 <td>
-                  {{ item.departmentName }}
+                  {{ item.departmentName || 'N/A'}}
                 </td>
                 <td>
                   {{ item.executerName }}
