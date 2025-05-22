@@ -128,6 +128,7 @@ export class HeaderOneComponent implements OnInit,OnDestroy  {
   subscription: Subscription | undefined;
    public extensionImage: any;
 
+minExpDate: Date | undefined;
 
  @ViewChild('notificationModalLib1', { static: false }) modalElementRef!: ElementRef;
  
@@ -179,7 +180,8 @@ export class HeaderOneComponent implements OnInit,OnDestroy  {
       expDate: ['', Validators.required],
       reason: ['', Validators.required]
     });
-
+const today = new Date();
+  this.minExpDate = new Date(today.setDate(today.getDate() + 1));
 
     this.selectedUserRole = localStorage.getItem('role');
     this.loggedUserId = localStorage.getItem('loggedInUserId');

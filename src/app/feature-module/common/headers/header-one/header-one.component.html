@@ -642,6 +642,24 @@
 											<td style="padding: 8px;"><strong>Department Name:</strong></td>
 											<td style="padding: 8px;">{{ selectedHodItem?.DepartmentName || 'N/A' }}</td>
 										</tr>
+									
+											<tr *ngIf="!expDateFlag">
+											<td style="padding: 8px;"><strong>Expiration Date:</strong></td>
+											<td style="padding: 8px;">
+												<input 
+												bsDatepicker 
+												container=".date-input2" 
+												type="text" 
+												[minDate]="minExpDate" 
+												matInput 
+												formControlName="expDate" 
+												class="form-control floating datetimepicker">
+												<span>The selected date must be greater than the current date.</span>
+											</td>
+											</tr>
+
+
+										<br>
 										<tr>
 											<td style="padding: 8px;"><strong>Attachment:</strong></td>
 											<td style="padding: 8px;">
@@ -681,14 +699,7 @@
 												</div>
 											</td>
 										</tr>
-										<tr *ngIf="!expDateFlag">
-											<td style="padding: 8px;"><strong>Expiration Date:</strong></td>
-											<td style="padding: 8px;">
-												<!-- <mat-label>To</mat-label> -->
-											<input  bsDatepicker container=".date-input2" type="text" matInput formControlName="expDate" class="form-control floating datetimepicker">
-											<span >The selected date must be greater than the current date.</span>
-										</td>
-										</tr>
+										
 									</table>
 
 									<!-- Action Buttons -->
