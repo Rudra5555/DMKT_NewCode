@@ -50,6 +50,18 @@ private baseUrl = 'https://dmkt.balco.in:8080';
       return this.http.request(req);
     }
 
+//DELETE FILE API
+deleteFile(fileName: any): Observable<any> {
+  return this.http.delete(`${this.baseUrl}/document/delete-document/${fileName}`).pipe(
+    catchError((error: any) => {
+      console.error('Failed to delete file:', error);
+      return throwError(error);
+    })
+  );
+}
+
+
+
     // (done)
     allCategoryList(): Observable<HttpEvent<any>> {
       const req = new HttpRequest('GET', `${this.baseUrl}/category/get-all-catefory`, {

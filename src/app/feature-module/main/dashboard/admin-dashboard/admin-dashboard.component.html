@@ -148,14 +148,17 @@
                 <th>Document Type</th>
                 <th>Sub-Document Type</th>
                 <th class="text-end">Action</th>
+                
               </tr>
             </thead>
             <tbody>
               <tr *ngFor="let item of fileList">
+              
                 <td>
                   <div class="tooltip-container">
-                    {{ item.fileName }}
-                  </div>
+                      {{ item.fileName }}
+                      <span class="tooltip-text">{{ item.uniqueFileName }}</span>
+                    </div>
                 </td>
 
                 <td>
@@ -172,6 +175,8 @@
                     <i class="fa-solid fa-download" style="color: rgb(0, 117, 234)"></i>
                   </a>
                 </td>
+               
+
               </tr>
 
               <tr *ngIf=" fileList.length == 0">

@@ -373,8 +373,12 @@ export class FileManagerComponent implements OnInit , OnDestroy {
       data.forEach((item, index) => {
         const serialNumber = index + 1;
         if (index >= this.skip && index < this.skip + this.pageSize) {
+          
           item.id = serialNumber;
+      
+          
           this.fileList.push(item);
+
           this.serialNumberArray.push(serialNumber);
         }
       });

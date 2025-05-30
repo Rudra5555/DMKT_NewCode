@@ -134,6 +134,12 @@ div#applicationDatePicker {
   z-index: 2;
   box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.4); /* Optional shadow for better visibility */
 }
+.tooltip-container {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+
 .tooltip-container .tooltip-text {
   visibility: hidden; 
   width: max-content; 
@@ -144,8 +150,8 @@ div#applicationDatePicker {
   padding: 5px; 
   position: absolute; 
   z-index: 1; 
-  bottom: 150%; 
-  left: 60%; 
+    bottom: 18%;
+    left: 92%;
   transform: translateX(-30%); 
   opacity: 0; 
   transition: opacity 0.3s ease-in-out; 

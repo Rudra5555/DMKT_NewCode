@@ -572,6 +572,10 @@ private paginateData(data: getfileList[]): void {
     const serialNumber = index + 1;
     if (index >= this.skip && index < this.skip + this.pageSize) {
       item.id = serialNumber;
+     
+          let newUniqueFileName = item.newUniqueFileName;
+         item.newUniqueFileName = newUniqueFileName.replace("///", "/");
+          
       this.fileList.push(item);
       this.serialNumberArray.push(serialNumber);
     }

@@ -325,6 +325,10 @@ export class AdminDashboardComponent implements OnInit {
     this.totalFileCount = newCount;
   }
 
+
+
+
+
 }
 
 

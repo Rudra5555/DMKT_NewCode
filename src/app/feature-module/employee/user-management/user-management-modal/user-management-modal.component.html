@@ -1,5 +1,5 @@
 <!-- Add Client Modal from Admin -->
-<div id="add_client_admin" class="modal custom-modal fade" role="dialog">
+<div id="add_client_admin" #addClientAdminModal class="modal custom-modal fade" role="dialog">
   <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -69,13 +69,13 @@
             <!-- Phone -->
             <div class="col-md-6">
               <div class="input-block mb-3">
-                <label class="col-form-label">Phone <span class="text-danger">*</span></label>
+                <label class="col-form-label">Phone </label>
                 <input class="form-control" type="number"
                   [class.invalid]="addUserForm.get('userPhone')?.invalid && addUserForm.get('userPhone')?.touched"
                   formControlName="userPhone">
-                <div *ngIf="addUserForm.get('userPhone')?.invalid && addUserForm.get('userPhone')?.touched">
+                <!-- <div *ngIf="addUserForm.get('userPhone')?.invalid && addUserForm.get('userPhone')?.touched">
                   <small class="text-danger">*Phone is required</small>
-                </div>
+                </div> -->
               </div>
             </div>
         
@@ -95,7 +95,7 @@
             </div>
         
             <div class="input-block mb-3" >
-              <label class="col-form-label">Department </label>
+              <label class="col-form-label">Department <span class="text-danger">*</span></label>
               <mat-select formControlName="department" class="custom-mat-select select" placeholder="Select" >
                 <mat-option value="">--Select--</mat-option>
                 <mat-option *ngFor="let element of departmentList" [value]="element.catName + '~' + element.abbreviation" >{{element.catName}}</mat-option>
@@ -111,7 +111,7 @@
             <table class="table table-striped custom-table">
               <thead>
                 <tr>
-                  <th>Main Role Permission</th>
+                  <th>Main Role Permission<span class="text-danger">*</span></th>
                   <th class="text-center">Admin</th>
                   <th class="text-center">User</th>
                   <th class="text-center">Librarian</th>
@@ -136,6 +136,10 @@
                 </tr>
               </tbody>
             </table>
+
+             <div *ngIf="submitted && !addUserForm.get('mainRole')?.value" class="text-danger mt-2">
+              Please select a Main Role Permission.
+            </div>
           </div>
           
 
@@ -196,7 +200,7 @@
           <!-- /Add Client Modal from Admin -->
 
             <!-- /Add Client Modal from Librarian -->
-            <div id="add_client_librarian" class="modal custom-modal fade" role="dialog">
+            <div id="add_client_librarian" #addClientLibrarianModal class="modal custom-modal fade" role="dialog">
               <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                 <div class="modal-content">
                   <div class="modal-header">
@@ -212,11 +216,11 @@
                           <h5 class="card-title">Image Upload</h5>
                         </div>
                         <div class="container" appDnd (fileDropped)="onFileDropped($event)">
-                          <input type="file" #fileDropRef id="fileDropRef" (change)="fileBrowseHandler($event)" />
+                          <input type="file" #librarianFileDropRef id="librarianFileDropRef" (change)="fileBrowseHandler($event)" />
                           <img src="assets/img/dnd/ic-upload-file.svg" alt="">
                           <h3>Drag and drop file here</h3>
                           <h3>or</h3>
-                          <label for="fileDropRef">Browse for file</label>
+                          <label for="librarianFileDropRef">Browse for file</label>
                         </div>
                     
                         <!-- File list section (hidden when no files are uploaded) -->
@@ -266,7 +270,7 @@
                         <!-- Phone -->
                         <div class="col-md-6">
                           <div class="input-block mb-3">
-                            <label class="col-form-label">Phone <span class="text-danger">*</span></label>
+                            <label class="col-form-label">Phone </label>
                             <input class="form-control" type="number"
                               [class.invalid]="addUserForm.get('userPhone')?.invalid && addUserForm.get('userPhone')?.touched"
                               formControlName="userPhone">
@@ -292,7 +296,7 @@
                         </div>
                     
                         <div class="input-block mb-3" >
-                          <label class="col-form-label">Department </label>
+                          <label class="col-form-label">Department <span class="text-danger">*</span></label>
                           <mat-select formControlName="department" class="custom-mat-select select" placeholder="Select" >
                             <mat-option value="">--Select--</mat-option>
                             <mat-option *ngFor="let element of departmentList" [value]="element.catName + '~' + element.abbreviation" >{{element.catName}}</mat-option>
@@ -360,7 +364,7 @@
             <!-- /Add Client Modal from Librarian -->
 
           <!-- Edit Client Modal Librarian-->
-          <div id="edit_client" class="modal custom-modal fade" role="dialog">
+          <div id="edit_client" #editClientLibrarianModal class="modal custom-modal fade" role="dialog">
             <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
               <div class="modal-content">
                 <div class="modal-header">
@@ -376,11 +380,11 @@
                         <h5 class="card-title">Image Upload</h5>
                       </div>
                       <div class="container" appDnd (fileDropped)="onFileDropped($event)" >
-                        <input type="file" #fileDropRef id="fileDropRef"   (change)="fileBrowseHandler($event)" />
+                        <input type="file" #editLibrarianFileDrop id="editLibrarianFileDrop"   (change)="fileBrowseHandler($event)" />
                         <img src="assets/img/dnd/ic-upload-file.svg" alt="">
                         <h3>Drag and drop file here</h3>
                         <h3>or</h3>
-                        <label for="fileDropRef">Browse for file</label>
+                        <label for="editLibrarianFileDrop">Browse for file</label>
                       </div>
                       <!-- File list section (hidden when no files are uploaded) -->
                     <div class="files-list" *ngIf="files && files.length > 0" style="overflow-y: auto;">
@@ -404,11 +408,11 @@
                         <div class="input-block mb-3">
                           <label class="col-form-label" for="">Employee Name <span class="text-danger">*</span></label>
                           <input class="form-control" type="text"  [readonly]="true"
-                            [class.invalid]="addUserForm.get('userName')?.invalid && addUserForm.get('userName')?.touched"
+                            [class.invalid]="editUserForm.get('userName')?.invalid && editUserForm.get('userName')?.touched"
                             formControlName="userName">
-                          @if (addUserForm.get('userName')?.invalid && addUserForm.get('userName')?.touched) {
+                          @if (editUserForm.get('userName')?.invalid && editUserForm.get('userName')?.touched) {
                           <div>
-                            @if (addUserForm.get('userName')?.invalid && addUserForm.get('userName')?.touched) {
+                            @if (editUserForm.get('userName')?.invalid && editUserForm.get('userName')?.touched) {
                             <small class="text-danger"> *Name is required</small>
                             }
                           </div>
@@ -422,11 +426,11 @@
                         <div class="input-block mb-3">
                           <label class="col-form-label" for="">Email ID<span class="text-danger">*</span></label>
                           <input class="form-control" type="text" [readonly]="true"
-                            [class.invalid]="addUserForm.get('userEmail')?.invalid && addUserForm.get('userEmail')?.touched"
+                            [class.invalid]="editUserForm.get('userEmail')?.invalid && editUserForm.get('userEmail')?.touched"
                             formControlName="userEmail">
-                          @if (addUserForm.get('userEmail')?.invalid && addUserForm.get('userEmail')?.touched) {
+                          @if (editUserForm.get('userEmail')?.invalid && editUserForm.get('userEmail')?.touched) {
                           <div>
-                            @if (addUserForm.get('userEmail')?.invalid && addUserForm.get('userEmail')?.touched) {
+                            @if (editUserForm.get('userEmail')?.invalid && editUserForm.get('userEmail')?.touched) {
                             <small class="text-danger"> *Email is required</small>
                             }
                           </div>
@@ -437,11 +441,11 @@
                         <div class="input-block mb-3">
                           <label class="col-form-label" for="">Phone <span class="text-danger">*</span></label>
                           <input class="form-control" type="number" [readonly]="true"
-                            [class.invalid]="addUserForm.get('userPhone')?.invalid && addUserForm.get('userPhone')?.touched"
+                            [class.invalid]="editUserForm.get('userPhone')?.invalid && editUserForm.get('userPhone')?.touched"
                             formControlName="userPhone">
-                          @if (addUserForm.get('userPhone')?.invalid && addUserForm.get('userPhone')?.touched) {
+                          @if (editUserForm.get('userPhone')?.invalid && editUserForm.get('userPhone')?.touched) {
                           <div>
-                            @if (addUserForm.get('userPhone')?.invalid && addUserForm.get('userPhone')?.touched) {
+                            @if (editUserForm.get('userPhone')?.invalid && editUserForm.get('userPhone')?.touched) {
                             <small class="text-danger"> *Phone is required</small>
                             }
                           </div>
@@ -454,7 +458,7 @@
                           <label class="col-form-label" for="">Plant Name</label>
                           <input class="form-control" formControlName="plant" [readonly]="true"> 
                         </div>
-                        <div *ngIf="addUserForm.get('plant')?.invalid && addUserForm.get('plant')?.touched" class="text-danger">
+                        <div *ngIf="editUserForm.get('plant')?.invalid && editUserForm.get('plant')?.touched" class="text-danger">
                           Password is required and must be at least 6 characters long.
                         </div>
                       </div>
@@ -463,7 +467,7 @@
                           <label class="col-form-label" for="">Department Name</label>
                           <input class="form-control" formControlName="department" [readonly]="true">
                         </div>
-                        <div *ngIf="addUserForm.get('department')?.invalid && addUserForm.get('department')?.touched" class="text-danger">
+                        <div *ngIf="editUserForm.get('department')?.invalid && editUserForm.get('department')?.touched" class="text-danger">
                           Password is required and must be at least 6 characters long.
                         </div>
                       </div>
@@ -512,7 +516,7 @@
                     <!-- /Edit Client Modal -->
 
                     <!-- Edit Modal from admin -->
-                    <div id="edit_client_admin" class="modal custom-modal fade" role="dialog">
+                    <div id="edit_client_admin" #editClientAdminModal class="modal custom-modal fade" role="dialog">
                       <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                         <div class="modal-content">
                           <div class="modal-header">
@@ -528,11 +532,11 @@
                                   <h5 class="card-title">Image Upload</h5>
                                 </div>
                                 <div class="container" appDnd (fileDropped)="onFileDropped($event)" >
-                                  <input type="file" #fileDropRef id="fileDropRef"   (change)="fileBrowseHandler($event)" />
+                                  <input type="file" #editAdminFileDrop id="editAdminFileDrop"   (change)="fileBrowseHandler($event)" />
                                   <img src="assets/img/dnd/ic-upload-file.svg" alt="">
                                   <h3>Drag and drop file here</h3>
                                   <h3>or</h3>
-                                  <label for="fileDropRef">Browse for file</label>
+                                  <label for="editAdminFileDrop">Browse for file</label>
                                 </div>
                                 <!-- File list section (hidden when no files are uploaded) -->
                               <div class="files-list" *ngIf="files && files.length > 0" style="overflow-y: auto;">
@@ -556,11 +560,11 @@
                                   <div class="input-block mb-3">
                                     <label class="col-form-label" for="">Employee Name <span class="text-danger">*</span></label>
                                     <input class="form-control" type="text"  [readonly]="true"
-                                      [class.invalid]="addUserForm.get('userName')?.invalid && addUserForm.get('userName')?.touched"
+                                      [class.invalid]="editUserForm.get('userName')?.invalid && editUserForm.get('userName')?.touched"
                                       formControlName="userName">
-                                    @if (addUserForm.get('userName')?.invalid && addUserForm.get('userName')?.touched) {
+                                    @if (editUserForm.get('userName')?.invalid && editUserForm.get('userName')?.touched) {
                                     <div>
-                                      @if (addUserForm.get('userName')?.invalid && addUserForm.get('userName')?.touched) {
+                                      @if (editUserForm.get('userName')?.invalid && editUserForm.get('userName')?.touched) {
                                       <small class="text-danger"> *Name is required</small>
                                       }
                                     </div>
@@ -574,11 +578,11 @@
                                   <div class="input-block mb-3">
                                     <label class="col-form-label" for="">Email ID<span class="text-danger">*</span></label>
                                     <input class="form-control" type="text" [readonly]="true"
-                                      [class.invalid]="addUserForm.get('userEmail')?.invalid && addUserForm.get('userEmail')?.touched"
+                                      [class.invalid]="editUserForm.get('userEmail')?.invalid && editUserForm.get('userEmail')?.touched"
                                       formControlName="userEmail">
-                                    @if (addUserForm.get('userEmail')?.invalid && addUserForm.get('userEmail')?.touched) {
+                                    @if (editUserForm.get('userEmail')?.invalid && editUserForm.get('userEmail')?.touched) {
                                     <div>
-                                      @if (addUserForm.get('userEmail')?.invalid && addUserForm.get('userEmail')?.touched) {
+                                      @if (editUserForm.get('userEmail')?.invalid && editUserForm.get('userEmail')?.touched) {
                                       <small class="text-danger"> *Email is required</small>
                                       }
                                     </div>
@@ -589,11 +593,11 @@
                                   <div class="input-block mb-3">
                                     <label class="col-form-label" for="">Phone <span class="text-danger">*</span></label>
                                     <input class="form-control" type="number" [readonly]="true"
-                                      [class.invalid]="addUserForm.get('userPhone')?.invalid && addUserForm.get('userPhone')?.touched"
+                                      [class.invalid]="editUserForm.get('userPhone')?.invalid && editUserForm.get('userPhone')?.touched"
                                       formControlName="userPhone">
-                                    @if (addUserForm.get('userPhone')?.invalid && addUserForm.get('userPhone')?.touched) {
+                                    @if (editUserForm.get('userPhone')?.invalid && editUserForm.get('userPhone')?.touched) {
                                     <div>
-                                      @if (addUserForm.get('userPhone')?.invalid && addUserForm.get('userPhone')?.touched) {
+                                      @if (editUserForm.get('userPhone')?.invalid && editUserForm.get('userPhone')?.touched) {
                                       <small class="text-danger"> *Phone is required</small>
                                       }
                                     </div>
@@ -606,7 +610,7 @@
                                     <label class="col-form-label" for="">Plant Name</label>
                                     <input class="form-control" formControlName="plant" [readonly]="true"> 
                                   </div>
-                                  <div *ngIf="addUserForm.get('plant')?.invalid && addUserForm.get('plant')?.touched" class="text-danger">
+                                  <div *ngIf="editUserForm.get('plant')?.invalid && editUserForm.get('plant')?.touched" class="text-danger">
                                     Password is required and must be at least 6 characters long.
                                   </div>
                                 </div>
@@ -615,7 +619,7 @@
                                     <label class="col-form-label" for="">Department Name</label>
                                     <input class="form-control" formControlName="department" [readonly]="true">
                                   </div>
-                                  <div *ngIf="addUserForm.get('department')?.invalid && addUserForm.get('department')?.touched" class="text-danger">
+                                  <div *ngIf="editUserForm.get('department')?.invalid && editUserForm.get('department')?.touched" class="text-danger">
                                     Password is required and must be at least 6 characters long.
                                   </div>
                                 </div>

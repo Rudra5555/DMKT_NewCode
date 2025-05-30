@@ -312,6 +312,13 @@ for (const item of files) {
 
   onSubmit(): void {
 
+  
+
+
+
+
+  //------------------------------------------------------//
+
     if (this.uploadFileForm.controls['documentType']) {
       this.documentTypeOption = this.uploadFileForm.value.documentType;
     }

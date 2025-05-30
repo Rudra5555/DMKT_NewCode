@@ -1,5 +1,5 @@
 import { HttpResponse } from '@angular/common/http';
-import { Component, ElementRef, OnInit, ViewChild,Input, SimpleChanges  } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild,Input, SimpleChanges, AfterViewInit  } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from "@angular/forms";
 import { IDropdownSettings } from 'ng-multiselect-dropdown';
 import { LoginComponentService } from 'src/app/services/login-component.service';
@@ -11,10 +11,15 @@ import Swal from 'sweetalert2';
   templateUrl: './user-management-modal.component.html',
   styleUrls: ['./user-management-modal.component.scss']
 })
-export class UserManagementModalComponent implements OnInit {
+export class UserManagementModalComponent implements OnInit, AfterViewInit {
   @Input() client: any;
   
   @ViewChild("fileDropRef", { static: false }) fileDropEl!: ElementRef;
+  @ViewChild('librarianFileDropRef', { static: false }) librarianFileDropRef!: ElementRef; 
+
+  @ViewChild('editAdminFileDrop', { static: false }) editAdminFileDrop!: ElementRef;
+   @ViewChild('editLibrarianFileDrop', { static: false }) editLibrarianFileDrop!: ElementRef;
+
   public addUserForm!: FormGroup ;
   public editUserForm!: FormGroup ;
   public dropdownList:any;
@@ -33,7 +38,17 @@ export class UserManagementModalComponent implements OnInit {
   roles: string[] = [];
   isHodChecked: boolean = false;
   plantList: any;
+   submitted: boolean = false;
+
+    @ViewChild('addClientAdminModal') addClientAdminModal!: ElementRef;
+    @ViewChild('addClientLibrarianModal') addClientLibrarianModal!: ElementRef;
+    @ViewChild('editClientAdminModal') editClientAdminModal!: ElementRef;
+    @ViewChild('editClientLibrarianModal') editClientLibrarianModal!: ElementRef;
+ 
+
   constructor( private formBuilder: FormBuilder, private loginService: LoginComponentService,private uploadDocument: UploadDocumentComponentService) { }
+
+
 
   
   ngOnInit(): void {
@@ -42,12 +57,12 @@ export class UserManagementModalComponent implements OnInit {
 
 
   this.addUserForm = this.formBuilder.group({
-    userName: ["", []],
+    userName: ["", [ Validators.required]],
     userPhone: ["", []],
-    userEmail: ["", []],
-    department: ["", []],
+    userEmail: ["", [ Validators.required]],
+    department: ["", [ Validators.required]],
     mainRole: ["", []],
-    plant: ["", []],
+    plant: ["", [ Validators.required]],
     Admin: [false],
     User: [false],
     SuperUser: [false],
@@ -55,6 +70,9 @@ export class UserManagementModalComponent implements OnInit {
     Librarian: [false],
     isActive: [false],
   });
+
+  
+  
 
   this.editUserForm = this.formBuilder.group({
     userName: ["", []],
@@ -90,6 +108,107 @@ export class UserManagementModalComponent implements OnInit {
   });
   
   }
+
+
+ngAfterViewInit(): void {
+  const adminModalElement = this.addClientAdminModal?.nativeElement;
+  const librarianModalElement = this.addClientLibrarianModal?.nativeElement;
+
+const editAdminModalElement = this.editClientAdminModal?.nativeElement;
+const editLibrarianModalElement = this.editClientLibrarianModal?.nativeElement;
+
+  if (adminModalElement) {
+    adminModalElement.addEventListener('hidden.bs.modal', () => {
+      this.resetForm();
+    });
+  }
+
+  if (librarianModalElement) {
+    librarianModalElement.addEventListener('hidden.bs.modal', () => {
+      this.resetForm();
+    });
+  }
+
+  if (editAdminModalElement) {
+  editAdminModalElement.addEventListener('hidden.bs.modal', () => {
+    this.resetAdminEditFileInput();
+  });
+}
+
+if (editLibrarianModalElement) {
+  editLibrarianModalElement.addEventListener('hidden.bs.modal', () => {
+    this.resetLibrarianEditFileInput();
+  });
+}
+}
+
+resetForm(): void {
+  this.addUserForm.reset({
+    userName: '',
+    userEmail: '',
+    userPhone: '',
+    plant: '',
+    department: '',
+    mainRole: '',
+    Admin: false,
+    User: false,
+    SuperUser: false,
+    HOD: false,
+    Librarian: false,
+    isActive: false
+  });
+
+  // Mark all controls as pristine and untouched
+  Object.keys(this.addUserForm.controls).forEach(key => {
+    this.addUserForm.get(key)?.markAsPristine();
+    this.addUserForm.get(key)?.markAsUntouched();
+  });
+
+  // Clear files and related flags
+  this.files = [];
+  this.uploadDocumentFlag = false;
+  this.uploadDocumentSizeFlag = false;
+  this.submitted = false;
+
+   const fileInput = document.getElementById('fileDropRef') as HTMLInputElement;
+  if (fileInput) {
+    fileInput.value = '';
+  }
+
+    this.librarianFileDropRef.nativeElement.value = '';
+}
+
+resetAdminEditFileInput(): void {
+    Object.keys(this.editUserForm.controls).forEach(key => {
+    this.editUserForm.get(key)?.markAsPristine();
+    this.editUserForm.get(key)?.markAsUntouched();
+  })
+    this.files = [];
+  this.uploadDocumentFlag = false;
+  this.uploadDocumentSizeFlag = false;
+  this.submitted = false; // reset shared file array
+  if (this.editAdminFileDrop?.nativeElement) {
+    this.editAdminFileDrop.nativeElement.value = '';
+  }
+}
+
+resetLibrarianEditFileInput(): void {
+     Object.keys(this.editUserForm.controls).forEach(key => {
+    this.editUserForm.get(key)?.markAsPristine();
+    this.editUserForm.get(key)?.markAsUntouched();
+  })
+    this.files = [];
+  this.uploadDocumentFlag = false;
+  this.uploadDocumentSizeFlag = false;
+  this.submitted = false; // reset shared file array
+  if (this.editLibrarianFileDrop?.nativeElement) {
+    this.editLibrarianFileDrop.nativeElement.value = '';
+  }
+}
+
+
+
+
   getMainHeadList() {
     this.uploadDocument.allDataList("POWER O&M", "main-head").subscribe({
       next: (event: any) => {
@@ -166,6 +285,19 @@ export class UserManagementModalComponent implements OnInit {
 
   submitAddUserForm() {
   
+  this.submitted = true;
+
+  // Mark all fields as touched so validation messages show
+  this.addUserForm.markAllAsTouched();
+
+  // Manually validate mainRole
+  const mainRoleValue = this.addUserForm.get('mainRole')?.value;
+
+  if (!mainRoleValue) {
+    // Stop submission if mainRole is not selected
+    return;
+  }
+
     if (this.addUserForm.valid) {
       const payload = {
         userName: this.addUserForm.value.userName,

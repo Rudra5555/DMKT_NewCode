@@ -722,6 +722,8 @@ onHodItemClick(requestorName: any, stepId: any): void {
 
   if (selectedItem) {
     this.selectedHodItem = selectedItem;
+    // console.log('Selected item:', this.selectedHodItem);
+    
   } else {
     console.error('No matching notification found for:', requestorName, 'and stepId:', stepId);
   }
@@ -732,6 +734,8 @@ onHodItemClick(requestorName: any, stepId: any): void {
   onItemClick(item: any): void {
       
     this.selectFileData = item;
+    // console.log("Selected item:", this.selectFileData);
+    
     
      this.extensionImage = this.selectFileData.DocumentType;
    

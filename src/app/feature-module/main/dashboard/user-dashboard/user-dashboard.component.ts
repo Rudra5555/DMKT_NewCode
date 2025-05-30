@@ -744,17 +744,44 @@ public moveToPage(pageNumber: number): void {
 
 
 
-// public searchData(value: string): void {
-//   const filterValue = value.trim().toLowerCase();
+deleteFile(item: any) {
+  console.log("Deleting file:", item);
 
-//   // 🔹 Search within full dataset
-//   this.filteredList = this.fullDataList.filter((item: getSearchfileList) => 
-//     item.fileName.toLowerCase().includes(filterValue)
-//   );
-//   this.skip = 0;
-//   this.calculateTotalPages(this.filteredList.length, this.pageSize);
-//   this.paginateData(this.filteredList);
-// }
+  Swal.fire({
+    title: "Are you sure you want to delete this file?",
+    text: "This will permanently delete the file and all of its versions.",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#d33",
+    cancelButtonColor: "#3085d6",
+    confirmButtonText: "Yes, delete it!",
+    cancelButtonText: "Cancel"
+  }).then((result) => {
+    if (result.isConfirmed) {
+      this.loginService.deleteFile(item.fileName).subscribe({
+        next: (response) => {
+          Swal.fire({
+            title: "Deleted!",
+            text: "The file has been permanently deleted.",
+            icon: "success",
+            showConfirmButton: false,
+            timer: 1500
+          }).then(() => {
+            // ✅ Force a page reload
+            window.location.href = window.location.href;
+          });
+        },
+        error: (error) => {
+          Swal.fire("Error", "Something went wrong while deleting the file.", "error");
+          console.error("Delete failed:", error);
+        }
+      });
+    }
+  });
+}
+
+
+
 
 
 
@@ -780,6 +807,8 @@ private paginateData(data: getSearchfileList[]): void {
     const serialNumber = index + 1;
     if (index >= this.skip && index < this.skip + this.pageSize) {
       item.id = serialNumber;
+       let newUniqueFileName = item.newUniqueFileName;
+         item.newUniqueFileName = newUniqueFileName.replace("///", "/");
       this.fileListSearch.push(item);
       this.serialNumberArray.push(serialNumber);
     }
