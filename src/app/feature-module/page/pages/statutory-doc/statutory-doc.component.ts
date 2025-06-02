@@ -163,7 +163,10 @@ export class StatutoryDocComponent implements OnInit {
           filteredData.map((item: getStatutoryDoc, index: number) => {
             const serialNumber = index + 1;
             if (index >= this.skip && serialNumber <= this.limit) {
-              item.id = serialNumber;
+              item.id = serialNumber; 
+         let newUniqueFileName = item.uniqueFileName;
+         item.uniqueFileName = newUniqueFileName.replace("///", "/");
+              
               this.contactlist.push(item);
               this.serialNumberArray.push(serialNumber);
             }

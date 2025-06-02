@@ -324,7 +324,7 @@ const today = new Date();
                 RequestedDocumentName: notification.documentName,
                 requestorName: notification.requesterName,
                 RequesterName: notification.requesterName,
-                UniqueDocumentName: notification.uniqueDocumentName,
+                UniqueDocumentName: notification.newUniqueDocumentName,
                 plantName: notification.plantName,
                 DepartmentName: notification.departmentName,
                 DocumentType: notification.documentType,
@@ -378,7 +378,14 @@ const today = new Date();
             const res = JSON.parse(decryptedData);
 
             this.resp = res.data
+            this.resp.forEach((notification: any) => {
+              if (notification.newUniqueDocumentName) {
+                notification.newUniqueDocumentName = notification.newUniqueDocumentName.replace("///", "/");
+              }
+            });
             this.respData = this.resp.filter((notification: any) => !notification.markAsRead);  //markedAsRead = false
+            // console.log("resp data:", this.respData);
+            
            
              
       
@@ -647,9 +654,13 @@ resetHodModalForm() {
           if (message == "Success!!") {
             this.successfulSubmitAlert();
           }
-
+         
+          
+          
           // Remove the approved/rejected notification from the notification list
           this.notificationData = this.notificationData.filter(item => item.documentId !== this.selectedHodItem?.documentId);
+         
+          
           // Update the notification count
           this.notificationCount = this.notificationData.length;
           this.selectedHodItem = null;
@@ -717,10 +728,12 @@ onHodItemClick(requestorName: any, stepId: any): void {
   
 
   const selectedItem = this.notificationData.find(
+
     item => item.requestorName === requestorName && item.stepId === stepId
   );
 
   if (selectedItem) {
+ 
     this.selectedHodItem = selectedItem;
     // console.log('Selected item:', this.selectedHodItem);
     
@@ -786,6 +799,16 @@ onHodItemClick(requestorName: any, stepId: any): void {
     });
   }
   }
+
+
+
+
+backSlashRemoval(item: any): string {
+  if (typeof item === 'string') {
+    return item.replace("///", "/");;
+  }
+  return '';
+}
 
 
 

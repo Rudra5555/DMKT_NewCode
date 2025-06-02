@@ -53,10 +53,16 @@
 
         </div>
         <!-- Error message for file validation -->
-        <div *ngIf="uploadDocumentFlag || uploadDocumentSizeFlag" class="text-danger"
+        <!-- <div *ngIf="uploadDocumentFlag || uploadDocumentSizeFlag" class="text-danger"
           style="margin-left: 2%; padding-bottom: 4%;">
           Upload Document is required and File size should be under 200 MB.
+        </div> -->
+        <div *ngIf="submitted && (uploadDocumentFlag || uploadDocumentSizeFlag)" 
+            class="text-danger"
+            style="margin-left: 2%; padding-bottom: 4%;">
+          Upload Document is required and File size should be under 200 MB.
         </div>
+
         <div *ngIf="invalidFileExtensionFlag" class="text-danger" style="margin-left: 2%; padding-bottom: 4%;">
           Only PDF, DOCX, XLSX, JPEG, DWG, JPG, TXT, CSV, XLS, PPT, and PNG files are allowed.
         </div>
@@ -70,11 +76,17 @@
             <mat-option *ngFor="let item of mainHeadList;"
               [value]="item.catName + '~' + item.abbreviation">{{item.catName}}</mat-option>
           </mat-select>
-          <div
+          <!-- <div
             *ngIf="uploadFileForm.get('mainHead')?.invalid && (uploadFileForm.get('mainHead')?.touched || uploadFileForm.get('mainHead')?.dirty)"
             class="text-danger">
             Main Head is required.
-          </div>
+          </div> -->
+          <div
+          *ngIf="submitted && uploadFileForm.get('mainHead')?.invalid"
+          class="text-danger">
+          Main Head is required.
+        </div>
+
         </div>
 
 
@@ -85,7 +97,7 @@
             <mat-option *ngFor="let element of plantList" [value]="element.catName">{{element.catName}}</mat-option>
           </mat-select>
           <div
-            *ngIf="uploadFileForm.get('plants')?.invalid && (uploadFileForm.get('plants')?.touched || uploadFileForm.get('plants')?.dirty)"
+            *ngIf="submitted && uploadFileForm.get('plants')?.invalid"
             class="text-danger">
             Plant is required.
           </div>
@@ -101,7 +113,7 @@
               [value]="element.catName + '~' + element.abbreviation">{{element.catName}}</mat-option>
           </mat-select>
           <div
-            *ngIf="uploadFileForm.get('department')?.invalid && (uploadFileForm.get('department')?.touched || uploadFileForm.get('department')?.dirty)"
+            *ngIf="submitted && uploadFileForm.get('department')?.invalid "
             class="text-danger">
             Department is required.
           </div>
@@ -117,7 +129,7 @@
               [value]="element.catName + '~' + element.abbreviation">{{element.catName}}</mat-option>
           </mat-select>
           <div
-            *ngIf="uploadFileForm.get('subArea')?.invalid && (uploadFileForm.get('subArea')?.touched || uploadFileForm.get('subArea')?.dirty)"
+            *ngIf="submitted && uploadFileForm.get('subArea')?.invalid "
             class="text-danger">
             Sub Area is required.
           </div>
@@ -130,11 +142,17 @@
             <mat-option value="">--Select--</mat-option>
             <mat-option *ngFor="let element of docList" [value]="element.id">{{element.documentName}}</mat-option>
           </mat-select>
-          <div
+          <!-- <div
             *ngIf="uploadFileForm.get('documentType')?.invalid && (uploadFileForm.get('documentType')?.touched || uploadFileForm.get('documentType')?.dirty)"
             class="text-danger">
             Document Type is required.
-          </div>
+          </div> -->
+          <div
+          *ngIf="submitted && uploadFileForm.get('documentType')?.invalid"
+          class="text-danger">
+          Document Type is required.
+        </div>
+
         </div>
 
 
@@ -147,7 +165,7 @@
 
           </mat-select>
           <div
-            *ngIf="uploadFileForm.get('subDocumentType')?.invalid && (uploadFileForm.get('subDocumentType')?.touched || uploadFileForm.get('subDocumentType')?.dirty)"
+            *ngIf="submitted && uploadFileForm.get('subDocumentType')?.invalid "
             class="text-danger">
             Sub-Document Type is required.
           </div>
@@ -160,11 +178,17 @@
             <mat-option value="Soft Copy">Soft Copy</mat-option>
             <mat-option value="Hard Copy">Hard Copy</mat-option>
           </mat-select>
-          <div
+          <!-- <div
             *ngIf="uploadFileForm.get('storageLocation')?.invalid && (uploadFileForm.get('storageLocation')?.touched || uploadFileForm.get('storageLocation')?.dirty)"
             class="text-danger">
             Storage Location is required.
+          </div> -->
+          <div
+            *ngIf="submitted && uploadFileForm.get('storageLocation')?.invalid"
+            class="text-danger">
+            Storage Location is required.
           </div>
+
 
         </div>
 

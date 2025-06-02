@@ -456,11 +456,16 @@ formatExecutedData(dateStr: string): string {
     private paginateData(data: getcontactlist[]): void {
       this.contactlist = [];
       this.serialNumberArray = [];
+    console.log("requested-doc.component.ts 55555:",JSON.stringify( data));
     
       data.forEach((item, index) => {
         const serialNumber = index + 1;
         if (index >= this.skip && index < this.skip + this.pageSize) {
+          // console.log("requested-doc.component.ts 55555:",JSON.stringify( item));
+          
           item.id = serialNumber;
+          let newUniqueFileName = item.newUniqueDocumentName;
+         item.newUniqueDocumentName = newUniqueFileName.replace("///", "/");
           this.contactlist.push(item);
           
           

@@ -1121,6 +1121,7 @@ export interface getcontactlist {
   fileName: string;
   fileSize: number
   uniqueDocumentName: string;
+  newUniqueDocumentName: string;
   documentName: string;
   executerName: string;
   departmentName: string;

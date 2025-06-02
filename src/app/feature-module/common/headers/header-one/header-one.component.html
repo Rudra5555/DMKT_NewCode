@@ -327,7 +327,7 @@
 												style="padding: 8px;text-align: center; vertical-align: middle;position: relative;">
 													<div class="tooltip-container">
 													{{selectFileData?.documentName }}
-													<span class="tooltip-text">{{ selectFileData?.uniqueDocumentName }}</span>
+													<span class="tooltip-text">{{ selectFileData?.newUniqueDocumentName }}</span>
 												  </div>
 											</td>
 										</tr>
@@ -630,7 +630,7 @@
 											<td style="padding: 8px;">
 												<div class="tooltip-container">
 													{{ selectedHodItem?.RequestedDocumentName }}
-													<span class="tooltip-text">{{ selectedHodItem?.UniqueDocumentName }}</span>
+													<span class="tooltip-text">{{backSlashRemoval( selectedHodItem?.UniqueDocumentName) }}</span>
 												  </div>
 											</td>
 										</tr>

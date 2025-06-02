@@ -217,7 +217,8 @@ export class VerifyUploadedDocumentComponent implements OnInit {
           const decryptedData = this.loginService.convertEncToDec(event.body);
           const res = JSON.parse(decryptedData);
           this.respData = res.data;
-          this.fileList = this.respData;
+          // this.fileList = this.respData;
+          this.fileList = [...this.respData].reverse();
           this.totalData = this.fileList.length;
           this.originalFileList = this.fileList;
           this.isLoading = false;

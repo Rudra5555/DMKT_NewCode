@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpResponse } from '@angular/common/http';
 import { FileManagementService } from 'src/app/services/file-management.service';
@@ -55,12 +55,15 @@ export class UploadDocComponent implements OnInit {
 docMap = new Map<number, string>();
 public newPlant: boolean = false;
 public invalidFileExtensionFlag: boolean = false;
+firstValidationAttempt: boolean = true; // Track if it's the first validation attempt
+  
 
  
   constructor(
     private uploadService: FileManagementService,
     private formBuilder: FormBuilder,
-    private uploadDocument: UploadDocumentComponentService
+    private uploadDocument: UploadDocumentComponentService,
+    private cdr: ChangeDetectorRef
   ) {
 
     this.uploadFileForm = this.formBuilder.group({
@@ -78,73 +81,91 @@ public invalidFileExtensionFlag: boolean = false;
     });
   }
 
-  ngOnInit(): void {
+ngOnInit(): void {
+  this.getDocTypeList();
+  this.getAllMainHeadData();
 
- 
+  const secretKey = '1234567890123456'; // Must match Java key
+  const iv = 'abcdefghijklmnop'; // Must match Java IV
 
+  const decryptedBytes = CryptoJS.AES.decrypt(this.encryptedData, CryptoJS.enc.Utf8.parse(secretKey), {
+    iv: CryptoJS.enc.Utf8.parse(iv),
+    mode: CryptoJS.mode.CBC,
+    padding: CryptoJS.pad.Pkcs7
+  });
 
+  const decryptedText = decryptedBytes.toString(CryptoJS.enc.Utf8);
+  // console.log('Decrypted Text:', decryptedText);
 
+  // 🔄 MAIN HEAD change listener
+  this.uploadFileForm.get('mainHead')?.valueChanges.subscribe(value => {
+    const [catName, abbreviation] = value.split('~');
+    this.selectedCatName = catName;
+    this.selectedCatNameAbbr = abbreviation;
 
-    this.getDocTypeList();
+    // console.log("Selected main head:", this.selectedCatName, "Abbreviation:", this.selectedCatNameAbbr);
 
-    this.uploadFileForm.get('mainHead')?.valueChanges.subscribe(value => {
-      const [catName, abbreviation] = value.split('~');
-      this.selectedCatName = catName;
-      this.selectedCatNameAbbr = abbreviation
-      if (catName != 'POWER O&M') {
-        this.plantList = [];
-        this.departmentList = [];
-        this.subAreaList = [];
-      }
-      this.getMainHeadList(catName, "main-head");
+    // 🔁 Reset all dependent form controls and variables
+    this.uploadFileForm.get('plants')?.reset();
+    this.uploadFileForm.get('department')?.reset();
+    this.uploadFileForm.get('subArea')?.reset();
+    this.uploadFileForm.get('subDocumentType')?.reset();
 
-    });
+    this.plantOption = '';
+    this.selectedDeptCatName = '';
+    this.selectedDeptCatNameAbbr = '';
+    this.selectedSubAreaCatName = '';
+    this.selectedSubAreaCatNameAbbr = '';
 
-    this.uploadFileForm.get('plants')?.valueChanges.subscribe(value => {
-      if (value != null) {
-        this.getAllPlantList(value, "plants");
-        this.plantOption = value;
-        if(this.plantOption == "CPP (1740MW)"){
-          this.newPlant = true;
-        }else{
-          this.newPlant = false;
-        }
-      } else {
-      }
-    });
+    this.plantList = [];
+    this.departmentList = [];
+    this.subAreaList = [];
+    this.subDocListSize = 0;
+    this.newPlant = false;
 
-    this.uploadFileForm.get('department')?.valueChanges.subscribe(value => {
+    // 🔄 Fetch updated plant list based on new main head
+    this.getMainHeadList(catName, "main-head");
+  });
+
+  // 🔄 PLANTS change listener
+  this.uploadFileForm.get('plants')?.valueChanges.subscribe(value => {
+    if (value != null) {
+      this.getAllPlantList(value, "plants");
+      this.plantOption = value;
+
+      this.newPlant = this.plantOption === "CPP (1740MW)";
+    } else {
+      this.plantOption = '';
+      this.newPlant = false;
+    }
+  });
+
+  // 🔄 DEPARTMENT change listener
+  this.uploadFileForm.get('department')?.valueChanges.subscribe(value => {
+    if (value) {
       const [deptName, deptAbbr] = value.split('~');
       this.getSubAreaList(deptName, "department");
       this.selectedDeptCatName = deptName;
       this.selectedDeptCatNameAbbr = deptAbbr;
-    });
+    } else {
+      this.selectedDeptCatName = '';
+      this.selectedDeptCatNameAbbr = '';
+    }
+  });
 
-    this.uploadFileForm.get('subArea')?.valueChanges.subscribe(value => {
+  // 🔄 SUB-AREA change listener
+  this.uploadFileForm.get('subArea')?.valueChanges.subscribe(value => {
+    if (value) {
       const [subAreaName, subAreaAbbr] = value.split('~');
       this.selectedSubAreaCatName = subAreaName;
       this.selectedSubAreaCatNameAbbr = subAreaAbbr;
-    });
-    this.getAllMainHeadData();
+    } else {
+      this.selectedSubAreaCatName = '';
+      this.selectedSubAreaCatNameAbbr = '';
+    }
+  });
+}
 
-
-
-
-    const secretKey = '1234567890123456'; // Must match Java key
-    const iv = 'abcdefghijklmnop'; // Must match Java IV
-  
-   
-  
-  // Decrypt
-    const decryptedBytes = CryptoJS.AES.decrypt(this.encryptedData, CryptoJS.enc.Utf8.parse(secretKey), {
-        iv: CryptoJS.enc.Utf8.parse(iv),
-        mode: CryptoJS.mode.CBC,
-        padding: CryptoJS.pad.Pkcs7
-    });
-  
-  // Convert bytes to string
-  const decryptedText = decryptedBytes.toString(CryptoJS.enc.Utf8);
-  }
 
   onFileDropped($event: any) {
         this.prepareFilesList($event);
@@ -238,6 +259,7 @@ for (const item of files) {
   }
 
   selectedMainHead(event: any) {
+    
     const [catName, abbreviation] = event.value.split('~');
     this.selectedCatName = catName;
     this.selectedCatNameAbbr = abbreviation;
@@ -310,127 +332,140 @@ for (const item of files) {
              this.files.length > 0);
   }
 
-  onSubmit(): void {
-
-  
-
-
-
-
-  //------------------------------------------------------//
-
-    if (this.uploadFileForm.controls['documentType']) {
-      this.documentTypeOption = this.uploadFileForm.value.documentType;
-    }
-    if (this.uploadFileForm.controls['subDocumentType']) {
-      this.subDocumentTypeOption = this.uploadFileForm.value.subDocumentType;
-      
-    }
-    
-    if (this.uploadFileForm.controls['storageLocation']) {
-      this.storageLocationOption = this.uploadFileForm.value.storageLocation;
-    }
-
-    let isStatutoryDocument = this.uploadFileForm.controls['isStatutoryDocument'].value;
-    let isRestrictedDocument = this.uploadFileForm.controls['isRestrictedDocument'].value;
-    let ishodRestricted = this.uploadFileForm.controls['isHodDocument'].value;
-    isStatutoryDocument = isStatutoryDocument === "" ? false : true;
-    isRestrictedDocument = isRestrictedDocument === "" ? false : true;
-    ishodRestricted = ishodRestricted === "" ? false : true;
-
-    const formData = new FormData();
-    for (const file of this.files) {
-      // console.log("this selectedFiles",file);
-      formData.append("file", file);
-    }
-
-    if(this.selectedDeptCatName == null){
-      this.selectedDeptCatName = '';
-    }if(this.selectedDeptCatNameAbbr == null){
-      this.selectedDeptCatNameAbbr = '';
-    }if(this.selectedSubAreaCatName == null){
-      this.selectedSubAreaCatName = '';
-    }if(this.selectedSubAreaCatNameAbbr == null){
-      this.selectedSubAreaCatNameAbbr = '';
-    }
-
-    if (this.plantOption != null && this.selectedDeptCatName != null && this.selectedDeptCatNameAbbr != null && this.selectedSubAreaCatName != null && this.selectedSubAreaCatNameAbbr != null   &&  this.files.length > 0) {
-     
-      const modalData = {
-
-          "department": this.selectedDeptCatName,
-          "departAbbr": this.selectedDeptCatNameAbbr,
-          "subArea": this.selectedSubAreaCatName,
-          "subAreaAbbr": this.selectedSubAreaCatNameAbbr,
-          "plants": this.plantOption,
-          "mainHead": this.selectedCatName,
-          "mainHeadAbbr": this.selectedCatNameAbbr,
-          "storageLocation": this.storageLocationOption,
-          "documentType": this.docMap.get( this.documentTypeOption),
-          "documentSubType": this.subDocumentTypeOption,
-          "isStatutory": isStatutoryDocument,
-          "hodRestricted": isRestrictedDocument,
-          "isRestrictedDocument": ishodRestricted
-
-      
-      };
-      // console.log("payloaddddd:: ",modalData);
-      formData.append("requestbody", JSON.stringify(modalData));
-      this.buttonDisabled = true;
-
-      this.uploadService.upload(formData).subscribe({
-        next: (event: any) => {
-          // console.log("event",event);
-          if (event instanceof HttpResponse) {
-            this.buttonDisabled = false;
-
-            this.uploadFileForm.get('uploadFile')?.reset('');
-            this.uploadFileForm.get('mainHead')?.reset('');
-            this.uploadFileForm.get('plants')?.reset('');
-            this.uploadFileForm.get('department')?.reset('');
-            this.uploadFileForm.get('subArea')?.reset('');
-            this.uploadFileForm.get('documentType')?.reset('');
-            this.uploadFileForm.get('subDocumentType')?.reset('');
-            this.uploadFileForm.get('storageLocation')?.reset('');
-            this.uploadFileForm.controls['isStatutoryDocument'].reset();
-            this.uploadFileForm.controls['isRestrictedDocument'].reset();
-            this.uploadFileForm.controls['isHodDocument'].reset();
-            this.clearFileInput();
-            this.successfulSubmitAlert();
-          }
-        },
-        error: (err: any) => {
-          this.unsuccessfulSubmitAlert();
-        }
-      });
+onSubmit(): void {
+  // ✅ Conditional validations
+  if (this.plantList.length > 0) {
+    const plantValue = this.uploadFileForm.get('plants')?.value;
+    if (!plantValue || plantValue === '--Select--') {
+      this.uploadFileForm.get('plants')?.markAsTouched();
+      this.uploadFileForm.get('plants')?.markAsDirty();
+      this.fieldSubmitAlert("Plants");
       return;
-    }if(this.plantOption == null && this.selectedDeptCatName == null && this.selectedSubAreaCatName == null && this.documentTypeOption != '' )
-       {
-       
-      const modalData = {
-        "mainHead": this.selectedCatName,
-        "mainHeadAbbr": this.selectedCatNameAbbr,
-        "plants": null,
-        "department": null,
-        "departAbbr": null,
-        "subArea": null,
-        "subAreaAbbr": null,
-        "documentType": this.docMap.get( this.documentTypeOption),
-        "documentSubType": this.subDocumentTypeOption,
-        "storageLocation": this.storageLocationOption,
-        "isStatutory": isStatutoryDocument,
-        "isRestrictedDocument": isRestrictedDocument,
-        "hodRestricted": ishodRestricted
+    }
+  }
 
-      };
-      // console.log("modal Data",modalData);
-      
+  if (this.departmentList.length > 0 && !this.newPlant && !this.uploadFileForm.get('department')?.value) {
+    this.markFieldInvalid('department');
+    this.fieldSubmitAlert("Department");
+    return;
+  }
 
-      formData.append("requestbody", JSON.stringify(modalData));
-   
-      this.uploadService.upload(formData).subscribe({
-        next: (event: any) => {
-          if (event instanceof HttpResponse) {
+  if (this.subAreaList.length > 0 && !this.uploadFileForm.get('subArea')?.value) {
+    this.markFieldInvalid('subArea');
+    this.fieldSubmitAlert("Sub-Area");
+    return;
+  }
+
+  if (this.subDocListSize > 0 && !this.uploadFileForm.get('subDocumentType')?.value) {
+    this.markFieldInvalid('subDocumentType');
+    this.fieldSubmitAlert("Sub-Document Type");
+    return;
+  }
+
+  // ✅ Extract values from form controls
+  const documentTypeOption = this.uploadFileForm.get('documentType')?.value || '';
+  const subDocumentTypeOption = this.uploadFileForm.get('subDocumentType')?.value || '';
+  const storageLocationOption = this.uploadFileForm.get('storageLocation')?.value || '';
+  const isStatutoryDocument = !!this.uploadFileForm.get('isStatutoryDocument')?.value;
+  const isRestrictedDocument = !!this.uploadFileForm.get('isRestrictedDocument')?.value;
+  const ishodRestricted = !!this.uploadFileForm.get('isHodDocument')?.value;
+
+  const departmentSelected = this.departmentList.length > 0 && !this.newPlant ? this.selectedDeptCatName : '';
+  const departmentAbbr = this.departmentList.length > 0 && !this.newPlant ? this.selectedDeptCatNameAbbr : '';
+  const subAreaSelected = this.subAreaList.length > 0 ? this.selectedSubAreaCatName : '';
+  const subAreaAbbr = this.subAreaList.length > 0 ? this.selectedSubAreaCatNameAbbr : '';
+
+  // ✅ Use current form value for plants instead of stale variable
+  const plantSelected = this.uploadFileForm.get('plants')?.value || '';
+
+  // ✅ Prepare formData
+  const formData = new FormData();
+  for (const file of this.files) {
+    formData.append("file", file);
+  }
+
+  const modalData: any = {
+    mainHead: this.selectedCatName,
+    mainHeadAbbr: this.selectedCatNameAbbr,
+    plants: plantSelected,
+    department: departmentSelected,
+    departAbbr: departmentAbbr,
+    subArea: subAreaSelected,
+    subAreaAbbr: subAreaAbbr,
+    documentType: this.docMap.get(documentTypeOption),
+    documentSubType: subDocumentTypeOption || '',
+    storageLocation: storageLocationOption,
+    isStatutory: isStatutoryDocument,
+    isRestrictedDocument: isRestrictedDocument,
+    hodRestricted: ishodRestricted
+  };
+  // console.log("Modal Data:", modalData);
+
+  // ✅ Allow upload if file is present and required fields are met
+  if (this.files.length > 0 && documentTypeOption && storageLocationOption) {
+    formData.append("requestbody", JSON.stringify(modalData));
+    this.buttonDisabled = true;
+
+    this.uploadService.upload(formData).subscribe({
+      next: (event: any) => {
+        if (event instanceof HttpResponse) {
+          this.buttonDisabled = false;
+          this.resetForm(); // ✅ Reset everything
+          this.successfulSubmitAlert();
+        }
+      },
+      error: (err: any) => {
+        console.error("Upload failed:", err);
+        this.resetForm(); // Still reset on error
+        this.unsuccessfulSubmitAlert();
+      }
+    });
+
+    return;
+  }
+
+  // ❌ Fallback validation if required values not met
+  this.submitted = true;
+  const isValid = this.validateEssentialFields(['mainHead', 'documentType', 'storageLocation', 'uploadFile']);
+  if (!isValid) return;
+
+  console.warn("Form is not valid for upload.");
+}
+
+
+
+
+
+  markFieldInvalid(fieldName: string): void {
+    const control = this.uploadFileForm.get(fieldName);
+    if (control) {
+      control.setErrors({ required: true });
+      control.markAsTouched();
+      control.markAsDirty();
+    }
+    this.uploadFileForm.updateValueAndValidity();
+    this.cdr.detectChanges();
+  }
+
+
+
+  resetForm() {
+    // this.uploadFileForm.reset();
+    this.submitted = false;
+    this.files = [];
+    this.fileDropEl.nativeElement.value = '';
+    this.uploadDocumentFlag = false;
+    this.uploadDocumentSizeFlag = false;
+    this.subDocListSize = 0;
+    this.plantList = [];
+    this.departmentList = [];
+    this.subAreaList = [];
+    this.documentTypeFlag = false;
+    this.storageLocationFlag = false;
+    this.mainHeadFlag = false;
+    this.plantFlag = false;
+    this.departmentFlag = false;
+    this.invalidFileExtensionFlag = false;
             this.uploadFileForm.get('uploadFile')?.reset('');
             this.uploadFileForm.get('mainHead')?.reset('');
             this.uploadFileForm.get('plants')?.reset('');
@@ -443,46 +478,102 @@ for (const item of files) {
             this.uploadFileForm.controls['isRestrictedDocument'].reset();
             this.uploadFileForm.controls['isHodDocument'].reset();
             this.clearFileInput();
-            this.successfulSubmitAlert();
-          }
-        },
-        error: (err: any) => {
-          this.uploadFileForm.get('uploadFile')?.reset('');
-            this.uploadFileForm.get('mainHead')?.reset('');
-            this.uploadFileForm.get('plants')?.reset('');
-            this.uploadFileForm.get('department')?.reset('');
-            this.uploadFileForm.get('subArea')?.reset('');
-            this.uploadFileForm.get('documentType')?.reset('');
-            this.uploadFileForm.get('subDocumentType')?.reset('');
-            this.uploadFileForm.get('storageLocation')?.reset('');
-            this.uploadFileForm.controls['isStatutoryDocument'].reset();
-            this.uploadFileForm.controls['isRestrictedDocument'].reset();
-            this.uploadFileForm.controls['isHodDocument'].reset();
-            this.clearFileInput();
-          this.unsuccessfulSubmitAlert();
-        }
-      });
-return;
-    }else 
-    {
-      // console.log("End of if and else");
-      this.uploadFileForm.get('uploadFile')?.reset('');
-      this.uploadFileForm.get('mainHead')?.reset('');
-      this.uploadFileForm.get('plants')?.reset('');
-      this.uploadFileForm.get('department')?.reset('');
-      this.uploadFileForm.get('subArea')?.reset('');
-      this.uploadFileForm.get('documentType')?.reset('');
-      this.uploadFileForm.get('subDocumentType')?.reset('');
-      this.uploadFileForm.get('storageLocation')?.reset('');
-      this.uploadFileForm.controls['isStatutoryDocument'].reset();
-      this.uploadFileForm.controls['isRestrictedDocument'].reset();
-      this.uploadFileForm.controls['isHodDocument'].reset();
-      this.clearFileInput();
-        this.unsuccessfulSubmitAlert();
-      
+  }
+
+//   validateEssentialFields(fields: string[]): boolean {
+//     this.fileDropEl.nativeElement.value = '';
+//   let hasErrors = false;
+//   fields.forEach(field => {
+//     const control = this.uploadFileForm.get(field);
+//     if (control?.invalid || control?.value == null || control?.value === '') {
+//       this.uploadDocumentFlag = true;
+//       control?.markAsTouched();
+//       control?.updateValueAndValidity();
+//       hasErrors = true;
+//     }
+//   });
+//   return !hasErrors;
+// }
+
+// validateEssentialFields(fields: string[]): boolean {
+//   this.fileDropEl.nativeElement.value = ''; // Reset file input if needed
+
+//   let hasErrors = false;
+
+//   fields.forEach(field => {
+//     // Skip validation for 'uploadFile' if file(s) already uploaded
+//     if (field === 'uploadFile' && this.files.length > 0) {
+//       this.uploadDocumentFlag = false; // No error for file upload
+//       return; // Skip validation
+//     }
+
+//     const control = this.uploadFileForm.get(field);
+//     if (control?.invalid || control?.value == null || control?.value === '') {
+//       this.uploadDocumentFlag = true;
+//       control?.markAsTouched();
+//       control?.updateValueAndValidity();
+//       hasErrors = true;
+
+//       const fieldLabel = this.getFieldLabel(field);
+//       this.fieldSubmitAlert(fieldLabel);
+//     }
+//   });
+
+//   return !hasErrors;
+// }
+
+validateEssentialFields(fields: string[]): boolean {
+  this.fileDropEl.nativeElement.value = '';
+  let hasErrors = false;
+  const missingFields: string[] = [];
+
+  fields.forEach(field => {
+    // Skip file validation if already uploaded
+    if (field === 'uploadFile' && this.files.length > 0) {
+      this.uploadDocumentFlag = false; // No error for file upload
+      return;
     }
 
+    const control = this.uploadFileForm.get(field);
+    if (control?.invalid || control?.value == null || control?.value === '') {
+      this.uploadDocumentFlag = true;
+      control?.markAsTouched();
+      control?.updateValueAndValidity();
+      hasErrors = true;
+
+      // Collect field label
+      const label = this.getFieldLabel(field);
+      missingFields.push(label);
+    }
+  });
+
+  if (hasErrors) {
+    if (this.firstValidationAttempt) {
+      // Show all missing fields in a single alert
+      const fieldList = missingFields.map(f => `• <b>${f}</b>`).join('<br>');
+      this.fieldSubmitAlert(`Please fill out the following required fields:<br><br>${fieldList}`);
+      this.firstValidationAttempt = false;
+    } else if (missingFields.length > 0) {
+      // Show one field at a time on later attempts
+      this.fieldSubmitAlert(missingFields[0]);
+    }
   }
+
+  return !hasErrors;
+}
+
+
+getFieldLabel(field: string): string {
+  const fieldMap: { [key: string]: string } = {
+    mainHead: 'Main Head',
+    documentType: 'Document Type',
+    storageLocation: 'Storage Location',
+    uploadFile: 'Upload File'
+  };
+
+  return fieldMap[field] || field;
+}
+
 
   getAllMainHeadData() {
     
@@ -496,6 +587,7 @@ return;
             const jsonObj = JSON.parse(decryptedData);
             if (jsonObj.status === 200 && jsonObj.categoryList) {
               this.mainHeadList = jsonObj.categoryList;
+              this.plantList = [];
               // console.log("Main head list:", this.mainHeadList);
               
             } else {
@@ -526,6 +618,7 @@ return;
   
               const jsonObj = JSON.parse(decryptedData);
               if (jsonObj.status === 200 && jsonObj.categoryList) {
+                
                 this.plantList = jsonObj.categoryList;
                 // console.log("Main head plant list:", this.plantList);
               } else {
@@ -672,4 +765,20 @@ return;
       window.location.href = window.location.href;
     });;
   }
+
+
+fieldSubmitAlert(fieldName: any) {
+  Swal.fire({
+    icon: "error",
+    html: `Please fill out the <b>${fieldName}</b> field.`
+  }).then(() => {
+    // Optionally reload or do something else
+    // window.location.href = window.location.href;
+  });
+}
+
+
+
+
+
 }
