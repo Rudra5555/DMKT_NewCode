@@ -149,6 +149,9 @@
                       data-bs-target="#edit_client_admin" (click)="setSelectedClient(client)">
                       <i class="fa-solid fa-pencil m-r-5" style="color: rgb(8, 28, 247)"></i> Edit
                     </a>
+                     <a class="dropdown-item" (click)="deleteUser(client)" style="cursor: pointer;">
+                       <i class="fa-solid fa-trash" style="color: red;"></i> Delete
+                    </a>
 
                     <a *ngIf="librarianRoleFlag" class="dropdown-item" data-bs-toggle="modal"
                       data-bs-target="#edit_client" (click)="setSelectedClient(client)">

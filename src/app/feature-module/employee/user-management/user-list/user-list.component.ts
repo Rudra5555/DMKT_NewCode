@@ -9,6 +9,7 @@ import { LoginComponentService } from "src/app/services/login-component.service"
 import { HttpResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { IdleService } from 'src/app/services/idle.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-user-list',
@@ -224,6 +225,42 @@ export class UserListComponent implements OnInit {
   //    this.calculateTotalPages(this.filteredList.length, this.pageSize);
   //    this.paginateData(this.filteredList);
   //  }
+
+  deleteUser(client: any) {
+    console.log("Deleting file:", client);
+  
+    Swal.fire({
+      title: "Are you sure you want to permanently delete this User?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, delete it!",
+      cancelButtonText: "Cancel"
+    }).then((result) => {
+      // if (result.isConfirmed) {
+      //   this.loginService.deleteUser(client).subscribe({
+      //     next: (response) => {
+      //       Swal.fire({
+      //         title: "Deleted!",
+      //         text: "The file has been permanently deleted.",
+      //         icon: "success",
+      //         showConfirmButton: false,
+      //         timer: 1500
+      //       }).then(() => {
+      //         // ✅ Force a page reload
+      //         window.location.href = window.location.href;
+      //       });
+      //     },
+      //     error: (error) => {
+      //       Swal.fire("Error", "Something went wrong while deleting the file.", "error");
+      //       console.error("Delete failed:", error);
+      //     }
+      //   });
+      // }
+    });
+  }
+  
   public searchData(value: string): void {
     const filterValue = value.trim().toLowerCase();
   
