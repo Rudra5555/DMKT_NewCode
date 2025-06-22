@@ -188,7 +188,7 @@ export class FileManagerComponent implements OnInit , OnDestroy {
 
           this.respData = res.documentLists;
 
-          // console.log("before felter:::",this.respData);
+          console.log("before felter:::",this.respData);
           
 
           const convertToKB = (bytes: number): string => {
@@ -229,7 +229,7 @@ export class FileManagerComponent implements OnInit , OnDestroy {
           this.transformedMap = this.transformApiResponseToMap(this.fileListOne);
 
           // this.fileList = Array.from(this.transformedMap.values());
-          // console.log("file list",JSON.stringify( this.fileList));
+          console.log("file list",JSON.stringify( this.fileList));
           this.firstRes = Array.from(this.transformedMap.values());
           this.totalData = this.firstRes.length;
           
@@ -379,6 +379,8 @@ export class FileManagerComponent implements OnInit , OnDestroy {
       
           
           this.fileList.push(item);
+          console.log("file list", JSON.stringify(this.fileList));
+          
 
           this.serialNumberArray.push(serialNumber);
         }

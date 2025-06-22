@@ -228,6 +228,8 @@ export class UserListComponent implements OnInit {
 
   deleteUser(client: any) {
     console.log("Deleting file:", client);
+  let userId = client.userId; // Assuming 'id' is the unique identifier for the user
+  console.log("User ID to delete:", userId);
   
     Swal.fire({
       title: "Are you sure you want to permanently delete this User?",
@@ -238,26 +240,26 @@ export class UserListComponent implements OnInit {
       confirmButtonText: "Yes, delete it!",
       cancelButtonText: "Cancel"
     }).then((result) => {
-      // if (result.isConfirmed) {
-      //   this.loginService.deleteUser(client).subscribe({
-      //     next: (response) => {
-      //       Swal.fire({
-      //         title: "Deleted!",
-      //         text: "The file has been permanently deleted.",
-      //         icon: "success",
-      //         showConfirmButton: false,
-      //         timer: 1500
-      //       }).then(() => {
-      //         // ✅ Force a page reload
-      //         window.location.href = window.location.href;
-      //       });
-      //     },
-      //     error: (error) => {
-      //       Swal.fire("Error", "Something went wrong while deleting the file.", "error");
-      //       console.error("Delete failed:", error);
-      //     }
-      //   });
-      // }
+      if (result.isConfirmed) {
+        this.loginService.deleteUser(userId).subscribe({
+          next: (response) => {
+            Swal.fire({
+              title: "Deleted!",
+              text: "The file has been permanently deleted.",
+              icon: "success",
+              showConfirmButton: false,
+              timer: 1500
+            }).then(() => {
+              // ✅ Force a page reload
+              window.location.href = window.location.href;
+            });
+          },
+          error: (error) => {
+            Swal.fire("Error", "Something went wrong while deleting the file.", "error");
+            console.error("Delete failed:", error);
+          }
+        });
+      }
     });
   }
   
