@@ -79,34 +79,23 @@
               </div>
             </div>
         
-            
-            <!-- Plant Selection -->
-            <div class="col-md-6">
+            <!-- Main-Heads -->
+              <div class="col-md-6">
               <div class="input-block mb-3" >
-                <label class="col-form-label">Plants <span class="text-danger">*</span></label>
-                <mat-select formControlName="plant" class="custom-mat-select select" placeholder="Select" >
-                  <mat-option value="" disabled>Select Plant</mat-option>
-                  <mat-option *ngFor="let element of plantList" [value]="element.catName" >{{element.catName}}</mat-option>
-                </mat-select>
-                <div *ngIf="addUserForm.get('plant')?.invalid && (addUserForm.get('plant')?.touched || addUserForm.get('plant')?.dirty)" class="text-danger">
-                  Plant is required.
+                <label class="col-form-label">Main Head <span class="text-danger">*</span></label>
+               <mat-select formControlName="mainHead" class="custom-mat-select select" placeholder="Select" required>
+                <mat-option value="">--Select--</mat-option>
+                <mat-option *ngFor="let item of mainHeadList;"
+                  [value]="item.catName + '~' + item.abbreviation">{{item.catName}}</mat-option>
+              </mat-select>
+                <div *ngIf="addUserForm.get('mainHead')?.invalid && (addUserForm.get('mainHead')?.touched || addUserForm.get('mainHead')?.dirty)" class="text-danger">
+                  Main Head is required.
                 </div>
               </div>
             </div>
-        
-            <div class="input-block mb-3" >
-              <label class="col-form-label">Department <span class="text-danger">*</span></label>
-              <mat-select formControlName="department" class="custom-mat-select select" placeholder="Select" >
-                <mat-option value="">--Select--</mat-option>
-                <mat-option *ngFor="let element of departmentList" [value]="element.catName + '~' + element.abbreviation" >{{element.catName}}</mat-option>
-              </mat-select>
-              <div *ngIf="addUserForm.get('department')?.invalid && (addUserForm.get('department')?.touched || addUserForm.get('department')?.dirty)" class="text-danger">
-                Department is required.
-              </div>
-            </div>
-          </div>
 
-          <!-- Main Role -->
+
+  <!-- Main Role -->
           <div class="table-responsive m-t-15">
             <table class="table table-striped custom-table">
               <thead>
@@ -115,7 +104,7 @@
                   <th class="text-center">Admin</th>
                   <th class="text-center">User</th>
                   <th class="text-center">Librarian</th>
-                  <!-- <th class="text-center">HOD</th> -->
+                  <th class="text-center">HOD</th>
                 </tr>
               </thead>
               <tbody>
@@ -130,9 +119,9 @@
                   <td class="text-center">
                     <input type="radio" formControlName="mainRole" value="Librarian" />
                   </td>
-                  <!-- <td class="text-center">
+                  <td class="text-center">
                     <input type="radio" formControlName="mainRole" value="HOD" />
-                  </td> -->
+                  </td>
                 </tr>
               </tbody>
             </table>
@@ -141,6 +130,89 @@
               Please select a Main Role Permission.
             </div>
           </div>
+
+            <!-- Plant Selection -->
+            <div class="">
+              <div class="input-block mb-3" >
+                <label class="col-form-label">Plants <span class="text-danger">*</span></label>
+                <mat-select formControlName="plant" class="custom-mat-select select" placeholder="Select" >
+                  <mat-option value="" disabled>Select Plant</mat-option>
+                  <mat-option *ngFor="let element of plantList" [value]="element.catName" >{{element.catName}}</mat-option>
+                </mat-select>
+                <div *ngIf="addUserForm.get('plant')?.invalid && (addUserForm.get('plant')?.touched || addUserForm.get('plant')?.dirty)" class="text-danger">
+                  Plant is required.
+                </div>
+              </div>
+            </div>
+        
+            <!-- <div class="input-block mb-3" >
+              <label class="col-form-label">Department <span class="text-danger">*</span></label>
+              <mat-select formControlName="department" class="custom-mat-select select" placeholder="Select" >
+                <mat-option value="">--Select--</mat-option>
+                <mat-option *ngFor="let element of departmentList" [value]="element.catName + '~' + element.abbreviation" >{{element.catName}}</mat-option>
+              </mat-select>
+              <div *ngIf="addUserForm.get('department')?.invalid && (addUserForm.get('department')?.touched || addUserForm.get('department')?.dirty)" class="text-danger">
+                Department is required.
+              </div>
+            </div> -->
+
+            <div class="input-block mb-3">
+  <label class="col-form-label">Department <span class="text-danger">*</span></label>
+  <mat-select
+    formControlName="department"
+    class="custom-mat-select select"
+    placeholder="Select"
+    multiple>
+    
+    <mat-option *ngFor="let element of departmentList" [value]="element.catName + '~' + element.abbreviation">
+      {{ element.catName }}
+    </mat-option>
+  </mat-select>
+
+  <div *ngIf="addUserForm.get('department')?.invalid && (addUserForm.get('department')?.touched || addUserForm.get('department')?.dirty)" class="text-danger">
+    At least one department must be selected.
+  </div>
+</div>
+
+
+
+          </div>
+
+          <!-- Main Role -->
+          <!-- <div class="table-responsive m-t-15">
+            <table class="table table-striped custom-table">
+              <thead>
+                <tr>
+                  <th>Main Role Permission<span class="text-danger">*</span></th>
+                  <th class="text-center">Admin</th>
+                  <th class="text-center">User</th>
+                  <th class="text-center">Librarian</th>
+                  <th class="text-center">HOD</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Roles</td>
+                  <td class="text-center">
+                    <input type="radio" formControlName="mainRole" value="Admin" />
+                  </td>
+                  <td class="text-center">
+                    <input type="radio" formControlName="mainRole" value="User" />
+                  </td>
+                  <td class="text-center">
+                    <input type="radio" formControlName="mainRole" value="Librarian" />
+                  </td>
+                  <td class="text-center">
+                    <input type="radio" formControlName="mainRole" value="HOD" />
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
+             <div *ngIf="submitted && !addUserForm.get('mainRole')?.value" class="text-danger mt-2">
+              Please select a Main Role Permission.
+            </div>
+          </div> -->
           
 
         

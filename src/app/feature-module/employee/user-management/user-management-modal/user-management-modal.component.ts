@@ -1,6 +1,7 @@
 import { HttpResponse } from '@angular/common/http';
 import { Component, ElementRef, OnInit, ViewChild,Input, SimpleChanges, AfterViewInit  } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from "@angular/forms";
+
 import { IDropdownSettings } from 'ng-multiselect-dropdown';
 import { LoginComponentService } from 'src/app/services/login-component.service';
 import { UploadDocumentComponentService } from 'src/app/services/upload-document-component.service';
@@ -28,6 +29,7 @@ export class UserManagementModalComponent implements OnInit, AfterViewInit {
   public uploadDocumentFlag: boolean = false;
   public departmentList: any[] = [];
   files: any[] = [];
+  public mainHeadList: any[] = [];
   base64Image: string | null = null;
   public dropdownSettings !:IDropdownSettings;
   msg: any;
@@ -44,6 +46,11 @@ export class UserManagementModalComponent implements OnInit, AfterViewInit {
     @ViewChild('addClientLibrarianModal') addClientLibrarianModal!: ElementRef;
     @ViewChild('editClientAdminModal') editClientAdminModal!: ElementRef;
     @ViewChild('editClientLibrarianModal') editClientLibrarianModal!: ElementRef;
+  selectedDeptCatNameAbbr: any;
+  selectedSubAreaCatName: any;
+  selectedSubAreaCatNameAbbr: any;
+  selectedCatName: any;
+  selectedCatNameAbbr: any;
  
 
   constructor( private formBuilder: FormBuilder, private loginService: LoginComponentService,private uploadDocument: UploadDocumentComponentService) { }
@@ -53,8 +60,9 @@ export class UserManagementModalComponent implements OnInit, AfterViewInit {
   
   ngOnInit(): void {
 
-    this.getMainHeadList();
-
+    
+  
+this.getAllMainHeadData();
 
   this.addUserForm = this.formBuilder.group({
     userName: ["", [ Validators.required]],
@@ -62,6 +70,7 @@ export class UserManagementModalComponent implements OnInit, AfterViewInit {
     userEmail: ["", [ Validators.required]],
     department: ["", [ Validators.required]],
     mainRole: ["", []],
+    mainHead: ["", [Validators.required]],
     plant: ["", [ Validators.required]],
     Admin: [false],
     User: [false],
@@ -89,6 +98,36 @@ export class UserManagementModalComponent implements OnInit, AfterViewInit {
     isActive: [false],
   });
 
+   this.addUserForm.get('mainHead')?.valueChanges.subscribe(value => {
+    const [catName, abbreviation] = value.split('~');
+    this.selectedCatName = catName;
+    this.selectedCatNameAbbr = abbreviation;
+
+    console.log("Selected main head:", this.selectedCatName, "Abbreviation:", this.selectedCatNameAbbr);
+
+    // 🔁 Reset all dependent form controls and variables
+    // this.addUserForm.get('plants')?.reset();
+    // this.addUserForm.get('department')?.reset();
+    // this.addUserForm.get('subArea')?.reset();
+    // this.addUserForm.get('subDocumentType')?.reset();
+
+    this.plantOption = '';
+    this.selectedDeptCatName = '';
+    this.selectedDeptCatNameAbbr = '';
+    this.selectedSubAreaCatName = '';
+    this.selectedSubAreaCatNameAbbr = '';
+
+    this.plantList = [];
+    this.departmentList = [];
+    // this.subAreaList = [];
+    // this.subDocListSize = 0;
+    this.newPlant = false;
+
+    // 🔄 Fetch updated plant list based on new main head
+    this.getMainHeadList(catName, "main-head");
+  });
+
+
   this.addUserForm.get('plant')?.valueChanges.subscribe(value => {
     if (value != null) {
       this.getAllPlantList(value, "plants");
@@ -106,6 +145,9 @@ export class UserManagementModalComponent implements OnInit, AfterViewInit {
     this.selectedDeptCatName = deptName;
     
   });
+
+
+
   
   }
 
@@ -206,16 +248,46 @@ resetLibrarianEditFileInput(): void {
   }
 }
 
+ getAllMainHeadData() {
+    
+    this.uploadDocument.allMainHeadList().subscribe({
+      next: (event: any) => {
+        if (event instanceof HttpResponse) {
+          try {
+            const decryptedData = this.uploadDocument.convertEncToDec(event.body);
+          
+  
+            const jsonObj = JSON.parse(decryptedData);
+            if (jsonObj.status === 200 && jsonObj.categoryList) {
+              this.mainHeadList = jsonObj.categoryList;
+              this.plantList = [];
+              console.log("Main head list:", this.mainHeadList);
+              
+            } else {
+              console.warn("No valid category list found in response.");
+              this.mainHeadList = [];
+            }
+          } catch (error) {
+            console.error("Error processing main head data:", error);
+            this.mainHeadList = [];
+          }
+        }
+      },
+      error: (err: any) => {
+        console.error("Error fetching main head data:", err);
+      }
+    });
+  }
 
 
-
-  getMainHeadList() {
-    this.uploadDocument.allDataList("POWER O&M", "main-head").subscribe({
+  getMainHeadList(catName: string, mainHead: string) {
+    this.uploadDocument.allDataList(catName, mainHead).subscribe({
       next: (event: any) => {
         if (event instanceof HttpResponse) {
           const decryptedData = this.uploadDocument.convertEncToDec(event.body);
           if (decryptedData) {
             const res = JSON.parse(decryptedData);
+            console.log("Main Head List Response:", res);
             this.plantList = (res?.categoryList || []).filter((item: { catId: number }) => item.catId !== 9);
           }
         }
