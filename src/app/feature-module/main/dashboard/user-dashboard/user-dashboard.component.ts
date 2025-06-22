@@ -398,6 +398,9 @@ export class UserDashboardComponent implements OnInit {
       this.documentNameSearch = true;
       this.closePlantModalBtn.nativeElement.click();
     }
+
+    // console.log("CatName and catId",catName,catId);
+    
     this.loginService.getDetailsByCateName(catName, catId).subscribe({
       next: (event: any) => {
         if (event instanceof HttpResponse) {
@@ -405,6 +408,8 @@ export class UserDashboardComponent implements OnInit {
           const res = JSON.parse(decryptedData);
 
           this.plantsList = res.categoryList
+          // console.log("unknown plantList from UD:::",this.plantsList);
+          
           if(this.plantsList.length==0){
             this.navigateToRoute(catName,catId);
           }
@@ -745,7 +750,7 @@ public moveToPage(pageNumber: number): void {
 
 
 deleteFile(item: any) {
-  console.log("Deleting file:", item);
+  // console.log("Deleting file:", item);
 
   Swal.fire({
     title: "Are you sure you want to delete this file?",

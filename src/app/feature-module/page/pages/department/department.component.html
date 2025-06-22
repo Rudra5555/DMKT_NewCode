@@ -208,22 +208,26 @@
             <div class="col-sm-6">
               <div class="input-block mb-3">
                 <label class="col-form-label">Main Head<span class="text-danger">*</span></label>
-
-                <input class="form-control" formControlName="mainHead" type="text"  placeholder="POWER O&M" readonly>
                
+                <mat-select formControlName="mainHead" class="custom-mat-select select" placeholder="Select"  (selectionChange)="onMainHeadChange($event.value)">
+                  <mat-option value="">--Select--</mat-option>
+                  <mat-option *ngFor="let element of mainHeadList" [value]="element" >{{element.catName}}</mat-option>
+                </mat-select>
+                <div
+                  *ngIf="uploadFileForm.get('mainHead')?.invalid && (uploadFileForm.get('mainHead')?.touched || uploadFileForm.get('mainHead')?.dirty)"
+                  class="text-danger">
+                  Main head is required.
+                </div>
+
               </div>
             </div>
            
             <div class="col-sm-6">
               <div class="input-block mb-3" >
                 <label class="col-form-label">Plant Name <span class="text-danger">*</span></label>
-                <mat-select formControlName="plants" class="custom-mat-select select"  (selectionChange)="onPlantSelect($event)" placeholder="Select">
+                <mat-select formControlName="plants" class="custom-mat-select select" placeholder="Select" (selectionChange)="onPlantChange($event.value)">
                   <mat-option value="">--Select--</mat-option>
- <mat-option *ngFor="let element of plantList" [value]="element.catName" >{{element.catName}}</mat-option>
- <!-- <mat-option *ngFor="let element of plantList" [value]="element.catName + '~' + element.catId" >{{element.catName}}</mat-option> -->
-                    <!-- <mat-option value="CPP-2 (540MW)">CPP-2 (540MW)</mat-option>
-                    <mat-option value="CPP-3 (1200MW)">CPP-3 (1200MW)</mat-option>
-                    <mat-option value="CPP-1">CPP-1 (270MW)</mat-option> -->
+                  <mat-option *ngFor="let element of plantList" [value]="element" >{{element.catName}}</mat-option>
                 </mat-select>
                 <div
                   *ngIf="uploadFileForm.get('plants')?.invalid && (uploadFileForm.get('plants')?.touched || uploadFileForm.get('plants')?.dirty)"

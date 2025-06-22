@@ -120,4 +120,19 @@ convertEncToDec(encryptedData:string):any{
       return this.http.request(req);
         }
 
+      PlantLists(mainHead: any): Observable<HttpEvent<any>> {   //done
+      const req = new HttpRequest('GET', `${this.baseUrl}/category/cat-wise-dropdown/${mainHead}/main-head`, {
+        responseType: 'json'
+        
+      });
+      return this.http.request(req);
+    }
+
+    allDeptList(plant: any): Observable<HttpEvent<any>> {   //done
+      const req = new HttpRequest('GET', `${this.baseUrl}/category/cat-wise-dropdown/${plant}/plants`, {
+        responseType: 'json'
+      });
+      return this.http.request(req);
+    }
+
 }
