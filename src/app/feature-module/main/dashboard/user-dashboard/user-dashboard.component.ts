@@ -136,6 +136,7 @@ export class UserDashboardComponent implements OnInit {
   fileListOne:any;
   copyDataList:any;
   fileListRes:any;
+  storedIds:any;
 
   public fullDataList:any;
   public filteredList:any;
@@ -151,6 +152,9 @@ export class UserDashboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.loggedUserRole = localStorage.getItem('role');
+
+    this.storedIds = JSON.parse(localStorage.getItem('departmentIds') || '[]');
+    console.log(this.storedIds);
 
     this.optionCategory = "department"
     this.getDataByCategory(this.optionCategory);
@@ -570,23 +574,59 @@ export class UserDashboardComponent implements OnInit {
             const res = resData.documentLists;
             this.fileListRes = res;
 
-            this.fileListOne = this.fileListRes.map((item: any) => {
-              const filteredVersions = item.listOfDocumentVersoinDtos.filter((version: any) => {
-                if (this.loggedUserRole === 'User') {
-                  return !version.hodDocument && !version.statutoryDocument && !version.restrictedDocument;
-                } else if (this.loggedUserRole === 'SuperUser') {
-                  return (!version.hodDocument && !version.statutoryDocument && !version.restrictedDocument) || version.statutoryDocument;
-                } else if (this.loggedUserRole === 'HOD') {
-                  return (!version.hodDocument && !version.statutoryDocument && !version.restrictedDocument) || version.hodDocument;
-                } else if (this.loggedUserRole === 'Librarian' || this.loggedUserRole === 'Admin') {
-                  return true;
-                }
-                return false;
-              });
+            // this.fileListOne = this.fileListRes.map((item: any) => {
+            //   const filteredVersions = item.listOfDocumentVersoinDtos.filter((version: any) => {
+            //     if (this.loggedUserRole === 'User') {
+            //       return !version.hodDocument && !version.statutoryDocument && !version.restrictedDocument;
+            //     } else if (this.loggedUserRole === 'SuperUser') {
+            //       return (!version.hodDocument && !version.statutoryDocument && !version.restrictedDocument) || version.statutoryDocument;
+            //     } else if (this.loggedUserRole === 'HOD') {
+            //       return (!version.hodDocument && !version.statutoryDocument && !version.restrictedDocument) || version.hodDocument;
+            //     } else if (this.loggedUserRole === 'Librarian' || this.loggedUserRole === 'Admin') {
+            //       return true;
+            //     }
+            //     return false;
+            //   });
               
-                return filteredVersions.length > 0 ? { ...item, listOfDocumentVersoinDtos: filteredVersions } : null;
-              })
-              .filter((item: null) => item !== null);
+            //     return filteredVersions.length > 0 ? { ...item, listOfDocumentVersoinDtos: filteredVersions } : null;
+            //   })
+            //   .filter((item: null) => item !== null);
+
+// *****************************************************************
+
+  this.fileListOne = this.fileListRes
+          .map((item: any) => {
+            const filteredVersions = item.listOfDocumentVersoinDtos.filter((version: any) => {
+              if (this.loggedUserRole === 'User') {
+                return !version.hodDocument && !version.statutoryDocument && !version.restrictedDocument;
+              } else if (this.loggedUserRole === 'SuperUser') {
+                return (!version.hodDocument && !version.statutoryDocument && !version.restrictedDocument) || version.statutoryDocument;
+              } else if (this.loggedUserRole === 'HOD') {
+                return (!version.hodDocument && !version.statutoryDocument && !version.restrictedDocument) || version.hodDocument;
+              } else if (this.loggedUserRole === 'Librarian' || this.loggedUserRole === 'Admin') {
+                return true;
+              }
+              return false;
+            });
+
+            if (filteredVersions.length > 0) {
+              return { ...item, listOfDocumentVersoinDtos: filteredVersions };
+            }
+
+            return null;
+          })
+          .filter((item: any) => {
+            if (!item) return false;
+
+            if (this.loggedUserRole === 'HOD' && this.storedIds?.length > 0) {
+              return this.storedIds.includes(item.departmentId);
+            }
+
+            return true; 
+          });
+
+
+          console.log("after felter:::***",this.fileListOne);
   
             this.transformedMap = this.transformApiResponseToMap(this.fileListOne);
 

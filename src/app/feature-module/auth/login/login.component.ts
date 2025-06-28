@@ -49,6 +49,7 @@ export class LoginComponent implements OnInit {
   public getEmail:any;
   public getPicture:any;
   accessRoles: any;
+  uniqueDeptIds:any;
   
   errorFlg:boolean=false
   errorMsg:any;
@@ -114,8 +115,8 @@ onClickSubmit(formData: any){
           }
                 
           this.data = jsonObj;
+          // console.log("Login response::**",this.data);
 
-          console.log("Login response::**",this.data);
   
           if(this.data!=null){   
             if(this.data.status ===417){
@@ -143,9 +144,15 @@ onClickSubmit(formData: any){
               this.getEmail = this.data.response.emailId;
               this.getPicture = this.data.response.userPicture;
               this.accessRoles = this.data.response.accessRoles;
-              
+
+              const deptIds = this.data.response.departmentNameList.map((item: { departmentId: any; }) => item.departmentId);
+              this.uniqueDeptIds = [...new Set(deptIds)];
+
+              console.log("depertment ids",this.uniqueDeptIds);
               
 
+              localStorage.setItem('departmentIds', JSON.stringify(this.uniqueDeptIds));
+              
               localStorage.setItem('role',this.getRoleData);
               localStorage.setItem('accessRole',this.accessRoles);
               localStorage.setItem('title',this.getTitle);
