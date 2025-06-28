@@ -166,11 +166,11 @@ export class VerifyUploadedDocumentComponent implements OnInit {
       const [catName, abbreviation] = value.split("~");
       this.selectedCatName = catName;
       this.selectedCatNameAbbr = abbreviation;
-      if (catName != "POWER O&M") {
-        this.plantList = [];
-        this.departmentList = [];
-        this.subAreaList = [];
-      }
+      // if (catName != "POWER O&M") {
+      //   this.plantList = [];
+      //   this.departmentList = [];
+      //   this.subAreaList = [];
+      // }
       this.getMainHeadList(catName, "main-head");
     });
 
@@ -178,11 +178,11 @@ export class VerifyUploadedDocumentComponent implements OnInit {
       if (value != null) {
         this.getAllPlantList(value, "plants");
         this.plantOption = value;
-        if (this.plantOption == "CPP (1740MW)") {
-          this.newPlant = true;
-        } else {
-          this.newPlant = false;
-        }
+        // if (this.plantOption == "CPP (1740MW)") {
+        //   this.newPlant = true;
+        // } else {
+        //   this.newPlant = false;
+        // }
       } else {
       }
     });
@@ -214,11 +214,19 @@ export class VerifyUploadedDocumentComponent implements OnInit {
     this.loginService.librarianVerifyDoc(this.loggedUserId).subscribe({
       next: (event: any) => {
         if (event instanceof HttpResponse) {
+          // console.log("Event Body",event.body);
+          
           const decryptedData = this.loginService.convertEncToDec(event.body);
+          // console.log("decrypt data",decryptedData);
+          
           const res = JSON.parse(decryptedData);
           this.respData = res.data;
+          // console.log("respData",this.respData);
+          
           // this.fileList = this.respData;
           this.fileList = [...this.respData].reverse();
+          // console.log("fileList",this.fileList);
+          
           this.totalData = this.fileList.length;
           this.originalFileList = this.fileList;
           this.isLoading = false;
@@ -497,7 +505,7 @@ export class VerifyUploadedDocumentComponent implements OnInit {
         isRestrictedDocument: isRestrictedDocument,
         hodRestricted: ishodRestricted,
       };
-      // console.log("payload for all",modalData);
+      console.log("payload for all***",modalData);
       this.buttonDisabled = true;
       formData.append("requestbody", JSON.stringify(modalData));
 
@@ -584,7 +592,7 @@ export class VerifyUploadedDocumentComponent implements OnInit {
         isRestrictedDocument: isRestrictedDocument,
         hodRestricted: ishodRestricted,
       };
-      // console.log("second payload for other",modalData);
+      console.log("second payload for other**",modalData);
 
       formData.append("requestbody", JSON.stringify(modalData));
 

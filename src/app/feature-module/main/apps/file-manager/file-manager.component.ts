@@ -188,7 +188,7 @@ export class FileManagerComponent implements OnInit , OnDestroy {
 
           this.respData = res.documentLists;
 
-          console.log("before felter:::",this.respData);
+          console.log("before felter:::**",this.respData);
           
 
           const convertToKB = (bytes: number): string => {
