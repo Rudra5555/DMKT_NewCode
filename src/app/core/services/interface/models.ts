@@ -998,6 +998,7 @@ export interface getClient {
   phoneNumber: string;
   emailId: string;
   password: string;
+  mainHead: string;
   departmentNameList:details[];
   // departmentName: string;
   // plantName: string;

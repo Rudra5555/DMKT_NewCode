@@ -63,6 +63,7 @@ export class UserListComponent implements OnInit {
 
     const client = this.idleService.getClientData();
     this.loggedInUser = localStorage.getItem('role')?.trim().toLowerCase();
+  console.log("Logged In User:", this.loggedInUser);
   
     this.adminRoleFlag = this.loggedInUser === 'admin';
     this.librarianRoleFlag = this.loggedInUser === 'librarian';
@@ -80,6 +81,8 @@ export class UserListComponent implements OnInit {
             if (event instanceof HttpResponse) {
             const decryptedData = this.loginService.convertEncToDec(event.body);
             const resData = JSON.parse(decryptedData);
+            console.log("Response Data:", resData);
+            
 
             const respData=resData
             this.res=resData.response
@@ -137,6 +140,8 @@ export class UserListComponent implements OnInit {
             if (event instanceof HttpResponse) {
               const decryptedData = this.loginService.convertEncToDec(event.body);
               const resData = JSON.parse(decryptedData);
+              console.log("Response Data 2nd api:", resData);
+              
 
             this.res=resData.response
       

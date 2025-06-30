@@ -511,8 +511,8 @@
                       </div>
                       <div class="col-md-6">
                         <div class="input-block mb-3">
-                          <label class="col-form-label" for="">Phone <span class="text-danger">*</span></label>
-                          <input class="form-control" type="number" [readonly]="true"
+                          <label class="col-form-label" for="">Phone </label>
+                          <input class="form-control" type="number" 
                             [class.invalid]="editUserForm.get('userPhone')?.invalid && editUserForm.get('userPhone')?.touched"
                             formControlName="userPhone">
                           @if (editUserForm.get('userPhone')?.invalid && editUserForm.get('userPhone')?.touched) {
@@ -524,24 +524,52 @@
                           }
                         </div>
                       </div>
+
+                             <!-- Main-Heads -->
+                          <div class="col-md-6">
+                          <div class="input-block mb-3" >
+                            <label class="col-form-label">Main Head <span class="text-danger">*</span></label>
+                          <mat-select formControlName="mainHead" class="custom-mat-select select" placeholder="Select" required>
+                            <mat-option value="">--Select--</mat-option>
+                            <mat-option *ngFor="let item of mainHeadList;"
+                              [value]="item.catName + '~' + item.abbreviation">{{item.catName}}</mat-option>
+                          </mat-select>
+                            <div *ngIf="editUserForm.get('mainHead')?.invalid && (editUserForm.get('mainHead')?.touched || editUserForm.get('mainHead')?.dirty)" class="text-danger">
+                              Main Head is required.
+                            </div>
+                          </div>
+                        </div>
                  
                       <div class="col-md-6">
-                        <div class="input-block mb-3">
-                          <label class="col-form-label" for="">Plant Name</label>
-                          <input class="form-control" formControlName="plant" [readonly]="true"> 
-                        </div>
-                        <div *ngIf="editUserForm.get('plant')?.invalid && editUserForm.get('plant')?.touched" class="text-danger">
-                          Password is required and must be at least 6 characters long.
-                        </div>
+                         <div class="input-block mb-3" >
+                                    <label class="col-form-label">Plants <span class="text-danger">*</span></label>
+                                    <mat-select formControlName="plant" class="custom-mat-select select" placeholder="Select" >
+                                      <mat-option value="" disabled>Select Plant</mat-option>
+                                      <mat-option *ngFor="let element of plantList" [value]="element.catName" >{{element.catName}}</mat-option>
+                                    </mat-select>
+                                    <div *ngIf="editUserForm.get('plant')?.invalid && (editUserForm.get('plant')?.touched || editUserForm.get('plant')?.dirty)" class="text-danger">
+                                      Plant is required.
+                                    </div>
+                                  </div>
                       </div>
                       <div class="col-md-6">
                         <div class="input-block mb-3">
-                          <label class="col-form-label" for="">Department Name</label>
-                          <input class="form-control" formControlName="department" [readonly]="true">
-                        </div>
-                        <div *ngIf="editUserForm.get('department')?.invalid && editUserForm.get('department')?.touched" class="text-danger">
-                          Password is required and must be at least 6 characters long.
-                        </div>
+                                          <label class="col-form-label">Department <span class="text-danger">*</span></label>
+                                          <mat-select
+                                            formControlName="department"
+                                            class="custom-mat-select select"
+                                            placeholder="Select"
+                                            >
+                                            
+                                            <mat-option *ngFor="let element of departmentList" [value]="element.catName + '~' + element.abbreviation">
+                                              {{ element.catName }}
+                                            </mat-option>
+                                          </mat-select>
+
+                                          <div *ngIf="editUserForm.get('department')?.invalid && (editUserForm.get('department')?.touched || editUserForm.get('department')?.dirty)" class="text-danger">
+                                            At least one department must be selected.
+                                          </div>
+                                        </div>
                       </div>
           
           
@@ -554,7 +582,7 @@
                             <!-- <th class="text-center">Admin</th> -->
                             <th class="text-center">User</th>
                             <th class="text-center">SuperUser</th>
-                            <th class="text-center">HOD</th>
+                            <!-- <th class="text-center">HOD</th> -->
                             <!-- <th class="text-center">Librarian</th> -->
                             <th class="text-center">IsActive</th>
                           </tr>
@@ -565,7 +593,7 @@
                             <!-- <td class="text-center"><input type="checkbox" formControlName="Admin" /></td> -->
                             <td class="text-center"><input type="checkbox" formControlName="User" /></td>
                             <td class="text-center"><input type="checkbox" formControlName="SuperUser" /></td>
-                            <td class="text-center"><input type="checkbox" formControlName="HOD" /></td>
+                            <!-- <td class="text-center"><input type="checkbox" formControlName="HOD" /></td> -->
                             <!-- <td class="text-center"><input type="checkbox" formControlName="Librarian" /></td> -->
                             <td class="text-center"><input type="checkbox" formControlName="isActive" /></td>
                           </tr>
@@ -663,8 +691,8 @@
                                 </div>
                                 <div class="col-md-6">
                                   <div class="input-block mb-3">
-                                    <label class="col-form-label" for="">Phone <span class="text-danger">*</span></label>
-                                    <input class="form-control" type="number" [readonly]="true"
+                                    <label class="col-form-label" for="">Phone </label>
+                                    <input class="form-control" type="number" 
                                       [class.invalid]="editUserForm.get('userPhone')?.invalid && editUserForm.get('userPhone')?.touched"
                                       formControlName="userPhone">
                                     @if (editUserForm.get('userPhone')?.invalid && editUserForm.get('userPhone')?.touched) {
@@ -677,36 +705,32 @@
                                   </div>
                                 </div>
                            
-                                <div class="col-md-6">
-                                  <div class="input-block mb-3">
-                                    <label class="col-form-label" for="">Plant Name</label>
-                                    <input class="form-control" formControlName="plant" [readonly]="true"> 
-                                  </div>
-                                  <div *ngIf="editUserForm.get('plant')?.invalid && editUserForm.get('plant')?.touched" class="text-danger">
-                                    Password is required and must be at least 6 characters long.
-                                  </div>
-                                </div>
-                                <div class="col-md-6">
-                                  <div class="input-block mb-3">
-                                    <label class="col-form-label" for="">Department Name</label>
-                                    <input class="form-control" formControlName="department" [readonly]="true">
-                                  </div>
-                                  <div *ngIf="editUserForm.get('department')?.invalid && editUserForm.get('department')?.touched" class="text-danger">
-                                    Password is required and must be at least 6 characters long.
-                                  </div>
-                                </div>
-                              </div>
+                                   <!-- Main-Heads -->
+                          <div class="col-md-6">
+                          <div class="input-block mb-3" >
+                            <label class="col-form-label">Main Head <span class="text-danger">*</span></label>
+                          <mat-select formControlName="mainHead" class="custom-mat-select select" placeholder="Select" required>
+                            <mat-option value="">--Select--</mat-option>
+                            <mat-option *ngFor="let item of mainHeadList;"
+                              [value]="item.catName + '~' + item.abbreviation">{{item.catName}}</mat-option>
+                          </mat-select>
+                            <div *ngIf="editUserForm.get('mainHead')?.invalid && (editUserForm.get('mainHead')?.touched || editUserForm.get('mainHead')?.dirty)" class="text-danger">
+                              Main Head is required.
+                            </div>
+                          </div>
+                        </div>
 
-                                <!-- Main Role -->
+                     <!-- Main Role -->
           <div class="table-responsive m-t-15">
             <table class="table table-striped custom-table">
               <thead>
                 <tr>
-                  <th>Main Role Permission</th>
+                  <th>Primary Role Permission</th>
                   <th class="text-center">Admin</th>
                   <th class="text-center">User</th>
                   <th class="text-center">Librarian</th>
-                  <!-- <th class="text-center">HOD</th> -->
+                  <th class="text-center">SuperUser</th>
+                  <th class="text-center">HOD</th>
                 </tr>
               </thead>
               <tbody>
@@ -721,20 +745,253 @@
                   <td class="text-center">
                     <input type="radio" formControlName="mainRole" value="Librarian" />
                   </td>
-                  <!-- <td class="text-center">
+                  <td class="text-center">
+                    <input type="radio" formControlName="mainRole" value="SuperUser" />
+                  </td>
+                  <td class="text-center">
                     <input type="radio" formControlName="mainRole" value="HOD" />
-                  </td> -->
+                  </td>
                 </tr>
               </tbody>
             </table>
           </div>
 
+                               
+
+                                 <div class="">
+                                  <div class="input-block mb-3" >
+                                    <label class="col-form-label">Plants <span class="text-danger">*</span></label>
+                                    <mat-select formControlName="plant" class="custom-mat-select select" placeholder="Select" >
+                                      <mat-option value="" disabled>Select Plant</mat-option>
+                                      <mat-option *ngFor="let element of plantList" [value]="element.catName" >{{element.catName}}</mat-option>
+                                    </mat-select>
+                                    <div *ngIf="editUserForm.get('plant')?.invalid && (editUserForm.get('plant')?.touched || editUserForm.get('plant')?.dirty)" class="text-danger">
+                                      Plant is required.
+                                    </div>
+                                  </div>
+                                </div>
+
+                                
+
+
+                                <div class="input-block mb-3">
+                                          <label class="col-form-label">Department <span class="text-danger">*</span></label>
+                                          <mat-select
+                                            formControlName="department"
+                                            class="custom-mat-select select"
+                                            placeholder="Select"
+                                            >
+                                            
+                                            <mat-option *ngFor="let element of departmentList" [value]="element.catName + '~' + element.abbreviation">
+                                              {{ element.catName }}
+                                            </mat-option>
+                                          </mat-select>
+
+                                          <div *ngIf="editUserForm.get('department')?.invalid && (editUserForm.get('department')?.touched || editUserForm.get('department')?.dirty)" class="text-danger">
+                                            At least one department must be selected.
+                                          </div>
+                                        </div>
+
+<!-- ✅ Conditionally Visible AddMode+ Button on HOD main Role -->
+<div *ngIf="isHODFlag && !otherMainHeadFlag" class="mb-3">
+  <button type="button" class="btn btn-primary" (click)="addExtraDeptPlant()" style="background-color:#2e65f0;" >Add More</button>
+</div>
+
+
+<!-- <div *ngIf="isHODFlag && extraDeptPlant.length > 0" formArrayName="extraDeptPlant">
+
+  <div
+    *ngFor="let group of extraDeptPlant.controls; let i = index"
+    [formGroupName]="i"
+    class="row g-2 align-items-end mb-3"
+  >
+    
+    <div class="col-md-5">
+  <div class="input-block mb-3">
+    <label class="col-form-label">Plant <span class="text-danger">*</span></label>
+    <mat-select
+      formControlName="plant"
+      class="custom-mat-select select"
+      placeholder="Select"
+      required
+    >
+      <mat-option value="">--Select--</mat-option>
+      <mat-option *ngFor="let plant of plantList" [value]="plant.catName">
+        {{ plant.catName }}
+      </mat-option>
+    </mat-select>
+    <div
+      *ngIf="editUserForm.get('plant')?.invalid && (editUserForm.get('plant')?.touched || editUserForm.get('plant')?.dirty)"
+      class="text-danger"
+    >
+      Plant is required.
+    </div>
+  </div>
+</div>
+
+
+   
+    <div class="col-md-5">
+  <div class="input-block mb-3">
+    <label class="col-form-label">Department <span class="text-danger">*</span></label>
+    <mat-select
+      formControlName="department"
+      class="custom-mat-select select"
+      placeholder="Select Department"
+      required
+    >
+      <mat-option value="">--Select--</mat-option>
+      <mat-option
+        *ngFor="let dept of extraDeptDropdownData[i]?.departmentList"
+        [value]="dept.catName + '~' + dept.abbreviation"
+      >
+        {{ dept.catName }}
+      </mat-option>
+    </mat-select>
+    <div
+      *ngIf="group.get('department')?.invalid && (group.get('department')?.touched || group.get('department')?.dirty)"
+      class="text-danger"
+    >
+      Department is required.
+    </div>
+  </div>
+</div>
+
+
+  <div class="col-md-1 d-flex align-items-center justify-content-end">
+  <button
+  
+    mat-icon-button
+    color="warn"
+    type="button"
+    (click)="removeExtraDeptPlant(i)"
+    class="rounded-icon-btn"
+    matTooltip="Remove"
+  >
+    <mat-icon>delete</mat-icon>
+  </button>
+</div>
+
+  </div>
+</div> -->
+
+
+
+
+<div *ngIf="isHODFlag && extraDeptPlant.length > 0" formArrayName="extraDeptPlant">
+  <div
+    *ngFor="let group of extraDeptPlant.controls; let i = index"
+    [formGroupName]="i"
+    class="row g-2 align-items-end mb-3"
+  >
+    <!-- 🔹 Plant Dropdown -->
+    <div class="col-md-5">
+      <div class="input-block mb-3">
+        <label class="col-form-label">Plant <span class="text-danger">*</span></label>
+        <mat-select
+          formControlName="plant"
+          class="custom-mat-select select"
+          placeholder="Select"
+          required
+        >
+          <mat-option value="">--Select--</mat-option>
+          <!-- <mat-option *ngFor="let plant of plantList" [value]="plant.catName">
+            {{ plant.catName }}
+          </mat-option> -->
+         <mat-option
+  *ngFor="let plant of plantList"
+  [value]="plant.catName"
+  [disabled]="
+    group.get('department')?.value?.split('~')[0] === getMainPlantAndDept().department &&
+    plant.catName === getMainPlantAndDept().plant
+  "
+  [matTooltip]="
+    group.get('department')?.value?.split('~')[0] === getMainPlantAndDept().department &&
+    plant.catName === getMainPlantAndDept().plant
+      ? 'This Plant + Department is already selected.'
+      : ''
+  "
+>
+  {{ plant.catName }}
+</mat-option>
+
+        </mat-select>
+        <div
+          *ngIf="group.get('plant')?.invalid && (group.get('plant')?.touched || group.get('plant')?.dirty)"
+          class="text-danger"
+        >
+          Plant is required.
+        </div>
+      </div>
+    </div>
+
+    <!-- 🔹 Department Dropdown -->
+    <div class="col-md-5">
+      <div class="input-block mb-3">
+        <label class="col-form-label">Department <span class="text-danger">*</span></label>
+        <mat-select
+          formControlName="department"
+          class="custom-mat-select select"
+          placeholder="Select Department"
+          required
+        >
+          <mat-option value="">--Select--</mat-option>
+          <mat-option
+            *ngFor="let dept of extraDeptDropdownData[i]?.departmentList"
+            [value]="dept.catName + '~' + dept.abbreviation"
+            [disabled]="
+              group.get('plant')?.value === getMainPlantAndDept().plant &&
+              dept.catName === getMainPlantAndDept().department
+            "
+            [matTooltip]="
+              group.get('plant')?.value === getMainPlantAndDept().plant &&
+              dept.catName === getMainPlantAndDept().department
+                ? 'This plant + department is already selected above.'
+                : ''
+            "
+          >
+            {{ dept.catName }}
+          </mat-option>
+        </mat-select>
+        <div
+          *ngIf="group.get('department')?.invalid && (group.get('department')?.touched || group.get('department')?.dirty)"
+          class="text-danger"
+        >
+          Department is required.
+        </div>
+      </div>
+    </div>
+
+    <!-- ❌ Delete Button -->
+    <div class="col-md-1 d-flex align-items-center justify-content-end">
+      <button
+        mat-icon-button
+        color="warn"
+        type="button"
+        (click)="removeExtraDeptPlant(i)"
+        class="rounded-icon-btn"
+        matTooltip="Remove"
+      >
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div>
+  </div>
+</div>
+
+
+
+
+                              </div>
+
+                                         
+
+     
 
                               <div class="table-responsive m-t-15">
                                 <table class="table table-striped custom-table">
                                   <thead>
                                     <tr>
-                                      <th>Role Permission</th>
+                                      <th>Secondary Role Permission</th>
                                       <th class="text-center">Admin</th>
                                       <th class="text-center">User</th>
                                       <th class="text-center">SuperUser</th>
