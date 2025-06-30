@@ -99,6 +99,7 @@ export class FileManagerMainheadComponent implements OnInit, OnDestroy {
   public fullDataList:any;
   public filteredList:any;
   public firstRes:any;
+  storedIds:any;
 
   private unsubscribe$ = new Subject<void>();
 
@@ -122,7 +123,8 @@ export class FileManagerMainheadComponent implements OnInit, OnDestroy {
     this.getDocumentTypeList();
     this.loggedUserRole = localStorage.getItem("role")
 
- 
+    this.storedIds = JSON.parse(localStorage.getItem('departmentIds') || '[]');
+    console.log(this.storedIds);
 
 
 
@@ -238,23 +240,60 @@ export class FileManagerMainheadComponent implements OnInit, OnDestroy {
             return Math.round(bytes / 1024);
           };
 
-           this.fileListOne = this.respData.map((item: any) => {
+          //  this.fileListOne = this.respData.map((item: any) => {
+          //   const filteredVersions = item.listOfDocumentVersoinDtos.filter((version: any) => {
+          //     if (this.loggedUserRole === 'User') {
+          //     return !version.hodDocument && !version.statutoryDocument && !version.restrictedDocument;
+          //     } else if (this.loggedUserRole === 'SuperUser') {
+          //     return (!version.hodDocument && !version.statutoryDocument && !version.restrictedDocument) || version.statutoryDocument;
+          //     } else if (this.loggedUserRole === 'HOD') {
+          //     return (!version.hodDocument && !version.statutoryDocument && !version.restrictedDocument) || version.hodDocument;
+          //     } else if (this.loggedUserRole === 'Librarian' || this.loggedUserRole === 'Admin') {
+          //       return true;
+          //     }
+          //     return false;
+          //     });
+                    
+          //    return filteredVersions.length > 0 ? { ...item, listOfDocumentVersoinDtos: filteredVersions } : null;
+          //    })
+          //   .filter((item: null) => item !== null);
+
+// ***********************************************************************
+
+        this.fileListOne = this.respData
+          .map((item: any) => {
             const filteredVersions = item.listOfDocumentVersoinDtos.filter((version: any) => {
               if (this.loggedUserRole === 'User') {
-              return !version.hodDocument && !version.statutoryDocument && !version.restrictedDocument;
+                return !version.hodDocument && !version.statutoryDocument && !version.restrictedDocument;
               } else if (this.loggedUserRole === 'SuperUser') {
-              return (!version.hodDocument && !version.statutoryDocument && !version.restrictedDocument) || version.statutoryDocument;
+                return (!version.hodDocument && !version.statutoryDocument && !version.restrictedDocument) || version.statutoryDocument;
               } else if (this.loggedUserRole === 'HOD') {
-              return (!version.hodDocument && !version.statutoryDocument && !version.restrictedDocument) || version.hodDocument;
+                return (!version.hodDocument && !version.statutoryDocument && !version.restrictedDocument) || version.hodDocument;
               } else if (this.loggedUserRole === 'Librarian' || this.loggedUserRole === 'Admin') {
                 return true;
               }
               return false;
-              });
-                    
-             return filteredVersions.length > 0 ? { ...item, listOfDocumentVersoinDtos: filteredVersions } : null;
-             })
-            .filter((item: null) => item !== null);
+            });
+
+            if (filteredVersions.length > 0) {
+              return { ...item, listOfDocumentVersoinDtos: filteredVersions };
+            }
+
+            return null;
+          })
+          .filter((item: any) => {
+            if (!item) return false;
+
+            if (this.loggedUserRole === 'HOD' && this.storedIds?.length > 0) {
+              return this.storedIds.includes(item.departmentId);
+            }
+
+            return true; 
+          });
+
+
+          console.log("after felter:::***",this.fileListOne);
+
 
           this.fileListOne.forEach((item: any) => {
             if (item.documentType) {

@@ -133,7 +133,7 @@ ngOnInit(): void {
       this.getAllPlantList(value, "plants");
       this.plantOption = value;
 
-      this.newPlant = this.plantOption === "CPP (1740MW)";
+      // this.newPlant = this.plantOption === "CPP (1740MW)";
     } else {
       this.plantOption = '';
       this.newPlant = false;
@@ -266,11 +266,11 @@ for (const item of files) {
     if (this.selectedCatName != null) {
       this.mainHeadFlag = false
     }
-    if (this.selectedCatName != 'POWER O&M') {
-      this.plantList = [];
-      this.departmentList = [];
-      this.subAreaList = [];
-    }
+    // if (this.selectedCatName != 'POWER O&M') {
+    //   this.plantList = [];
+    //   this.departmentList = [];
+    //   this.subAreaList = [];
+    // }
   }
 
   selectedPlant(event: any) {
@@ -279,9 +279,9 @@ for (const item of files) {
     if (this.plantOption != null) {
       this.plantFlag = false;
     }
-    if (this.selectedCatName != "POWER O&M") {
-      this.plantFlag = false;
-    }
+    // if (this.selectedCatName != "POWER O&M") {
+    //   this.plantFlag = false;
+    // }
   }
 
   selectedDepartment(event: any) {
@@ -399,13 +399,15 @@ onSubmit(): void {
     isRestrictedDocument: isRestrictedDocument,
     hodRestricted: ishodRestricted
   };
-  // console.log("Modal Data:", modalData);
+  // console.log("Modal Data****", modalData);
 
   // ✅ Allow upload if file is present and required fields are met
   if (this.files.length > 0 && documentTypeOption && storageLocationOption) {
     formData.append("requestbody", JSON.stringify(modalData));
     this.buttonDisabled = true;
 
+    // console.log("formdata***",formData);
+    
     this.uploadService.upload(formData).subscribe({
       next: (event: any) => {
         if (event instanceof HttpResponse) {
@@ -620,7 +622,7 @@ getFieldLabel(field: string): string {
               if (jsonObj.status === 200 && jsonObj.categoryList) {
                 
                 this.plantList = jsonObj.categoryList;
-                // console.log("Main head plant list:", this.plantList);
+                console.log("Main head plant list:", this.plantList);
               } else {
                 console.warn("No valid category list found in response.");
                 this.plantList = [];
@@ -651,7 +653,7 @@ getFieldLabel(field: string): string {
               const jsonObj = JSON.parse(decryptedData);
               if (jsonObj.status === 200 && jsonObj.categoryList) {
                 this.departmentList = jsonObj.categoryList;
-                // console.log("Plant department list:", this.departmentList);
+                console.log("Plant department list:***", this.departmentList);
               } else {
                 console.warn("No valid category list found in response.");
                 this.departmentList = [];
@@ -750,7 +752,7 @@ getFieldLabel(field: string): string {
     }).then(() => {
 
       // window.location.reload();
-      window.location.href = window.location.href;
+      // window.location.href = window.location.href;
     });
   }
 
@@ -762,7 +764,7 @@ getFieldLabel(field: string): string {
     }).then(() => {
 
       // window.location.reload();
-      window.location.href = window.location.href;
+      // window.location.href = window.location.href;
     });;
   }
 

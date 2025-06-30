@@ -87,6 +87,7 @@ export class DepartmentComponent implements OnInit{
      departmentId:any;
      plant:any;
     plantId:any;
+    headId:any;
      startDate:any;
      endDate:any;
   
@@ -106,7 +107,7 @@ export class DepartmentComponent implements OnInit{
      public fullDataList:any;
      public filteredList:any;
   
-    
+    headName:any;
     //** / pagination variables
     constructor(private data: DataService,private datePipe: DatePipe,private uploadDocument: UploadDocumentComponentService, _uploadService: FileManagementService, private formBuilder: FormBuilder, private loginService : LoginComponentService) {
    
@@ -149,8 +150,9 @@ export class DepartmentComponent implements OnInit{
   
 
   ngOnInit() {
-    this.getMainHeadList();
+    // this.getPlantList();
     this.setLast15Days();
+     this.getAllMainHeadData()
    
   }
 
@@ -160,38 +162,51 @@ export class DepartmentComponent implements OnInit{
     this.uploadFileForm.get('departmentAbbr')?.reset('');
   }
 
-  getMainHeadList() {
-    this.uploadDocument.allDataList("POWER O&M", "main-head").subscribe({
-      next: (event: any) => {
-        if (event instanceof HttpResponse) {
-          const decryptedData = this.uploadDocument.convertEncToDec(event.body);
-          if (decryptedData) {
-            const res = JSON.parse(decryptedData);
-            this.plantList = res?.categoryList || [];
-          }
-        }
-      },
-      error: (err: any) => {
-        console.error('Error fetching main head list:', err);
-      }
-    });
-  }
-  
 
-
-  onPlantSelect(event: any) {
-    this.selectedPlant = event.value;
+    getAllMainHeadData() {
+      
+      this.uploadDocument.allMainHeadList().subscribe({
+        next: (event: any) => {
+          if (event instanceof HttpResponse) {
+            try {
+              const decryptedData = this.uploadDocument.convertEncToDec(event.body);
+            
     
-    if(this.selectedPlant == "CPP-2 (540MW)"){
-      this.plantId = 1;
+              const jsonObj = JSON.parse(decryptedData);
+              if (jsonObj.status === 200 && jsonObj.categoryList) {
+                this.mainHeadList = jsonObj.categoryList;
+                // console.log("Main head list:::::::::::",this.mainHeadList);
+                
+              } else {
+                console.warn("No valid category list found in response.");
+                this.mainHeadList = [];
+              }
+            } catch (error) {
+              console.error("Error processing main head data:", error);
+              this.mainHeadList = [];
+            }
+          }
+        },
+        error: (err: any) => {
+          console.error("Error fetching main head data:", err);
+        }
+      });
     }
-    if(this.selectedPlant == "CPP-3 (1200MW)"){
-      this.plantId = 2;
-    }
-      if(this.selectedPlant == "CPP-1"){
-        this.plantId = 9;
-      }
-  }
+
+
+  // onPlantSelect(event: any) {
+  //   this.selectedPlant = event.value;
+    
+  //   if(this.selectedPlant == "CPP-2 (540MW)"){
+  //     this.plantId = 1;
+  //   }
+  //   if(this.selectedPlant == "CPP-3 (1200MW)"){
+  //     this.plantId = 2;
+  //   }
+  //     if(this.selectedPlant == "CPP-1"){
+  //       this.plantId = 9;
+  //     }
+  // }
 
 
   getDeptFileList() {
@@ -303,6 +318,42 @@ openModal(fileUrl: string , documentName : string) {
   }
   
 
+  onMainHeadChange(selectedMainHead: any) {
+    // console.log("mainhead::::::::",selectedMainHead);
+    
+  if (selectedMainHead) {
+    this.headId = selectedMainHead.catId;
+    this.headName = selectedMainHead.catName;
+
+    this.getPlantList();
+  }
+}
+
+ getPlantList() {
+
+    this.uploadDocument.PlantLists(this.headName).subscribe({
+      next: (event: any) => {
+        if (event instanceof HttpResponse) {
+          const decryptedData = this.uploadDocument.convertEncToDec(event.body);
+          if (decryptedData) {
+            const res = JSON.parse(decryptedData);
+            this.plantList = res?.categoryList || [];
+            //  console.log("plant list:::::::::::",this.plantList);
+          }
+        }
+      },
+      error: (err: any) => {
+        console.error('Error fetching main head list:', err);
+      }
+    });
+  }
+  
+  onPlantChange(selectedMainHead: any) {
+  if (selectedMainHead) {
+    this.plantId = selectedMainHead.catId;
+  }
+}
+
   onSubmit(): void {
     if (this.uploadFileForm.invalid) {
       this.uploadFileForm.markAllAsTouched();
@@ -315,9 +366,10 @@ openModal(fileUrl: string , documentName : string) {
       departmentName: formData.department,
       departmentAbbr: formData.departmentAbbr,
       plantId: this.plantId,
-      headId: '1',
+      headId: this.headId,
     };
     
+// console.log("payload for upload::::::",payload);
 
     this.uploadDocument.addDept(payload).subscribe({
       next: (event: any) => {

@@ -105,6 +105,12 @@ export class SubAreaComponent implements OnInit{
      allsubArea:any;
      public fullDataList:any;
      public filteredList:any;
+
+     headId:any;
+     headName:any;
+     plantName:any;
+     deptId:any;
+     deptName:any;
   
     constructor(private data: DataService,private datePipe: DatePipe,private uploadDocument: UploadDocumentComponentService, _uploadService: FileManagementService, private formBuilder: FormBuilder, private loginService : LoginComponentService) {
    
@@ -112,7 +118,7 @@ export class SubAreaComponent implements OnInit{
       this.bsRangeValue = [this.bsValue, this.maxDate];
 
       this.uploadFileForm = this.formBuilder.group({
-           mainHead: ['', []],
+        mainHead: ['', []],
         plants: ["", [Validators.required]],
         department: ["", [Validators.required]],
         subArea: ["", [Validators.required]],
@@ -149,70 +155,73 @@ export class SubAreaComponent implements OnInit{
   ngOnInit() {
     this.setLast15Days();
 
-    this.getMainHeadList();
+    // this.getMainHeadList();
+    this.getAllMainHeadData();
 
-    this.uploadFileForm.get('plants')?.valueChanges.subscribe(value => {
-      if (value != null) {
-        this.getAllPlantList(value, "plants");
-        this.plantOption = value;
-        if( this.plantOption == "CPP-2 (540MW)"){
-          this.plantId = 1;}
-        if( this.plantOption == "CPP-3 (1200MW)"){
-          this.plantId = 2;}
-          if( this.plantOption == "CPP-1"){
-            this.plantId = 9;}
+    // this.uploadFileForm.get('plants')?.valueChanges.subscribe(value => {
+    //   if (value != null) {
+    //     this.getAllPlantList(value, "plants");
+    //     this.plantOption = value;
+    //     if( this.plantOption == "CPP-2 (540MW)"){
+    //       this.plantId = 1;}
+    //     if( this.plantOption == "CPP-3 (1200MW)"){
+    //       this.plantId = 2;}
+    //       if( this.plantOption == "CPP-1"){
+    //         this.plantId = 9;}
         
-      } else {
-      }
-    });
+    //   } else {
+    //   }
+    // });
 
 
-    this.uploadFileForm.get('department')?.valueChanges.subscribe(value => {
-      const [deptName, deptAbbr] = value.split('~');
-      this.selectedDeptCatName = deptName;
-      this.selectedDeptCatNameAbbr = deptAbbr;
+    // this.uploadFileForm.get('department')?.valueChanges.subscribe(value => {
+    //   const [deptName, deptAbbr] = value.split('~');
+    //   this.selectedDeptCatName = deptName;
+    //   this.selectedDeptCatNameAbbr = deptAbbr;
 
-    });
+    // });
  
   }
 
-  getMainHeadList() {
-    this.uploadDocument.allDataList("POWER O&M", "main-head").subscribe({
-      next: (event: any) => {
-        if (event instanceof HttpResponse) {
-          const decryptedData = this.uploadDocument.convertEncToDec(event.body);
-          if (decryptedData) {
-            const res = JSON.parse(decryptedData);
-            this.plantList = res?.categoryList || [];
-          }
-        }
-      },
-      error: (err: any) => {
-        console.error("Error fetching main head list:", err);
-      }
-    });
-  }
+  // getMainHeadList() {
+  //   this.uploadDocument.allDataList("POWER O&M", "main-head").subscribe({
+  //     next: (event: any) => {
+  //       if (event instanceof HttpResponse) {
+  //         const decryptedData = this.uploadDocument.convertEncToDec(event.body);
+  //         if (decryptedData) {
+  //           const res = JSON.parse(decryptedData);
+  //           this.plantList = res?.categoryList || [];
+  //         }
+  //       }
+  //     },
+  //     error: (err: any) => {
+  //       console.error("Error fetching main head list:", err);
+  //     }
+  //   });
+  // }
   
 
 
-  getAllPlantList(selectedValue: string, plantHeader: string) {
-    if (selectedValue !== '' && plantHeader !== null) {
-      this.uploadDocument.allPlantList(selectedValue, plantHeader).subscribe({
-        next: (event: any) => {
-          if (event instanceof HttpResponse) {
-            const decryptedData = this.uploadDocument.convertEncToDec(event.body);
-            if (decryptedData) {
-              const res = JSON.parse(decryptedData);
-              this.departmentList = res?.categoryList || [];
-            }
-          }
-        },
-        error: (err: any) => {
-          console.error("Error fetching plant list:", err);
-        }
-      });
-    }
-  }
+  // getAllPlantList(selectedValue: string, plantHeader: string) {
+  //   console.log("sub-area dept check::::",selectedValue,plantHeader);
+    
+  //   if (selectedValue !== '' && plantHeader !== null) {
+  //     this.uploadDocument.allPlantList(selectedValue, plantHeader).subscribe({
+  //       next: (event: any) => {
+  //         if (event instanceof HttpResponse) {
+  //           const decryptedData = this.uploadDocument.convertEncToDec(event.body);
+  //           if (decryptedData) {
+  //             const res = JSON.parse(decryptedData);
+  //             this.departmentList = res?.categoryList || [];
+  //           }
+  //         }
+  //       },
+  //       error: (err: any) => {
+  //         console.error("Error fetching plant list:", err);
+  //       }
+  //     });
+  //   }
+  // }
   
 
   selectedDepartment(event: any) {
@@ -359,6 +368,111 @@ openModal(fileUrl: string , documentName : string) {
     this.uploadFileForm.get('subArea')?.reset('');
 
 }
+
+
+
+    getAllMainHeadData() {
+      
+      this.uploadDocument.allMainHeadList().subscribe({
+        next: (event: any) => {
+          if (event instanceof HttpResponse) {
+            try {
+              const decryptedData = this.uploadDocument.convertEncToDec(event.body);
+            
+    
+              const jsonObj = JSON.parse(decryptedData);
+              if (jsonObj.status === 200 && jsonObj.categoryList) {
+                this.mainHeadList = jsonObj.categoryList;
+                // console.log("Main head list:::::::::::",this.mainHeadList);
+                
+              } else {
+                console.warn("No valid category list found in response.");
+                this.mainHeadList = [];
+              }
+            } catch (error) {
+              console.error("Error processing main head data:", error);
+              this.mainHeadList = [];
+            }
+          }
+        },
+        error: (err: any) => {
+          console.error("Error fetching main head data:", err);
+        }
+      });
+    }
+
+ onMainHeadChange(selectedMainHead: any) {
+    // console.log("mainhead::::::::",selectedMainHead);
+    
+  if (selectedMainHead) {
+    this.headId = selectedMainHead.catId;
+    this.headName = selectedMainHead.catName;
+
+    this.getPlantList();
+  }
+}
+
+ getPlantList() {
+
+    this.uploadDocument.PlantLists(this.headName).subscribe({
+      next: (event: any) => {
+        if (event instanceof HttpResponse) {
+          const decryptedData = this.uploadDocument.convertEncToDec(event.body);
+          if (decryptedData) {
+            const res = JSON.parse(decryptedData);
+            this.plantList = res?.categoryList || [];
+            //  console.log("plant list:::::::::::",this.plantList);
+          }
+        }
+      },
+      error: (err: any) => {
+        console.error('Error fetching main head list:', err);
+      }
+    });
+  }
+  
+  onPlantChange(selectedMainHead: any) {
+  if (selectedMainHead) {
+    this.plantId = selectedMainHead.catId;
+    this.plantName = selectedMainHead.catName;
+
+    this.getDeptList();
+  }
+}
+
+  getDeptList() {
+    // console.log("sub-area dept check::::",selectedValue,plantHeader);
+    
+    // console.log("sub-area dept check::::",this.plantName,this.plantId);
+
+      this.uploadDocument.allDeptList(this.plantName).subscribe({
+        next: (event: any) => {
+          if (event instanceof HttpResponse) {
+            const decryptedData = this.uploadDocument.convertEncToDec(event.body);
+            if (decryptedData) {
+              const res = JSON.parse(decryptedData);
+              // console.log("ressssss",res);
+              
+              this.departmentList = res?.categoryList || [];
+              // console.log("dept List",this.departmentList);
+              
+            }
+          }
+        },
+        error: (err: any) => {
+          console.error("Error fetching plant list:", err);
+        }
+      });
+    
+  }
+
+  onDeptChange(selectedDept: any) {
+  if (selectedDept) {
+    this.deptId = selectedDept.catId;
+    this.deptName = selectedDept.catName;
+  }
+}
+
 onSubmit(): void {
   if (this.uploadFileForm.invalid) {
     this.uploadFileForm.markAllAsTouched();
@@ -368,20 +482,22 @@ onSubmit(): void {
 
   const formData = this.uploadFileForm.value;
 
-  const selectedDepartment = this.departmentList.find(
-    (item) => item.catName === formData.department
-  ); 
+  // const selectedDepartment = this.departmentList.find(
+  //   (item) => item.catName === formData.department
+  // ); 
 
-  const departmentId = selectedDepartment?.catId;
+  // const departmentId = selectedDepartment?.catId;
 
   const payload = {
     subAreaName: formData.subArea,
     abbreviation: formData.subAreaAbbr,
-    departmentId: departmentId,
+    departmentId: this.deptId,
     plantId: this.plantId,
-    headId: "1"
+    headId: this.headId
   };
 
+  // console.log("payloaddd::",payload);
+  
   this.uploadDocument.addSubArea(payload).subscribe({
     next: (event: any) => {
       if (event instanceof HttpResponse) {

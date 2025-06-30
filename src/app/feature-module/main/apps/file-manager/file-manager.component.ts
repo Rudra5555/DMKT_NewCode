@@ -82,6 +82,7 @@ export class FileManagerComponent implements OnInit , OnDestroy {
   fileListOne:any;
   copyDataList:any;
   filterRes:any;
+  storedIds:any;
   public fullDataList:any;
   public filteredList:any;
   public firstRes:any;
@@ -132,6 +133,10 @@ export class FileManagerComponent implements OnInit , OnDestroy {
     this.getDocumentTypeList();
     this.loggedUserRole=localStorage.getItem("role")  
     this.setLast15Days();
+
+    this.storedIds = JSON.parse(localStorage.getItem('departmentIds') || '[]');
+    console.log(this.storedIds);
+
 
     this.route.queryParams.subscribe(params => {
       this.departmentName = params['DepartmentName'];
@@ -188,33 +193,66 @@ export class FileManagerComponent implements OnInit , OnDestroy {
 
           this.respData = res.documentLists;
 
-          console.log("before felter:::",this.respData);
+          console.log("before felter:::**",this.respData);
           
-
           const convertToKB = (bytes: number): string => {
             return (bytes / 1024).toFixed(2);
           };
 
-          this.fileListOne = this.respData.map((item: any) => {
-          const filteredVersions = item.listOfDocumentVersoinDtos.filter((version: any) => {
-            if (this.loggedUserRole === 'User') {
-              return !version.hodDocument && !version.statutoryDocument && !version.restrictedDocument;
-            } else if (this.loggedUserRole === 'SuperUser') {
-              return (!version.hodDocument && !version.statutoryDocument && !version.restrictedDocument) || version.statutoryDocument;
-            } else if (this.loggedUserRole === 'HOD') {
-              return (!version.hodDocument && !version.statutoryDocument && !version.restrictedDocument) || version.hodDocument;
-            } else if (this.loggedUserRole === 'Librarian' || this.loggedUserRole === 'Admin') {
-              return true;
-            }
-            return false;
-          });
+          // this.fileListOne = this.respData.map((item: any) => {
+          // const filteredVersions = item.listOfDocumentVersoinDtos.filter((version: any) => {
+          //   if (this.loggedUserRole === 'User') {
+          //     return !version.hodDocument && !version.statutoryDocument && !version.restrictedDocument;
+          //   } else if (this.loggedUserRole === 'SuperUser') {
+          //     return (!version.hodDocument && !version.statutoryDocument && !version.restrictedDocument) || version.statutoryDocument;
+          //   } else if (this.loggedUserRole === 'HOD') {
+          //     return (!version.hodDocument && !version.statutoryDocument && !version.restrictedDocument) || version.hodDocument;
+          //   } else if (this.loggedUserRole === 'Librarian' || this.loggedUserRole === 'Admin') {
+          //     return true;
+          //   }
+          //   return false;
+          // });
           
-            return filteredVersions.length > 0 ? { ...item, listOfDocumentVersoinDtos: filteredVersions } : null;
+          //   return filteredVersions.length > 0 ? { ...item, listOfDocumentVersoinDtos: filteredVersions } : null;
+          // })
+          // .filter((item: null) => item !== null);
+
+
+// ************************************************************************
+
+        this.fileListOne = this.respData
+          .map((item: any) => {
+            const filteredVersions = item.listOfDocumentVersoinDtos.filter((version: any) => {
+              if (this.loggedUserRole === 'User') {
+                return !version.hodDocument && !version.statutoryDocument && !version.restrictedDocument;
+              } else if (this.loggedUserRole === 'SuperUser') {
+                return (!version.hodDocument && !version.statutoryDocument && !version.restrictedDocument) || version.statutoryDocument;
+              } else if (this.loggedUserRole === 'HOD') {
+                return (!version.hodDocument && !version.statutoryDocument && !version.restrictedDocument) || version.hodDocument;
+              } else if (this.loggedUserRole === 'Librarian' || this.loggedUserRole === 'Admin') {
+                return true;
+              }
+              return false;
+            });
+
+            if (filteredVersions.length > 0) {
+              return { ...item, listOfDocumentVersoinDtos: filteredVersions };
+            }
+
+            return null;
           })
-          .filter((item: null) => item !== null);
+          .filter((item: any) => {
+            if (!item) return false;
+
+            if (this.loggedUserRole === 'HOD' && this.storedIds?.length > 0) {
+              return this.storedIds.includes(item.departmentId);
+            }
+
+            return true; 
+          });
 
 
-          // console.log("after felter:::",this.fileListOne);
+          console.log("after felter:::***",this.fileListOne);
 
           this.fileListOne.forEach((item: any) => {
             if (item.documentType) {

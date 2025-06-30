@@ -214,8 +214,12 @@
                   <button class="btn-custom btn-green" (click)="getDetailsByPlantsName(item.name, item.catType)"
                     (click)="onClick()">CPP-3(1200MW)</button>
                 </div>
-                <div *ngIf="item.name == 'CPP (1740MW)'">
+                <!-- <div *ngIf="item.name == 'CPP (1740MW)'">
                   <button class="btn-custom btn-green" (click)="navigateToRoute(item.name, item.catType)"
+                    (click)="onClick()">CPP(1740MW)</button>
+                </div> -->
+                 <div *ngIf="item.name == 'CPP (1740MW)'">
+                  <button class="btn-custom btn-green" (click)="getDetailsByPlantsName(item.name, item.catType)"
                     (click)="onClick()">CPP(1740MW)</button>
                 </div>
               </div>

@@ -49,6 +49,7 @@ export class LoginComponent implements OnInit {
   public getEmail:any;
   public getPicture:any;
   accessRoles: any;
+  uniqueDeptIds:any;
   
   errorFlg:boolean=false
   errorMsg:any;
@@ -113,99 +114,9 @@ onClickSubmit(formData: any){
           if (jsonObj.status === 200) {
           }
                 
-        //   this.data = jsonObj;
-        //    this.data={
-        //     "status": 200,
-        //     "response": {
-        //         "userName": "Librarian",
-        //         "userId":3,
-        //         "role": "Librarian",
-        //         "accessRoles": [
-        //             "User",
-        //             "Admin",
-        //             "HOD"
-        //         ],
-        //         "title":"Rahul",
-        //         "displayName": "Das",
-        //         "departmentNameList": [
-        //             {
-        //                 "departmentName": "OPERATION",
-        //                 "plantName": "CPP-2 (540MW)"
-        //             },
-        //             {
-        //                 "departmentName": "C&I",
-        //                 "plantName": "CPP-3 (1200MW)"
-        //             }
-        //         ],
-        //         "userPicture": "1234567890",
-        //         "phoneNumber": "9678824924",
-        //         "emailId": "nitish@gmail.com"
-        //     },
-        //     "message": "success!!"
-        // }
+          this.data = jsonObj;
+          // console.log("Login response::**",this.data);
 
-      //   this.data={
-      //     "status": 200,
-      //     "response": {
-      //         "userName": "User",
-      //         "userId":1,
-      //         "role": "User",
-      //         "accessRoles": [
-      //             "User",
-      //             "Admin",
-      //             "HOD"
-      //         ],
-      //         "title":"Biplob",
-      //         "displayName": "Das",
-      //         "departmentNameList": [
-      //             {
-      //                 "departmentName": "OPERATION",
-      //                 "plantName": "CPP-2 (540MW)"
-      //             },
-      //             {
-      //                 "departmentName": "C&I",
-      //                 "plantName": "CPP-3 (1200MW)"
-      //             }
-      //         ],
-      //         "userPicture": "1234567890",
-      //         "phoneNumber": "9678824924",
-      //         "emailId": "nitish@gmail.com"
-      //     },
-      //     "message": "success!!"
-      // }
-
-      this.data={
-        "status": 200,
-        "response": {
-            "userName": "Admin",
-            "userId":2,
-            "role": "Admin",
-            "accessRoles": [
-                "User",
-                "Admin",
-                "HOD"
-            ],
-            "title":"Nitish",
-            "displayName": "Paul",
-            "departmentNameList": [
-                {
-                    "departmentName": "OPERATION",
-                    "plantName": "CPP-2 (540MW)"
-                },
-                {
-                    "departmentName": "C&I",
-                    "plantName": "CPP-3 (1200MW)"
-                }
-            ],
-            "userPicture": "1234567890",
-            "phoneNumber": "9678824924",
-            "emailId": "nitish@gmail.com"
-        },
-        "message": "success!!"
-    }
-
-
-          // console.log("DecResData",this.dataaa);
   
           if(this.data!=null){   
             if(this.data.status ===417){
@@ -233,9 +144,15 @@ onClickSubmit(formData: any){
               this.getEmail = this.data.response.emailId;
               this.getPicture = this.data.response.userPicture;
               this.accessRoles = this.data.response.accessRoles;
-              
+
+              const deptIds = this.data.response.departmentNameList.map((item: { departmentId: any; }) => item.departmentId);
+              this.uniqueDeptIds = [...new Set(deptIds)];
+
+              console.log("depertment ids",this.uniqueDeptIds);
               
 
+              localStorage.setItem('departmentIds', JSON.stringify(this.uniqueDeptIds));
+              
               localStorage.setItem('role',this.getRoleData);
               localStorage.setItem('accessRole',this.accessRoles);
               localStorage.setItem('title',this.getTitle);
