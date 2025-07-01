@@ -10,7 +10,7 @@
           <li class="breadcrumb-item">Dashboard</li>
         </ul>
       </div>
-      <div class="col-auto float-end ms-auto" *ngIf="librarianRoleFlag">
+      <!-- <div class="col-auto float-end ms-auto" *ngIf="librarianRoleFlag">
         <a class="button btn btn-success" data-bs-toggle="modal" data-bs-target="#add_client_librarian"
           id="addUserLibrarian">
           <i class="la la-plus-circle"></i> Add Employee
@@ -20,7 +20,7 @@
         <a class="button btn btn-success" data-bs-toggle="modal" data-bs-target="#add_client_admin" id="addUserAdmin">
           <i class="la la-plus-circle"></i> Add Employee
         </a>
-      </div>
+      </div> -->
     </div>
   </div>
   <!-- /Page Header -->
@@ -100,6 +100,7 @@
               <th mat-sort-header="email">Email ID</th>
               <th mat-sort-header="phone">Mobile</th>
               <th mat-sort-header="role" style="padding-left: 60px;">Employee Role</th>
+              <th mat-sort-header="mainHead" style="padding-left: -60px;">Main Head</th>
               <th mat-sort-header="plant" style="padding-left: -60px;">Plant</th>
               <th mat-sort-header="Department">Department</th>
               <th mat-sort-header="status">Status</th>
@@ -125,6 +126,7 @@
               <td>{{ client.emailId }}</td>
               <td>{{ client.phoneNumber }}</td>
               <td style="padding-left: 65px;">{{ client.role }}</td>
+               <td style="padding-left: 10px;">{{ client.mainHead }}</td>
               <td style="text-align: center;">{{ getPlantNames(client) }}</td>
               <td style="text-align: center;">{{ getDepartmentNames(client) }}</td>
               <td>
@@ -149,7 +151,7 @@
                       data-bs-target="#edit_client_admin" (click)="setSelectedClient(client)">
                       <i class="fa-solid fa-pencil m-r-5" style="color: rgb(8, 28, 247)"></i> Edit
                     </a>
-                     <a class="dropdown-item" (click)="deleteUser(client)" style="cursor: pointer;">
+                     <a  *ngIf="adminRoleFlag"  class="dropdown-item" (click)="deleteUser(client)" style="cursor: pointer;">
                        <i class="fa-solid fa-trash" style="color: red;"></i> Delete
                     </a>
 

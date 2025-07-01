@@ -102,3 +102,21 @@
     height: 72px;
     margin-bottom: 3%;
 }
+
+.rounded-icon-btn {
+  margin-bottom: 19px;
+  background-color: #f8d7da; /* light red bg */
+  border-radius: 50%;        /* make it round */
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease-in-out;
+  border: none;
+}
+
+.rounded-icon-btn:hover {
+  background-color: #f5c6cb; /* hover effect */
+}
