@@ -16,6 +16,9 @@ export class LoginComponentService {
   private secretKey = '1234567890123456'; // Must match Java key
   private iv = 'abcdefghijklmnop'; // Must match Java IV
 
+private readonly SECRET_KEY = '1234567890123456'; // Must be 16 characters for AES-128
+private readonly INIT_VECTOR = 'abcdefghijklmnop'; // Must be 16 characters
+
   constructor(private http: HttpClient) { }
 
   convertEncToDec(encryptedData:string):any{
@@ -33,13 +36,37 @@ export class LoginComponentService {
   }
 
 
-  login(file: any): Observable<HttpEvent<any>> {
-      const req = new HttpRequest('POST', `${this.baseUrl}/auth/login`, file, {
-        responseType: 'json'
-      });
+  private encryptPayload(data: any): string {
+  const key = CryptoJS.enc.Utf8.parse(this.SECRET_KEY);
+  const iv = CryptoJS.enc.Utf8.parse(this.INIT_VECTOR);
 
-      return this.http.request(req);
-    }
+  const encrypted = CryptoJS.AES.encrypt(JSON.stringify(data), key, {
+    iv: iv,
+    mode: CryptoJS.mode.CBC,
+    padding: CryptoJS.pad.Pkcs7
+  });
+
+  return encrypted.toString(); // Base64 string
+}
+
+  // login(loginData: any): Observable<HttpEvent<any>> {
+  //     const req = new HttpRequest('POST', `${this.baseUrl}/auth/login`, loginData, {
+  //       responseType: 'json'
+  //     });
+
+  //     return this.http.request(req);
+  //   }
+
+login(loginData: any): Observable<HttpEvent<any>> {
+  const encryptedData = this.encryptPayload(loginData);
+
+  const req = new HttpRequest('POST', `${this.baseUrl}/auth/login`, { data: encryptedData }, {
+    responseType: 'json'
+  });
+
+  return this.http.request(req);
+}
+
 
     // (done)
     getPlantList(category: string): Observable<HttpEvent<any>> {
