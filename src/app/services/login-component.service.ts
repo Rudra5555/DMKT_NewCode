@@ -62,7 +62,7 @@ private readonly INIT_VECTOR = 'abcdefghijklmnop'; // Must be 16 characters
 login(loginData: any): Observable<HttpEvent<any>> {
   const encryptedData = this.encryptPayload(loginData);
 
-  const req = new HttpRequest('POST', `${this.baseUrl}/auth/login`, { data: encryptedData }, {
+  const req = new HttpRequest('POST', `${this.baseUrl}/auth/login`, {encryptedData }, {
     responseType: 'json'
   });
 

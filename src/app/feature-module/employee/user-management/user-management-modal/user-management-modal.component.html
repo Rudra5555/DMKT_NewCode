@@ -971,6 +971,7 @@
         (click)="removeExtraDeptPlant(i)"
         class="rounded-icon-btn"
         matTooltip="Remove"
+        [disabled]="group.get('patched')?.value !== false"
       >
         <mat-icon>delete</mat-icon>
       </button>
