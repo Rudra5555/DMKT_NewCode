@@ -777,4 +777,14 @@ public changePageSize(newPageSize: number): void {
     return (bytes / 1024).toFixed(2) + ' KB';
   }
 
+   convertDotsToSlashes(filename: string): string {
+  const lastDotIndex = filename.lastIndexOf('.');
+  if (lastDotIndex === -1) return filename;
+
+  const nameWithoutExtension = filename.substring(0, lastDotIndex);
+  const extension = filename.substring(lastDotIndex);
+
+  return nameWithoutExtension.replace(/\./g, '/') + extension;
+}
+
 }

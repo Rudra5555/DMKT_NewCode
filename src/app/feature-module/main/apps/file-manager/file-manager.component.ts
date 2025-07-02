@@ -739,5 +739,16 @@ onDocumentTypeChange(docType: any) {
     this.calculateTotalPages(this.filteredList.length, this.pageSize);
   }
   }
+
+  convertDotsToSlashes(filename: string): string {
+  const lastDotIndex = filename.lastIndexOf('.');
+  if (lastDotIndex === -1) return filename;
+
+  const nameWithoutExtension = filename.substring(0, lastDotIndex);
+  const extension = filename.substring(lastDotIndex);
+
+  return nameWithoutExtension.replace(/\./g, '/') + extension;
+}
+
 }
 
