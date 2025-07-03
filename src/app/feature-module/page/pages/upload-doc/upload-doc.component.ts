@@ -164,6 +164,23 @@ ngOnInit(): void {
       this.selectedSubAreaCatNameAbbr = '';
     }
   });
+
+
+// 🔄 DOCUMENT TYPE change listener. Select One at a time
+  this.uploadFileForm.get('isStatutoryDocument')?.valueChanges.subscribe(value => {
+    if (value) {
+      this.uploadFileForm.get('isRestrictedDocument')?.setValue(false, { emitEvent: false });
+    }
+  });
+
+  this.uploadFileForm.get('isRestrictedDocument')?.valueChanges.subscribe(value => {
+    if (value) {
+      this.uploadFileForm.get('isStatutoryDocument')?.setValue(false, { emitEvent: false });
+    }
+  });
+
+
+
 }
 
 
