@@ -1,5 +1,5 @@
 import { routes } from "src/app/core/helpers/routes/routes";
-import { Component, OnInit } from "@angular/core";
+import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from "@angular/core";
 import { FileManagementService } from "src/app/services/file-management.service";
 import {
   FormBuilder,
@@ -54,6 +54,7 @@ export const OPTIONS: Option[] = [
   styleUrls: ["./verify-uploaded-document.component.scss"],
 })
 export class VerifyUploadedDocumentComponent implements OnInit {
+  @ViewChild("fileDropRef", { static: false }) fileDropEl!: ElementRef;
   files: any[] = [];
   public routes = routes;
   public message: any;
@@ -121,12 +122,14 @@ export class VerifyUploadedDocumentComponent implements OnInit {
   subDocumentTypeOption: any;
   public newPlant: boolean = false;
   isLoading: boolean = false;
+  firstValidationAttempt: boolean = true;
 
   constructor(
     private uploadService: FileManagementService,
     private formBuilder: FormBuilder,
     private uploadDocument: UploadDocumentComponentService,
-    private loginService: LoginComponentService
+    private loginService: LoginComponentService,
+    private cdr: ChangeDetectorRef
   ) {
     this.uploadFileForm = this.formBuilder.group({
       uploadFile: ["", [Validators.required]],
@@ -474,76 +477,277 @@ export class VerifyUploadedDocumentComponent implements OnInit {
 
   // ************************
 
+  // onSubmit(): void {
+  //   if (this.uploadFileForm.controls["documentType"]) {
+  //     this.documentTypeOption = this.uploadFileForm.value.documentType;
+  //   }
+  //   if (this.uploadFileForm.controls["subDocumentType"]) {
+  //     this.subDocumentTypeOption = this.uploadFileForm.value.subDocumentType;
+  //   }
+  //   if (this.uploadFileForm.controls["storageLocation"]) {
+  //     this.storageLocationOption = this.uploadFileForm.value.storageLocation;
+  //   }
+
+  //   let isStatutoryDocument =
+  //     this.uploadFileForm.controls["isStatutoryDocument"].value;
+  //   let isRestrictedDocument =
+  //     this.uploadFileForm.controls["isRestrictedDocument"].value;
+  //   let ishodRestricted = this.uploadFileForm.controls["isHodDocument"].value;
+  //   isStatutoryDocument = isStatutoryDocument === "" ? false : true;
+  //   isRestrictedDocument = isRestrictedDocument === "" ? false : true;
+  //   ishodRestricted = ishodRestricted === "" ? false : true;
+
+  //   const formData = new FormData();
+  //   for (const file of this.files) {
+  //     formData.append("file", file);
+  //   }
+
+  //   if (
+  //     this.plantOption != null &&
+  //     this.selectedDeptCatName != null &&
+  //     this.selectedDeptCatNameAbbr != null &&
+  //     this.selectedSubAreaCatName != null &&
+  //     this.selectedSubAreaCatNameAbbr != null &&
+  //     this.files.length > 0
+  //   ) {
+  //     const modalData = {
+  //       mainHead: this.selectedCatName,
+  //       mainHeadAbbr: this.selectedCatNameAbbr,
+  //       plants: this.plantOption,
+  //       department: this.selectedDeptCatName,
+  //       departAbbr: this.selectedDeptCatNameAbbr,
+  //       subArea: this.selectedSubAreaCatName,
+  //       subAreaAbbr: this.selectedSubAreaCatNameAbbr,
+  //       documentType: this.docMap.get(this.documentTypeOption),
+  //       documentSubType: this.subDocumentTypeOption,
+  //       storageLocation: this.storageLocationOption,
+  //       isStatutory: isStatutoryDocument,
+  //       isRestrictedDocument: isRestrictedDocument,
+  //       hodRestricted: ishodRestricted,
+  //     };
+  //     console.log("payload for all***",modalData);
+  //     this.buttonDisabled = true;
+  //     formData.append("requestbody", JSON.stringify(modalData));
+
+  //     this.loginService.upload(formData).subscribe({
+  //       next: (event: any) => {
+  //         if (event instanceof HttpResponse) {
+  //           this.buttonDisabled = false;
+  //           this.resetForm();
+  //           this.clearFileInput();
+  //           this.successfulSubmitAlert();
+
+  //           let docStatus = {
+  //             workflowDocId: this.workflowDocId,
+  //             status: "A",
+  //             executedBy: this.loggedUserId,
+  //             reason: "",
+  //           };
+
+  //           this.loginService.updateDocStatus(docStatus).subscribe({
+  //             next: (event: any) => {
+  //               if (event instanceof HttpResponse) {
+  //                 const decryptedData = this.loginService.convertEncToDec(event.body);
+  //                 const res = JSON.parse(decryptedData);
+
+  //                 let updatedDoc = res.data;
+
+  //                 let index = this.fileList.findIndex(
+  //                   (doc: any) => doc.workflowDocId === updatedDoc.workflowDocId
+  //                 );
+
+  //                 if (index !== -1) {
+  //                   this.fileList[index] = updatedDoc;
+  //                 }
+  //               }
+  //             },
+  //             error: (err: any) => {
+  //               let msg = docStatus + ": Failed!";
+
+  //               if (err.error && err.error.message) {
+  //                 msg += " " + err.error.message;
+  //               }
+
+  //               this.message.push(msg);
+  //             },
+  //           });
+  //         }
+  //       },
+
+  //       error: (err: any) => {
+  //         this.unsuccessfulSubmitAlert();
+  //       },
+  //     });
+  //     return;
+  //   }
+  //   if (
+  //     this.plantOption != null &&
+  //     this.selectedDeptCatName == null &&
+  //     this.selectedSubAreaCatName == null &&
+  //     this.documentTypeOption != "" &&
+  //     this.storageLocationOption != ""
+  //   ) {
+  //     const modalData = {
+  //       mainHead: this.selectedCatName,
+  //       mainHeadAbbr: this.selectedCatNameAbbr,
+  //       plants: this.plantOption,
+  //       department: null,
+  //       departAbbr: null,
+  //       subArea: null,
+  //       subAreaAbbr: null,
+  //       documentType: this.docMap.get(this.documentTypeOption),
+  //       documentSubType: this.subDocumentTypeOption,
+  //       storageLocation: this.storageLocationOption,
+  //       isStatutory: isStatutoryDocument,
+  //       isRestrictedDocument: isRestrictedDocument,
+  //       hodRestricted: ishodRestricted,
+  //     };
+  //     console.log("second payload for other**",modalData);
+
+  //     formData.append("requestbody", JSON.stringify(modalData));
+
+  //     this.loginService.upload(formData).subscribe({
+  //       next: (event: any) => {
+  //         if (event instanceof HttpResponse) {
+  //           this.resetForm();
+  //           this.clearFileInput();
+  //           this.successfulSubmitAlert();
+
+  //           let docStatus = {
+  //             workflowDocId: this.workflowDocId,
+  //             status: "A",
+  //             executedBy: this.loggedUserId,
+  //             reason: "",
+  //           };
+
+  //           this.loginService.updateDocStatus(docStatus).subscribe({
+  //             next: (event: any) => {
+  //               if (event instanceof HttpResponse) {
+  //                 const decryptedData = this.loginService.convertEncToDec(event.body);
+  //                 const res = JSON.parse(decryptedData);
+
+  //                 let updatedDoc = res.data;
+
+  //                 let index = this.fileList.findIndex(
+  //                   (doc: any) => doc.workflowDocId === updatedDoc.workflowDocId
+  //                 );
+
+  //                 if (index !== -1) {
+  //                   this.fileList[index] = updatedDoc;
+  //                 }
+  //               }
+  //             },
+  //             error: (err: any) => {
+  //               let msg = docStatus + ": Failed!";
+
+  //               if (err.error && err.error.message) {
+  //                 msg += " " + err.error.message;
+  //               }
+
+  //               this.message.push(msg);
+  //             },
+  //           });
+  //         }
+  //       },
+  //       error: (err: any) => {
+  //         this.resetForm();
+  //         this.clearFileInput();
+  //         this.unsuccessfulSubmitAlert();
+  //       },
+  //     });
+  //     return;
+  //   } else {
+  //     // console.log("End of if and else");
+  //     this.resetForm();
+  //     this.clearFileInput();
+  //     this.unsuccessfulSubmitAlert();
+  //   }
+  // }
+
   onSubmit(): void {
-    if (this.uploadFileForm.controls["documentType"]) {
-      this.documentTypeOption = this.uploadFileForm.value.documentType;
+  // ✅ Conditional validations
+  if (this.plantList.length > 0) {
+    const plantValue = this.uploadFileForm.get('plants')?.value;
+    if (!plantValue || plantValue === '--Select--') {
+      this.uploadFileForm.get('plants')?.markAsTouched();
+      this.uploadFileForm.get('plants')?.markAsDirty();
+      this.fieldSubmitAlert("Plants");
+      return;
     }
-    if (this.uploadFileForm.controls["subDocumentType"]) {
-      this.subDocumentTypeOption = this.uploadFileForm.value.subDocumentType;
-    }
-    if (this.uploadFileForm.controls["storageLocation"]) {
-      this.storageLocationOption = this.uploadFileForm.value.storageLocation;
-    }
+  }
 
-    let isStatutoryDocument =
-      this.uploadFileForm.controls["isStatutoryDocument"].value;
-    let isRestrictedDocument =
-      this.uploadFileForm.controls["isRestrictedDocument"].value;
-    let ishodRestricted = this.uploadFileForm.controls["isHodDocument"].value;
-    isStatutoryDocument = isStatutoryDocument === "" ? false : true;
-    isRestrictedDocument = isRestrictedDocument === "" ? false : true;
-    ishodRestricted = ishodRestricted === "" ? false : true;
+  if (this.departmentList.length > 0 && !this.newPlant && !this.uploadFileForm.get('department')?.value) {
+    this.markFieldInvalid('department');
+    this.fieldSubmitAlert("Department");
+    return;
+  }
 
-    const formData = new FormData();
-    for (const file of this.files) {
-      formData.append("file", file);
-    }
+  if (this.subAreaList.length > 0 && !this.uploadFileForm.get('subArea')?.value) {
+    this.markFieldInvalid('subArea');
+    this.fieldSubmitAlert("Sub-Area");
+    return;
+  }
 
-    if (
-      this.plantOption != null &&
-      this.selectedDeptCatName != null &&
-      this.selectedDeptCatNameAbbr != null &&
-      this.selectedSubAreaCatName != null &&
-      this.selectedSubAreaCatNameAbbr != null &&
-      this.files.length > 0
-    ) {
-      const modalData = {
-        mainHead: this.selectedCatName,
-        mainHeadAbbr: this.selectedCatNameAbbr,
-        plants: this.plantOption,
-        department: this.selectedDeptCatName,
-        departAbbr: this.selectedDeptCatNameAbbr,
-        subArea: this.selectedSubAreaCatName,
-        subAreaAbbr: this.selectedSubAreaCatNameAbbr,
-        documentType: this.docMap.get(this.documentTypeOption),
-        documentSubType: this.subDocumentTypeOption,
-        storageLocation: this.storageLocationOption,
-        isStatutory: isStatutoryDocument,
-        isRestrictedDocument: isRestrictedDocument,
-        hodRestricted: ishodRestricted,
-      };
-      console.log("payload for all***",modalData);
-      this.buttonDisabled = true;
-      formData.append("requestbody", JSON.stringify(modalData));
+  if (this.subDocListSize > 0 && !this.uploadFileForm.get('subDocumentType')?.value) {
+    this.markFieldInvalid('subDocumentType');
+    this.fieldSubmitAlert("Sub-Document Type");
+    return;
+  }
 
-      this.loginService.upload(formData).subscribe({
-        next: (event: any) => {
-          if (event instanceof HttpResponse) {
-            this.buttonDisabled = false;
-            this.uploadFileForm.get("uploadFile")?.reset("");
-            this.uploadFileForm.get("mainHead")?.reset("");
-            this.uploadFileForm.get("plants")?.reset("");
-            this.uploadFileForm.get("department")?.reset("");
-            this.uploadFileForm.get("subArea")?.reset("");
-            this.uploadFileForm.get("documentType")?.reset("");
-            this.uploadFileForm.get("subDocumentType")?.reset("");
-            this.uploadFileForm.get("storageLocation")?.reset("");
-            this.uploadFileForm.controls["isStatutoryDocument"].reset();
-            this.uploadFileForm.controls["isRestrictedDocument"].reset();
-            this.uploadFileForm.controls["isHodDocument"].reset();
-            this.clearFileInput();
-            this.successfulSubmitAlert();
+  // ✅ Extract values from form controls
+  const documentTypeOption = this.uploadFileForm.get('documentType')?.value || '';
+  const subDocumentTypeOption = this.uploadFileForm.get('subDocumentType')?.value || '';
+  const storageLocationOption = this.uploadFileForm.get('storageLocation')?.value || '';
+  const isStatutoryDocument = !!this.uploadFileForm.get('isStatutoryDocument')?.value;
+  const isRestrictedDocument = !!this.uploadFileForm.get('isRestrictedDocument')?.value;
+  const ishodRestricted = !!this.uploadFileForm.get('isHodDocument')?.value;
 
+  const departmentSelected = this.departmentList.length > 0 && !this.newPlant ? this.selectedDeptCatName : '';
+  const departmentAbbr = this.departmentList.length > 0 && !this.newPlant ? this.selectedDeptCatNameAbbr : '';
+  const subAreaSelected = this.subAreaList.length > 0 ? this.selectedSubAreaCatName : '';
+  const subAreaAbbr = this.subAreaList.length > 0 ? this.selectedSubAreaCatNameAbbr : '';
+
+  // ✅ Use current form value for plants instead of stale variable
+  const plantSelected = this.uploadFileForm.get('plants')?.value || '';
+
+  // ✅ Prepare formData
+  const formData = new FormData();
+  for (const file of this.files) {
+    formData.append("file", file);
+  }
+
+  const modalData: any = {
+    mainHead: this.selectedCatName,
+    mainHeadAbbr: this.selectedCatNameAbbr,
+    plants: plantSelected,
+    department: departmentSelected,
+    departAbbr: departmentAbbr,
+    subArea: subAreaSelected,
+    subAreaAbbr: subAreaAbbr,
+    documentType: this.docMap.get(documentTypeOption),
+    documentSubType: subDocumentTypeOption || '',
+    storageLocation: storageLocationOption,
+    isStatutory: isStatutoryDocument,
+    isRestrictedDocument: isRestrictedDocument,
+    hodRestricted: ishodRestricted
+  };
+  // console.log("Modal Data****", modalData);
+
+  // ✅ Allow upload if file is present and required fields are met
+  if (this.files.length > 0 && documentTypeOption && storageLocationOption) {
+    formData.append("requestbody", JSON.stringify(modalData));
+    this.buttonDisabled = true;
+
+    // console.log("formdata***",formData);
+    
+    this.uploadService.upload(formData).subscribe({
+      next: (event: any) => {
+        if (event instanceof HttpResponse) {
+          this.buttonDisabled = false;
+          this.resetForm(); // ✅ Reset everything
+          this.successfulSubmitAlert();
+
+          
             let docStatus = {
               workflowDocId: this.workflowDocId,
               status: "A",
@@ -578,125 +782,58 @@ export class VerifyUploadedDocumentComponent implements OnInit {
                 this.message.push(msg);
               },
             });
-          }
-        },
+            
+        }
+      },
+      error: (err: any) => {
+        console.error("Upload failed:", err);
+        this.resetForm(); // Still reset on error
+        this.unsuccessfulSubmitAlert();
+      }
+    });
 
-        error: (err: any) => {
-          this.unsuccessfulSubmitAlert();
-        },
-      });
-      return;
-    }
-    if (
-      this.plantOption != null &&
-      this.selectedDeptCatName == null &&
-      this.selectedSubAreaCatName == null &&
-      this.documentTypeOption != "" &&
-      this.storageLocationOption != ""
-    ) {
-      const modalData = {
-        mainHead: this.selectedCatName,
-        mainHeadAbbr: this.selectedCatNameAbbr,
-        plants: this.plantOption,
-        department: null,
-        departAbbr: null,
-        subArea: null,
-        subAreaAbbr: null,
-        documentType: this.docMap.get(this.documentTypeOption),
-        documentSubType: this.subDocumentTypeOption,
-        storageLocation: this.storageLocationOption,
-        isStatutory: isStatutoryDocument,
-        isRestrictedDocument: isRestrictedDocument,
-        hodRestricted: ishodRestricted,
-      };
-      console.log("second payload for other**",modalData);
+    return;
+  }
 
-      formData.append("requestbody", JSON.stringify(modalData));
+  // ❌ Fallback validation if required values not met
+  this.submitted = true;
+  const isValid = this.validateEssentialFields(['mainHead', 'documentType', 'storageLocation', 'uploadFile']);
+  if (!isValid) return;
 
-      this.loginService.upload(formData).subscribe({
-        next: (event: any) => {
-          if (event instanceof HttpResponse) {
-            this.uploadFileForm.get("uploadFile")?.reset("");
-            this.uploadFileForm.get("mainHead")?.reset("");
-            this.uploadFileForm.get("plants")?.reset("");
-            this.uploadFileForm.get("department")?.reset("");
-            this.uploadFileForm.get("subArea")?.reset("");
-            this.uploadFileForm.get("documentType")?.reset("");
-            this.uploadFileForm.get("subDocumentType")?.reset("");
-            this.uploadFileForm.get("storageLocation")?.reset("");
-            this.uploadFileForm.controls["isStatutoryDocument"].reset();
-            this.uploadFileForm.controls["isRestrictedDocument"].reset();
-            this.uploadFileForm.controls["isHodDocument"].reset();
+  console.warn("Form is not valid for upload.");
+}
+
+
+
+   resetForm() {
+    // this.uploadFileForm.reset();
+    this.submitted = false;
+    this.files = [];
+    this.fileDropEl.nativeElement.value = '';
+    this.uploadDocumentFlag = false;
+    this.uploadDocumentSizeFlag = false;
+    this.subDocListSize = 0;
+    this.plantList = [];
+    this.departmentList = [];
+    this.subAreaList = [];
+    this.documentTypeFlag = false;
+    this.storageLocationFlag = false;
+    this.mainHeadFlag = false;
+    this.plantFlag = false;
+    this.departmentFlag = false;
+    this.invalidFileExtensionFlag = false;
+            this.uploadFileForm.get('uploadFile')?.reset('');
+            this.uploadFileForm.get('mainHead')?.reset('');
+            this.uploadFileForm.get('plants')?.reset('');
+            this.uploadFileForm.get('department')?.reset('');
+            this.uploadFileForm.get('subArea')?.reset('');
+            this.uploadFileForm.get('documentType')?.reset('');
+            this.uploadFileForm.get('subDocumentType')?.reset('');
+            this.uploadFileForm.get('storageLocation')?.reset('');
+            this.uploadFileForm.controls['isStatutoryDocument'].reset();
+            this.uploadFileForm.controls['isRestrictedDocument'].reset();
+            this.uploadFileForm.controls['isHodDocument'].reset();
             this.clearFileInput();
-            this.successfulSubmitAlert();
-
-            let docStatus = {
-              workflowDocId: this.workflowDocId,
-              status: "A",
-              executedBy: this.loggedUserId,
-              reason: "",
-            };
-
-            this.loginService.updateDocStatus(docStatus).subscribe({
-              next: (event: any) => {
-                if (event instanceof HttpResponse) {
-                  const decryptedData = this.loginService.convertEncToDec(event.body);
-                  const res = JSON.parse(decryptedData);
-
-                  let updatedDoc = res.data;
-
-                  let index = this.fileList.findIndex(
-                    (doc: any) => doc.workflowDocId === updatedDoc.workflowDocId
-                  );
-
-                  if (index !== -1) {
-                    this.fileList[index] = updatedDoc;
-                  }
-                }
-              },
-              error: (err: any) => {
-                let msg = docStatus + ": Failed!";
-
-                if (err.error && err.error.message) {
-                  msg += " " + err.error.message;
-                }
-
-                this.message.push(msg);
-              },
-            });
-          }
-        },
-        error: (err: any) => {
-          this.uploadFileForm.get("uploadFile")?.reset("");
-          this.uploadFileForm.get("mainHead")?.reset("");
-          this.uploadFileForm.get("plants")?.reset("");
-          this.uploadFileForm.get("department")?.reset("");
-          this.uploadFileForm.get("subArea")?.reset("");
-          this.uploadFileForm.get("documentType")?.reset("");
-          this.uploadFileForm.get("storageLocation")?.reset("");
-          this.uploadFileForm.controls["isStatutoryDocument"].reset();
-          this.uploadFileForm.controls["isRestrictedDocument"].reset();
-          this.uploadFileForm.controls["isHodDocument"].reset();
-          this.clearFileInput();
-          this.unsuccessfulSubmitAlert();
-        },
-      });
-      return;
-    } else {
-      // console.log("End of if and else");
-      this.uploadFileForm.get("uploadFile")?.reset("");
-      this.uploadFileForm.get("mainHead")?.reset("");
-      this.uploadFileForm.get("plants")?.reset("");
-      this.uploadFileForm.get("department")?.reset("");
-      this.uploadFileForm.get("subArea")?.reset("");
-      this.uploadFileForm.get("documentType")?.reset("");
-      this.uploadFileForm.get("storageLocation")?.reset("");
-      this.uploadFileForm.controls["isStatutoryDocument"].reset();
-      this.uploadFileForm.controls["isRestrictedDocument"].reset();
-      this.uploadFileForm.controls["isHodDocument"].reset();
-      this.clearFileInput();
-      this.unsuccessfulSubmitAlert();
-    }
   }
 
   getAllMainHeadData() {
@@ -844,6 +981,78 @@ export class VerifyUploadedDocumentComponent implements OnInit {
     }).then(() => {
       window.location.href = window.location.href;
     });
+  }
+
+  validateEssentialFields(fields: string[]): boolean {
+  this.fileDropEl.nativeElement.value = '';
+  let hasErrors = false;
+  const missingFields: string[] = [];
+
+  fields.forEach(field => {
+    // Skip file validation if already uploaded
+    if (field === 'uploadFile' && this.files.length > 0) {
+      this.uploadDocumentFlag = false; // No error for file upload
+      return;
+    }
+
+    const control = this.uploadFileForm.get(field);
+    if (control?.invalid || control?.value == null || control?.value === '') {
+      this.uploadDocumentFlag = true;
+      control?.markAsTouched();
+      control?.updateValueAndValidity();
+      hasErrors = true;
+
+      // Collect field label
+      const label = this.getFieldLabel(field);
+      missingFields.push(label);
+    }
+  });
+
+  if (hasErrors) {
+    if (this.firstValidationAttempt) {
+      // Show all missing fields in a single alert
+      const fieldList = missingFields.map(f => `• <b>${f}</b>`).join('<br>');
+      this.fieldSubmitAlert(`Please fill out the following required fields:<br><br>${fieldList}`);
+      this.firstValidationAttempt = false;
+    } else if (missingFields.length > 0) {
+      // Show one field at a time on later attempts
+      this.fieldSubmitAlert(missingFields[0]);
+    }
+  }
+
+  return !hasErrors;
+}
+
+getFieldLabel(field: string): string {
+  const fieldMap: { [key: string]: string } = {
+    mainHead: 'Main Head',
+    documentType: 'Document Type',
+    storageLocation: 'Storage Location',
+    uploadFile: 'Upload File'
+  };
+
+  return fieldMap[field] || field;
+}
+
+fieldSubmitAlert(fieldName: any) {
+  Swal.fire({
+    icon: "error",
+    html: `Please fill out the <b>${fieldName}</b> field.`
+  }).then(() => {
+    // Optionally reload or do something else
+    // window.location.href = window.location.href;
+  });
+}
+
+  markFieldInvalid(fieldName: string): void {
+    const control = this.uploadFileForm.get(fieldName);
+    if (control) {
+      control.setErrors({ required: true });
+      control.markAsTouched();
+      control.markAsDirty();
+    }
+    this.uploadFileForm.updateValueAndValidity();
+    this.cdr.detectChanges();
   }
 
   // **************************************
