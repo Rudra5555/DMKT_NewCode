@@ -602,7 +602,7 @@ export class UserDashboardComponent implements OnInit {
               } else if (this.loggedUserRole === 'SuperUser') {
                 return (!version.hodDocument && !version.statutoryDocument && !version.restrictedDocument) || version.statutoryDocument;
               } else if (this.loggedUserRole === 'HOD') {
-                return (!version.hodDocument && !version.statutoryDocument && !version.restrictedDocument) || version.hodDocument;
+                return (!version.hodDocument && !version.statutoryDocument && !version.restrictedDocument) || version.restrictedDocument;
               } else if (this.loggedUserRole === 'Librarian' || this.loggedUserRole === 'Admin') {
                 return true;
               }
