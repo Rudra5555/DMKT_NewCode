@@ -962,7 +962,7 @@
       </div>
     </div>
 
-    <!-- ❌ Delete Button -->
+    <!-- ❌ Delete Button    [disabled]="group.get('patched')?.value !== false" -->
     <div class="col-md-1 d-flex align-items-center justify-content-end">
       <button
         mat-icon-button
@@ -971,7 +971,7 @@
         (click)="removeExtraDeptPlant(i)"
         class="rounded-icon-btn"
         matTooltip="Remove"
-        [disabled]="group.get('patched')?.value !== false"
+       
       >
         <mat-icon>delete</mat-icon>
       </button>

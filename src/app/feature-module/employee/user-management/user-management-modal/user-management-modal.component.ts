@@ -427,7 +427,7 @@ addExtraDeptPlant() {
   const group = this.formBuilder.group({
     plant: ['', Validators.required],
     department: ['', Validators.required],
-    patched: [false]
+    // patched: [false]
   });
 
   this.extraDeptPlant.push(group);
