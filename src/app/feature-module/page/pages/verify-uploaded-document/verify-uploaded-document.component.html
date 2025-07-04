@@ -107,7 +107,7 @@
   </div>
 </div>
 
-<div class="modal firstModal custom-modal fade" id="uploadDocumentModal" role="dialog">
+<div class="modal firstModal custom-modal fade" id="uploadDocumentModal" #uploadDocumentModalRef role="dialog">
   <div class="modal-dialog modal-dialog-right modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header d-flex justify-content-between align-items-center"
@@ -325,8 +325,8 @@
 
           </div>
           <div class="submit-section">
-            <button class="btn submit-btn" type="submit" data-bs-dismiss="modal" [disabled]="buttonDisabled"
-              aria-label="Close">Submit</button>
+            <button class="btn submit-btn" type="submit"  [disabled]="buttonDisabled"
+             >Submit</button>
           </div>
         </form>
       </div>

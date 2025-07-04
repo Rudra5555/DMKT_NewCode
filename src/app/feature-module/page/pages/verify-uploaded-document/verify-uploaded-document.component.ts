@@ -55,6 +55,8 @@ export const OPTIONS: Option[] = [
 })
 export class VerifyUploadedDocumentComponent implements OnInit {
   @ViewChild("fileDropRef", { static: false }) fileDropEl!: ElementRef;
+  @ViewChild('uploadDocumentModalRef') modalRef!: ElementRef;
+
   files: any[] = [];
   public routes = routes;
   public message: any;
@@ -228,6 +230,21 @@ export class VerifyUploadedDocumentComponent implements OnInit {
 
 
   }
+
+
+    ngAfterViewInit() {
+    const modalElement = this.modalRef.nativeElement;
+    modalElement.addEventListener('hidden.bs.modal', () => {
+      this.resetForm();
+      window.location.href = window.location.href;
+    });
+    
+  }
+
+  // resetModalForm() {
+  //   this.uploadFileForm.reset();
+  //   this.files = [];
+  // }
 
   getFileListDetails() {
     this.isLoading = true;
