@@ -233,33 +233,78 @@ export class UserManagementModalComponent implements OnInit, AfterViewInit {
     extraDeptPlant: this.formBuilder.array([]) // ✅ dynamic section
   });
 
-  // Main Head → Plant cascading
-  this.editUserForm.get('mainHead')?.valueChanges.subscribe(value => {
-    const [catName, abbreviation] = value.split('~');
-    this.selectedCatName = catName;
-    if(this.selectedCatName !== "POWER O&M"){
-      this.otherMainHeadFlag = true;
-      console.log("Other main head selected Flag:", this.otherMainHeadFlag);
-          }else{
-      this.otherMainHeadFlag = false;
-       console.log("Other main head selected Flag:", this.otherMainHeadFlag);
-          }
-    console.log("Selected main head:", this.selectedCatName, "Abbreviation:", abbreviation);
+  // Main Head → Plant cascading 
+  // this.editUserForm.get('mainHead')?.valueChanges.subscribe(value => {
+  //   const [catName, abbreviation] = value.split('~');
+  //   this.selectedCatName = catName;
+  //   if(this.selectedCatName !== "POWER O&M"){
+  //     this.otherMainHeadFlag = true;
+  //     console.log("Other main head selected Flag:", this.otherMainHeadFlag);
+  //         }else{
+  //     this.otherMainHeadFlag = false;
+  //      console.log("Other main head selected Flag:", this.otherMainHeadFlag);
+  //         }
+  //   console.log("Selected main head:", this.selectedCatName, "Abbreviation:", abbreviation);
     
-    this.selectedCatNameAbbr = abbreviation;
+  //   this.selectedCatNameAbbr = abbreviation;
 
-    this.plantOption = '';
-    this.selectedDeptCatName = '';
-    this.selectedDeptCatNameAbbr = '';
-    this.selectedSubAreaCatName = '';
-    this.selectedSubAreaCatNameAbbr = '';
+  //   this.plantOption = '';
+  //   this.selectedDeptCatName = '';
+  //   this.selectedDeptCatNameAbbr = '';
+  //   this.selectedSubAreaCatName = '';
+  //   this.selectedSubAreaCatNameAbbr = '';
 
-    this.plantList = [];
-    this.departmentList = [];
-    this.newPlant = false;
+  //   this.plantList = [];
+  //   this.departmentList = [];
+  //   this.newPlant = false;
 
-    this.getMainHeadList(catName, "main-head");
+  //   this.getMainHeadList(catName, "main-head");
+  // });
+
+// new code fixed
+this.editUserForm.get('mainHead')?.valueChanges.subscribe(value => {
+  const [catName, abbreviation] = value.split('~');
+  this.selectedCatName = catName;
+  this.selectedCatNameAbbr = abbreviation;
+
+  // 🔁 Clear existing values
+  this.editUserForm.patchValue({
+    plant: '',
+    department: ''
   });
+
+  this.plantOption = '';
+  this.departmentList = [];
+  this.plantList = [];
+  this.newPlant = false;
+  this.selectedDeptCatName = '';
+  this.selectedDeptCatNameAbbr = '';
+  this.selectedSubAreaCatName = '';
+  this.selectedSubAreaCatNameAbbr = '';
+
+  // ✅ Set the otherMainHeadFlag
+  this.otherMainHeadFlag = this.selectedCatName !== 'POWER O&M';
+  console.log("Main Head selected:", this.selectedCatName, "Flag:", this.otherMainHeadFlag);
+
+  // ✅ Reset extra department rows if not POWER O&M
+  if (this.otherMainHeadFlag) {
+    this.resetExtraDeptPlant();
+  }
+
+  // ✅ Fetch plant list
+  this.getMainHeadList(catName, "main-head");
+
+  // ✅ Optionally auto-select first plant and fetch department list
+  setTimeout(() => {
+    if (this.plantList.length > 0) {
+      const firstPlant = this.plantList[0].catName;
+      this.editUserForm.patchValue({ plant: firstPlant });
+      this.getAllPlantList(firstPlant, 'plants');
+    }
+  }, 300);
+});
+
+
 
   // Plant logic
   this.editUserForm.get('plant')?.valueChanges.subscribe(value => {

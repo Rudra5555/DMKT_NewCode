@@ -10,6 +10,7 @@ import { E } from '@angular/cdk/keycodes';
 import Swal from 'sweetalert2';
 import { DomSanitizer } from '@angular/platform-browser';
 import { interval, Subscription, switchMap } from 'rxjs';
+import { ex } from '@fullcalendar/core/internal-common';
 
 
 interface data {
@@ -519,7 +520,7 @@ const today = new Date();
 
     if (this.approverStatus == "R") {
       this.expDateFlag = true;
-      
+      this.formattedDate = ''; //expiration date reset
       this.reasonFlag = true;
     } if (this.approverStatus == "A") {
       this.expDateFlag = false;
@@ -594,6 +595,7 @@ resetHodModalForm() {
     const reason = this.hodModalForm.get('reason')?.value;
     this.expDate = this.hodModalForm.get('expDate')?.value;
     
+
     if (this.expDate != '') {
       const date = new Date(this.expDate);
       const day = String(date.getDate()).padStart(2, '0'); // Ensures two digits for the day
@@ -627,6 +629,11 @@ resetHodModalForm() {
       return;
     }
 
+    if( status === 'R') {
+      this.formattedDate = '';
+       this.hodModalForm.get('expDate')?.reset(); // Optional: clears the form control too
+    }
+console.log("expDate", this.formattedDate ); // date is comming not geting reset when status is R
 
     const payload = {
       executedBy: this.loggedUserId,
