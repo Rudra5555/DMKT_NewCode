@@ -823,7 +823,7 @@ export class VerifyUploadedDocumentComponent implements OnInit {
    if ((modalData.department && modalData.departAbbr) &&
     (!modalData.subArea || !modalData.subAreaAbbr)) {
     this.markFieldInvalid('subArea');
-    this.fieldSubmitAlert("Sub-Area");
+    this.fieldSubmitAlertSecond("Sub-Area");
   return;
 }
 
@@ -1138,6 +1138,14 @@ fieldSubmitAlert(fieldName: any) {
   }).then(() => {
     // Optionally reload or do something else
     // window.location.href = window.location.href;
+  });
+}
+
+fieldSubmitAlertSecond(fieldName: any) {
+  Swal.fire({
+    icon: "error",
+    html: `Please add <b>${fieldName}</b> field under the <b>${this.selectedDeptCatName}</b> department of <b>${this.selectedCatName}</b> Main Head .`
+  }).then(() => {
   });
 }
 
