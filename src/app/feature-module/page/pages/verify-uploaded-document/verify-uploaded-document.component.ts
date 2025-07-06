@@ -167,49 +167,120 @@ export class VerifyUploadedDocumentComponent implements OnInit {
     this.loggedUserId = localStorage.getItem("loggedInUserId");
     this.getFileListDetails();
 
-    this.uploadFileForm.get("mainHead")?.valueChanges.subscribe((value) => {
-      const [catName, abbreviation] = value.split("~");
-      this.selectedCatName = catName;
-      this.selectedCatNameAbbr = abbreviation;
-      // if (catName != "POWER O&M") {
-      //   this.plantList = [];
-      //   this.departmentList = [];
-      //   this.subAreaList = [];
-      // }
-      this.getMainHeadList(catName, "main-head");
-    });
+    // this.uploadFileForm.get("mainHead")?.valueChanges.subscribe((value) => {
+    //   const [catName, abbreviation] = value.split("~");
+    //   this.selectedCatName = catName;
+    //   this.selectedCatNameAbbr = abbreviation;
+    //   // if (catName != "POWER O&M") {
+    //   //   this.plantList = [];
+    //   //   this.departmentList = [];
+    //   //   this.subAreaList = [];
+    //   // }
+    //   this.getMainHeadList(catName, "main-head");
+    // });
 
-    this.uploadFileForm.get("plants")?.valueChanges.subscribe((value) => {
-      if (value != null) {
-        this.getAllPlantList(value, "plants");
-        this.plantOption = value;
-        // if (this.plantOption == "CPP (1740MW)") {
-        //   this.newPlant = true;
-        // } else {
-        //   this.newPlant = false;
-        // }
-      } else {
-      }
-    });
+    // this.uploadFileForm.get("plants")?.valueChanges.subscribe((value) => {
+    //   if (value != null) {
+    //     this.getAllPlantList(value, "plants");
+    //     this.plantOption = value;
+    //     // if (this.plantOption == "CPP (1740MW)") {
+    //     //   this.newPlant = true;
+    //     // } else {
+    //     //   this.newPlant = false;
+    //     // }
+    //   } else {
+    //   }
+    // });
 
-    this.uploadFileForm.get("department")?.valueChanges.subscribe((value) => {
-      const [deptName, deptAbbr] = value.split("~");
-      const selectedDept = this.departmentList.find(
-        (dept: any) => dept.optionVal === value
-      );
-      if (selectedDept) {
-        const deptId = selectedDept.catId;
-      }
+    // this.uploadFileForm.get("department")?.valueChanges.subscribe((value) => {
+    //   const [deptName, deptAbbr] = value.split("~");
+    //   const selectedDept = this.departmentList.find(
+    //     (dept: any) => dept.optionVal === value
+    //   );
+    //   if (selectedDept) {
+    //     const deptId = selectedDept.catId;
+    //   }
+    //   this.getSubAreaList(deptName, "department");
+    //   this.selectedDeptCatName = deptName;
+    //   this.selectedDeptCatNameAbbr = deptAbbr;
+    // });
+
+    // this.uploadFileForm.get("subArea")?.valueChanges.subscribe((value) => {
+    //   const [subAreaName, subAreaAbbr] = value.split("~");
+    //   this.selectedSubAreaCatName = subAreaName;
+    //   this.selectedSubAreaCatNameAbbr = subAreaAbbr;
+    // });
+// *******************************************************************
+// 🔄 MAIN HEAD change listener
+  this.uploadFileForm.get('mainHead')?.valueChanges.subscribe(value => {
+    const [catName, abbreviation] = value.split('~');
+    this.selectedCatName = catName;
+    this.selectedCatNameAbbr = abbreviation;
+
+    // console.log("Selected main head:", this.selectedCatName, "Abbreviation:", this.selectedCatNameAbbr);
+
+    // 🔁 Reset all dependent form controls and variables
+    this.uploadFileForm.get('plants')?.reset();
+    this.uploadFileForm.get('department')?.reset();
+    this.uploadFileForm.get('subArea')?.reset();
+    this.uploadFileForm.get('subDocumentType')?.reset();
+
+    this.plantOption = '';
+    this.selectedDeptCatName = '';
+    this.selectedDeptCatNameAbbr = '';
+    this.selectedSubAreaCatName = '';
+    this.selectedSubAreaCatNameAbbr = '';
+
+    this.plantList = [];
+    this.departmentList = [];
+    this.subAreaList = [];
+    this.subDocListSize = 0;
+    this.newPlant = false;
+
+    // 🔄 Fetch updated plant list based on new main head
+    this.getMainHeadList(catName, "main-head");
+  });
+
+  // 🔄 PLANTS change listener
+  this.uploadFileForm.get('plants')?.valueChanges.subscribe(value => {
+    if (value != null) {
+      this.getAllPlantList(value, "plants");
+      this.plantOption = value;
+
+      // this.newPlant = this.plantOption === "CPP (1740MW)";
+    } else {
+      this.plantOption = '';
+      this.newPlant = false;
+    }
+  });
+
+  // 🔄 DEPARTMENT change listener
+  this.uploadFileForm.get('department')?.valueChanges.subscribe(value => {
+    if (value) {
+      const [deptName, deptAbbr] = value.split('~');
       this.getSubAreaList(deptName, "department");
       this.selectedDeptCatName = deptName;
       this.selectedDeptCatNameAbbr = deptAbbr;
-    });
+    } else {
+      this.selectedDeptCatName = '';
+      this.selectedDeptCatNameAbbr = '';
+    }
+  });
 
-    this.uploadFileForm.get("subArea")?.valueChanges.subscribe((value) => {
-      const [subAreaName, subAreaAbbr] = value.split("~");
+  // 🔄 SUB-AREA change listener
+  this.uploadFileForm.get('subArea')?.valueChanges.subscribe(value => {
+    if (value) {
+      const [subAreaName, subAreaAbbr] = value.split('~');
       this.selectedSubAreaCatName = subAreaName;
       this.selectedSubAreaCatNameAbbr = subAreaAbbr;
-    });
+    } else {
+      this.selectedSubAreaCatName = '';
+      this.selectedSubAreaCatNameAbbr = '';
+    }
+  });
+
+
+// ********************************************************************
 
     this.getAllMainHeadData();
 
@@ -422,11 +493,11 @@ export class VerifyUploadedDocumentComponent implements OnInit {
     if (this.selectedCatName != null) {
       this.mainHeadFlag = false;
     }
-    if (this.selectedCatName != "POWER O&M") {
-      this.plantList = [];
-      this.departmentList = [];
-      this.subAreaList = [];
-    }
+    // if (this.selectedCatName != "POWER O&M") {
+    //   this.plantList = [];
+    //   this.departmentList = [];
+    //   this.subAreaList = [];
+    // }
   }
 
   selectedPlant(event: any) {
@@ -435,9 +506,9 @@ export class VerifyUploadedDocumentComponent implements OnInit {
     if (this.plantOption != null) {
       this.plantFlag = false;
     }
-    if (this.selectedCatName != "POWER O&M") {
-      this.plantFlag = false;
-    }
+    // if (this.selectedCatName != "POWER O&M") {
+    //   this.plantFlag = false;
+    // }
   }
 
   selectedDepartment(event: any) {
@@ -748,7 +819,16 @@ export class VerifyUploadedDocumentComponent implements OnInit {
     isRestrictedDocument: isRestrictedDocument,
     hodRestricted: ishodRestricted
   };
+
+   if ((modalData.department && modalData.departAbbr) &&
+    (!modalData.subArea || !modalData.subAreaAbbr)) {
+    this.markFieldInvalid('subArea');
+    this.fieldSubmitAlert("Sub-Area");
+  return;
+}
+
   // console.log("Modal Data****", modalData);
+
 
   // ✅ Allow upload if file is present and required fields are met
   if (this.files.length > 0 && documentTypeOption && storageLocationOption) {

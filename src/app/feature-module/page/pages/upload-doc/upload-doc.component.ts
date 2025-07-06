@@ -416,14 +416,21 @@ onSubmit(): void {
     isRestrictedDocument: isRestrictedDocument,
     hodRestricted: ishodRestricted
   };
-  // console.log("Modal Data****", modalData);
+  console.log("Modal Data****", modalData);
+
+  if ((modalData.department && modalData.departAbbr) &&
+    (!modalData.subArea || !modalData.subAreaAbbr)) {
+    this.markFieldInvalid('subArea');
+    this.fieldSubmitAlert("Sub-Area");
+  return;
+}
 
   // ✅ Allow upload if file is present and required fields are met
   if (this.files.length > 0 && documentTypeOption && storageLocationOption) {
     formData.append("requestbody", JSON.stringify(modalData));
     this.buttonDisabled = true;
 
-    // console.log("formdata***",formData);
+    console.log("formdata***",formData);
     
     this.uploadService.upload(formData).subscribe({
       next: (event: any) => {
