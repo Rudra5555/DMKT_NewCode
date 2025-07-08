@@ -124,7 +124,7 @@ export class FileManagerMainheadComponent implements OnInit, OnDestroy {
     this.loggedUserRole = localStorage.getItem("role")
 
     this.storedIds = JSON.parse(localStorage.getItem('departmentIds') || '[]');
-    console.log(this.storedIds);
+    // console.log(this.storedIds);
 
 
 
@@ -292,7 +292,7 @@ export class FileManagerMainheadComponent implements OnInit, OnDestroy {
           });
 
 
-          console.log("after felter:::***",this.fileListOne);
+          // console.log("after felter:::***",this.fileListOne);
 
 
           this.fileListOne.forEach((item: any) => {

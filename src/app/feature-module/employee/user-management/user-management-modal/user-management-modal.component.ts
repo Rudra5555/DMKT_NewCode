@@ -284,7 +284,7 @@ this.editUserForm.get('mainHead')?.valueChanges.subscribe(value => {
 
   // ✅ Set the otherMainHeadFlag
   this.otherMainHeadFlag = this.selectedCatName !== 'POWER O&M';
-  console.log("Main Head selected:", this.selectedCatName, "Flag:", this.otherMainHeadFlag);
+  // console.log("Main Head selected:", this.selectedCatName, "Flag:", this.otherMainHeadFlag);
 
   // ✅ Reset extra department rows if not POWER O&M
   if (this.otherMainHeadFlag) {
@@ -346,7 +346,7 @@ this.editUserForm.get('mainHead')?.valueChanges.subscribe(value => {
   // 🔁 Handle Main Role → Checkbox sync
  this.editUserForm.get('mainRole')?.valueChanges.subscribe((selectedRole: string) => {
   this.isHODFlag = selectedRole === 'HOD';
-  console.log(`HOD flag is set to: ${this.isHODFlag}`);
+  // console.log(`HOD flag is set to: ${this.isHODFlag}`);
   this.syncMainRoleWithCheckbox(selectedRole);
 
 
@@ -364,7 +364,7 @@ this.editUserForm.get('mainHead')?.valueChanges.subscribe(value => {
       const currentMainRole = this.editUserForm.get('mainRole')?.value;
       if (role === currentMainRole) return; // skip frozen
       if (isChecked) {
-        console.log(`${role} Access granted manually`);
+        // console.log(`${role} Access granted manually`);
       }
     });
   });
@@ -653,7 +653,7 @@ resetLibrarianEditFileInput(): void {
             if (jsonObj.status === 200 && jsonObj.categoryList) {
               this.mainHeadList = jsonObj.categoryList;
               this.plantList = [];
-              console.log("Main head list:", this.mainHeadList);
+              // console.log("Main head list:", this.mainHeadList);
               
             } else {
               console.warn("No valid category list found in response.");
@@ -679,7 +679,7 @@ resetLibrarianEditFileInput(): void {
           const decryptedData = this.uploadDocument.convertEncToDec(event.body);
           if (decryptedData) {
             const res = JSON.parse(decryptedData);
-            console.log("Plant List List Response:", res);
+            // console.log("Plant List List Response:", res);
             this.plantList = (res?.categoryList || []).filter((item: { catId: number }) => item.catId !== 9);
           }
         }
@@ -904,7 +904,7 @@ patchExtraDeptPlant(extraList: any[]) {
             const decryptedData = this.uploadDocument.convertEncToDec(event.body);
             if (decryptedData) {
               const res = JSON.parse(decryptedData);
-              console.log("Plant List Response:", res);
+              // console.log("Plant List Response:", res);
               
               this.departmentList = res?.categoryList || [];
             }
@@ -950,7 +950,7 @@ patchExtraDeptPlant(extraList: any[]) {
         accessRoles: this.getSelectedRoles(),
         userPicture: this.files?.length ? this.files[0].base64 : null, 
       };
-   console.log("User modal payload",payload);
+  //  console.log("User modal payload",payload);
    
       
           this.loginService.addUser(payload).subscribe({
@@ -1049,7 +1049,7 @@ patchExtraDeptPlant(extraList: any[]) {
         accessRoles: this.getSelectedRolesEdit(),
         userPicture: this.files?.length ? this.files[0].base64 : null, 
       };
-      console.log("Librarian User modal payload", payload);
+      // console.log("Librarian User modal payload", payload);
       
       
           this.loginService.addUser(payload).subscribe({
@@ -1133,7 +1133,7 @@ patchExtraDeptPlant(extraList: any[]) {
       userPicture: this.files?.length ? this.files[0].base64 : null
     };
 
-    console.log("ADMIN User modal payload", payload);
+    // console.log("ADMIN User modal payload", payload);
       
           this.loginService.addUser(payload).subscribe({
               next: (event: any) => {

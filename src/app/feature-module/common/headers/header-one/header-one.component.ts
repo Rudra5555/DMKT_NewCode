@@ -633,7 +633,7 @@ resetHodModalForm() {
       this.formattedDate = '';
        this.hodModalForm.get('expDate')?.reset(); // Optional: clears the form control too
     }
-console.log("expDate", this.formattedDate ); // date is comming not geting reset when status is R
+// console.log("expDate", this.formattedDate ); // date is comming not geting reset when status is R
 
     const payload = {
       executedBy: this.loggedUserId,

@@ -63,7 +63,7 @@ export class UserListComponent implements OnInit {
 
     const client = this.idleService.getClientData();
     this.loggedInUser = localStorage.getItem('role')?.trim().toLowerCase();
-  console.log("Logged In User:", this.loggedInUser);
+  // console.log("Logged In User:", this.loggedInUser);
   
     this.adminRoleFlag = this.loggedInUser === 'admin';
     this.librarianRoleFlag = this.loggedInUser === 'librarian';
@@ -81,7 +81,7 @@ export class UserListComponent implements OnInit {
             if (event instanceof HttpResponse) {
             const decryptedData = this.loginService.convertEncToDec(event.body);
             const resData = JSON.parse(decryptedData);
-            console.log("Response Data:", resData);
+            // console.log("Response Data:", resData);
             
 
             const respData=resData
@@ -140,7 +140,7 @@ export class UserListComponent implements OnInit {
             if (event instanceof HttpResponse) {
               const decryptedData = this.loginService.convertEncToDec(event.body);
               const resData = JSON.parse(decryptedData);
-              console.log("Response Data 2nd api:", resData);
+              // console.log("Response Data 2nd api:", resData);
               
 
             this.res=resData.response
@@ -232,9 +232,9 @@ export class UserListComponent implements OnInit {
   //  }
 
   deleteUser(client: any) {
-    console.log("Deleting file:", client);
+    // console.log("Deleting file:", client);
   let userId = client.userId; // Assuming 'id' is the unique identifier for the user
-  console.log("User ID to delete:", userId);
+  // console.log("User ID to delete:", userId);
   
     Swal.fire({
       title: "Are you sure you want to permanently delete this User?",

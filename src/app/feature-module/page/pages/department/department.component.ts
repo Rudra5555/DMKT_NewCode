@@ -339,8 +339,8 @@ openModal(fileUrl: string , documentName : string) {
             const res = JSON.parse(decryptedData);
             const filteredData  = res?.categoryList || [];
             this.plantList = filteredData.filter((item: { catName: string; }) => item.catName !== "CPP-1");
-            
-             console.log("plant list:::::::::::",this.plantList);
+
+            //  console.log("plant list:::::::::::",this.plantList);
           }
         }
       },

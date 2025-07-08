@@ -416,7 +416,7 @@ onSubmit(): void {
     isRestrictedDocument: isRestrictedDocument,
     hodRestricted: ishodRestricted
   };
-  console.log("Modal Data****", modalData);
+  // console.log("Modal Data****", modalData);
 
   if ((modalData.department && modalData.departAbbr) &&
     (!modalData.subArea || !modalData.subAreaAbbr)) {
@@ -430,7 +430,7 @@ onSubmit(): void {
     formData.append("requestbody", JSON.stringify(modalData));
     this.buttonDisabled = true;
 
-    console.log("formdata***",formData);
+    // console.log("formdata***",formData);
     
     this.uploadService.upload(formData).subscribe({
       next: (event: any) => {
@@ -646,7 +646,7 @@ getFieldLabel(field: string): string {
               if (jsonObj.status === 200 && jsonObj.categoryList) {
                 
                 this.plantList = jsonObj.categoryList;
-                console.log("Main head plant list:", this.plantList);
+                // console.log("Main head plant list:", this.plantList);
               } else {
                 console.warn("No valid category list found in response.");
                 this.plantList = [];
@@ -677,7 +677,7 @@ getFieldLabel(field: string): string {
               const jsonObj = JSON.parse(decryptedData);
               if (jsonObj.status === 200 && jsonObj.categoryList) {
                 this.departmentList = jsonObj.categoryList;
-                console.log("Plant department list:***", this.departmentList);
+                // console.log("Plant department list:***", this.departmentList);
               } else {
                 console.warn("No valid category list found in response.");
                 this.departmentList = [];

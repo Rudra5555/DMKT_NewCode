@@ -154,7 +154,7 @@ export class UserDashboardComponent implements OnInit {
     this.loggedUserRole = localStorage.getItem('role');
 
     this.storedIds = JSON.parse(localStorage.getItem('departmentIds') || '[]');
-    console.log(this.storedIds);
+    // console.log(this.storedIds);
 
     this.optionCategory = "department"
     this.getDataByCategory(this.optionCategory);
@@ -626,7 +626,7 @@ export class UserDashboardComponent implements OnInit {
           });
 
 
-          console.log("after felter:::***",this.fileListOne);
+          // console.log("after felter:::***",this.fileListOne);
   
             this.transformedMap = this.transformApiResponseToMap(this.fileListOne);
 

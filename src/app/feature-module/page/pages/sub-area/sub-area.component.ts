@@ -423,7 +423,7 @@ openModal(fileUrl: string , documentName : string) {
             // this.plantList = res?.categoryList || [];
             const filteredData  = res?.categoryList || [];
             this.plantList = filteredData.filter((item: { catName: string; }) => item.catName !== "CPP-1");
-             console.log("plant list:::::::::::",this.plantList);
+            //  console.log("plant list:::::::::::",this.plantList);
           }
         }
       },

@@ -148,7 +148,7 @@ onClickSubmit(formData: any){
               const deptIds = this.data.response.departmentNameList.map((item: { departmentId: any; }) => item.departmentId);
               this.uniqueDeptIds = [...new Set(deptIds)];
 
-              console.log("depertment ids",this.uniqueDeptIds);
+              // console.log("depertment ids",this.uniqueDeptIds);
               
 
               localStorage.setItem('departmentIds', JSON.stringify(this.uniqueDeptIds));

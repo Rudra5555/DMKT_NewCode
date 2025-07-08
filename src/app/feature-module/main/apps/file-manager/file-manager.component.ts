@@ -135,7 +135,7 @@ export class FileManagerComponent implements OnInit , OnDestroy {
     this.setLast15Days();
 
     this.storedIds = JSON.parse(localStorage.getItem('departmentIds') || '[]');
-    console.log(this.storedIds);
+    // console.log(this.storedIds);
 
 
     this.route.queryParams.subscribe(params => {
@@ -193,7 +193,7 @@ export class FileManagerComponent implements OnInit , OnDestroy {
 
           this.respData = res.documentLists;
 
-          console.log("before felter:::**",this.respData);
+          // console.log("before felter:::**",this.respData);
           
           const convertToKB = (bytes: number): string => {
             return (bytes / 1024).toFixed(2);
@@ -252,7 +252,7 @@ export class FileManagerComponent implements OnInit , OnDestroy {
           });
 
 
-          console.log("after felter:::***",this.fileListOne);
+          // console.log("after felter:::***",this.fileListOne);
 
           this.fileListOne.forEach((item: any) => {
             if (item.documentType) {
@@ -267,7 +267,7 @@ export class FileManagerComponent implements OnInit , OnDestroy {
           this.transformedMap = this.transformApiResponseToMap(this.fileListOne);
 
           // this.fileList = Array.from(this.transformedMap.values());
-          console.log("file list",JSON.stringify( this.fileList));
+          // console.log("file list",JSON.stringify( this.fileList));
           this.firstRes = Array.from(this.transformedMap.values());
           this.totalData = this.firstRes.length;
           
@@ -417,7 +417,7 @@ export class FileManagerComponent implements OnInit , OnDestroy {
       
           
           this.fileList.push(item);
-          console.log("file list", JSON.stringify(this.fileList));
+          // console.log("file list", JSON.stringify(this.fileList));
           
 
           this.serialNumberArray.push(serialNumber);
