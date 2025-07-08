@@ -337,8 +337,10 @@ openModal(fileUrl: string , documentName : string) {
           const decryptedData = this.uploadDocument.convertEncToDec(event.body);
           if (decryptedData) {
             const res = JSON.parse(decryptedData);
-            this.plantList = res?.categoryList || [];
-            //  console.log("plant list:::::::::::",this.plantList);
+            const filteredData  = res?.categoryList || [];
+            this.plantList = filteredData.filter((item: { catName: string; }) => item.catName !== "CPP-1");
+            
+             console.log("plant list:::::::::::",this.plantList);
           }
         }
       },
