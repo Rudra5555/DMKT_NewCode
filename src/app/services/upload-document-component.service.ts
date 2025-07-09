@@ -7,10 +7,10 @@ import * as CryptoJS from 'crypto-js';
 })
 export class UploadDocumentComponentService {
 
- private baseUrl = 'http://103.168.18.28:8080';//dev server
+//  private baseUrl = 'http://103.168.18.28:8080';//dev server
 // private baseUrl = 'http://10.101.71.204:8080'; //vedanta dev server
-// private baseUrl = 'https://10.101.71.190:8080'; //vedanta Prod Server
-// private baseUrl = 'https://dmkt.balco.in:8080';
+// private baseUrl = 'https://10.101.71.190:8080'; 
+private baseUrl = 'https://dmkt.balco.in:8080'; //vedanta Prod Server
 
 private secretKey = '1234567890123456'; // Must match Java key
 private iv = 'abcdefghijklmnop'; // Must match Java IV
