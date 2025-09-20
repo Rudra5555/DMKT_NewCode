@@ -161,12 +161,17 @@ export class LibRecentUploadedComponent implements OnInit {
   getFileListDetails() {
     this.isLoading = true;
     this.contactlist = [];
+// console.log(" starting get data list");
 
     this.loginService.AllAdminFileList(this.startDate, this.endDate).subscribe({
       next: (event: any) => {
         if (event instanceof HttpResponse) {
           const decryptedData = this.loginService.convertEncToDec(event.body);
+          // console.log("Decrypted Data:", decryptedData);
+          
           const res = JSON.parse(decryptedData);
+          // console.log("Response from API:", res);
+          
 
           this.res = res.response;
 

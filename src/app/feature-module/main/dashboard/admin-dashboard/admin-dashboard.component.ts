@@ -300,6 +300,9 @@ export class AdminDashboardComponent implements OnInit {
     ]
   };
 
+  sanitizeFileName(fileName: string): string {
+  return fileName ? fileName.replace(/\/{2,}/g, '/') : '';
+}
 
   // public pieChartData: ChartData<'pie', number[], string | string[]> = {
   //   labels: ['Mechanical', 'Electrical', 'Boiler', 'Civil', 'C&I', 'Turbine', 'Bop'],

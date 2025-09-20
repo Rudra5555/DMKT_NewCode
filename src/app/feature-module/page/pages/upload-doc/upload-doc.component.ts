@@ -34,6 +34,7 @@ export class UploadDocComponent implements OnInit {
   public subAreaFlag: boolean = false;
   public documentTypeFlag: boolean = false;
   public uploadDocumentFlag: boolean = false;
+  public invalidFileNameFlag: boolean = false;
   public storageLocationFlag: boolean = false
   public mainHeadFlag: boolean = false;
   public plantFlag: boolean = false;
@@ -192,6 +193,8 @@ ngOnInit(): void {
   fileBrowseHandler(files: any) {
 
     this.prepareFilesList(files.target.files);
+
+    
   }
 
   deleteFile(index: number) {
@@ -219,28 +222,78 @@ ngOnInit(): void {
   }
 
   prepareFilesList(files: Array<any>) {
+   
+    
     if (files != null) {
       this.uploadDocumentFlag = false;
     }
 
     // const allowedExtensions = [".pdf", ".docx", ".xlsx", ".jpeg", ".dwg"];
-    const allowedExtensions = [".pdf", ".docx", ".xlsx", ".jpeg", ".dwg", ".jpg", ".txt", ".csv", ".xls", ".ppt", ".png"];
+    const allowedExtensions = [".pdf", ".docx", ".xlsx", ".jpeg", ".dwg", ".jpg", ".txt", ".csv", ".xls", ".ppt", ".png", ".doc"];
+
+
+// for (const item of files) {
+//   console.log("Processing file:", item);
+  
+//   this.invalidFileExtensionFlag = false; 
+//   const fileExtension = item.name.slice(item.name.lastIndexOf(".")).toLowerCase();
+
+//   if (allowedExtensions.includes(fileExtension)) {
+//     item.progress = 0;
+//     this.files.push(item);
+//     this.calculateTotalFileSize(this.files);
+//   } else {
+//     console.warn(`File type not allowed: ${item.name}`);
+//     this.invalidFileExtensionFlag = true;
+
+//   }
+// }
 
 
 for (const item of files) {
-  this.invalidFileExtensionFlag = false; 
+
+
+  if (!item.name.includes('.')) {
+    console.warn("⛔ Skipping file without extension:", item.name);
+    continue;
+  }
+
   const fileExtension = item.name.slice(item.name.lastIndexOf(".")).toLowerCase();
+  const fileNameWithoutExtension = item.name.slice(0, item.name.lastIndexOf("."));
+  const normalizedName = fileNameWithoutExtension + fileExtension;
+
+  const validFileNamePattern = /^[a-zA-Z0-9_\-~().%& ]+$/;
+
+  if (!validFileNamePattern.test(fileNameWithoutExtension)) {
+    this.fileNameValidation(item.name);
+    this.invalidFileNameFlag = true;
+    continue;
+  }
 
   if (allowedExtensions.includes(fileExtension)) {
-    item.progress = 0;
-    this.files.push(item);
+    // ✅ Create new File object with normalized name
+    const normalizedFile = new File([item], normalizedName, {
+      type: item.type,
+      lastModified: item.lastModified,
+    });
+
+    (normalizedFile as any).progress = 0; // if you're using progress manually
+    this.files.push(normalizedFile);
+
+   
     this.calculateTotalFileSize(this.files);
   } else {
-    console.warn(`File type not allowed: ${item.name}`);
+    console.warn("❌ Invalid file extension:", fileExtension, "Original name:", item.name);
     this.invalidFileExtensionFlag = true;
-
   }
 }
+
+
+
+
+
+
+
     this.uploadFilesSimulator(0);
     this.uploadFileForm.get('uploadFile')?.setValue(this.files);
 
@@ -791,6 +844,38 @@ getFieldLabel(field: string): string {
       // window.location.href = window.location.href;
     });;
   }
+
+  // fileNameValidation(name: any) {
+  //   Swal.fire({
+  //     icon: "error",
+  //     title: "Oops...",
+  //     text: "Something went wrong!",
+  //   }).then(() => {
+
+  //     // window.location.reload();
+  //     // window.location.href = window.location.href;
+  //   //     alert(
+  //   //   `Invalid file name: ${item.name}\n` +
+  //   //    "Allowed characters: letters, numbers, space, '_', '-', '~', '(', ')', '.', and '&'."
+  //   // );
+  //   });;
+  // }
+
+  fileNameValidation(name: string): void {
+  Swal.fire({
+    icon: "error",
+    title: "Invalid File Name",
+    html: `
+      <strong>${name}</strong><br><br>
+      Allowed characters:<br>
+      Letters (a-z, A-Z), Numbers (0-9), Space, '_', '-', '~', '(', ')', '.', '%', and '&'.
+    `,
+    confirmButtonText: "OK"
+  }).then(() => {
+    // Optionally reload or do something else
+    window.location.href = window.location.href;
+  });;
+}
 
 
 fieldSubmitAlert(fieldName: any) {

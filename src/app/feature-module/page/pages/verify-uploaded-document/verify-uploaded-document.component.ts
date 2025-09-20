@@ -79,6 +79,7 @@ export class VerifyUploadedDocumentComponent implements OnInit {
   public subAreaList: any[] = [];
   public subAreaFlag: boolean = false;
   public invalidFileExtensionFlag: boolean = false;
+  public invalidFileNameFlag: boolean = false;
   public documentTypeFlag: boolean = false;
   public uploadDocumentFlag: boolean = false;
   public storageLocationFlag: boolean = false;
@@ -437,23 +438,100 @@ export class VerifyUploadedDocumentComponent implements OnInit {
       ".xls",
       ".ppt",
       ".png",
+      ".doc"
     ];
 
-    for (const item of files) {
-      this.invalidFileExtensionFlag = false;
-      const fileExtension = item.name
-        .slice(item.name.lastIndexOf("."))
-        .toLowerCase();
+    // for (const item of files) {
+    //   this.invalidFileExtensionFlag = false;
+    //   const fileExtension = item.name
+    //     .slice(item.name.lastIndexOf("."))
+    //     .toLowerCase();
 
-      if (allowedExtensions.includes(fileExtension)) {
-        item.progress = 0;
-        this.files.push(item);
-        this.calculateTotalFileSize(this.files);
-      } else {
-        console.warn(`File type not allowed: ${item.name}`);
-        this.invalidFileExtensionFlag = true;
-      }
-    }
+    //   if (allowedExtensions.includes(fileExtension)) {
+    //     item.progress = 0;
+    //     this.files.push(item);
+    //     this.calculateTotalFileSize(this.files);
+    //   } else {
+    //     console.warn(`File type not allowed: ${item.name}`);
+    //     this.invalidFileExtensionFlag = true;
+    //   }
+    // }
+
+
+// for (const item of files) {
+//   console.log("Processing file:", item);
+
+//   this.invalidFileExtensionFlag = false;
+
+//   const fileExtension = item.name.slice(item.name.lastIndexOf(".")).toLowerCase();
+//   const fileNameWithoutExtension = item.name.slice(0, item.name.lastIndexOf("."));
+
+//   const validFileNamePattern = /^[a-zA-Z0-9_\-~().%& ]+$/;
+
+//   if (!validFileNamePattern.test(fileNameWithoutExtension)) {
+//     this.fileNameValidation(item.name);
+//     this.invalidFileNameFlag = true;
+//     continue; // Skip this file
+//   }
+
+//   if (allowedExtensions.includes(fileExtension)) {
+//     item.progress = 0;
+//     this.files.push(item);
+//     this.calculateTotalFileSize(this.files);
+//   } else {
+//     console.warn(`File type not allowed: ${item.name}`);
+//     this.invalidFileExtensionFlag = true;
+//   }
+// }
+
+
+for (const item of files) {
+  
+
+  this.invalidFileExtensionFlag = false;
+
+  if (!item.name.includes('.')) {
+    console.warn("Skipping file without extension:", item.name);
+    continue;
+  }
+
+  const fileExtension = item.name.slice(item.name.lastIndexOf(".")).toLowerCase();
+  const fileNameWithoutExtension = item.name.slice(0, item.name.lastIndexOf("."));
+  const normalizedName = fileNameWithoutExtension + fileExtension;
+
+  const validFileNamePattern = /^[a-zA-Z0-9_\-~().%& ]+$/;
+
+  if (!validFileNamePattern.test(fileNameWithoutExtension)) {
+    this.fileNameValidation(item.name);
+    this.invalidFileNameFlag = true;
+    continue; // Skip this file
+  }
+
+  if (allowedExtensions.includes(fileExtension)) {
+    // ✅ Create new File object with normalized name
+    const normalizedFile = new File([item], normalizedName, {
+      type: item.type,
+      lastModified: item.lastModified
+    });
+
+    // ✅ Add custom `progress` property (if used elsewhere)
+    (normalizedFile as any).progress = 0;
+
+    this.files.push(normalizedFile);
+    this.calculateTotalFileSize(this.files);
+
+    
+  } else {
+    console.warn(`File type not allowed: ${item.name}`);
+    this.invalidFileExtensionFlag = true;
+  }
+}
+
+
+
+
+
+
     this.uploadFilesSimulator(0);
     this.uploadFileForm.get("uploadFile")?.setValue(this.files);
   }
@@ -1055,6 +1133,27 @@ export class VerifyUploadedDocumentComponent implements OnInit {
         },
       });
     }
+  }
+
+
+    fileNameValidation(name: string): void {
+    Swal.fire({
+      icon: "error",
+      title: "Invalid File Name",
+      // html:
+      //   `The file name <strong>${name}</strong> contains invalid characters.<br><br>` +
+      //   "Allowed characters are: letters, numbers, space, <code>_</code>, <code>-</code>, <code>~</code>, " +
+      //   "<code>(</code>, <code>)</code>, <code>.</code>, and <code>&</code>.",
+      html: `
+      <strong>${name}</strong><br><br>
+      Allowed characters:<br>
+      Letters (a-z, A-Z), Numbers (0-9), Space, '_', '-', '~', '(', ')', '.', '%', and '&'.
+    `,
+      confirmButtonText: "OK"
+    }).then(() => {
+      // Optionally reload or do something else
+      window.location.href = window.location.href;
+    });;
   }
   
 

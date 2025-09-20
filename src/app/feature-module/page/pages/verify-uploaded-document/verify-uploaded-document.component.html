@@ -123,7 +123,7 @@
           <div class="row">
             <div class="col-sm-6">
               <div class="input-block mb-3">
-                <label class="col-form-label" for="">Upload Files <span class="text-danger">(.pdf, .docx, .xlsx, .jpeg,
+                <label class="col-form-label" for="">Upload Files <span class="text-danger">(.pdf, .docx, .xlsx, .jpeg, .doc,
                     .dwg, .jpg, .txt, .csv, .xls, .ppt, .png)*</span></label>
 
                 <div class="card">
@@ -155,8 +155,15 @@
                 Upload Document is required and File size should be under 200 MB.
               </div>
               <div *ngIf="invalidFileExtensionFlag" class="text-danger" style="margin-left: 2%; padding-bottom: 4%;">
-                Only PDF, DOCX, XLSX, JPEG, DWG, JPG, TXT, CSV, XLS, PPT, and PNG files are allowed.
+                Only PDF, DOCX, XLSX, JPEG, DWG, JPG, TXT, CSV, XLS, PPT, DOC and PNG files are allowed.
               </div>
+              <div *ngIf="invalidFileNameFlag" class="text-danger" style="margin-left: 2%; padding-bottom: 4%;">
+                File name contains invalid characters. Allowed characters are: letters, numbers, space, '_', '-', '~', '(', ')', '.','%' and '&'.
+              </div>
+
+
+
+
             </div>
             <div class="col-sm-6">
               <div class="input-block mb-3">

@@ -157,7 +157,10 @@
                 <td>
                   <div class="tooltip-container">
                       {{ item.fileName }}
-                      <span class="tooltip-text">{{ item.uniqueFileName }}</span>
+                      <!-- <span class="tooltip-text">{{ item.uniqueFileName }}</span> -->
+                       <span class="tooltip-text">{{ sanitizeFileName(item.uniqueFileName) }}</span>
+
+
                     </div>
                 </td>
 
